@@ -7,10 +7,11 @@ import { TimetableTab } from './tabs/TimetableTab';
 import { SettingsTab } from './tabs/SettingsTab';
 
 interface DashboardProps {
+  userName: string;
   onLogout: () => void;
 }
 
-export function Dashboard({ onLogout }: DashboardProps) {
+export function Dashboard({ userName, onLogout }: DashboardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('students');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -35,7 +36,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
       <div className="dashboard-content">
         <header className="dashboard-header">
           <div>
-            <h1 className="dashboard-title">Teacher Notebook</h1>
+            <h1 className="dashboard-title">Teacher Notebook {userName && `- ${userName}`}</h1>
             <p className="dashboard-subtitle">Gestiona tus clases y estudiantes de manera eficiente</p>
           </div>
           <button className="dashboard-logout-btn" onClick={onLogout}>

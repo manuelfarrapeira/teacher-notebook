@@ -6,9 +6,10 @@ import { GraduationCap, BookOpen, Users, Award } from 'lucide-react';
 
 interface LoginScreenProps {
   onLogin: (username: string, password: string) => void;
+  error?: string;
 }
 
-export function LoginScreen({ onLogin }: LoginScreenProps) {
+export function LoginScreen({ onLogin, error }: LoginScreenProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -84,6 +85,20 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             <GraduationCap className="icon-button" />
             Acceder al Aula
           </Button>
+
+          {error && (
+            <div style={{
+              marginTop: '1rem',
+              padding: '0.75rem',
+              backgroundColor: '#fee2e2',
+              color: '#991b1b',
+              borderRadius: '0.375rem',
+              fontSize: '0.875rem',
+              textAlign: 'center'
+            }}>
+              {error}
+            </div>
+          )}
         </form>
 
         <div className="login-footer">

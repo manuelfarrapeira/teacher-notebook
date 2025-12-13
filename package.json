@@ -6,8 +6,10 @@
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
+    "start:pro": "cross-env VITE_ENV=pro electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make:pro": "cross-env VITE_ENV=pro electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
   },
@@ -32,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "autoprefixer": "^10.4.22",
+    "cross-env": "^7.0.3",
     "electron": "39.2.6",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.32.0",
@@ -45,6 +48,7 @@
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.13",
+    "@react-buddy/ide-toolbox": "^2.4.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
@@ -54,7 +58,6 @@
     "lucide-react": "^0.561.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "tailwind-merge": "^3.4.0",
-    "@react-buddy/ide-toolbox": "^2.4.0"
+    "tailwind-merge": "^3.4.0"
   }
 }

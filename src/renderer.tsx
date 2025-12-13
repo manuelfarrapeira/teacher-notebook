@@ -8,5 +8,14 @@ if (!container) {
   throw new Error('Root element not found');
 }
 
-const root = createRoot(container);
-root.render(<App />);
+// Obtener el ambiente desde el proceso principal
+if (window.electron?.ipcRenderer) {
+  window.electron.ipcRenderer.invoke('get-env').then((env: string) => {
+    localStorage.setItem('APP_ENV', env);
+    const root = createRoot(container);
+    root.render(<App />);
+  });
+} else {
+  const root = createRoot(container);
+  root.render(<App />);
+}
