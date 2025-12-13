@@ -5,10 +5,12 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start:local": "cross-env VITE_ENV=local electron-forge start",
+    "start:pre": "cross-env VITE_ENV=pre electron-forge start",
     "start:pro": "cross-env VITE_ENV=pro electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make:pre": "cross-env VITE_ENV=pre electron-forge make",
     "make:pro": "cross-env VITE_ENV=pro electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."

@@ -1,4 +1,5 @@
 export const API_CONFIG = {
+  local: 'http://localhost:8081',
   pre: 'https://codefm.synology.me:5553',
   pro: 'https://codefm.synology.me:4443'
 };
