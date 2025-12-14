@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Users, Calendar, Settings, LogOut, ChevronDown, Clock } from 'lucide-react';
+import { BookOpen, Users, Calendar, Settings, LogOut, Clock, Menu } from 'lucide-react';
 import { StudentsTab } from './tabs/StudentsTab';
 import { ClassesTab } from './tabs/ClassesTab';
 import { ScheduleTab } from './tabs/ScheduleTab';
@@ -7,14 +7,13 @@ import { TimetableTab } from './tabs/TimetableTab';
 import { SettingsTab } from './tabs/SettingsTab';
 
 interface DashboardProps {
-  userName: string;
   onLogout: () => void;
 }
 
-export function Dashboard({ userName, onLogout }: DashboardProps) {
+export function Dashboard({ onLogout }: DashboardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('students');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const tabs = [
     { id: 'students', label: 'Estudiantes', icon: Users },
@@ -24,202 +23,103 @@ export function Dashboard({ userName, onLogout }: DashboardProps) {
     { id: 'settings', label: 'Configuración', icon: Settings },
   ];
 
-  const activeTabData = tabs.find(tab => tab.id === activeTab);
-
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
-    setIsDropdownOpen(false);
+    setIsMenuOpen(false); // Close menu on tab change
   };
 
   return (
     <div className="dashboard-container">
-      <div className="dashboard-content">
-        <header className="dashboard-header">
-          <div>
-            <h1 className="dashboard-title">Teacher Notebook {userName && `- ${userName}`}</h1>
-            <p className="dashboard-subtitle">Gestiona tus clases y estudiantes de manera eficiente</p>
-          </div>
-          <button className="dashboard-logout-btn" onClick={onLogout}>
-            <LogOut className="icon-logout" />
+      {isMenuOpen && <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)} />}
+      
+      {/* Sidebar */}
+      <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
+        <h1 className="dashboard-title">
+          Teacher Notebook
+        </h1>
+
+        <div className="dashboard-menu">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                className={`dashboard-tab ${isActive ? 'active' : ''}`}
+                onClick={() => handleTabChange(tab.id)}
+              >
+                <Icon className="icon-tab" size={20} />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="dashboard-logout-section">
+          <button
+            onClick={onLogout}
+            className="dashboard-tab"
+          >
+            <LogOut size={20} />
             Cerrar Sesión
+          </button>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="dashboard-main-content">
+        <header className="dashboard-header">
+          <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
+            <Menu size={24} />
           </button>
         </header>
 
-        <div className="dashboard-stats">
-          <div className="dashboard-card">
-            <div className="dashboard-card-content">
-              <div>
-                <h3 className="dashboard-card-title">Total Estudiantes</h3>
-                <p className="dashboard-card-number blue">24</p>
-              </div>
-              <Users className="icon-card blue" />
-            </div>
-          </div>
-
-          <div className="dashboard-card">
-            <div className="dashboard-card-content">
-              <div>
-                <h3 className="dashboard-card-title">Clases Hoy</h3>
-                <p className="dashboard-card-number green">3</p>
-              </div>
-              <BookOpen className="icon-card green" />
-            </div>
-          </div>
-
-          <div className="dashboard-card">
-            <div className="dashboard-card-content">
-              <div>
-                <h3 className="dashboard-card-title">Próxima Clase</h3>
-                <p className="dashboard-card-number orange">14:30</p>
-              </div>
-              <Calendar className="icon-card orange" />
-            </div>
-          </div>
+        <div className="course-info">
+          Colegio publico Tui - curso 24/25 cuarto
         </div>
 
-        <div className="dashboard-tabs">
-          <div className="dashboard-tabs-list">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button 
-                  key={tab.id}
-                  className={`dashboard-tab ${activeTab === tab.id ? 'active' : ''}`}
-                  onClick={() => handleTabChange(tab.id)}
+        <div className="dashboard-tabs-content">
+          {activeTab === 'students' && <StudentsTab onAddNew={() => setIsModalOpen(true)} />}
+          {activeTab === 'classes' && <ClassesTab />}
+          {activeTab === 'schedule' && <ScheduleTab />}
+          {activeTab === 'timetable' && (<TimetableTab />)}
+          {activeTab === 'settings' && <SettingsTab />}
+        </div>
+      </main>
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3 className="modal-title">
+              Añadir Nuevo Elemento
+            </h3>
+            <div className="modal-body">
+              <input
+                placeholder="Nombre"
+                className="modal-input"
+              />
+              <input
+                placeholder="Email"
+                className="modal-input"
+              />
+              <div className="modal-footer">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="modal-button cancel"
                 >
-                  <Icon className="icon-tab" />
-                  {tab.label}
+                  Cancelar
                 </button>
-              );
-            })}
-            
-            {/* Botón desplegable para móvil */}
-            <button 
-              className="dashboard-tab dashboard-tab-mobile active"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              {activeTabData && (
-                <>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <activeTabData.icon className="icon-tab" />
-                    {activeTabData.label}
-                  </div>
-                  <ChevronDown className="icon-tab" style={{ transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }} />
-                </>
-              )}
-            </button>
-            
-            {/* Menú desplegable */}
-            <div 
-              className="dashboard-tabs-dropdown"
-              style={{ display: isDropdownOpen ? 'block' : 'none' }}
-            >
-              {tabs.filter(tab => tab.id !== activeTab).map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button 
-                    key={tab.id}
-                    className="dashboard-tab"
-                    onClick={() => handleTabChange(tab.id)}
-                  >
-                    <Icon className="icon-tab" />
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="dashboard-tabs-content">
-            {activeTab === 'students' && <StudentsTab onAddNew={() => setIsModalOpen(true)} />}
-            {activeTab === 'classes' && <ClassesTab />}
-            {activeTab === 'schedule' && <ScheduleTab />}
-            {activeTab === 'timetable' && (
-              <div className="dashboard-card">
-                <div className="dashboard-section-header">
-                  <div>
-                    <h2 className="dashboard-section-title">Horario Semanal</h2>
-                  </div>
-                </div>
-                <TimetableTab />
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="modal-button save"
+                >
+                  Guardar
+                </button>
               </div>
-            )}
-            {activeTab === 'settings' && <SettingsTab />}
+            </div>
           </div>
         </div>
-
-        {isModalOpen && (
-          <div style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 50,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)'
-          }}>
-            <div style={{
-              background: 'white',
-              borderRadius: '0.5rem',
-              padding: '1.5rem',
-              width: '100%',
-              maxWidth: '28rem',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-            }}>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem' }}>
-                Añadir Nuevo Elemento
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <input 
-                  placeholder="Nombre" 
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '0.375rem'
-                  }}
-                />
-                <input 
-                  placeholder="Email" 
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '0.375rem'
-                  }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
-                  <button 
-                    onClick={() => setIsModalOpen(false)}
-                    style={{
-                      padding: '0.5rem 1rem',
-                      border: '1px solid #d1d5db',
-                      background: 'white',
-                      borderRadius: '0.375rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                  <button 
-                    onClick={() => setIsModalOpen(false)}
-                    style={{
-                      padding: '0.5rem 1rem',
-                      background: '#2563eb',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '0.375rem',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Guardar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

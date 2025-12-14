@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LoginScreen } from './components/LoginScreen';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Dashboard } from './components/Dashboard';
@@ -7,9 +7,23 @@ import { AuthService } from './services/AuthService';
 type AppState = 'login' | 'loading' | 'dashboard';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<AppState>('login');
+  const [currentScreen, setCurrentScreen] = useState<AppState>('loading');
   const [userName, setUserName] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
+
+  useEffect(() => {
+    const session = AuthService.getSession();
+    if (session) {
+      setUserName(session.userName);
+      setCurrentScreen('dashboard');
+    } else {
+      setCurrentScreen('login');
+    }
+  }, []);
+
+  useEffect(() => {
+    document.title = userName ? `Teacher Notebook - ${userName}` : 'Teacher Notebook';
+  }, [userName]);
 
   const handleLogin = async (username: string, password: string) => {
     setLoginError('');
@@ -27,12 +41,14 @@ function App() {
       setCurrentScreen('dashboard');
     } catch (error) {
       console.error('Login failed:', error);
-      setLoginError('Error en el login. Verifica tus credenciales.');
+      const errorMessage = error instanceof Error ? error.message : 'Se ha producido un error al autenticar';
+      setLoginError(`Error en el login. ${errorMessage}`);
       setCurrentScreen('login');
     }
   };
 
   const handleLogout = () => {
+    AuthService.clearSession();
     setUserName('');
     setCurrentScreen('login');
   };
