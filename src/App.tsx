@@ -19,6 +19,16 @@ function App() {
     } else {
       setCurrentScreen('login');
     }
+
+    // Escuchar evento de logout forzado
+    const handleForceLogout = () => {
+      setUserName('');
+      setCurrentScreen('login');
+      setLoginError('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+    };
+
+    globalThis.addEventListener('auth:logout', handleForceLogout);
+    return () => globalThis.removeEventListener('auth:logout', handleForceLogout);
   }, []);
 
   useEffect(() => {
@@ -61,7 +71,7 @@ function App() {
     return <LoadingScreen />;
   }
 
-  return <Dashboard userName={userName} onLogout={handleLogout} />;
+  return <Dashboard onLogout={handleLogout} />;
 }
 
 export default App;

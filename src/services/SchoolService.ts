@@ -1,4 +1,5 @@
 import { getApiUrl } from '../config/environment';
+import { AuthService } from './AuthService';
 
 export interface SchoolClass {
   id: number;
@@ -18,14 +19,20 @@ export interface School {
 export class SchoolService {
   static async getSchools(): Promise<School[]> {
     const apiUrl = await getApiUrl();
-    
+    const token = AuthService.getAccessToken();
+
+    if (!token) {
+      AuthService.forceLogout();
+      return [];
+    }
+
     try {
       const response = await fetch(`${apiUrl}/teacher-notebook/v1/schools`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       
       if (!response.ok) {

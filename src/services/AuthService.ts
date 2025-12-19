@@ -1,5 +1,10 @@
 import { getApiUrl } from '../config/environment';
 
+interface LoginResponse {
+  userName: string;
+  accessToken: string;
+}
+
 export class AuthService {
   private static readonly SESSION_KEY = 'teacher_notebook_session';
 
@@ -25,9 +30,13 @@ export class AuthService {
         throw new Error('Se ha producido un error al autenticar');
       }
       
-      const userName = await response.text();
-      sessionStorage.setItem(this.SESSION_KEY, JSON.stringify({ userName, timestamp: Date.now() }));
-      return userName;
+      const loginData: LoginResponse = await response.json();
+      sessionStorage.setItem(this.SESSION_KEY, JSON.stringify({
+        userName: loginData.userName,
+        accessToken: loginData.accessToken,
+        timestamp: Date.now()
+      }));
+      return loginData.userName;
     } catch (error) {
       if (error instanceof Error && error.message === 'Verifica tus credenciales.') {
         throw error;
@@ -36,12 +45,22 @@ export class AuthService {
     }
   }
 
-  static getSession(): { userName: string } | null {
+  static getSession(): { userName: string; accessToken: string } | null {
     const session = sessionStorage.getItem(this.SESSION_KEY);
     return session ? JSON.parse(session) : null;
   }
 
+  static getAccessToken(): string | null {
+    const session = this.getSession();
+    return session ? session.accessToken : null;
+  }
+
   static clearSession(): void {
     sessionStorage.removeItem(this.SESSION_KEY);
+  }
+
+  static forceLogout(): void {
+    this.clearSession();
+    globalThis.dispatchEvent(new CustomEvent('auth:logout'));
   }
 }
