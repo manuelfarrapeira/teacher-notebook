@@ -35,6 +35,8 @@ interface Translations {
     selectSchool: string;
     selectClass: string;
     refresh: string;
+    weeklyTimetable: string;
+    addNewItem: string;
     students: {
       title: string;
       addNew: string;
@@ -66,6 +68,14 @@ interface Translations {
     delete: string;
     edit: string;
     close: string;
+    language: {
+      es: string;
+      en: string;
+    };
+    tooltip: {
+      switchToEnglish: string;
+      switchToSpanish: string;
+    };
   };
 }
 
@@ -103,6 +113,8 @@ const translations: Record<Locale, Translations> = {
       selectSchool: 'Selecciona un colegio',
       selectClass: 'Selecciona una clase',
       refresh: 'Actualizar',
+      weeklyTimetable: 'Horario Semanal',
+      addNewItem: 'Añadir Nuevo Elemento',
       students: {
         title: 'Estudiantes',
         addNew: 'Añadir Nuevo',
@@ -133,7 +145,15 @@ const translations: Record<Locale, Translations> = {
       save: 'Guardar',
       delete: 'Eliminar',
       edit: 'Editar',
-      close: 'Cerrar'
+      close: 'Cerrar',
+      language: {
+        es: 'ES',
+        en: 'EN'
+      },
+      tooltip: {
+        switchToEnglish: 'Cambiar a Inglés',
+        switchToSpanish: 'Cambiar a Español'
+      }
     }
   },
   en: {
@@ -169,6 +189,8 @@ const translations: Record<Locale, Translations> = {
       selectSchool: 'Select a school',
       selectClass: 'Select a class',
       refresh: 'Refresh',
+      weeklyTimetable: 'Weekly Timetable',
+      addNewItem: 'Add New Item',
       students: {
         title: 'Students',
         addNew: 'Add New',
@@ -199,7 +221,15 @@ const translations: Record<Locale, Translations> = {
       save: 'Save',
       delete: 'Delete',
       edit: 'Edit',
-      close: 'Close'
+      close: 'Close',
+      language: {
+        es: 'SP',
+        en: 'EN'
+      },
+      tooltip: {
+        switchToEnglish: 'Switch to English',
+        switchToSpanish: 'Switch to Spanish'
+      }
     }
   }
 };

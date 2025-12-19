@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookOpen, Users, Calendar, Settings, LogOut, Clock, Menu, RefreshCw } from 'lucide-react';
+import { BookOpen, Users, Calendar, Settings, LogOut, Clock, Menu } from 'lucide-react';
 import { StudentsTab } from './tabs/StudentsTab';
 import { ClassesTab } from './tabs/ClassesTab';
 import { ScheduleTab } from './tabs/ScheduleTab';
@@ -8,8 +8,8 @@ import { SettingsTab } from './tabs/SettingsTab';
 import { SchoolService, School } from '../services/SchoolService';
 import { LoadingModal } from './modals/LoadingModal';
 import { AlertMessage } from './ui/alert';
+import { TopBar } from './TopBar';
 import { useI18n } from '../lib/i18n';
-import { LanguageSelector } from './LanguageSelector';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -25,11 +25,11 @@ export function Dashboard({ onLogout }: DashboardProps) {
   const [selectedSchool, setSelectedSchool] = useState<number | null>(null);
   const [selectedClass, setSelectedClass] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // New state for error messages
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchSchools = useCallback(async () => {
     setLoading(true);
-    setErrorMessage(null); // Clear previous errors
+    setErrorMessage(null);
     try {
       const schoolData = await SchoolService.getSchools();
       setSchools(schoolData);
@@ -53,7 +53,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
     } finally {
       setLoading(false);
     }
-  }, [selectedSchool, selectedClass]);
+  }, [selectedSchool, selectedClass, t]);
 
   useEffect(() => {
     fetchSchools();
@@ -98,7 +98,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
       {isMenuOpen && <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)} />}
       
       <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
-        <h1 className="dashboard-title">Teacher Notebook</h1>
+        <h1 className="dashboard-title">{t('app.title')}</h1>
         <div className="dashboard-menu">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -124,32 +124,33 @@ export function Dashboard({ onLogout }: DashboardProps) {
           <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
             <Menu size={24} />
           </button>
-          <div style={{ marginLeft: 'auto' }}>
-            <LanguageSelector />
-          </div>
         </header>
 
-        <div className="course-info-selectors">
-          <select className="course-select" value={selectedSchool || ''} onChange={handleSchoolChange}>
-            {schools.map(school => (
-              <option key={school.id} value={school.id}>{school.name}</option>
-            ))}
-          </select>
-          <select className="course-select" value={selectedClass || ''} onChange={handleClassChange}>
-            {currentSchool?.classes.map(cls => (
-              <option key={cls.id} value={cls.id}>{cls.name} - {cls.schoolYear}</option>
-            ))}
-          </select>
-          <button className="refresh-button" onClick={handleRefresh} disabled={loading}>
-            <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
-          </button>
-        </div>
+        <TopBar
+          schools={schools}
+          selectedSchool={selectedSchool}
+          selectedClass={selectedClass}
+          loading={loading}
+          currentSchool={currentSchool}
+          onSchoolChange={handleSchoolChange}
+          onClassChange={handleClassChange}
+          onRefresh={handleRefresh}
+        />
 
         <div className="dashboard-tabs-content">
           {activeTab === 'students' && <StudentsTab onAddNew={() => setIsModalOpen(true)} />}
           {activeTab === 'classes' && <ClassesTab />}
           {activeTab === 'schedule' && <ScheduleTab />}
-          {activeTab === 'timetable' && <TimetableTab />}
+          {activeTab === 'timetable' && (
+            <div className="dashboard-card">
+              <div className="dashboard-section-header">
+                <div>
+                  <h2 className="dashboard-section-title">{t('dashboard.weeklyTimetable')}</h2>
+                </div>
+              </div>
+              <TimetableTab />
+            </div>
+          )}
           {activeTab === 'settings' && <SettingsTab />}
         </div>
       </main>
@@ -157,13 +158,13 @@ export function Dashboard({ onLogout }: DashboardProps) {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3 className="modal-title">Añadir Nuevo Elemento</h3>
+            <h3 className="modal-title">{t('dashboard.addNewItem')}</h3>
             <div className="modal-body">
               <input placeholder="Nombre" className="modal-input" />
               <input placeholder="Email" className="modal-input" />
               <div className="modal-footer">
-                <button onClick={() => setIsModalOpen(false)} className="modal-button cancel">Cancelar</button>
-                <button onClick={() => setIsModalOpen(false)} className="modal-button save">Guardar</button>
+                <button onClick={() => setIsModalOpen(false)} className="modal-button cancel">{t('common.cancel')}</button>
+                <button onClick={() => setIsModalOpen(false)} className="modal-button save">{t('common.save')}</button>
               </div>
             </div>
           </div>

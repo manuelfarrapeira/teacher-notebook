@@ -30,7 +30,7 @@ export function LanguageSelector() {
     setLocale(locale === 'es' ? 'en' : 'es');
   };
 
-  const languageName = locale === 'es' ? 'Español' : 'English';
+  const languageName = locale === 'es' ? 'ES' : 'EN';
   const tooltipText = locale === 'es' ? 'Cambiar a inglés' : 'Switch to Spanish';
 
   return (
