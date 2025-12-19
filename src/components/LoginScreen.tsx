@@ -3,6 +3,8 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { GraduationCap, BookOpen, Users, Award } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
+import { LanguageSelector } from './LanguageSelector';
 
 interface LoginScreenProps {
   onLogin: (username: string, password: string) => void;
@@ -10,6 +12,7 @@ interface LoginScreenProps {
 }
 
 export function LoginScreen({ onLogin, error }: LoginScreenProps) {
+  const { t } = useI18n();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,6 +23,11 @@ export function LoginScreen({ onLogin, error }: LoginScreenProps) {
 
   return (
     <div className="login-container">
+      {/* Selector de idioma */}
+      <div style={{ position: 'absolute', top: '1rem', right: '1rem', zIndex: 10 }}>
+        <LanguageSelector />
+      </div>
+
       {/* Elementos decorativos de fondo */}
       <div className="login-bg-elements">
         <div className="login-bg-icon book">
@@ -46,36 +54,36 @@ export function LoginScreen({ onLogin, error }: LoginScreenProps) {
               <Award className="icon-badge" />
             </div>
           </div>
-          <h1 className="login-title">Teacher Notebook</h1>
-          <p className="login-subtitle">Tu espacio educativo digital</p>
+          <h1 className="login-title">{t('login.title')}</h1>
+          <p className="login-subtitle">{t('login.subtitle')}</p>
           <div className="login-tagline">
             <BookOpen className="icon-tagline" />
-            <span>Gestión académica profesional</span>
+            <span>{t('login.tagline')}</span>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="login-field">
-            <Label htmlFor="username" className="login-label">Usuario</Label>
+            <Label htmlFor="username" className="login-label">{t('login.username')}</Label>
             <Input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="tu_usuario"
+              placeholder={t('login.usernamePlaceholder')}
               required
               className="login-input"
             />
           </div>
           
           <div className="login-field">
-            <Label htmlFor="password" className="login-label">Contraseña</Label>
+            <Label htmlFor="password" className="login-label">{t('login.password')}</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder={t('login.passwordPlaceholder')}
               required
               className="login-input"
             />
@@ -83,7 +91,7 @@ export function LoginScreen({ onLogin, error }: LoginScreenProps) {
 
           <Button type="submit" className="login-button">
             <GraduationCap className="icon-button" />
-            Acceder al Aula
+            {t('login.loginButton')}
           </Button>
 
           {error && (

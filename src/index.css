@@ -873,3 +873,14 @@ body {
     align-items: stretch;
   }
 }
+
+/* Language Selector Styles */
+.language-selector-button {
+  transition: all 0.2s ease;
+}
+
+.language-selector-button:hover {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+

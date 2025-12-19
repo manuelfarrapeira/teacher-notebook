@@ -1,4 +1,5 @@
 import { getApiUrl } from '../config/environment';
+import { getCurrentLocale } from '../lib/i18n';
 
 interface LoginResponse {
   userName: string;
@@ -11,13 +12,15 @@ export class AuthService {
   static async login(username: string, password: string): Promise<string> {
     const auth = btoa(`${username}:${password}`);
     const apiUrl = await getApiUrl();
-    
+    const locale = getCurrentLocale();
+
     try {
       const response = await fetch(`${apiUrl}/public/auth/login`, {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${auth}`,
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept-Language': locale
         },
         body: new URLSearchParams({ username, password }),
         credentials: 'include'

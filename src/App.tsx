@@ -39,7 +39,7 @@ function App() {
     setLoginError('');
 
     if (!username || !password) {
-      setLoginError('Por favor completa todos los campos.');
+      setLoginError(t('login.errors.emptyFields'));
       return;
     }
 
@@ -51,8 +51,8 @@ function App() {
       setCurrentScreen('dashboard');
     } catch (error) {
       console.error('Login failed:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Se ha producido un error al autenticar';
-      setLoginError(`Error en el login. ${errorMessage}`);
+      const errorMessage = error instanceof Error ? error.message : t('login.errors.authError');
+      setLoginError(`${t('login.errors.loginFailed')} ${errorMessage}`);
       setCurrentScreen('login');
     }
   };

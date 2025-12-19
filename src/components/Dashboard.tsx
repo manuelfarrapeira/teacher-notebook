@@ -7,13 +7,16 @@ import { TimetableTab } from './tabs/TimetableTab';
 import { SettingsTab } from './tabs/SettingsTab';
 import { SchoolService, School } from '../services/SchoolService';
 import { LoadingModal } from './modals/LoadingModal';
-import { AlertMessage } from './ui/alert'; // Import the new AlertMessage component
+import { AlertMessage } from './ui/alert';
+import { useI18n } from '../lib/i18n';
+import { LanguageSelector } from './LanguageSelector';
 
 interface DashboardProps {
   onLogout: () => void;
 }
 
 export function Dashboard({ onLogout }: DashboardProps) {
+  const { t } = useI18n();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('students');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,11 +45,11 @@ export function Dashboard({ onLogout }: DashboardProps) {
           setSelectedClass(null);
         }
       } else {
-        setErrorMessage("No se encontraron colegios.");
+        setErrorMessage(t('dashboard.errors.noSchools'));
       }
     } catch (error) {
       console.error(error);
-      setErrorMessage("Error al cargar los colegios. Por favor, inténtalo de nuevo.");
+      setErrorMessage(t('dashboard.errors.loadSchoolsError'));
     } finally {
       setLoading(false);
     }
@@ -57,11 +60,11 @@ export function Dashboard({ onLogout }: DashboardProps) {
   }, [fetchSchools]);
 
   const tabs = [
-    { id: 'students', label: 'Estudiantes', icon: Users },
-    { id: 'classes', label: 'Clases', icon: BookOpen },
-    { id: 'schedule', label: 'Calendario', icon: Calendar },
-    { id: 'timetable', label: 'Horario', icon: Clock },
-    { id: 'settings', label: 'Configuración', icon: Settings },
+    { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
+    { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
+    { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
+    { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
+    { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
   ];
 
   const handleTabChange = (tabId: string) => {
@@ -111,7 +114,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
         <div className="dashboard-logout-section">
           <button onClick={onLogout} className="dashboard-tab">
             <LogOut size={20} />
-            Cerrar Sesión
+            {t('dashboard.logout')}
           </button>
         </div>
       </nav>
@@ -121,6 +124,9 @@ export function Dashboard({ onLogout }: DashboardProps) {
           <button className="menu-button" onClick={() => setIsMenuOpen(true)}>
             <Menu size={24} />
           </button>
+          <div style={{ marginLeft: 'auto' }}>
+            <LanguageSelector />
+          </div>
         </header>
 
         <div className="course-info-selectors">
