@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useI18n } from '../lib/i18n';
+import React, { useState, useEffect, useRef } from 'react';
+import { useI18n } from '../../lib/i18n';
 import { ChevronDown } from 'lucide-react';
 
 const SpainFlag = () => (
@@ -22,16 +22,41 @@ const UKFlag = () => (
 export function LanguageSelector() {
   const { locale, setLocale, t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleLanguageChange = (newLocale: 'es' | 'en') => {
     setLocale(newLocale);
     setIsOpen(false);
   };
 
-  const languageName = locale === 'es' ? t('common.language.es') : t('common.language.en');
+  // Handle clicks outside the language selector
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Obtener el schoolYear actual si está disponible
+  let schoolYear = '';
+  if (typeof window !== 'undefined') {
+    // Intentar obtener schoolYear de la URL, contexto global, o variable global
+    // Aquí puedes ajustar la lógica según cómo se obtiene schoolYear en tu app
+    const urlParams = new URLSearchParams(window.location.search);
+    schoolYear = urlParams.get('schoolYear') || '';
+  }
+
+  // Concatenar el nombre del idioma con el schoolYear
+  const languageName = `${locale === 'es' ? t('common.language.es') : t('common.language.en')}${schoolYear ? ' - ' + schoolYear : ''}`;
 
   return (
-    <div className="language-selector-container">
+    <div className="language-selector-container" ref={containerRef}>
       <button onClick={() => setIsOpen(!isOpen)} className="language-button">
         {locale === 'es' ? <SpainFlag /> : <UKFlag />}
         <span className="language-name">{languageName}</span>
@@ -41,11 +66,11 @@ export function LanguageSelector() {
         <div className="language-dropdown">
           <button onClick={() => handleLanguageChange('es')} className="language-option">
             <SpainFlag />
-            <span>{t('common.language.es')}</span>
+            <span>{`${t('common.language.es')}${schoolYear ? ' - ' + schoolYear : ''}`}</span>
           </button>
           <button onClick={() => handleLanguageChange('en')} className="language-option">
             <UKFlag />
-            <span>{t('common.language.en')}</span>
+            <span>{`${t('common.language.en')}${schoolYear ? ' - ' + schoolYear : ''}`}</span>
           </button>
         </div>
       )}

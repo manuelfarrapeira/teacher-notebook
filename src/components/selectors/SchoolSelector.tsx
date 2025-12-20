@@ -1,6 +1,6 @@
 import React from 'react';
-import { School } from '../services/SchoolService';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './ui/select';
+import { School } from '../../services/SchoolService';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 
 interface SchoolSelectorProps {
   schools: School[];

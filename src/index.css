@@ -658,6 +658,10 @@ body {
   gap: 0.5rem;
   font-weight: 600;
   font-size: 0.9rem;
+  min-width: 0;
+  width: auto;
+  max-width: 350px;
+  white-space: normal;
 }
 
 .selector-button:hover {
@@ -668,7 +672,9 @@ body {
 .selector-name {
   font-weight: 600;
   font-size: 0.9rem;
-  white-space: nowrap;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .selector-dropdown {

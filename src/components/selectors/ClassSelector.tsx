@@ -1,6 +1,6 @@
 import React from 'react';
-import { SchoolClass } from '../services/SchoolService';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './ui/select';
+import { SchoolClass } from '../../services/SchoolService';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 
 interface ClassSelectorProps {
   classes: SchoolClass[];
@@ -9,10 +9,15 @@ interface ClassSelectorProps {
 }
 
 export function ClassSelector({ classes, selectedClass, onClassChange }: ClassSelectorProps) {
+  const selected = classes.find(cls => cls.id === selectedClass);
+  const selectedLabel = selected ? `${selected.name} - ${selected.schoolYear}` : 'Seleccionar clase';
+
   return (
     <Select value={selectedClass ? String(selectedClass) : ''} onValueChange={v => onClassChange(Number(v))}>
       <SelectTrigger className="min-w-[140px]">
-        <SelectValue placeholder="Seleccionar clase" />
+        <SelectValue placeholder="Seleccionar clase">
+          {selectedLabel}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {classes.map(cls => (
