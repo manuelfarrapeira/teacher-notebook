@@ -485,8 +485,8 @@ body {
   background: #fff;
   border-bottom: 2.5px solid #a9c1fd;
   box-shadow: 0 2px 8px 0 rgba(79, 70, 229, 0.06);
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   min-height: 48px;
   z-index: 20;
 }
@@ -779,9 +779,12 @@ body {
   background: white;
   border-radius: 0.5rem;
   border: 1px solid #e5e7eb;
-  /*box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);*/
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   border-bottom: 2.5px solid #a9c1fd;
   padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .dashboard-section-header {

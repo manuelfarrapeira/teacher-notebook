@@ -98,7 +98,6 @@ export function Dashboard({ onLogout }: DashboardProps) {
       {isMenuOpen && <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)} />}
       
       <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
-        <h1 className="dashboard-title">{t('app.title')}</h1>
         <div className="dashboard-menu">
           {tabs.map((tab) => {
             const Icon = tab.icon;
