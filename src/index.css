@@ -466,7 +466,7 @@ body {
 
 .dashboard-main-content {
   flex: 1;
-  padding: 2rem;
+  padding: 0 2rem 2rem 2rem;
   overflow-y: auto;
 }
 
@@ -1087,4 +1087,3 @@ body {
     gap: 1rem;
   }
 }
-
