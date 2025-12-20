@@ -6,7 +6,7 @@ export function ScheduleTab()  {
       <div className="dashboard-card">
         <div className="dashboard-empty">
           <BookOpen className="dashboard-empty-icon" />
-          <p className="dashboard-empty-text">No hay clases programadas</p>
+
         </div>
       </div>
   );

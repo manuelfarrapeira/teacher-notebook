@@ -141,16 +141,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
           {activeTab === 'students' && <StudentsTab onAddNew={() => setIsModalOpen(true)} />}
           {activeTab === 'classes' && <ClassesTab />}
           {activeTab === 'schedule' && <ScheduleTab />}
-          {activeTab === 'timetable' && (
-            <div className="dashboard-card">
-              <div className="dashboard-section-header">
-                <div>
-                  <h2 className="dashboard-section-title">{t('dashboard.weeklyTimetable')}</h2>
-                </div>
-              </div>
-              <TimetableTab />
-            </div>
-          )}
+          {activeTab === 'timetable' && ( <TimetableTab />)}
           {activeTab === 'settings' && <SettingsTab />}
         </div>
       </main>
