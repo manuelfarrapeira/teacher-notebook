@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookOpen, Users, Calendar, Settings, LogOut, Clock, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { StudentsTab } from './tabs/StudentsTab';
 import { ClassesTab } from './tabs/ClassesTab';
 import { ScheduleTab } from './tabs/ScheduleTab';
@@ -9,6 +9,7 @@ import { SchoolService, School } from '../services/SchoolService';
 import { LoadingModal } from './modals/LoadingModal';
 import { AlertMessage } from './ui/alert';
 import { TopBar } from './TopBar';
+import { Sidebar } from './Sidebar';
 import { useI18n } from '../lib/i18n';
 
 interface DashboardProps {
@@ -59,13 +60,6 @@ export function Dashboard({ onLogout }: DashboardProps) {
     fetchSchools();
   }, [fetchSchools]);
 
-  const tabs = [
-    { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
-    { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
-    { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
-    { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
-    { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
-  ];
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
@@ -97,26 +91,12 @@ export function Dashboard({ onLogout }: DashboardProps) {
     <div className="dashboard-container">
       {isMenuOpen && <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)} />}
       
-      <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
-        <div className="dashboard-menu">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button key={tab.id} className={`dashboard-tab ${isActive ? 'active' : ''}`} onClick={() => handleTabChange(tab.id)}>
-                <Icon className="icon-tab" size={20} />
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-        <div className="dashboard-logout-section">
-          <button onClick={onLogout} className="dashboard-tab">
-            <LogOut size={20} />
-            {t('dashboard.logout')}
-          </button>
-        </div>
-      </nav>
+      <Sidebar
+        activeTab={activeTab}
+        isMenuOpen={isMenuOpen}
+        onTabChange={handleTabChange}
+        onLogout={onLogout}
+      />
 
       <main className="dashboard-main-content">
         <header className="dashboard-header">
