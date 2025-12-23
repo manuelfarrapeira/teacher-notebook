@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {BookOpen, ChevronLeft, ChevronRight, Plus} from 'lucide-react';
 
 export function ScheduleTab()  {
@@ -11,3 +11,4 @@ export function ScheduleTab()  {
       </div>
   );
 }
+

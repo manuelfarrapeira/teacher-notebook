@@ -73,11 +73,9 @@ export abstract class BaseService {
       throw new Error('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
     }
 
-    // Intentar parsear el error del servidor
     try {
       const errorData: ApiError = await response.json();
 
-      // Si hay detalles de validación, concatenarlos
       if (errorData.details && errorData.details.length > 0) {
         const detailsMessage = errorData.details
           .map(detail => `${detail.field}: ${detail.reason}`)
@@ -85,22 +83,17 @@ export abstract class BaseService {
         throw new Error(detailsMessage);
       }
 
-      // Si hay descripción, usarla
       if (errorData.description) {
         throw new Error(errorData.description);
       }
 
-      // Si hay detail, usarlo
       if (errorData.detail) {
         throw new Error(errorData.detail);
       }
 
-      // Fallback al código de error
       throw new Error(`Error del servidor: ${errorData.code}`);
 
     } catch (parseError) {
-      // Si no se puede parsear como JSON o no tiene el formato esperado
-      // usar mensajes genéricos basados en el status code
       if (parseError instanceof Error && parseError.message !== 'Unexpected end of JSON input') {
         throw parseError;
       }

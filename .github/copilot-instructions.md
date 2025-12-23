@@ -66,7 +66,125 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
 
 ---
 
+## 🎨 Estructura CSS para Tabs
+
+**Cuando crees una nueva tab, SIEMPRE debes seguir esta estructura CSS básica:**
+
+### Estructura Básica Requerida
+
+```tsx
+import React from 'react';
+import { IconName } from 'lucide-react';
+import { useI18n } from '../../lib/i18n';
+
+export function NuevaTab() {
+  const { t } = useI18n();
+
+  return (
+    <div className="dashboard-card">
+      {/* Header (opcional) */}
+      <div className="dashboard-section-header">
+        <h2 className="dashboard-section-title">{t('dashboard.nueva.title')}</h2>
+        <button className="dashboard-add-btn">
+          {t('dashboard.nueva.addNew')}
+        </button>
+      </div>
+
+      {/* Estado vacío o contenido */}
+      <div className="dashboard-empty">
+        <IconName className="dashboard-empty-icon" />
+        <p className="dashboard-empty-text">{t('dashboard.nueva.emptyMessage')}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### Clases CSS Disponibles para Tabs
+
+**Contenedores:**
+- `dashboard-card` - Contenedor principal de la tab (fondo blanco, borde, padding)
+
+**Headers:**
+- `dashboard-section-header` - Contenedor flex para título y botón
+- `dashboard-section-title` - Título de la sección (1.25rem, font-weight: 600)
+
+**Botones:**
+- `dashboard-add-btn` - Botón de acción principal (azul, hover effect)
+
+**Estados vacíos:**
+- `dashboard-empty` - Contenedor centrado para estado vacío
+- `dashboard-empty-icon` - Icono del estado vacío (3rem, color gris)
+- `dashboard-empty-text` - Texto del estado vacío (color gris)
+
+**Formularios y modales:**
+- `modal-overlay` - Overlay de fondo para modales
+- `modal-content` - Contenedor del modal (fondo blanco, bordes redondeados)
+- `modal-title` - Título del modal
+- `modal-body` - Cuerpo del modal (flex column, gap)
+- `modal-input` - Input estándar del modal
+- `modal-footer` - Footer del modal (flex, justify-end)
+- `modal-button` - Botón del modal (base)
+- `modal-button cancel` - Botón cancelar (borde, fondo blanco)
+- `modal-button save` - Botón guardar (azul, sin borde)
+
+**Listas y estudiantes:**
+- `dashboard-search` - Input de búsqueda
+- `dashboard-students` - Contenedor de lista de estudiantes
+- `dashboard-student` - Item individual de estudiante
+- `dashboard-student-info` - Contenedor de info del estudiante
+- `dashboard-student-avatar` - Avatar circular del estudiante
+- `dashboard-student-name` - Nombre del estudiante
+- `dashboard-student-grade` - Grado del estudiante
+- `dashboard-badge` - Badge de estado
+
+**Animaciones:**
+- `icon-spin` - Animación de rotación para spinners
+- `animate-spin` - Animación de rotación (alternativa)
+
+### ❌ NO Hacer
+
+1. **NO usar componentes de shadcn/ui** directamente en tabs:
+   ```tsx
+   // ❌ INCORRECTO
+   import { Card, CardHeader, CardTitle } from '../ui/card';
+   <Card><CardHeader>...</CardHeader></Card>
+   ```
+
+2. **NO usar Tailwind directamente** para la estructura principal:
+   ```tsx
+   // ❌ INCORRECTO
+   <div className="space-y-6 p-6">
+     <div className="bg-white rounded-lg shadow">
+   ```
+
+3. **NO usar estilos inline** para estructura:
+   ```tsx
+   // ❌ INCORRECTO (solo usar para ajustes menores)
+   <div style={{ display: 'flex', gap: '1rem' }}>
+   ```
+
+### ✅ SÍ Hacer
+
+1. **Usar clases CSS del index.css:**
+   ```tsx
+   // ✅ CORRECTO
+   <div className="dashboard-card">
+     <div className="dashboard-section-header">
+   ```
+
+2. **Seguir el patrón de otras tabs** (StudentsTab, ClassesTab, etc.)
+
+3. **Consultar `src/index.css`** para ver todas las clases disponibles
+
+### Ejemplo Completo
+
+Ver `src/components/tabs/ClassesTab.tsx` como referencia de una tab simple.
+Ver `src/components/tabs/SchoolsTab.tsx` como referencia de una tab con formulario y lista.
+
+---
+
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
-Última actualización: 2025-12-21
+Última actualización: 2025-12-23
 

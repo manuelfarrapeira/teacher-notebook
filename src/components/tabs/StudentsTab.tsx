@@ -38,3 +38,4 @@ export function StudentsTab({ onAddNew }: StudentsTabProps) {
     </div>
   );
 }
+

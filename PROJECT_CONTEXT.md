@@ -131,6 +131,240 @@ src/
 }
 ```
 
+### 📐 Estructura CSS para Tabs
+
+**⚠️ IMPORTANTE:** Todas las tabs deben seguir la misma estructura CSS básica para mantener consistencia visual y funcional.
+
+#### Estructura Base Requerida para Nuevas Tabs
+
+```typescriptreact
+import React from 'react';
+import { IconName } from 'lucide-react';
+import { useI18n } from '../../lib/i18n';
+
+export function NuevaTab() {
+  const { t } = useI18n();
+
+  return (
+    <div className="dashboard-card">
+      {/* Header con título y botón (opcional) */}
+      <div className="dashboard-section-header">
+        <h2 className="dashboard-section-title">{t('dashboard.nueva.title')}</h2>
+        <button className="dashboard-add-btn">
+          {t('dashboard.nueva.addNew')}
+        </button>
+      </div>
+
+      {/* Estado vacío o contenido principal */}
+      <div className="dashboard-empty">
+        <IconName className="dashboard-empty-icon" />
+        <p className="dashboard-empty-text">{t('dashboard.nueva.emptyMessage')}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+#### Clases CSS Disponibles
+
+**Contenedores principales:**
+| Clase | Descripción | Estilos |
+|-------|-------------|---------|
+| `dashboard-card` | Contenedor principal de la tab | fondo blanco, borde gris, padding 1.5rem, sombra suave |
+
+**Headers y títulos:**
+| Clase | Descripción | Estilos |
+|-------|-------------|---------|
+| `dashboard-section-header` | Contenedor flex para header | display: flex, justify-content: space-between, align-items: center |
+| `dashboard-section-title` | Título de sección | font-size: 1.25rem, font-weight: 600 |
+
+**Botones de acción:**
+| Clase | Descripción | Estilos |
+|-------|-------------|---------|
+| `dashboard-add-btn` | Botón principal de acción | background azul, color blanco, padding, border-radius, hover effect |
+
+**Estados vacíos:**
+| Clase | Descripción | Estilos |
+|-------|-------------|---------|
+| `dashboard-empty` | Contenedor de estado vacío | text-align: center, padding: 2rem |
+| `dashboard-empty-icon` | Icono del estado vacío | height: 3rem, width: 3rem, color gris, margin centrado |
+| `dashboard-empty-text` | Texto del estado vacío | color: #6b7280 (gris) |
+
+**Listas y estudiantes:**
+| Clase | Descripción | Estilos |
+|-------|-------------|---------|
+| `dashboard-search` | Input de búsqueda | width: 100%, padding: 0.75rem, borde gris, border-radius |
+| `dashboard-students` | Contenedor de lista de estudiantes | display: flex, flex-direction: column, gap: 1rem |
+| `dashboard-student` | Item individual de estudiante | display: flex, align-items: center, justify-content: space-between, padding: 1rem, borde |
+| `dashboard-student-info` | Info del estudiante (avatar + texto) | display: flex, align-items: center, gap: 0.75rem |
+| `dashboard-student-avatar` | Avatar circular | width: 2.5rem, height: 2.5rem, border-radius: 50%, background azul claro |
+| `dashboard-student-name` | Nombre del estudiante | font-weight: 500 |
+| `dashboard-student-grade` | Grado del estudiante | font-size: 0.875rem, color gris |
+| `dashboard-badge` | Badge de estado | background gris claro, padding, border-radius, font pequeño |
+
+**Modales y formularios:**
+| Clase | Descripción | Estilos |
+|-------|-------------|---------|
+| `modal-overlay` | Overlay de fondo del modal | position: fixed, inset: 0, background rgba negro 50%, z-index: 50 |
+| `modal-content` | Contenedor del modal | background blanco, border-radius, padding: 1.5rem, max-width: 28rem, sombra |
+| `modal-title` | Título del modal | font-size: 1.125rem, font-weight: 600 |
+| `modal-body` | Cuerpo del modal | display: flex, flex-direction: column, gap: 1rem |
+| `modal-input` | Input del formulario | width: 100%, padding: 0.75rem, borde gris, border-radius |
+| `modal-footer` | Footer del modal | display: flex, justify-content: flex-end, gap: 0.5rem |
+| `modal-button` | Botón base del modal | padding: 0.5rem 1rem, border-radius, cursor pointer |
+| `modal-button cancel` | Botón cancelar | borde gris, background blanco |
+| `modal-button save` | Botón guardar | background azul, color blanco, sin borde |
+
+**Utilidades y animaciones:**
+| Clase | Descripción | Estilos |
+|-------|-------------|---------|
+| `icon-spin` | Animación de rotación para iconos | animation: spin 1s linear infinite |
+| `animate-spin` | Animación de rotación (alternativa) | animation: spin 1s linear infinite |
+| `icon-tab` | Tamaño estándar de iconos en tabs | height: 1rem, width: 1rem |
+
+#### ❌ NO Hacer al Crear Tabs
+
+1. **NO usar componentes de shadcn/ui** para la estructura principal:
+   ```tsx
+   // ❌ INCORRECTO
+   import { Card, CardHeader, CardTitle } from '../ui/card';
+   
+   return (
+     <Card>
+       <CardHeader>
+         <CardTitle>Título</CardTitle>
+       </CardHeader>
+     </Card>
+   );
+   ```
+
+2. **NO usar Tailwind directamente** para la estructura base:
+   ```tsx
+   // ❌ INCORRECTO
+   return (
+     <div className="space-y-6 p-6 bg-white rounded-lg shadow">
+       <div className="flex items-center justify-between">
+   ```
+
+3. **NO usar estilos inline** para la estructura principal:
+   ```tsx
+   // ❌ INCORRECTO (excepto ajustes menores muy específicos)
+   <div style={{ display: 'flex', gap: '1rem', padding: '2rem' }}>
+   ```
+
+4. **NO crear archivos CSS nuevos** para tabs individuales
+
+#### ✅ SÍ Hacer al Crear Tabs
+
+1. **Usar las clases CSS definidas** en `src/index.css`:
+   ```tsx
+   // ✅ CORRECTO
+   return (
+     <div className="dashboard-card">
+       <div className="dashboard-section-header">
+         <h2 className="dashboard-section-title">{t('title')}</h2>
+         <button className="dashboard-add-btn">{t('add')}</button>
+       </div>
+     </div>
+   );
+   ```
+
+2. **Seguir el patrón de tabs existentes:**
+   - Ver `src/components/tabs/ClassesTab.tsx` para una tab simple
+   - Ver `src/components/tabs/StudentsTab.tsx` para una tab con lista
+   - Ver `src/components/tabs/SchoolsTab.tsx` para una tab con formulario completo
+
+3. **Consultar `src/index.css`** antes de crear estilos nuevos - probablemente ya exista la clase que necesitas
+
+4. **Mantener la jerarquía:** `dashboard-card` → `dashboard-section-header` / `dashboard-empty` / contenido
+
+#### Ejemplo Completo: Tab Simple
+
+```typescriptreact
+// src/components/tabs/TasksTab.tsx
+import React from 'react';
+import { CheckSquare } from 'lucide-react';
+import { useI18n } from '../../lib/i18n';
+
+export function TasksTab() {
+  const { t } = useI18n();
+
+  return (
+    <div className="dashboard-card">
+      <div className="dashboard-empty">
+        <CheckSquare className="dashboard-empty-icon" />
+        <p className="dashboard-empty-text">{t('dashboard.tasks.noTasks')}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+#### Ejemplo Completo: Tab con Formulario
+
+```typescriptreact
+// src/components/tabs/NotesTab.tsx
+import React, { useState } from 'react';
+import { FileText, Plus, Loader2 } from 'lucide-react';
+import { useI18n } from '../../lib/i18n';
+
+export function NotesTab() {
+  const { t } = useI18n();
+  const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <div className="dashboard-card">
+      <div className="dashboard-section-header">
+        <h2 className="dashboard-section-title">{t('dashboard.notes.title')}</h2>
+        <button className="dashboard-add-btn" onClick={() => setShowForm(true)}>
+          <Plus size={16} style={{ marginRight: '0.5rem' }} />
+          {t('dashboard.notes.addNew')}
+        </button>
+      </div>
+
+      {showForm && (
+        <div className="modal-content" style={{ marginBottom: '1.5rem', maxWidth: '100%' }}>
+          <h3 className="modal-title">{t('dashboard.notes.createNote')}</h3>
+          <form className="modal-body">
+            <input className="modal-input" placeholder={t('dashboard.notes.titlePlaceholder')} />
+            <textarea className="modal-input" placeholder={t('dashboard.notes.contentPlaceholder')} />
+            <div className="modal-footer">
+              <button type="button" className="modal-button cancel" onClick={() => setShowForm(false)}>
+                {t('common.cancel')}
+              </button>
+              <button type="submit" className="modal-button save">
+                {t('common.save')}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem 0' }}>
+          <Loader2 className="icon-spin" size={32} />
+        </div>
+      ) : (
+        <div className="dashboard-empty">
+          <FileText className="dashboard-empty-icon" />
+          <p className="dashboard-empty-text">{t('dashboard.notes.noNotes')}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+#### Referencias
+
+- **Tabs existentes:** Todos los archivos en `src/components/tabs/`
+- **CSS completo:** `src/index.css` (líneas 558-730 aprox.)
+- **Ejemplos de referencia:**
+  - Tab simple: `ClassesTab.tsx`, `SettingsTab.tsx`
+  - Tab con header: `StudentsTab.tsx`
+  - Tab completa con formulario: `SchoolsTab.tsx`
+
 ---
 
 ## 🌍 Sistema de Internacionalización (i18n)

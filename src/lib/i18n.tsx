@@ -30,6 +30,7 @@ interface Translations {
       schedule: string;
       timetable: string;
       settings: string;
+      schools: string;
     };
     logout: string;
     selectSchool: string;
@@ -46,6 +47,30 @@ interface Translations {
     };
     classes: {
       noClasses: string;
+    };
+    schools: {
+      title: string;
+      subtitle: string;
+      addNew: string;
+      list: string;
+      name: string;
+      town: string;
+      phone: string;
+      namePlaceholder: string;
+      townPlaceholder: string;
+      phonePlaceholder: string;
+      formDescription: string;
+      submit: string;
+      cancel: string;
+      noSchools: string;
+      addFirstSchool: string;
+      createSuccess: string;
+      createError: string;
+      validation: {
+        nameRequired: string;
+        nameMinLength: string;
+        phoneInvalid: string;
+      };
     };
     loadingData: string;
     errors: {
@@ -107,7 +132,8 @@ const translations: Record<Locale, Translations> = {
         classes: 'Clases',
         schedule: 'Calendario',
         timetable: 'Horario',
-        settings: 'Configuración'
+        settings: 'Configuración',
+        schools: 'Colegios'
       },
       logout: 'Cerrar Sesión',
       selectSchool: 'Selecciona un colegio',
@@ -124,6 +150,30 @@ const translations: Record<Locale, Translations> = {
       },
       classes: {
         noClasses: 'No hay clases programadas'
+      },
+      schools: {
+        title: 'Gestión de Colegios',
+        subtitle: 'Administra tus colegios y visualiza información clave',
+        addNew: 'Crear Nuevo Colegio',
+        list: 'Lista de Colegios',
+        name: 'Nombre',
+        town: 'Localidad',
+        phone: 'Teléfono',
+        namePlaceholder: 'Nombre del colegio',
+        townPlaceholder: 'Localidad (opcional)',
+        phonePlaceholder: '123456789',
+        formDescription: 'Completa el formulario para crear un nuevo colegio. Los campos marcados con * son obligatorios.',
+        submit: 'Crear Colegio',
+        cancel: 'Cancelar',
+        noSchools: 'No hay colegios registrados',
+        addFirstSchool: 'Haz clic en "Crear Nuevo Colegio" para empezar',
+        createSuccess: 'Colegio creado exitosamente',
+        createError: 'Error al crear el colegio',
+        validation: {
+          nameRequired: 'El nombre es obligatorio',
+          nameMinLength: 'El nombre debe tener al menos 5 caracteres',
+          phoneInvalid: 'El teléfono debe tener exactamente 9 dígitos'
+        }
       },
       loadingData: 'Cargando datos...',
       errors: {
@@ -183,7 +233,8 @@ const translations: Record<Locale, Translations> = {
         classes: 'Classes',
         schedule: 'Schedule',
         timetable: 'Timetable',
-        settings: 'Settings'
+        settings: 'Settings',
+        schools: 'Schools'
       },
       logout: 'Log Out',
       selectSchool: 'Select a school',
@@ -200,6 +251,30 @@ const translations: Record<Locale, Translations> = {
       },
       classes: {
         noClasses: 'No classes scheduled'
+      },
+      schools: {
+        title: 'School Management',
+        subtitle: 'Manage your schools and view key information',
+        addNew: 'Create New School',
+        list: 'School List',
+        name: 'Name',
+        town: 'Town',
+        phone: 'Phone',
+        namePlaceholder: 'School name',
+        townPlaceholder: 'Town (optional)',
+        phonePlaceholder: '123456789',
+        formDescription: 'Complete the form to create a new school. Fields marked with * are required.',
+        submit: 'Create School',
+        cancel: 'Cancel',
+        noSchools: 'No schools registered',
+        addFirstSchool: 'Click "Create New School" to get started',
+        createSuccess: 'School created successfully',
+        createError: 'Error creating school',
+        validation: {
+          nameRequired: 'Name is required',
+          nameMinLength: 'Name must be at least 5 characters',
+          phoneInvalid: 'Phone must be exactly 9 digits'
+        }
       },
       loadingData: 'Loading data...',
       errors: {
