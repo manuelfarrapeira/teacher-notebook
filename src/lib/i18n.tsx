@@ -71,6 +71,11 @@ interface Translations {
         nameMinLength: string;
         phoneInvalid: string;
       };
+      delete: string;
+      deleteTitle: string;
+      deleteConfirm: string;
+      deleteConfirmBtn: string;
+      deleteError: string;
     };
     loadingData: string;
     errors: {
@@ -173,7 +178,12 @@ const translations: Record<Locale, Translations> = {
           nameRequired: 'El nombre es obligatorio',
           nameMinLength: 'El nombre debe tener al menos 5 caracteres',
           phoneInvalid: 'El teléfono debe tener exactamente 9 dígitos'
-        }
+        },
+        delete: 'Eliminar',
+        deleteTitle: 'Eliminar colegio',
+        deleteConfirm: '¿Está seguro que quiere dar de baja el colegio "{name}"? Esta acción no se puede deshacer.',
+        deleteConfirmBtn: 'Sí, eliminar',
+        deleteError: 'Error al eliminar el colegio',
       },
       loadingData: 'Cargando datos...',
       errors: {
@@ -274,7 +284,12 @@ const translations: Record<Locale, Translations> = {
           nameRequired: 'Name is required',
           nameMinLength: 'Name must be at least 5 characters',
           phoneInvalid: 'Phone must be exactly 9 digits'
-        }
+        },
+        delete: 'Delete',
+        deleteTitle: 'Delete school',
+        deleteConfirm: 'Are you sure you want to delete the school "{name}"? This action cannot be undone.',
+        deleteConfirmBtn: 'Yes, delete',
+        deleteError: 'Error deleting school',
       },
       loadingData: 'Loading data...',
       errors: {

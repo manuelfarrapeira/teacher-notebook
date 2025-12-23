@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Building2, Plus, Loader2 } from 'lucide-react';
+import { Building2, Plus, Loader2, Trash2 } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SchoolService, School, SchoolRequestDTO } from '../../services/SchoolService';
 
@@ -23,6 +23,9 @@ export function SchoolsTab() {
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [schoolToDelete, setSchoolToDelete] = useState<School | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -124,6 +127,40 @@ export function SchoolsTab() {
     setFormData({ name: '', town: '', tlf: '' });
     setFormErrors({});
     setShowForm(false);
+  };
+
+  const handleDeleteClick = (school: School) => {
+    setSchoolToDelete(school);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!schoolToDelete) return;
+    setDeleting(true);
+    try {
+      await SchoolService.deleteSchool(schoolToDelete.id);
+      setConfirmDeleteOpen(false);
+      setSchoolToDelete(null);
+      await fetchSchools();
+    } catch (error: any) {
+      console.log('ERROR JSON AL ELIMINAR COLEGIO:', error);
+      setConfirmDeleteOpen(false);
+      setSchoolToDelete(null);
+      let message = t('dashboard.schools.deleteError');
+      if (error && typeof error === 'object') {
+        if (typeof error.detail === 'string' && error.detail.trim().length > 0) {
+          message = error.detail;
+        } else if (typeof error.description === 'string' && error.description.trim().length > 0) {
+          message = error.description;
+        } else if (typeof error.code === 'string' && error.code.trim().length > 0) {
+          message = error.code;
+        }
+      }
+      setErrorMessage(message);
+      setErrorDialogOpen(true);
+    } finally {
+      setDeleting(false);
+    }
   };
 
   return (
@@ -244,11 +281,24 @@ export function SchoolsTab() {
                   borderRadius: '0.5rem',
                   padding: '1rem',
                   backgroundColor: 'white',
+                  position: 'relative',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                  <Building2 size={20} />
-                  <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{school.name}</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Building2 size={20} />
+                    <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{school.name}</h4>
+                  </div>
+                  <button
+                    className="modal-button cancel"
+                    style={{ padding: '0.25rem', fontSize: '1rem', color: '#dc2626', borderColor: 'transparent', background: 'none', borderRadius: '0.375rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    onClick={() => handleDeleteClick(school)}
+                    disabled={deleting}
+                    title={t('dashboard.schools.delete')}
+                    aria-label={t('dashboard.schools.delete')}
+                  >
+                    <Trash2 size={20} />
+                  </button>
                 </div>
                 <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
                   {school.town && (
@@ -316,8 +366,37 @@ export function SchoolsTab() {
           </div>
         </div>
       )}
+
+      {/* Modal de confirmación de borrado */}
+      {confirmDeleteOpen && schoolToDelete && (
+        <div className="modal-overlay" onClick={() => setConfirmDeleteOpen(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3 className="modal-title" style={{ color: '#dc2626' }}>{t('dashboard.schools.deleteTitle')}</h3>
+            <div className="modal-body">
+              <p>{t('dashboard.schools.deleteConfirm').replace('{name}', schoolToDelete.name)}</p>
+            </div>
+            <div className="modal-footer" style={{ marginTop: '1.5rem' }}>
+              <button
+                className="modal-button cancel"
+                onClick={() => setConfirmDeleteOpen(false)}
+                disabled={deleting}
+              >
+                {t('common.cancel')}
+              </button>
+              <button
+                className="modal-button save"
+                style={{ backgroundColor: '#dc2626' }}
+                onClick={handleConfirmDelete}
+                disabled={deleting}
+              >
+                {deleting && <Loader2 size={16} className="icon-spin" style={{ marginRight: '0.5rem' }} />}
+                {t('dashboard.schools.deleteConfirmBtn')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
 

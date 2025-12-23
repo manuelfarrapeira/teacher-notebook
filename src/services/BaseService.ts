@@ -64,52 +64,32 @@ export abstract class BaseService {
   /**
    * Maneja los errores de las respuestas HTTP de forma centralizada
    * @param response - Respuesta HTTP del servidor
-   * @throws Error con mensaje apropiado según el tipo de error
+   * @throws ApiError (objeto) para que el frontend lo trate como desee
    */
   protected static async handleErrorResponse(response: Response): Promise<never> {
-    // Manejo de errores de autenticación
     if (response.status === 401 || response.status === 403) {
       AuthService.forceLogout();
-      throw new Error('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+      throw {
+        code: '401',
+        description: 'UNAUTHORIZED',
+        detail: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+        details: null
+      };
     }
 
     try {
       const errorData: ApiError = await response.json();
-
-      if (errorData.details && errorData.details.length > 0) {
-        const detailsMessage = errorData.details
-          .map(detail => `${detail.field}: ${detail.reason}`)
-          .join('\n');
-        throw new Error(detailsMessage);
-      }
-
-      if (errorData.description) {
-        throw new Error(errorData.description);
-      }
-
-      if (errorData.detail) {
-        throw new Error(errorData.detail);
-      }
-
-      throw new Error(`Error del servidor: ${errorData.code}`);
-
+      throw errorData;
     } catch (parseError) {
-      if (parseError instanceof Error && parseError.message !== 'Unexpected end of JSON input') {
+      if (parseError && typeof parseError === 'object' && 'code' in parseError) {
         throw parseError;
       }
-
-      switch (response.status) {
-        case 400:
-          throw new Error('Solicitud incorrecta. Por favor, verifica los datos enviados.');
-        case 404:
-          throw new Error('Recurso no encontrado.');
-        case 500:
-          throw new Error('Error interno del servidor. Por favor, intenta más tarde.');
-        case 503:
-          throw new Error('Servicio no disponible. Por favor, intenta más tarde.');
-        default:
-          throw new Error(`Error en la petición: ${response.status} ${response.statusText}`);
-      }
+      throw {
+        code: String(response.status),
+        description: response.statusText || 'ERROR',
+        detail: 'Error desconocido en la petición.',
+        details: null
+      };
     }
   }
 
@@ -130,23 +110,16 @@ export abstract class BaseService {
     const apiUrl = getApiUrl();
     const url = `${apiUrl}${baseEndpoint}${endpoint}`;
 
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: this.buildHeaders(additionalHeaders),
-      });
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: this.buildHeaders(additionalHeaders),
+    });
 
-      if (!response.ok) {
-        await this.handleErrorResponse(response);
-      }
-
-      return await response.json();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error('Error desconocido al realizar la petición GET.');
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
     }
+
+    return await response.json();
   }
 
   /**
@@ -242,29 +215,22 @@ export abstract class BaseService {
     const apiUrl = getApiUrl();
     const url = `${apiUrl}${baseEndpoint}${endpoint}`;
 
-    try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: this.buildHeaders(additionalHeaders),
-      });
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: this.buildHeaders(additionalHeaders),
+    });
 
-      if (!response.ok) {
-        await this.handleErrorResponse(response);
-      }
-
-      // Algunos DELETE no devuelven contenido
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        return await response.json();
-      }
-
-      return {} as T;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error('Error desconocido al realizar la petición DELETE.');
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
     }
+
+    // Algunos DELETE no devuelven contenido
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    }
+
+    return {} as T;
   }
 
   /**
@@ -286,24 +252,17 @@ export abstract class BaseService {
     const apiUrl = getApiUrl();
     const url = `${apiUrl}${baseEndpoint}${endpoint}`;
 
-    try {
-      const response = await fetch(url, {
-        method: 'PATCH',
-        headers: this.buildHeaders(additionalHeaders),
-        body: body ? JSON.stringify(body) : undefined,
-      });
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: this.buildHeaders(additionalHeaders),
+      body: body ? JSON.stringify(body) : undefined,
+    });
 
-      if (!response.ok) {
-        await this.handleErrorResponse(response);
-      }
-
-      return await response.json();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error('Error desconocido al realizar la petición PATCH.');
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
     }
+
+    return await response.json();
   }
 }
 

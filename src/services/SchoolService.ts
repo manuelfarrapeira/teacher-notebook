@@ -31,4 +31,8 @@ export class SchoolService extends BaseService {
   static async createSchool(schoolData: SchoolRequestDTO): Promise<School> {
     return this.put<School>(this.BASE_ENDPOINT, '/schools', schoolData);
   }
+
+  static async deleteSchool(id: number): Promise<void> {
+    return this.delete<void>(this.BASE_ENDPOINT, `/schools/${id}`);
+  }
 }

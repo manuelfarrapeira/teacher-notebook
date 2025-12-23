@@ -867,6 +867,11 @@ body {
   border: none;
 }
 
+/* Espaciado extra para el footer del modal de confirmación de borrado */
+.modal-footer-delete {
+  margin-top: 1.5rem;
+}
+
 .icon-tab {
   height: 1rem;
   width: 1rem;
