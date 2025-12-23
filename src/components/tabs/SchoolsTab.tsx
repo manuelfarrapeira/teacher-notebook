@@ -183,7 +183,7 @@ export function SchoolsTab() {
     const renderSchoolList = () => {
         if (loading) {
             return (
-                <div style={{display: 'flex', justifyContent: 'center', padding: '3rem 0'}}>
+                <div className="loading-center">
                     <Loader2 className="icon-spin" size={32}/>
                 </div>
             );
@@ -199,97 +199,56 @@ export function SchoolsTab() {
         }
 
         return (
-            <div style={{
-                display: 'grid',
-                gap: '1rem',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
-            }}>
+            <div className="schools-grid">
                 {schools.map((school) => (
-                        <div
-                            key={school.id}
-                            style={{
-                                border: '1px solid #e5e7eb',
-                                borderRadius: '0.5rem',
-                                padding: '1rem',
-                                backgroundColor: 'white',
-                                position: 'relative',
-                            }}
-                        >
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                marginBottom: '0.75rem',
-                                justifyContent: 'space-between'
-                            }}>
-                                <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                                    <Building2 size={20}/>
-                                    <h4 style={{fontSize: '1rem', fontWeight: 600}}>{school.name}</h4>
-                                </div>
-                                <div style={{display: 'flex', gap: '0.5rem'}}>
-                                    <button
-                                        className="modal-button cancel"
-                                        style={{
-                                            padding: '0.25rem',
-                                            fontSize: '1rem',
-                                            color: '#2563eb',
-                                            borderColor: 'transparent',
-                                            background: 'none',
-                                            borderRadius: '0.375rem',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}
-                                        onClick={() => handleEditClick(school)}
-                                        disabled={deleting}
-                                        title={t('dashboard.schools.edit')}
-                                        aria-label={t('dashboard.schools.edit')}
-                                    >
-                                        <Edit size={20}/>
-                                    </button>
-                                    <button
-                                        className="modal-button cancel"
-                                        style={{
-                                            padding: '0.25rem',
-                                            fontSize: '1rem',
-                                            color: '#dc2626',
-                                            borderColor: 'transparent',
-                                            background: 'none',
-                                            borderRadius: '0.375rem',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}
-                                        onClick={() => handleDeleteClick(school)}
-                                        disabled={deleting}
-                                        title={t('dashboard.schools.delete')}
-                                        aria-label={t('dashboard.schools.delete')}
-                                    >
-                                        <Trash2 size={20}/>
-                                    </button>
-                                </div>
+                    <div key={school.id} className="school-card">
+                        <div className="school-card-header">
+                            <div className="school-card-title-wrapper">
+                                <Building2 size={20}/>
+                                <h4 className="school-card-title">{school.name}</h4>
                             </div>
-                            <div style={{fontSize: '0.875rem', color: '#6b7280'}}>
-                                {Boolean(school.town) && (
-                                    <p style={{marginBottom: '0.5rem'}}>
-                                        <span
-                                            style={{fontWeight: 500}}>{t('dashboard.schools.town')}:</span> {school.town}
-                                    </p>
-                                )}
-                                {Boolean(school.tlf) && (
-                                    <p style={{marginBottom: '0.5rem'}}>
-                                        <span
-                                            style={{fontWeight: 500}}>{t('dashboard.schools.phone')}:</span> {school.tlf}
-                                    </p>
-                                )}
-                                <p>
-                                    <span
-                                        style={{fontWeight: 500}}>{t('dashboard.tabs.classes')}:</span> {school.classes.length}
-                                </p>
+                            <div className="school-card-actions">
+                                <button
+                                    className="school-action-btn edit"
+                                    onClick={() => handleEditClick(school)}
+                                    disabled={deleting}
+                                    title={t('dashboard.schools.edit')}
+                                    aria-label={t('dashboard.schools.edit')}
+                                >
+                                    <Edit size={20}/>
+                                </button>
+                                <button
+                                    className="school-action-btn delete"
+                                    onClick={() => handleDeleteClick(school)}
+                                    disabled={deleting}
+                                    title={t('dashboard.schools.delete')}
+                                    aria-label={t('dashboard.schools.delete')}
+                                >
+                                    <Trash2 size={20}/>
+                                </button>
                             </div>
                         </div>
-                    ))}
-                </div>
+                        <div className="school-card-details">
+                            {Boolean(school.town) && (
+                                <p className="school-detail-item">
+                                    <span
+                                        className="school-detail-label">{t('dashboard.schools.town')}:</span> {school.town}
+                                </p>
+                            )}
+                            {Boolean(school.tlf) && (
+                                <p className="school-detail-item">
+                                    <span
+                                        className="school-detail-label">{t('dashboard.schools.phone')}:</span> {school.tlf}
+                                </p>
+                            )}
+                            <p>
+                                <span
+                                    className="school-detail-label">{t('dashboard.tabs.classes')}:</span> {school.classes.length}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
         );
     };
 
@@ -303,21 +262,21 @@ export function SchoolsTab() {
                     className="dashboard-add-btn"
                     disabled={loading || submitting}
                 >
-                    <Plus size={16} style={{marginRight: '0.5rem'}}/>
+                    <Plus size={16} className="icon-margin-right"/>
                     {t('dashboard.schools.addNew')}
                 </button>
             </div>
 
             {/* Formulario de creación/edición */}
             {showForm && (
-                <div className="modal-content" style={{marginBottom: '1.5rem', maxWidth: '100%'}}>
+                <div className="modal-content form-inline-expanded">
                     <h3 className="modal-title">
                         {editingSchool ? t('dashboard.schools.editTitle') : t('dashboard.schools.addNew')}
                     </h3>
                     <form onSubmit={handleSubmit} className="modal-body">
                         <div>
                             <label className="login-label">
-                                {t('dashboard.schools.name')} <span style={{color: 'red'}}>*</span>
+                                {t('dashboard.schools.name')} <span className="form-required-asterisk">*</span>
                             </label>
                             <input
                                 id="name"
@@ -328,7 +287,7 @@ export function SchoolsTab() {
                                 disabled={submitting}
                             />
                             {formErrors.name && (
-                                <p style={{color: 'red', fontSize: '0.875rem', marginTop: '0.25rem'}}>
+                                <p className="form-error-text">
                                     {formErrors.name}
                                 </p>
                             )}
@@ -360,7 +319,7 @@ export function SchoolsTab() {
                                 maxLength={9}
                             />
                             {formErrors.tlf && (
-                                <p style={{color: 'red', fontSize: '0.875rem', marginTop: '0.25rem'}}>
+                                <p className="form-error-text">
                                     {formErrors.tlf}
                                 </p>
                             )}
@@ -377,12 +336,11 @@ export function SchoolsTab() {
                             </button>
                             <button
                                 type="submit"
-                                className="modal-button save"
+                                className="modal-button save button-with-icon"
                                 disabled={submitting}
-                                style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}
                             >
                                 {submitting &&
-                                    <Loader2 size={16} className="icon-spin" style={{marginRight: '0.5rem'}}/>}
+                                    <Loader2 size={16} className="icon-spin icon-margin-right"/>}
                                 {editingSchool ? t('dashboard.schools.update') : t('dashboard.schools.submit')}
                             </button>
                         </div>
