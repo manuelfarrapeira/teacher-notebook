@@ -401,7 +401,7 @@ const translations: Record<Locale, Translations> = {
 import { useI18n } from '../lib/i18n';
 
 export function MiComponente() {
-  const { t, locale, setLocale } = useI18n();
+  const { t } = useI18n();
   
   return <h1>{t('app.title')}</h1>;
 }
@@ -640,57 +640,141 @@ export function ClassSelector({ classes, selectedClass, onClassChange }: ClassSe
 #### 3️⃣ **Modales**
 **Directorio:** `src/components/modals/`
 
-Componentes modales para confirmaciones, formularios, etc.
+Componentes modales reutilizables para confirmaciones, mensajes de error, éxito, etc.
 
-**Ejemplo: `LoadingModal.tsx`**
+**Modales disponibles:**
+
+##### `ErrorModal.tsx`
+Modal para mostrar mensajes de error.
+
 ```typescriptreact
-import React from 'react';
-import { useI18n } from '../../lib/i18n';
+import { ErrorModal } from '../modals/ErrorModal';
 
-export function LoadingModal() {
-  const { t } = useI18n();
-  
-  return (
-    <div className="loading-modal-overlay">
-      <div className="loading-modal-content">
-        <div className="loading-spinner"></div>
-        <p className="loading-modal-text">{t('dashboard.loadingData')}</p>
-      </div>
-    </div>
-  );
-}
+<ErrorModal
+  isOpen={isErrorOpen}
+  message="Error al procesar la solicitud"
+  onClose={() => setIsErrorOpen(false)}
+/>
 ```
+
+**Props:**
+- `isOpen: boolean` - Controla la visibilidad del modal
+- `message: string` - Mensaje de error a mostrar
+- `onClose: () => void` - Callback al cerrar el modal
+
+##### `SuccessModal.tsx`
+Modal para mostrar mensajes de éxito.
+
+```typescriptreact
+import { SuccessModal } from '../modals/SuccessModal';
+
+<SuccessModal
+  isOpen={isSuccessOpen}
+  message="Operación completada exitosamente"
+  onClose={() => setIsSuccessOpen(false)}
+/>
+```
+
+**Props:**
+- `isOpen: boolean` - Controla la visibilidad del modal
+- `message: string` - Mensaje de éxito a mostrar
+- `onClose: () => void` - Callback al cerrar el modal
+
+##### `ConfirmDeleteModal.tsx`
+Modal para confirmar acciones de eliminación.
+
+```typescriptreact
+import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
+
+<ConfirmDeleteModal
+  isOpen={isConfirmOpen}
+  itemName="Elemento a eliminar"
+  title="Confirmar eliminación"
+  confirmMessage="¿Está seguro que desea eliminar {name}?"
+  onConfirm={handleDelete}
+  onCancel={() => setIsConfirmOpen(false)}
+  isDeleting={isDeleting}
+/>
+```
+
+**Props:**
+- `isOpen: boolean` - Controla la visibilidad del modal
+- `itemName: string` - Nombre del elemento a eliminar (reemplaza {name} en confirmMessage)
+- `title: string` - Título del modal
+- `confirmMessage: string` - Mensaje de confirmación (puede incluir {name} como placeholder)
+- `onConfirm: () => void` - Callback al confirmar
+- `onCancel: () => void` - Callback al cancelar
+- `isDeleting?: boolean` - Muestra spinner durante la operación de eliminación
+
+##### `LoadingModal.tsx`
+Modal para mostrar estado de carga.
+
+```typescriptreact
+import { LoadingModal } from '../modals/LoadingModal';
+
+<LoadingModal />
+```
+
+**Características:**
+- Usa elemento `<dialog>` nativo de HTML5 para mejor accesibilidad
+- Backdrop semitransparente automático
+- Centrado vertical y horizontal
+- Soporte para teclado (Escape para cerrar)
+- Estilos consistentes con el resto de la aplicación
 
 **Para agregar un nuevo modal:**
 1. Crear archivo en `src/components/modals/NuevoModal.tsx`
-2. Crear el estado en el componente padre que lo usa
-3. Renderizar condicionalmente basado en el estado
-4. Agregar estilos en `src/index.css` con prefijo `.{nombreModal}-`
+2. Usar el elemento `<dialog>` nativo con clase `modal-overlay`
+3. Envolver el contenido en un contenedor flex para centrado
+4. Usar clase `modal-content` para el contenedor del contenido
+5. Implementar props para controlar visibilidad y callbacks
+6. Agregar traducciones necesarias en `src/lib/i18n.tsx`
+7. Documentar las props con interfaces TypeScript
 
-#### 4️⃣ **Componentes UI Base**
-**Directorio:** `src/components/ui/`
+**Ejemplo de estructura de un nuevo modal:**
 
-Componentes base reutilizables usando Radix UI. Proporcionan la estructura y estilos base.
-
-**Componentes disponibles:**
-- `button.tsx` - Botones estilizados
-- `select.tsx` - Selects con dropdown
-- `input.tsx` - Inputs de texto
-- `dialog.tsx` - Diálogos modales
-- `card.tsx` - Tarjetas
-- `alert.tsx` - Alertas
-- `badge.tsx` - Badges/etiquetas
-- `table.tsx` - Tablas
-- ... y más
-
-**Uso:**
 ```typescriptreact
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
+import React, { useRef } from 'react';
+import { useI18n } from '../../lib/i18n';
 
-<Button onClick={handleClick}>Clic</Button>
-<Input placeholder="Escribe algo..." />
+interface NuevoModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  // ... otras props
+}
+
+export function NuevoModal({ isOpen, onClose }: NuevoModalProps) {
+  const { t } = useI18n();
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  if (!isOpen) return null;
+
+  return (
+    <dialog
+      className="modal-overlay"
+      open={isOpen}
+      aria-label={t('modal.title')}
+      onClose={onClose}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+        <div className="modal-content" ref={modalRef}>
+          <h3 className="modal-title">{t('modal.title')}</h3>
+          <div className="modal-body">
+            {/* Contenido del modal */}
+          </div>
+          <div className="modal-footer">
+            <button className="modal-button cancel" onClick={onClose}>
+              {t('common.cancel')}
+            </button>
+            <button className="modal-button save" onClick={handleSave}>
+              {t('common.save')}
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  );
+}
 ```
 
 ---
@@ -732,9 +816,9 @@ export function StudentCard() { }
 export function studentCard() { }
 // Archivo: studentCard.tsx
 
-// ✅ CORRECTO - SVG en nombre
-// Archivo: LanguageSelector.svg.tsx
-export function LanguageSelector() { }
+// ✅ CORRECTO - Agregar el sufijo "Modal" a los modales
+export function ConfirmDeleteModal() { }
+// Archivo: ConfirmDeleteModal.tsx
 ```
 
 ### 🎨 Estilos CSS
@@ -932,97 +1016,29 @@ export function StudentCard(props) {
    interface NuevoModalProps {
      isOpen: boolean;
      onClose: () => void;
-     onConfirm: () => void;
+     // ... otras props
    }
 
-   export function NuevoModal({ isOpen, onClose, onConfirm }: NuevoModalProps) {
+   export function NuevoModal({ isOpen, onClose }: NuevoModalProps) {
      const { t } = useI18n();
-
-     if (!isOpen) return null;
-
+     
      return (
-       <div className="modal-overlay">
+       <dialog className="modal-overlay" open={isOpen} aria-label={t('modal.title')} onClose={onClose}>
          <div className="modal-content">
-           <h3 className="modal-title">{t('dashboard.nuevoModal.title')}</h3>
+           <h3 className="modal-title">{t('modal.title')}</h3>
            <div className="modal-body">
-             {/* Contenido */}
+             {/* Contenido del modal */}
            </div>
            <div className="modal-footer">
-             <button onClick={onClose}>{t('common.cancel')}</button>
-             <button onClick={onConfirm}>{t('common.confirm')}</button>
+             <button className="modal-button cancel" onClick={onClose}>
+               {t('common.cancel')}
+             </button>
+             <button className="modal-button save" onClick={handleSave}>
+               {t('common.save')}
+             </button>
            </div>
          </div>
-       </div>
-     );
-   }
-   ```
-
-2. **Usar en el componente padre:**
-   ```typescriptreact
-   const [isModalOpen, setIsModalOpen] = useState(false);
-
-   return (
-     <>
-       <button onClick={() => setIsModalOpen(true)}>Abrir Modal</button>
-       <NuevoModal
-         isOpen={isModalOpen}
-         onClose={() => setIsModalOpen(false)}
-         onConfirm={handleConfirm}
-       />
-     </>
-   );
-   ```
-
-3. **Agregar estilos en `src/index.css`:**
-   ```css
-   .modal-overlay {
-     position: fixed;
-     inset: 0;
-     background: rgba(0, 0, 0, 0.5);
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     z-index: 50;
-   }
-
-   .modal-content {
-     background: white;
-     border-radius: 0.75rem;
-     padding: 2rem;
-     max-width: 28rem;
-     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-   }
-   ```
-
-### ➕ Agregar un Nuevo Selector
-
-**Pasos:**
-
-1. **Crear `src/components/selectors/NuevoSelector.tsx`:**
-   ```typescriptreact
-   import React from 'react';
-   import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
-
-   interface NuevoSelectorProps {
-     items: Array<{ id: number; name: string }>;
-     selectedId: number | null;
-     onSelect: (id: number) => void;
-   }
-
-   export function NuevoSelector({ items, selectedId, onSelect }: NuevoSelectorProps) {
-     return (
-       <Select value={selectedId ? String(selectedId) : ''} onValueChange={v => onSelect(Number(v))}>
-         <SelectTrigger>
-           <SelectValue placeholder="Seleccionar..." />
-         </SelectTrigger>
-         <SelectContent>
-           {items.map(item => (
-             <SelectItem key={item.id} value={String(item.id)}>
-               {item.name}
-             </SelectItem>
-           ))}
-         </SelectContent>
-       </Select>
+       </dialog>
      );
    }
    ```

@@ -214,4 +214,3 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia de una tab con formular
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
 Última actualización: 2025-12-23
-
