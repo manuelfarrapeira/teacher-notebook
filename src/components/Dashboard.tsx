@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookOpen, Users, Calendar, Settings, LogOut, Clock, Building2 } from 'lucide-react';
+import { BookOpen, Users, Calendar, Settings, Clock, Building2 } from 'lucide-react';
 import { StudentsTab } from './tabs/StudentsTab';
 import { ClassesTab } from './tabs/ClassesTab';
 import { ScheduleTab } from './tabs/ScheduleTab';
@@ -14,9 +14,10 @@ import { useI18n } from '../lib/i18n';
 
 interface DashboardProps {
   onLogout: () => void;
+  userName: string;
 }
 
-export function Dashboard({ onLogout }: Readonly<DashboardProps>) {
+export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
   const { t } = useI18n();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('schools');
@@ -100,7 +101,6 @@ export function Dashboard({ onLogout }: Readonly<DashboardProps>) {
       {isMenuOpen && <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)} />}
       
       <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
-        <h1 className="dashboard-title">Teacher Notebook</h1>
         <div className="dashboard-menu">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -113,12 +113,6 @@ export function Dashboard({ onLogout }: Readonly<DashboardProps>) {
             );
           })}
         </div>
-        <div className="dashboard-logout-section">
-          <button onClick={onLogout} className="dashboard-tab">
-            <LogOut size={20} />
-            {t('dashboard.logout')}
-          </button>
-        </div>
       </nav>
 
       <main className="dashboard-main-content">
@@ -129,9 +123,11 @@ export function Dashboard({ onLogout }: Readonly<DashboardProps>) {
             selectedClass={selectedClass}
             loading={loading}
             currentSchool={currentSchool}
+            userName={userName}
             onSchoolChange={handleSchoolChange}
             onClassChange={handleClassChange}
             onRefresh={handleRefresh}
+            onLogout={onLogout}
           />
         </header>
 

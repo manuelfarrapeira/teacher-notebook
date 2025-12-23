@@ -185,8 +185,8 @@ const translations: Record<Locale, Translations> = {
       edit: 'Editar',
       close: 'Cerrar',
       language: {
-        es: 'ES',
-        en: 'EN'
+        es: 'ESPAÑOL',
+        en: 'INGLÉS'
       }
     }
   },
@@ -278,8 +278,8 @@ const translations: Record<Locale, Translations> = {
       edit: 'Edit',
       close: 'Close',
       language: {
-        es: 'SP',
-        en: 'EN'
+        es: 'SPANISH',
+        en: 'ENGLISH'
       }
     }
   }

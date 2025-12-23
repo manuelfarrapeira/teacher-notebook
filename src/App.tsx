@@ -3,10 +3,12 @@ import { LoginScreen } from './components/LoginScreen';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Dashboard } from './components/Dashboard';
 import { AuthService } from './services/AuthService';
+import { useI18n } from './lib/i18n';
 
 type AppState = 'login' | 'loading' | 'dashboard';
 
 function App() {
+  const { t } = useI18n();
   const [currentScreen, setCurrentScreen] = useState<AppState>('loading');
   const [userName, setUserName] = useState<string>('');
   const [loginError, setLoginError] = useState<string>('');
@@ -71,7 +73,7 @@ function App() {
     return <LoadingScreen />;
   }
 
-  return <Dashboard onLogout={handleLogout} />;
+  return <Dashboard onLogout={handleLogout} userName={userName} />;
 }
 
 export default App;

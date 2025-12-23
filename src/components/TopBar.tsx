@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { RefreshCw, ChevronDown } from 'lucide-react';
 import { School } from '../services/SchoolService';
-import { LanguageSelector } from './selectors/LanguageSelector'; // Import the LanguageSelector
+import { UserMenu } from './UserMenu';
 
 interface TopBarProps {
   schools: School[];
@@ -9,9 +9,11 @@ interface TopBarProps {
   selectedClass: number | null;
   loading: boolean;
   currentSchool: School | undefined;
+  userName: string;
   onSchoolChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onClassChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onRefresh: () => void;
+  onLogout: () => void;
 }
 
 export function TopBar({
@@ -20,9 +22,11 @@ export function TopBar({
   selectedClass,
   loading,
   currentSchool,
+  userName,
   onSchoolChange,
   onClassChange,
   onRefresh,
+  onLogout,
 }: TopBarProps) {
   const [isSchoolOpen, setIsSchoolOpen] = useState(false);
   const [isClassOpen, setIsClassOpen] = useState(false);
@@ -115,7 +119,7 @@ export function TopBar({
         </button>
       </div>
       <div className="top-bar-actions">
-        <LanguageSelector />
+        <UserMenu userName={userName} onLogout={onLogout} />
       </div>
     </div>
   );
