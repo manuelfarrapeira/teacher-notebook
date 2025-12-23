@@ -216,19 +216,19 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
                             </div>
                             <div className="school-card-actions">
                                 <button
-                                    className="school-action-btn edit"
+                                    className="school-action-btn edit tooltip-container"
                                     onClick={() => handleEditClick(school)}
                                     disabled={deleting}
-                                    title={t('dashboard.schools.edit')}
+                                    data-tooltip={t('dashboard.schools.edit')}
                                     aria-label={t('dashboard.schools.edit')}
                                 >
                                     <Edit size={20}/>
                                 </button>
                                 <button
-                                    className="school-action-btn delete"
+                                    className="school-action-btn delete tooltip-container"
                                     onClick={() => handleDeleteClick(school)}
                                     disabled={deleting}
-                                    title={t('dashboard.schools.delete')}
+                                    data-tooltip={t('dashboard.schools.delete')}
                                     aria-label={t('dashboard.schools.delete')}
                                 >
                                     <Trash2 size={20}/>
