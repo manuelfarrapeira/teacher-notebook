@@ -33,18 +33,6 @@ interface Translations {
       schools: string;
     };
     logout: string;
-    selectSchool: string;
-    selectClass: string;
-    refresh: string;
-    weeklyTimetable: string;
-    addNewItem: string;
-    students: {
-      title: string;
-      addNew: string;
-      search: string;
-      active: string;
-      grade: string;
-    };
     classes: {
       noClasses: string;
     };
@@ -86,8 +74,6 @@ interface Translations {
     errors: {
       noSchools: string;
       loadSchoolsError: string;
-      fetchError: string;
-      generalError: string;
     };
   };
   loading: {
@@ -106,10 +92,6 @@ interface Translations {
     language: {
       es: string;
       en: string;
-    };
-    tooltip: {
-      switchToEnglish: string;
-      switchToSpanish: string;
     };
   };
 }
@@ -138,7 +120,7 @@ const translations: Record<Locale, Translations> = {
     },
     dashboard: {
       tabs: {
-        students: 'Estudiantes',
+        students: 'Alumnos',
         classes: 'Clases',
         schedule: 'Calendario',
         timetable: 'Horario',
@@ -146,18 +128,6 @@ const translations: Record<Locale, Translations> = {
         schools: 'Colegios'
       },
       logout: 'Cerrar Sesión',
-      selectSchool: 'Selecciona un colegio',
-      selectClass: 'Selecciona una clase',
-      refresh: 'Actualizar',
-      weeklyTimetable: 'Horario Semanal',
-      addNewItem: 'Añadir Nuevo Elemento',
-      students: {
-        title: 'Estudiantes',
-        addNew: 'Añadir Nuevo',
-        search: 'Buscar estudiantes...',
-        active: 'Activo',
-        grade: 'Grado'
-      },
       classes: {
         noClasses: 'No hay clases programadas'
       },
@@ -198,9 +168,7 @@ const translations: Record<Locale, Translations> = {
       loadingData: 'Cargando datos...',
       errors: {
         noSchools: 'No se encontraron colegios.',
-        loadSchoolsError: 'Error al cargar los colegios. Por favor, inténtalo de nuevo.',
-        fetchError: 'No se pudieron obtener los datos de los colegios.',
-        generalError: 'Se ha producido un error al obtener los datos de los colegios.'
+        loadSchoolsError: 'Error al cargar los colegios. Por favor, inténtalo de nuevo.'
       }
     },
     loading: {
@@ -219,10 +187,6 @@ const translations: Record<Locale, Translations> = {
       language: {
         es: 'ES',
         en: 'EN'
-      },
-      tooltip: {
-        switchToEnglish: 'Cambiar a Inglés',
-        switchToSpanish: 'Cambiar a Español'
       }
     }
   },
@@ -257,18 +221,6 @@ const translations: Record<Locale, Translations> = {
         schools: 'Schools'
       },
       logout: 'Log Out',
-      selectSchool: 'Select a school',
-      selectClass: 'Select a class',
-      refresh: 'Refresh',
-      weeklyTimetable: 'Weekly Timetable',
-      addNewItem: 'Add New Item',
-      students: {
-        title: 'Students',
-        addNew: 'Add New',
-        search: 'Search students...',
-        active: 'Active',
-        grade: 'Grade'
-      },
       classes: {
         noClasses: 'No classes scheduled'
       },
@@ -309,9 +261,7 @@ const translations: Record<Locale, Translations> = {
       loadingData: 'Loading data...',
       errors: {
         noSchools: 'No schools found.',
-        loadSchoolsError: 'Error loading schools. Please try again.',
-        fetchError: 'Could not retrieve school data.',
-        generalError: 'An error occurred while retrieving school data.'
+        loadSchoolsError: 'Error loading schools. Please try again.'
       }
     },
     loading: {
@@ -330,10 +280,6 @@ const translations: Record<Locale, Translations> = {
       language: {
         es: 'SP',
         en: 'EN'
-      },
-      tooltip: {
-        switchToEnglish: 'Switch to English',
-        switchToSpanish: 'Switch to Spanish'
       }
     }
   }

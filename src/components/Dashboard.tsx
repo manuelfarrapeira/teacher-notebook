@@ -16,10 +16,10 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
-export function Dashboard({ onLogout }: DashboardProps) {
+export function Dashboard({ onLogout }: Readonly<DashboardProps>) {
   const { t } = useI18n();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('students');
+  const [activeTab, setActiveTab] = useState('schools');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const [schools, setSchools] = useState<School[]>([]);
@@ -61,11 +61,11 @@ export function Dashboard({ onLogout }: DashboardProps) {
   }, [fetchSchools]);
 
   const tabs = [
+    { id: 'schools', label: t('dashboard.tabs.schools'), icon: Building2 },
     { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
     { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
     { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
     { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
-    { id: 'schools', label: t('dashboard.tabs.schools'), icon: Building2 },
     { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
   ];
 
@@ -75,7 +75,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
   };
 
   const handleSchoolChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const schoolId = parseInt(event.target.value, 10);
+    const schoolId = Number.parseInt(event.target.value, 10);
     setSelectedSchool(schoolId);
     const school = schools.find(s => s.id === schoolId);
     if (school && school.classes.length > 0) {
@@ -86,7 +86,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
   };
 
   const handleClassChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedClass(parseInt(event.target.value, 10));
+    setSelectedClass(Number.parseInt(event.target.value, 10));
   };
 
   const handleRefresh = () => {
@@ -138,7 +138,7 @@ export function Dashboard({ onLogout }: DashboardProps) {
 
         <div className="dashboard-tabs-content">
           {activeTab === 'schools' && <SchoolsTab />}
-          {activeTab === 'students' && <StudentsTab onAddNew={() => setIsModalOpen(true)} />}
+          {activeTab === 'students' && <StudentsTab/>}
           {activeTab === 'classes' && <ClassesTab />}
           {activeTab === 'schedule' && <ScheduleTab />}
           {activeTab === 'timetable' && <TimetableTab />}
