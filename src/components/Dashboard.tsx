@@ -124,10 +124,12 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
             loading={loading}
             currentSchool={currentSchool}
             userName={userName}
+            isMenuOpen={isMenuOpen}
             onSchoolChange={handleSchoolChange}
             onClassChange={handleClassChange}
             onRefresh={handleRefresh}
             onLogout={onLogout}
+            onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
           />
         </header>
 

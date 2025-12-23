@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { RefreshCw, ChevronDown } from 'lucide-react';
+import { RefreshCw, ChevronDown, Menu } from 'lucide-react';
 import { School } from '../services/SchoolService';
 import { UserMenu } from './UserMenu';
 
@@ -10,10 +10,12 @@ interface TopBarProps {
   loading: boolean;
   currentSchool: School | undefined;
   userName: string;
+  isMenuOpen: boolean;
   onSchoolChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onClassChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onRefresh: () => void;
   onLogout: () => void;
+  onToggleMenu: () => void;
 }
 
 export function TopBar({
@@ -23,10 +25,12 @@ export function TopBar({
   loading,
   currentSchool,
   userName,
+  isMenuOpen,
   onSchoolChange,
   onClassChange,
   onRefresh,
   onLogout,
+  onToggleMenu,
 }: TopBarProps) {
   const [isSchoolOpen, setIsSchoolOpen] = useState(false);
   const [isClassOpen, setIsClassOpen] = useState(false);
@@ -56,7 +60,11 @@ export function TopBar({
 
   return (
     <div className="top-bar-container">
-      <div className="course-selectors">
+      <div className="top-bar-left">
+        <button className="menu-button" onClick={onToggleMenu}>
+          <Menu size={24} />
+        </button>
+        <div className="course-selectors">
         <div className="selector-button-group" ref={schoolRef}>
           <button
             onClick={() => setIsSchoolOpen(!isSchoolOpen)}
@@ -117,6 +125,7 @@ export function TopBar({
         <button className="refresh-button" onClick={onRefresh} disabled={loading}>
           <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
         </button>
+        </div>
       </div>
       <div className="top-bar-actions">
         <UserMenu userName={userName} onLogout={onLogout} />
