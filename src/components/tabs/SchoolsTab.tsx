@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Building2, Plus, Loader2, Trash2} from 'lucide-react';
+import {Building2, Plus, Loader2, Trash2, Edit} from 'lucide-react';
 import {useI18n} from '../../lib/i18n';
 import {SchoolService, School, SchoolRequestDTO} from '../../services/SchoolService';
 import {ApiErrorException} from '../../services/BaseService';
@@ -25,6 +25,7 @@ export function SchoolsTab() {
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [showForm, setShowForm] = useState(false);
+    const [editingSchool, setEditingSchool] = useState<School | null>(null);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successDialogOpen, setSuccessDialogOpen] = useState(false);
@@ -39,6 +40,7 @@ export function SchoolsTab() {
     });
 
     const [formErrors, setFormErrors] = useState<FormErrors>({});
+    const [successMessage, setSuccessMessage] = useState('');
 
 
     useEffect(() => {
@@ -107,16 +109,24 @@ export function SchoolsTab() {
                 requestData.tlf = Number.parseInt(formData.tlf.trim(), 10);
             }
 
-            await SchoolService.createSchool(requestData);
+            if (editingSchool) {
+                await SchoolService.updateSchool(editingSchool.id, requestData);
+                setSuccessMessage(t('dashboard.schools.updateSuccess'));
+            } else {
+                await SchoolService.createSchool(requestData);
+                setSuccessMessage(t('dashboard.schools.createSuccess'));
+            }
 
             setFormData({name: '', town: '', tlf: ''});
             setShowForm(false);
+            setEditingSchool(null);
             setSuccessDialogOpen(true);
 
             await fetchSchools();
         } catch (error) {
-            console.error('Error creating school:', error);
-            setErrorMessage(error instanceof Error ? error.message : t('dashboard.schools.createError'));
+            console.error('Error creating/updating school:', error);
+            const errorKey = editingSchool ? 'dashboard.schools.updateError' : 'dashboard.schools.createError';
+            setErrorMessage(error instanceof Error ? error.message : t(errorKey));
             setErrorDialogOpen(true);
         } finally {
             setSubmitting(false);
@@ -127,6 +137,17 @@ export function SchoolsTab() {
         setFormData({name: '', town: '', tlf: ''});
         setFormErrors({});
         setShowForm(false);
+        setEditingSchool(null);
+    };
+
+    const handleEditClick = (school: School) => {
+        setEditingSchool(school);
+        setFormData({
+            name: school.name,
+            town: school.town || '',
+            tlf: school.tlf ? String(school.tlf) : '',
+        });
+        setShowForm(true);
     };
 
     const handleDeleteClick = (school: School) => {
@@ -178,16 +199,12 @@ export function SchoolsTab() {
         }
 
         return (
-            <div>
-                <h3 style={{fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem'}}>
-                    {t('dashboard.schools.list')}
-                </h3>
-                <div style={{
-                    display: 'grid',
-                    gap: '1rem',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
-                }}>
-                    {schools.map((school) => (
+            <div style={{
+                display: 'grid',
+                gap: '1rem',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'
+            }}>
+                {schools.map((school) => (
                         <div
                             key={school.id}
                             style={{
@@ -209,26 +226,48 @@ export function SchoolsTab() {
                                     <Building2 size={20}/>
                                     <h4 style={{fontSize: '1rem', fontWeight: 600}}>{school.name}</h4>
                                 </div>
-                                <button
-                                    className="modal-button cancel"
-                                    style={{
-                                        padding: '0.25rem',
-                                        fontSize: '1rem',
-                                        color: '#dc2626',
-                                        borderColor: 'transparent',
-                                        background: 'none',
-                                        borderRadius: '0.375rem',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                    onClick={() => handleDeleteClick(school)}
-                                    disabled={deleting}
-                                    title={t('dashboard.schools.delete')}
-                                    aria-label={t('dashboard.schools.delete')}
-                                >
-                                    <Trash2 size={20}/>
-                                </button>
+                                <div style={{display: 'flex', gap: '0.5rem'}}>
+                                    <button
+                                        className="modal-button cancel"
+                                        style={{
+                                            padding: '0.25rem',
+                                            fontSize: '1rem',
+                                            color: '#2563eb',
+                                            borderColor: 'transparent',
+                                            background: 'none',
+                                            borderRadius: '0.375rem',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                        onClick={() => handleEditClick(school)}
+                                        disabled={deleting}
+                                        title={t('dashboard.schools.edit')}
+                                        aria-label={t('dashboard.schools.edit')}
+                                    >
+                                        <Edit size={20}/>
+                                    </button>
+                                    <button
+                                        className="modal-button cancel"
+                                        style={{
+                                            padding: '0.25rem',
+                                            fontSize: '1rem',
+                                            color: '#dc2626',
+                                            borderColor: 'transparent',
+                                            background: 'none',
+                                            borderRadius: '0.375rem',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                        onClick={() => handleDeleteClick(school)}
+                                        disabled={deleting}
+                                        title={t('dashboard.schools.delete')}
+                                        aria-label={t('dashboard.schools.delete')}
+                                    >
+                                        <Trash2 size={20}/>
+                                    </button>
+                                </div>
                             </div>
                             <div style={{fontSize: '0.875rem', color: '#6b7280'}}>
                                 {Boolean(school.town) && (
@@ -251,7 +290,6 @@ export function SchoolsTab() {
                         </div>
                     ))}
                 </div>
-            </div>
         );
     };
 
@@ -270,10 +308,12 @@ export function SchoolsTab() {
                 </button>
             </div>
 
-            {/* Formulario de creación */}
+            {/* Formulario de creación/edición */}
             {showForm && (
                 <div className="modal-content" style={{marginBottom: '1.5rem', maxWidth: '100%'}}>
-                    <h3 className="modal-title">{t('dashboard.schools.addNew')}</h3>
+                    <h3 className="modal-title">
+                        {editingSchool ? t('dashboard.schools.editTitle') : t('dashboard.schools.addNew')}
+                    </h3>
                     <form onSubmit={handleSubmit} className="modal-body">
                         <div>
                             <label className="login-label">
@@ -343,7 +383,7 @@ export function SchoolsTab() {
                             >
                                 {submitting &&
                                     <Loader2 size={16} className="icon-spin" style={{marginRight: '0.5rem'}}/>}
-                                {t('dashboard.schools.submit')}
+                                {editingSchool ? t('dashboard.schools.update') : t('dashboard.schools.submit')}
                             </button>
                         </div>
                     </form>
@@ -360,7 +400,7 @@ export function SchoolsTab() {
 
             <SuccessModal
                 isOpen={successDialogOpen}
-                message={t('dashboard.schools.createSuccess')}
+                message={successMessage}
                 onClose={() => setSuccessDialogOpen(false)}
             />
 

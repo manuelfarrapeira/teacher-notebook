@@ -32,7 +32,7 @@ export function SuccessModal({ isOpen, message, onClose }: SuccessModalProps) {
           <div className="modal-body">
             <p>{message}</p>
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer" style={{ marginTop: '1.5rem' }}>
             <button
               className="modal-button save"
               onClick={onClose}

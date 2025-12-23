@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 
 type Locale = 'es' | 'en';
 
@@ -52,6 +52,8 @@ interface Translations {
       title: string;
       subtitle: string;
       addNew: string;
+      edit: string;
+      editTitle: string;
       list: string;
       name: string;
       town: string;
@@ -61,11 +63,14 @@ interface Translations {
       phonePlaceholder: string;
       formDescription: string;
       submit: string;
+      update: string;
       cancel: string;
       noSchools: string;
       addFirstSchool: string;
       createSuccess: string;
+      updateSuccess: string;
       createError: string;
+      updateError: string;
       validation: {
         nameRequired: string;
         nameMinLength: string;
@@ -160,6 +165,8 @@ const translations: Record<Locale, Translations> = {
         title: 'Gestión de Colegios',
         subtitle: 'Administra tus colegios y visualiza información clave',
         addNew: 'Crear Nuevo Colegio',
+        edit: 'Editar',
+        editTitle: 'Editar Colegio',
         list: 'Lista de Colegios',
         name: 'Nombre',
         town: 'Localidad',
@@ -169,11 +176,14 @@ const translations: Record<Locale, Translations> = {
         phonePlaceholder: '123456789',
         formDescription: 'Completa el formulario para crear un nuevo colegio. Los campos marcados con * son obligatorios.',
         submit: 'Crear Colegio',
+        update: 'Actualizar Colegio',
         cancel: 'Cancelar',
         noSchools: 'No hay colegios registrados',
         addFirstSchool: 'Haz clic en "Crear Nuevo Colegio" para empezar',
         createSuccess: 'Colegio creado exitosamente',
+        updateSuccess: 'Colegio actualizado exitosamente',
         createError: 'Error al crear el colegio',
+        updateError: 'Error al actualizar el colegio',
         validation: {
           nameRequired: 'El nombre es obligatorio',
           nameMinLength: 'El nombre debe tener al menos 5 caracteres',
@@ -266,6 +276,8 @@ const translations: Record<Locale, Translations> = {
         title: 'School Management',
         subtitle: 'Manage your schools and view key information',
         addNew: 'Create New School',
+        edit: 'Edit',
+        editTitle: 'Edit School',
         list: 'School List',
         name: 'Name',
         town: 'Town',
@@ -275,11 +287,14 @@ const translations: Record<Locale, Translations> = {
         phonePlaceholder: '123456789',
         formDescription: 'Complete the form to create a new school. Fields marked with * are required.',
         submit: 'Create School',
+        update: 'Update School',
         cancel: 'Cancel',
         noSchools: 'No schools registered',
         addFirstSchool: 'Click "Create New School" to get started',
         createSuccess: 'School created successfully',
+        updateSuccess: 'School updated successfully',
         createError: 'Error creating school',
+        updateError: 'Error updating school',
         validation: {
           nameRequired: 'Name is required',
           nameMinLength: 'Name must be at least 5 characters',
@@ -334,8 +349,8 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 const STORAGE_KEY = 'teacher_notebook_locale';
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => {
+export function I18nProvider({ children }: Readonly<{ children: ReactNode }>) {
+  const [locale, setLocale] = useState<Locale>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     return (stored === 'es' || stored === 'en') ? stored : 'es';
   });
@@ -346,6 +361,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const t = (key: string): string => {
     const keys = key.split('.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value: any = translations[locale];
 
     for (const k of keys) {
@@ -360,12 +376,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return typeof value === 'string' ? value : key;
   };
 
-  const setLocale = (newLocale: Locale) => {
-    setLocaleState(newLocale);
-  };
+  const contextValue = useMemo(() => ({ locale, setLocale, t }), [locale]);
 
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t }}>
+    <I18nContext.Provider value={contextValue}>
       {children}
     </I18nContext.Provider>
   );

@@ -32,6 +32,10 @@ export class SchoolService extends BaseService {
     return this.put<School>(this.BASE_ENDPOINT, '/schools', schoolData);
   }
 
+  static async updateSchool(id: number, schoolData: SchoolRequestDTO): Promise<School> {
+    return this.patch<School>(this.BASE_ENDPOINT, `/schools/${id}`, schoolData);
+  }
+
   static async deleteSchool(id: number): Promise<void> {
     return this.delete<void>(this.BASE_ENDPOINT, `/schools/${id}`);
   }
