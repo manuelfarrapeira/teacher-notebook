@@ -18,8 +18,11 @@ interface FormErrors {
     tlf?: string;
 }
 
+interface SchoolsTabProps {
+    onSchoolsChange?: () => void;
+}
 
-export function SchoolsTab() {
+export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
     const {t} = useI18n();
     const [schools, setSchools] = useState<School[]>([]);
     const [loading, setLoading] = useState(false);
@@ -123,6 +126,10 @@ export function SchoolsTab() {
             setSuccessDialogOpen(true);
 
             await fetchSchools();
+
+            if (onSchoolsChange) {
+                onSchoolsChange();
+            }
         } catch (error) {
             console.error('Error creating/updating school:', error);
             const errorKey = editingSchool ? 'dashboard.schools.updateError' : 'dashboard.schools.createError';
@@ -267,88 +274,96 @@ export function SchoolsTab() {
                 </button>
             </div>
 
-            {/* Formulario de creación/edición */}
-            {showForm && (
-                <div className="modal-content form-inline-expanded">
-                    <h3 className="modal-title">
-                        {editingSchool ? t('dashboard.schools.editTitle') : t('dashboard.schools.addNew')}
-                    </h3>
-                    <form onSubmit={handleSubmit} className="modal-body">
-                        <div>
-                            <label className="login-label">
-                                {t('dashboard.schools.name')} <span className="form-required-asterisk">*</span>
-                            </label>
-                            <input
-                                id="name"
-                                className="modal-input"
-                                value={formData.name}
-                                onChange={(e) => handleInputChange('name', e.target.value)}
-                                placeholder={t('dashboard.schools.namePlaceholder')}
-                                disabled={submitting}
-                            />
-                            {formErrors.name && (
-                                <p className="form-error-text">
-                                    {formErrors.name}
-                                </p>
-                            )}
-                        </div>
-
-                        <div>
-                            <label className="login-label">{t('dashboard.schools.town')}</label>
-                            <input
-                                id="town"
-                                className="modal-input"
-                                value={formData.town}
-                                onChange={(e) => handleInputChange('town', e.target.value)}
-                                placeholder={t('dashboard.schools.townPlaceholder')}
-                                disabled={submitting}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="login-label">{t('dashboard.schools.phone')}</label>
-                            <input
-                                id="tlf"
-                                type="text"
-                                inputMode="numeric"
-                                className="modal-input"
-                                value={formData.tlf}
-                                onChange={(e) => handleInputChange('tlf', e.target.value)}
-                                placeholder={t('dashboard.schools.phonePlaceholder')}
-                                disabled={submitting}
-                                maxLength={9}
-                            />
-                            {formErrors.tlf && (
-                                <p className="form-error-text">
-                                    {formErrors.tlf}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="modal-button cancel"
-                                onClick={handleCancel}
-                                disabled={submitting}
-                            >
-                                {t('dashboard.schools.cancel')}
-                            </button>
-                            <button
-                                type="submit"
-                                className="modal-button save button-with-icon"
-                                disabled={submitting}
-                            >
-                                {submitting &&
-                                    <Loader2 size={16} className="icon-spin icon-margin-right"/>}
-                                {editingSchool ? t('dashboard.schools.update') : t('dashboard.schools.submit')}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            )}
-
             {renderSchoolList()}
+
+            {showForm && (
+                <dialog
+                    className="modal-overlay"
+                    open={showForm}
+                    aria-label={editingSchool ? t('dashboard.schools.editTitle') : t('dashboard.schools.addNew')}
+                    onClose={handleCancel}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                        <div className="modal-content">
+                            <h3 className="modal-title">
+                                {editingSchool ? t('dashboard.schools.editTitle') : t('dashboard.schools.addNew')}
+                            </h3>
+                            <form onSubmit={handleSubmit} className="modal-body">
+                                <div>
+                                    <label className="login-label">
+                                        {t('dashboard.schools.name')} <span className="form-required-asterisk">*</span>
+                                    </label>
+                                    <input
+                                        id="name"
+                                        className="modal-input"
+                                        value={formData.name}
+                                        onChange={(e) => handleInputChange('name', e.target.value)}
+                                        placeholder={t('dashboard.schools.namePlaceholder')}
+                                        disabled={submitting}
+                                    />
+                                    {formErrors.name && (
+                                        <p className="form-error-text">
+                                            {formErrors.name}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="login-label">{t('dashboard.schools.town')}</label>
+                                    <input
+                                        id="town"
+                                        className="modal-input"
+                                        value={formData.town}
+                                        onChange={(e) => handleInputChange('town', e.target.value)}
+                                        placeholder={t('dashboard.schools.townPlaceholder')}
+                                        disabled={submitting}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="login-label">{t('dashboard.schools.phone')}</label>
+                                    <input
+                                        id="tlf"
+                                        type="text"
+                                        inputMode="numeric"
+                                        className="modal-input"
+                                        value={formData.tlf}
+                                        onChange={(e) => handleInputChange('tlf', e.target.value)}
+                                        placeholder={t('dashboard.schools.phonePlaceholder')}
+                                        disabled={submitting}
+                                        maxLength={9}
+                                    />
+                                    {formErrors.tlf && (
+                                        <p className="form-error-text">
+                                            {formErrors.tlf}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="modal-button cancel"
+                                        onClick={handleCancel}
+                                        disabled={submitting}
+                                    >
+                                        {t('dashboard.schools.cancel')}
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="modal-button save button-with-icon"
+                                        disabled={submitting}
+                                    >
+                                        {submitting &&
+                                            <Loader2 size={16} className="icon-spin icon-margin-right"/>}
+                                        {editingSchool ? t('dashboard.schools.update') : t('dashboard.schools.submit')}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </dialog>
+            )}
 
             <ErrorModal
                 isOpen={errorDialogOpen}

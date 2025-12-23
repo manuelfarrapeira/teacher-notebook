@@ -137,7 +137,7 @@ export function Dashboard({ onLogout }: Readonly<DashboardProps>) {
 
 
         <div className="dashboard-tabs-content">
-          {activeTab === 'schools' && <SchoolsTab />}
+          {activeTab === 'schools' && <SchoolsTab onSchoolsChange={fetchSchools} />}
           {activeTab === 'students' && <StudentsTab/>}
           {activeTab === 'classes' && <ClassesTab />}
           {activeTab === 'schedule' && <ScheduleTab />}

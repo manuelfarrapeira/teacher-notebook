@@ -1152,10 +1152,6 @@ dialog.modal-overlay::backdrop {
   font-weight: 500;
 }
 
-.form-inline-expanded {
-  margin-bottom: 1.5rem;
-  max-width: 100%;
-}
 
 .form-required-asterisk {
   color: red;

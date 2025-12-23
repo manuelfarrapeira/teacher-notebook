@@ -134,7 +134,7 @@ const translations: Record<Locale, Translations> = {
       schools: {
         title: 'Gestión de Colegios',
         subtitle: 'Administra tus colegios y visualiza información clave',
-        addNew: 'Crear Nuevo Colegio',
+        addNew: 'Crear Colegio',
         edit: 'Editar',
         editTitle: 'Editar Colegio',
         list: 'Lista de Colegios',
@@ -227,7 +227,7 @@ const translations: Record<Locale, Translations> = {
       schools: {
         title: 'School Management',
         subtitle: 'Manage your schools and view key information',
-        addNew: 'Create New School',
+        addNew: 'Create School',
         edit: 'Edit',
         editTitle: 'Edit School',
         list: 'School List',
