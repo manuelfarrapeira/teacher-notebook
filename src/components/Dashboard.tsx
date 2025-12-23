@@ -90,23 +90,36 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
     setSelectedClass(Number.parseInt(event.target.value, 10));
   };
 
-  const handleRefresh = () => {
-    fetchSchools();
-  };
-
   const currentSchool = schools.find(s => s.id === selectedSchool);
 
   return (
     <div className="dashboard-container">
-      {isMenuOpen && <div className="mobile-menu-overlay" onClick={() => setIsMenuOpen(false)} />}
-      
-      <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
+      {isMenuOpen && (
+        <button
+          type="button"
+          className="mobile-menu-overlay"
+          aria-label={t('dashboard.sidebar.closeMenu')}
+          onClick={() => setIsMenuOpen(false)}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') setIsMenuOpen(false);
+          }}
+        />
+      )}
+
+      <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`} aria-label={t('dashboard.sidebar.ariaLabel')}>
         <div className="dashboard-menu">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
-              <button key={tab.id} className={`dashboard-tab ${isActive ? 'active' : ''}`} onClick={() => handleTabChange(tab.id)}>
+              <button
+                key={tab.id}
+                className={`dashboard-tab ${isActive ? 'active' : ''}`}
+                onClick={() => handleTabChange(tab.id)}
+                tabIndex={0}
+                aria-current={isActive ? 'page' : undefined}
+                aria-label={tab.label}
+              >
                 <Icon className="icon-tab" size={20} />
                 {tab.label}
               </button>
@@ -121,13 +134,10 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
             schools={schools}
             selectedSchool={selectedSchool}
             selectedClass={selectedClass}
-            loading={loading}
             currentSchool={currentSchool}
             userName={userName}
-            isMenuOpen={isMenuOpen}
             onSchoolChange={handleSchoolChange}
             onClassChange={handleClassChange}
-            onRefresh={handleRefresh}
             onLogout={onLogout}
             onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
           />

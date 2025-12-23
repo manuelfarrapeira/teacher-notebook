@@ -3,10 +3,10 @@ import { BookOpen, Users, Calendar, Settings, LogOut, Clock } from 'lucide-react
 import { useI18n } from '../lib/i18n';
 
 interface SidebarProps {
-  activeTab: string;
-  isMenuOpen: boolean;
-  onTabChange: (tabId: string) => void;
-  onLogout: () => void;
+  readonly activeTab: string;
+  readonly isMenuOpen: boolean;
+  readonly onTabChange: (tabId: string) => void;
+  readonly onLogout: () => void;
 }
 
 export function Sidebar({ activeTab, isMenuOpen, onTabChange, onLogout }: SidebarProps) {
@@ -48,4 +48,3 @@ export function Sidebar({ activeTab, isMenuOpen, onTabChange, onLogout }: Sideba
     </nav>
   );
 }
-

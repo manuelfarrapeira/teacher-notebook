@@ -1,37 +1,31 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {RefreshCw, ChevronDown, Menu} from 'lucide-react';
 import {School} from '../services/SchoolService';
 import {UserMenu} from './UserMenu';
+import { Menu, ChevronDown } from 'lucide-react';
 
 interface TopBarProps {
-    schools: School[];
-    selectedSchool: number | null;
-    selectedClass: number | null;
-    loading: boolean;
-    currentSchool: School | undefined;
-    userName: string;
-    isMenuOpen: boolean;
-    onSchoolChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-    onClassChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-    onRefresh: () => void;
-    onLogout: () => void;
-    onToggleMenu: () => void;
+    readonly schools: School[];
+    readonly selectedSchool: number | null;
+    readonly selectedClass: number | null;
+    readonly currentSchool: School | undefined;
+    readonly userName: string;
+    readonly onSchoolChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+    readonly onClassChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+    readonly onLogout: () => void;
+    readonly onToggleMenu: () => void;
 }
 
 export function TopBar({
-                           schools,
-                           selectedSchool,
-                           selectedClass,
-                           loading,
-                           currentSchool,
-                           userName,
-                           isMenuOpen,
-                           onSchoolChange,
-                           onClassChange,
-                           onRefresh,
-                           onLogout,
-                           onToggleMenu,
-                       }: TopBarProps) {
+    schools,
+    selectedSchool,
+    selectedClass,
+    currentSchool,
+    userName,
+    onSchoolChange,
+    onClassChange,
+    onLogout,
+    onToggleMenu,
+}: TopBarProps) {
     const [isSchoolOpen, setIsSchoolOpen] = useState(false);
     const [isClassOpen, setIsClassOpen] = useState(false);
     const schoolRef = useRef<HTMLDivElement>(null);
@@ -78,7 +72,7 @@ export function TopBar({
                                 {schools.map(school => (
                                     <button
                                         key={school.id}
-                                        onClick={(e) => {
+                                        onClick={() => {
                                             const syntheticEvent = {
                                                 target: {value: school.id}
                                             } as unknown as React.ChangeEvent<HTMLSelectElement>;
@@ -107,7 +101,7 @@ export function TopBar({
                                 {currentSchool?.classes.map(cls => (
                                     <button
                                         key={cls.id}
-                                        onClick={(e) => {
+                                        onClick={() => {
                                             const syntheticEvent = {
                                                 target: {value: cls.id}
                                             } as unknown as React.ChangeEvent<HTMLSelectElement>;
