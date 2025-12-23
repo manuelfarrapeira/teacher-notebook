@@ -184,6 +184,33 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia de una tab con formular
 
 ---
 
+## ♿️ Accesibilidad y HTML Semántico (actualizado 2025-12-23)
+
+- Siempre usa elementos HTML semánticos en vez de roles ARIA sobre elementos genéricos. Ejemplo: usa `<button>` en vez de `<div role="button">`.
+- Para modales y diálogos, usa el elemento `<dialog>` nativo de HTML5 en vez de `<div role="dialog">` o `<section role="dialog">`.
+- No uses roles como `role="document"` o `role="dialog"` en `<div>`, `<section>`, `<article>`, etc. Usa el elemento semántico adecuado.
+- Los overlays de modales deben ser `<dialog>` y el contenido interior un `<div>` o estructura semántica.
+- No asignes event handlers (onClick, onKeyDown) a elementos no interactivos como `<div>`, `<span>`, `<section>`, etc. Usa `<button>`, `<a>`, `<dialog>`, etc.
+- Si necesitas focus trap en un modal, implementa la lógica sobre `<dialog>` y sus hijos interactivos.
+- Si SonarQube reporta issues de accesibilidad, semántica o ARIA, prioriza la solución usando HTML5 nativo.
+- Ejemplo correcto de modal:
+
+```tsx
+<dialog open={isOpen} aria-label={t('common.error')}>
+  <div className="modal-content">
+    <h3>{t('common.error')}</h3>
+    <button onClick={closeModal}>{t('common.close')}</button>
+  </div>
+</dialog>
+```
+
+- No uses `.at(-1)` en arrays si la versión de TypeScript no lo soporta; usa `.slice(-1)[0]`.
+- Usa tipado estricto en errores (`unknown` y `instanceof`).
+- Extrae ternarios anidados complejos a funciones helpers.
+- Convierte condicionales a booleanos explícitos (`Boolean(valor)`).
+
+---
+
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
 Última actualización: 2025-12-23

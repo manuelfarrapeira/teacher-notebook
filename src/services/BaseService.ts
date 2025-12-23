@@ -3,7 +3,7 @@ import { AuthService } from './AuthService';
 import { getCurrentLocale } from '../lib/i18n';
 
 /**
- * Interfaz que representa el formato de error estándar del servidor
+ * Interface representing the standard error format from the backend
  */
 export interface ApiError {
   code: string;
@@ -16,16 +16,28 @@ export interface ApiError {
 }
 
 /**
- * Clase base abstracta para servicios que requieren autenticación.
- * Centraliza la lógica común de HTTP: validación de token, headers,
- * métodos CRUD genéricos y manejo de errores del servidor.
+ * Custom error class for API errors
+ */
+export class ApiErrorException extends Error {
+  public apiError: ApiError;
+  constructor(apiError: ApiError) {
+    super(apiError.detail || apiError.description || apiError.code);
+    this.name = 'ApiErrorException';
+    this.apiError = apiError;
+  }
+}
+
+/**
+ * Abstract base class for services requiring authentication.
+ * Centralizes common HTTP logic: token validation, headers,
+ * generic CRUD methods, and centralized backend error handling.
  */
 export abstract class BaseService {
 
   /**
-   * Construye los headers comunes para las peticiones HTTP autenticadas
-   * @param additionalHeaders - Headers adicionales opcionales
-   * @returns Headers combinados con Authorization, Accept-Language y Content-Type
+   * Builds common headers for authenticated HTTP requests
+   * @param additionalHeaders - Optional additional headers
+   * @returns Headers combined with Authorization, Accept-Language, and Content-Type
    */
   protected static buildHeaders(additionalHeaders?: HeadersInit): Headers {
     const token = AuthService.getAccessToken();
@@ -37,7 +49,6 @@ export abstract class BaseService {
       'Accept-Language': locale,
     });
 
-    // Merge de headers adicionales si se proporcionan
     if (additionalHeaders) {
       const additionalHeadersObj = new Headers(additionalHeaders);
       additionalHeadersObj.forEach((value, key) => {
@@ -49,56 +60,58 @@ export abstract class BaseService {
   }
 
   /**
-   * Valida la existencia del token de acceso antes de realizar una petición
-   * @throws Error si no hay token válido y ejecuta logout
+   * Validates the existence of an access token before making a request
+   * @throws Error if no valid token and triggers logout
    */
   protected static validateToken(): void {
     const token = AuthService.getAccessToken();
 
     if (!token) {
       AuthService.forceLogout();
-      throw new Error('No hay sesión activa. Por favor, inicia sesión.');
+      throw new Error('No active session. Please log in.');
     }
   }
 
   /**
-   * Maneja los errores de las respuestas HTTP de forma centralizada
-   * @param response - Respuesta HTTP del servidor
-   * @throws ApiError (objeto) para que el frontend lo trate como desee
+   * Centralized error handling for HTTP responses
+   * @param response - HTTP response from the backend
+   * @throws ApiErrorException for the frontend to handle as needed
    */
   protected static async handleErrorResponse(response: Response): Promise<never> {
     if (response.status === 401 || response.status === 403) {
       AuthService.forceLogout();
-      throw {
+      throw new ApiErrorException({
         code: '401',
         description: 'UNAUTHORIZED',
-        detail: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+        detail: 'Your session has expired. Please log in again.',
         details: null
-      };
+      });
     }
-
     try {
       const errorData: ApiError = await response.json();
-      throw errorData;
+      // Throw the backend error as is
+      throw new ApiErrorException(errorData);
     } catch (parseError) {
-      if (parseError && typeof parseError === 'object' && 'code' in parseError) {
+      // If the error is already ApiErrorException, propagate it
+      if (parseError instanceof ApiErrorException) {
         throw parseError;
       }
-      throw {
+      // If JSON parsing fails, throw a generic ApiErrorException
+      throw new ApiErrorException({
         code: String(response.status),
         description: response.statusText || 'ERROR',
-        detail: 'Error desconocido en la petición.',
+        detail: 'Unknown error in the request.',
         details: null
-      };
+      });
     }
   }
 
   /**
-   * Realiza una petición GET
-   * @param baseEndpoint - Endpoint base del servicio (ej: '/teacher-notebook/v1')
-   * @param endpoint - Endpoint relativo (será concatenado con baseEndpoint)
-   * @param additionalHeaders - Headers adicionales opcionales
-   * @returns Promesa con los datos tipados
+   * Performs a GET request
+   * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
+   * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with typed data
    */
   protected static async get<T>(
     baseEndpoint: string,
@@ -123,11 +136,12 @@ export abstract class BaseService {
   }
 
   /**
-   * Realiza una petición POST
-   * @param endpoint - Endpoint relativo (será concatenado con baseEndpoint)
-   * @param body - Cuerpo de la petición
-   * @param additionalHeaders - Headers adicionales opcionales
-   * @returns Promesa con los datos tipados
+   * Performs a POST request
+   * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
+   * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
+   * @param body - Request body
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with typed data
    */
   protected static async post<T>(
     baseEndpoint: string,
@@ -156,16 +170,17 @@ export abstract class BaseService {
       if (error instanceof Error) {
         throw error;
       }
-      throw new Error('Error desconocido al realizar la petición POST.');
+      throw new Error('Unknown error performing POST request.');
     }
   }
 
   /**
-   * Realiza una petición PUT
-   * @param endpoint - Endpoint relativo (será concatenado con baseEndpoint)
-   * @param body - Cuerpo de la petición
-   * @param additionalHeaders - Headers adicionales opcionales
-   * @returns Promesa con los datos tipados
+   * Performs a PUT request
+   * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
+   * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
+   * @param body - Request body
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with typed data
    */
   protected static async put<T>(
     baseEndpoint: string,
@@ -194,16 +209,16 @@ export abstract class BaseService {
       if (error instanceof Error) {
         throw error;
       }
-      throw new Error('Error desconocido al realizar la petición PUT.');
+      throw new Error('Unknown error performing PUT request.');
     }
   }
 
   /**
-   * Realiza una petición DELETE
-   * @param baseEndpoint - Endpoint base del servicio (ej: '/teacher-notebook/v1')
-   * @param endpoint - Endpoint relativo (será concatenado con baseEndpoint)
-   * @param additionalHeaders - Headers adicionales opcionales
-   * @returns Promesa con los datos tipados
+   * Performs a DELETE request
+   * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
+   * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with typed data
    */
   protected static async delete<T>(
     baseEndpoint: string,
@@ -224,9 +239,9 @@ export abstract class BaseService {
       await this.handleErrorResponse(response);
     }
 
-    // Algunos DELETE no devuelven contenido
+    // Some DELETE requests do not return content
     const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType?.includes('application/json')) {
       return await response.json();
     }
 
@@ -234,12 +249,12 @@ export abstract class BaseService {
   }
 
   /**
-   * Realiza una petición PATCH
-   * @param baseEndpoint - Endpoint base del servicio (ej: '/teacher-notebook/v1')
-   * @param endpoint - Endpoint relativo (será concatenado con baseEndpoint)
-   * @param body - Cuerpo de la petición
-   * @param additionalHeaders - Headers adicionales opcionales
-   * @returns Promesa con los datos tipados
+   * Performs a PATCH request
+   * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
+   * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
+   * @param body - Request body
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with typed data
    */
   protected static async patch<T>(
     baseEndpoint: string,
@@ -265,4 +280,3 @@ export abstract class BaseService {
     return await response.json();
   }
 }
-

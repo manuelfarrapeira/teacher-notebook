@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Building2, Plus, Loader2, Trash2 } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SchoolService, School, SchoolRequestDTO } from '../../services/SchoolService';
+import { ApiErrorException } from '../../services/BaseService';
 
 interface FormData {
   name: string;
@@ -12,6 +13,39 @@ interface FormData {
 interface FormErrors {
   name?: string;
   tlf?: string;
+}
+
+function useFocusTrap(isOpen: boolean, modalRef: React.RefObject<HTMLDivElement>) {
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+    const focusableSelectors = [
+      'button',
+      'input',
+      'select',
+      'textarea',
+      '[tabindex]:not([tabindex="-1"])'
+    ];
+    const focusableEls = modalRef.current.querySelectorAll<HTMLElement>(focusableSelectors.join(','));
+    if (focusableEls.length > 0) focusableEls[0].focus();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const focusable = Array.from(focusableEls).filter(el => !el.hasAttribute('disabled'));
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable.slice(-1)[0];
+      if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    };
+    modalRef.current.addEventListener('keydown', handleKeyDown);
+    return () => {
+      modalRef.current?.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, modalRef]);
 }
 
 export function SchoolsTab() {
@@ -34,6 +68,15 @@ export function SchoolsTab() {
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
+
+  // Refs for modals
+  const errorModalRef = useRef<HTMLDivElement>(null);
+  const successModalRef = useRef<HTMLDivElement>(null);
+  const confirmDeleteModalRef = useRef<HTMLDivElement>(null);
+
+  useFocusTrap(errorDialogOpen, errorModalRef);
+  useFocusTrap(successDialogOpen, successModalRef);
+  useFocusTrap(confirmDeleteOpen, confirmDeleteModalRef);
 
   useEffect(() => {
     fetchSchools();
@@ -142,25 +185,95 @@ export function SchoolsTab() {
       setConfirmDeleteOpen(false);
       setSchoolToDelete(null);
       await fetchSchools();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log('ERROR JSON AL ELIMINAR COLEGIO:', error);
       setConfirmDeleteOpen(false);
       setSchoolToDelete(null);
       let message = t('dashboard.schools.deleteError');
-      if (error && typeof error === 'object') {
-        if (typeof error.detail === 'string' && error.detail.trim().length > 0) {
-          message = error.detail;
-        } else if (typeof error.description === 'string' && error.description.trim().length > 0) {
-          message = error.description;
-        } else if (typeof error.code === 'string' && error.code.trim().length > 0) {
-          message = error.code;
-        }
+      if (error instanceof ApiErrorException) {
+        message = error.apiError.detail || error.apiError.description || error.apiError.code;
+      } else if (error instanceof Error) {
+        message = error.message;
       }
       setErrorMessage(message);
       setErrorDialogOpen(true);
     } finally {
       setDeleting(false);
     }
+  };
+
+  // Helper function to render school list
+  const renderSchoolList = () => {
+    if (loading) {
+      return (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem 0' }}>
+          <Loader2 className="icon-spin" size={32} />
+        </div>
+      );
+    }
+
+    if (schools.length === 0) {
+      return (
+        <div className="dashboard-empty">
+          <Building2 className="dashboard-empty-icon" />
+          <p className="dashboard-empty-text">{t('dashboard.schools.noSchools')}</p>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem' }}>
+          {t('dashboard.schools.list')}
+        </h3>
+        <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
+          {schools.map((school) => (
+            <div
+              key={school.id}
+              style={{
+                border: '1px solid #e5e7eb',
+                borderRadius: '0.5rem',
+                padding: '1rem',
+                backgroundColor: 'white',
+                position: 'relative',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Building2 size={20} />
+                  <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{school.name}</h4>
+                </div>
+                <button
+                  className="modal-button cancel"
+                  style={{ padding: '0.25rem', fontSize: '1rem', color: '#dc2626', borderColor: 'transparent', background: 'none', borderRadius: '0.375rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  onClick={() => handleDeleteClick(school)}
+                  disabled={deleting}
+                  title={t('dashboard.schools.delete')}
+                  aria-label={t('dashboard.schools.delete')}
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+              <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                {Boolean(school.town) && (
+                  <p style={{ marginBottom: '0.5rem' }}>
+                    <span style={{ fontWeight: 500 }}>{t('dashboard.schools.town')}:</span> {school.town}
+                  </p>
+                )}
+                {Boolean(school.tlf) && (
+                  <p style={{ marginBottom: '0.5rem' }}>
+                    <span style={{ fontWeight: 500 }}>{t('dashboard.schools.phone')}:</span> {school.tlf}
+                  </p>
+                )}
+                <p>
+                  <span style={{ fontWeight: 500 }}>{t('dashboard.tabs.classes')}:</span> {school.classes.length}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -258,143 +371,112 @@ export function SchoolsTab() {
       )}
 
       {/* Lista de colegios */}
-      {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem 0' }}>
-          <Loader2 className="icon-spin" size={32} />
-        </div>
-      ) : schools.length === 0 ? (
-        <div className="dashboard-empty">
-          <Building2 className="dashboard-empty-icon" />
-          <p className="dashboard-empty-text">{t('dashboard.schools.noSchools')}</p>
-        </div>
-      ) : (
-        <div>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem' }}>
-            {t('dashboard.schools.list')}
-          </h3>
-          <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
-            {schools.map((school) => (
-              <div
-                key={school.id}
-                style={{
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '0.5rem',
-                  padding: '1rem',
-                  backgroundColor: 'white',
-                  position: 'relative',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Building2 size={20} />
-                    <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{school.name}</h4>
-                  </div>
-                  <button
-                    className="modal-button cancel"
-                    style={{ padding: '0.25rem', fontSize: '1rem', color: '#dc2626', borderColor: 'transparent', background: 'none', borderRadius: '0.375rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    onClick={() => handleDeleteClick(school)}
-                    disabled={deleting}
-                    title={t('dashboard.schools.delete')}
-                    aria-label={t('dashboard.schools.delete')}
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
-                <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                  {school.town && (
-                    <p style={{ marginBottom: '0.5rem' }}>
-                      <span style={{ fontWeight: 500 }}>{t('dashboard.schools.town')}:</span> {school.town}
-                    </p>
-                  )}
-                  {school.tlf && (
-                    <p style={{ marginBottom: '0.5rem' }}>
-                      <span style={{ fontWeight: 500 }}>{t('dashboard.schools.phone')}:</span> {school.tlf}
-                    </p>
-                  )}
-                  <p>
-                    <span style={{ fontWeight: 500 }}>{t('dashboard.tabs.classes')}:</span> {school.classes.length}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {renderSchoolList()}
 
       {/* Error Dialog */}
       {errorDialogOpen && (
-        <div className="modal-overlay" onClick={() => setErrorDialogOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3 className="modal-title" style={{ color: '#dc2626' }}>
-              ❌ {t('common.error')}
-            </h3>
-            <div className="modal-body">
-              <p style={{ whiteSpace: 'pre-line' }}>{errorMessage}</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                className="modal-button save"
-                onClick={() => setErrorDialogOpen(false)}
-                style={{ backgroundColor: '#dc2626' }}
-              >
-                {t('common.close')}
-              </button>
+        <dialog
+          className="modal-overlay"
+          open={errorDialogOpen}
+          aria-label={t('common.error')}
+          onClose={() => setErrorDialogOpen(false)}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <div
+              className="modal-content"
+              ref={errorModalRef}
+            >
+              <h3 className="modal-title" style={{ color: '#dc2626' }}>
+                ❌ {t('common.error')}
+              </h3>
+              <div className="modal-body">
+                <p style={{ whiteSpace: 'pre-line' }}>{errorMessage}</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="modal-button save"
+                  onClick={() => setErrorDialogOpen(false)}
+                  style={{ backgroundColor: '#dc2626' }}
+                >
+                  {t('common.close')}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
 
       {/* Success Dialog */}
       {successDialogOpen && (
-        <div className="modal-overlay" onClick={() => setSuccessDialogOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3 className="modal-title" style={{ color: '#16a34a' }}>
-              ✅ {t('common.success')}
-            </h3>
-            <div className="modal-body">
-              <p>{t('dashboard.schools.createSuccess')}</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                className="modal-button save"
-                onClick={() => setSuccessDialogOpen(false)}
-                style={{ backgroundColor: '#16a34a' }}
-              >
-                {t('common.close')}
-              </button>
+        <dialog
+          className="modal-overlay"
+          open={successDialogOpen}
+          aria-label={t('common.success')}
+          onClose={() => setSuccessDialogOpen(false)}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <div
+              className="modal-content"
+              ref={successModalRef}
+            >
+              <h3 className="modal-title" style={{ color: '#16a34a' }}>
+                ✅ {t('common.success')}
+              </h3>
+              <div className="modal-body">
+                <p>{t('dashboard.schools.createSuccess')}</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="modal-button save"
+                  onClick={() => setSuccessDialogOpen(false)}
+                  style={{ backgroundColor: '#16a34a' }}
+                >
+                  {t('common.close')}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
 
-      {/* Modal de confirmación de borrado */}
+      {/* Delete Confirmation Modal */}
       {confirmDeleteOpen && schoolToDelete && (
-        <div className="modal-overlay" onClick={() => setConfirmDeleteOpen(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <h3 className="modal-title" style={{ color: '#dc2626' }}>{t('dashboard.schools.deleteTitle')}</h3>
-            <div className="modal-body">
-              <p>{t('dashboard.schools.deleteConfirm').replace('{name}', schoolToDelete.name)}</p>
-            </div>
-            <div className="modal-footer" style={{ marginTop: '1.5rem' }}>
-              <button
-                className="modal-button cancel"
-                onClick={() => setConfirmDeleteOpen(false)}
-                disabled={deleting}
-              >
-                {t('common.cancel')}
-              </button>
-              <button
-                className="modal-button save"
-                style={{ backgroundColor: '#dc2626' }}
-                onClick={handleConfirmDelete}
-                disabled={deleting}
-              >
-                {deleting && <Loader2 size={16} className="icon-spin" style={{ marginRight: '0.5rem' }} />}
-                {t('dashboard.schools.deleteConfirmBtn')}
-              </button>
+        <dialog
+          className="modal-overlay"
+          open={confirmDeleteOpen}
+          aria-label={t('dashboard.schools.deleteTitle')}
+          onClose={() => setConfirmDeleteOpen(false)}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <div
+              className="modal-content"
+              ref={confirmDeleteModalRef}
+            >
+              <h3 className="modal-title" style={{ color: '#dc2626' }}>{t('dashboard.schools.deleteTitle')}</h3>
+              <div className="modal-body">
+                <p>{t('dashboard.schools.deleteConfirm').replace('{name}', schoolToDelete.name)}</p>
+              </div>
+              <div className="modal-footer" style={{ marginTop: '1.5rem' }}>
+                <button
+                  className="modal-button cancel"
+                  onClick={() => setConfirmDeleteOpen(false)}
+                  disabled={deleting}
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  className="modal-button save"
+                  style={{ backgroundColor: '#dc2626' }}
+                  onClick={handleConfirmDelete}
+                  disabled={deleting}
+                >
+                  {deleting && <Loader2 size={16} className="icon-spin" style={{ marginRight: '0.5rem' }} />}
+                  {t('dashboard.schools.deleteConfirmBtn')}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );
