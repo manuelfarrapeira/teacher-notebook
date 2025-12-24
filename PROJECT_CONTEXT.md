@@ -671,7 +671,7 @@ import { SuccessModal } from '../modals/SuccessModal';
 <SuccessModal
   isOpen={isSuccessOpen}
   message="Operación completada exitosamente"
-  onClose={() => setIsSuccessOpen(false)}
+  onClose={() => setSuccessOpen(false)}
 />
 ```
 
@@ -1194,3 +1194,209 @@ import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 - Usa tipado estricto en errores (`unknown` y `instanceof`).
 - Extrae ternarios anidados complejos a funciones helpers.
 - Convierte condicionales a booleanos explícitos (`Boolean(valor)`).
+
+---
+
+## 📋 Validación de Formularios y UX (actualizado 2025-12-24)
+
+### Principios de Validación
+
+1. **Validación en tiempo real**: Los errores deben limpiarse cuando el usuario comienza a corregir el campo
+2. **Feedback visual inmediato**: Borde rojo en inputs con error + mensaje descriptivo
+3. **Foco automático**: El cursor debe moverse al primer campo con error tras submit
+4. **Filtrado de entrada**: Prevenir caracteres inválidos antes de que se escriban
+
+### Implementación Estándar
+
+#### 1. Estructura de Estado
+
+```tsx
+interface FormData {
+  name: string;
+  town: string;
+  tlf: string;
+}
+
+interface FormErrors {
+  name?: string;
+  tlf?: string;
+}
+
+const [formData, setFormData] = useState<FormData>({
+  name: '',
+  town: '',
+  tlf: '',
+});
+
+const [formErrors, setFormErrors] = useState<FormErrors>({});
+
+// Refs para focus management
+const nameInputRef = useRef<HTMLInputElement>(null);
+const tlfInputRef = useRef<HTMLInputElement>(null);
+```
+
+#### 2. Validación con Focus
+
+```tsx
+const validateForm = (): boolean => {
+  const errors: FormErrors = {};
+
+  // Validaciones
+  if (!formData.name.trim()) {
+    errors.name = t('validation.nameRequired');
+  } else if (formData.name.trim().length < 5) {
+    errors.name = t('validation.nameMinLength');
+  }
+  
+  if (formData.tlf.trim()) {
+    const phoneRegex = /^\d{9}$/;
+    if (!phoneRegex.test(formData.tlf.trim())) {
+      errors.tlf = t('validation.phoneInvalid');
+    }
+  }
+
+  setFormErrors(errors);
+  
+  // Focus on first field with error
+  if (errors.name) {
+    nameInputRef.current?.focus();
+  } else if (errors.tlf) {
+    tlfInputRef.current?.focus();
+  }
+  
+  return Object.keys(errors).length === 0;
+};
+```
+
+#### 3. Filtrado de Entrada en Tiempo Real
+
+```tsx
+const handleInputChange = (field: keyof FormData, value: string) => {
+  // Filter only numbers for phone field
+  if (field === 'tlf') {
+    value = value.replaceAll(/\D/g, ''); // Remove all non-digit characters
+  }
+  
+  setFormData(prev => ({...prev, [field]: value}));
+  
+  // Clear error when user starts typing
+  if (formErrors[field as keyof FormErrors]) {
+    setFormErrors(prev => ({...prev, [field]: undefined}));
+  }
+};
+```
+
+#### 4. Markup del Input con Validación
+
+```tsx
+<div>
+  <label className="login-label">
+    {t('dashboard.schools.name')} 
+    <span className="form-required-asterisk">*</span>
+  </label>
+  <input
+    ref={nameInputRef}
+    id="name"
+    className={`modal-input ${formErrors.name ? 'input-error' : ''}`}
+    value={formData.name}
+    onChange={(e) => handleInputChange('name', e.target.value)}
+    placeholder={t('dashboard.schools.namePlaceholder')}
+    disabled={submitting}
+  />
+  {formErrors.name && (
+    <p className="form-error-text">
+      {formErrors.name}
+    </p>
+  )}
+</div>
+
+{/* Input numérico */}
+<input
+  ref={tlfInputRef}
+  id="tlf"
+  type="text"
+  inputMode="numeric"
+  className={`modal-input ${formErrors.tlf ? 'input-error' : ''}`}
+  value={formData.tlf}
+  onChange={(e) => handleInputChange('tlf', e.target.value)}
+  maxLength={9}
+/>
+```
+
+### Clases CSS para Validación
+
+Definidas en `src/index.css`:
+
+```css
+/* Input con error */
+.modal-input.input-error {
+  border: 2px solid #ef4444;
+  outline: none;
+}
+
+.modal-input.input-error:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Mensaje de error */
+.form-error-text {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Asterisco de campo obligatorio */
+.form-required-asterisk {
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+```
+
+### Tipos de Validación Comunes
+
+| Tipo | Implementación |
+|------|----------------|
+| **Campo obligatorio** | `if (!value.trim()) errors.field = t('validation.required')` |
+| **Longitud mínima** | `if (value.length < 5) errors.field = t('validation.minLength')` |
+| **Email** | `/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)` |
+| **Teléfono (9 dígitos)** | `/^\d{9}$/.test(value)` |
+| **Solo números** | `value.replaceAll(/\D/g, '')` en onChange |
+| **Solo letras** | `value.replaceAll(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')` |
+
+### Modales de Feedback
+
+Todos los modales deben estar en `src/components/modals/`:
+
+- `ErrorModal` - Mostrar errores del servidor o validación
+- `SuccessModal` - Confirmación de acciones exitosas
+- `ConfirmDeleteModal` - Confirmación antes de eliminar
+- `LoadingModal` - Indicador de carga para operaciones largas
+
+```tsx
+<ErrorModal
+  isOpen={errorDialogOpen}
+  message={errorMessage}
+  onClose={() => setErrorDialogOpen(false)}
+/>
+
+<SuccessModal
+  isOpen={successDialogOpen}
+  message={successMessage}
+  onClose={() => setSuccessDialogOpen(false)}
+/>
+```
+
+### Ejemplo Completo de Referencia
+
+Ver `src/components/tabs/SchoolsTab.tsx` para ver la implementación completa de:
+- Formulario de creación/edición
+- Validación con múltiples campos
+- Filtrado de entrada numérica
+- Foco automático en errores
+- Integración con modales de feedback
+- Manejo de estados de carga
+
+---
+
+**Última actualización:** Diciembre 2024 (actualizado 2025-12-24)

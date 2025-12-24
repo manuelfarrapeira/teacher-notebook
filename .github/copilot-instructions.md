@@ -211,6 +211,95 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia de una tab con formular
 
 ---
 
+## 📋 Validación de Formularios y UX (actualizado 2025-12-24)
+
+### Validación de Campos
+
+1. **Inputs numéricos**: 
+   - Filtrar caracteres no numéricos en tiempo real usando `replaceAll(/\D/g, '')`
+   - Usar `type="text"` con `inputMode="numeric"` para mejor experiencia en móviles
+   - Establecer `maxLength` apropiado
+
+   ```tsx
+   const handleInputChange = (field: string, value: string) => {
+     if (field === 'tlf') {
+       value = value.replaceAll(/\D/g, ''); // Solo números
+     }
+     setFormData(prev => ({...prev, [field]: value}));
+   };
+   ```
+
+2. **Indicadores visuales de error**:
+   - Inputs con errores deben tener la clase `input-error` que muestra borde rojo
+   - Mostrar mensajes de error debajo del input usando clase `form-error-text`
+   
+   ```tsx
+   <input
+     className={`modal-input ${formErrors.name ? 'input-error' : ''}`}
+     // ...
+   />
+   {formErrors.name && (
+     <p className="form-error-text">{formErrors.name}</p>
+   )}
+   ```
+
+3. **Foco automático en errores**:
+   - Usar `useRef` para crear referencias a los inputs
+   - En la función de validación, enfocar el primer campo con error
+   
+   ```tsx
+   const nameInputRef = useRef<HTMLInputElement>(null);
+   const tlfInputRef = useRef<HTMLInputElement>(null);
+   
+   const validateForm = (): boolean => {
+     const errors: FormErrors = {};
+     // ... validaciones ...
+     
+     // Focus on first field with error
+     if (errors.name) {
+       nameInputRef.current?.focus();
+     } else if (errors.tlf) {
+       tlfInputRef.current?.focus();
+     }
+     
+     return Object.keys(errors).length === 0;
+   };
+   ```
+
+4. **Clases CSS para errores**:
+   - `.input-error` - Borde rojo 2px (#ef4444)
+   - `.form-error-text` - Texto de error en rojo
+   - `.form-required-asterisk` - Asterisco rojo para campos obligatorios
+
+### Modales
+
+- Los modales deben estar en `src/components/modals/` (no en las tabs)
+- Usar componentes reutilizables: `ErrorModal`, `SuccessModal`, `ConfirmDeleteModal`
+- Los modales deben usar el elemento `<dialog>` con clase `modal-overlay`
+- El contenido del modal debe estar en un `<div>` con clase `modal-content`
+- Los modales deben centrarse usando flexbox en el overlay
+
+```tsx
+<dialog className="modal-overlay" open={isOpen}>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+    <div className="modal-content">
+      {/* Contenido del modal */}
+    </div>
+  </div>
+</dialog>
+```
+
+### Patrones de Formulario
+
+Ver `src/components/tabs/SchoolsTab.tsx` como referencia completa de:
+- Validación de formularios con múltiples campos
+- Manejo de errores visuales
+- Foco automático en campos con error
+- Filtrado de entrada en tiempo real
+- Integración con modales de error/éxito
+
+---
+
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
-Última actualización: 2025-12-23
+Última actualización: 2025-12-24

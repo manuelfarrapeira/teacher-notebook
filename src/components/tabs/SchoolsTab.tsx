@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Building2, Plus, Loader2, Trash2, Edit} from 'lucide-react';
 import {useI18n} from '../../lib/i18n';
 import {SchoolService, School, SchoolRequestDTO} from '../../services/SchoolService';
@@ -45,6 +45,9 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [successMessage, setSuccessMessage] = useState('');
 
+    const nameInputRef = useRef<HTMLInputElement>(null);
+    const tlfInputRef = useRef<HTMLInputElement>(null);
+
 
     useEffect(() => {
         fetchSchools();
@@ -80,10 +83,22 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
         }
 
         setFormErrors(errors);
+
+        if (errors.name) {
+            nameInputRef.current?.focus();
+        } else if (errors.tlf) {
+            tlfInputRef.current?.focus();
+        }
+
         return Object.keys(errors).length === 0;
     };
 
     const handleInputChange = (field: keyof FormData, value: string) => {
+        // Filter only numbers for phone field
+        if (field === 'tlf') {
+            value = value.replaceAll(/\D/g, '');
+        }
+
         setFormData(prev => ({...prev, [field]: value}));
         if (formErrors[field as keyof FormErrors]) {
             setFormErrors(prev => ({...prev, [field]: undefined}));
@@ -294,8 +309,9 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
                                         {t('dashboard.schools.name')} <span className="form-required-asterisk">*</span>
                                     </label>
                                     <input
+                                        ref={nameInputRef}
                                         id="name"
-                                        className="modal-input"
+                                        className={`modal-input ${formErrors.name ? 'input-error' : ''}`}
                                         value={formData.name}
                                         onChange={(e) => handleInputChange('name', e.target.value)}
                                         placeholder={t('dashboard.schools.namePlaceholder')}
@@ -323,10 +339,11 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
                                 <div>
                                     <label className="login-label">{t('dashboard.schools.phone')}</label>
                                     <input
+                                        ref={tlfInputRef}
                                         id="tlf"
                                         type="text"
                                         inputMode="numeric"
-                                        className="modal-input"
+                                        className={`modal-input ${formErrors.tlf ? 'input-error' : ''}`}
                                         value={formData.tlf}
                                         onChange={(e) => handleInputChange('tlf', e.target.value)}
                                         placeholder={t('dashboard.schools.phonePlaceholder')}
