@@ -37,8 +37,10 @@ const createWindow = () => {
     );
   }
 
-  // Open the DevTools. quitar esto cuando se genere app
-  mainWindow.webContents.openDevTools();
+  // Open DevTools only in local environment
+  if (process.env.VITE_ENV === 'local') {
+    mainWindow.webContents.openDevTools();
+  }
 };
 
 // This method will be called when Electron has finished
