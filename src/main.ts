@@ -21,6 +21,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
+    minWidth: 500,
     autoHideMenuBar: true,
     icon: iconPath,
     webPreferences: {

@@ -411,6 +411,7 @@ body {
   height: 100vh;
   background: #f4f7fa;
   overflow: hidden;
+  border-top: 1px solid #624db6;
 }
 
 .dashboard-sidebar {

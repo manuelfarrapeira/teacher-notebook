@@ -63,8 +63,8 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
 
   const tabs = [
     { id: 'schools', label: t('dashboard.tabs.schools'), icon: Building2 },
-    { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
     { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
+    { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
     { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
     { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
     { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
@@ -146,8 +146,8 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
 
         <div className="dashboard-tabs-content">
           {activeTab === 'schools' && <SchoolsTab onSchoolsChange={fetchSchools} />}
-          {activeTab === 'students' && <StudentsTab/>}
           {activeTab === 'classes' && <ClassesTab />}
+          {activeTab === 'students' && <StudentsTab/>}
           {activeTab === 'schedule' && <ScheduleTab />}
           {activeTab === 'timetable' && <TimetableTab />}
           {activeTab === 'settings' && <SettingsTab />}
