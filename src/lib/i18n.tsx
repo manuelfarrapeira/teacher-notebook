@@ -56,6 +56,19 @@ interface Translations {
       deleteTitle: string;
       deleteConfirm: string;
       noClassesInSchool: string;
+      searchPlaceholder: string;
+      noSchoolsFound: string;
+      showFilter: string;
+      hideFilter: string;
+      searchBy: string;
+      filterBySchool: string;
+      filterByClass: string;
+      filterByTown: string;
+      searchSchoolPlaceholder: string;
+      searchClassPlaceholder: string;
+      searchTownPlaceholder: string;
+      clearFilter: string;
+      clearAllFilters: string;
       validation: {
         nameRequired: string;
         nameMinLength: string;
@@ -180,6 +193,19 @@ const translations: Record<Locale, Translations> = {
         deleteTitle: 'Eliminar clase',
         deleteConfirm: '¿Está seguro que desea eliminar la clase "{name}"? Esta acción no se puede deshacer.',
         noClassesInSchool: 'Este colegio no tiene clases todavía. Haz clic en "Añadir Clase" para crear una.',
+        searchPlaceholder: 'Buscar colegio o clase...',
+        noSchoolsFound: 'No se encontraron colegios o clases con ese nombre',
+        showFilter: 'Mostrar filtros',
+        hideFilter: 'Ocultar filtros',
+        searchBy: 'Buscar por',
+        filterBySchool: 'Colegio',
+        filterByClass: 'Clase',
+        filterByTown: 'Población',
+        searchSchoolPlaceholder: 'Escribe el nombre del colegio...',
+        searchClassPlaceholder: 'Escribe el nombre de la clase...',
+        searchTownPlaceholder: 'Escribe el nombre de la población...',
+        clearFilter: 'Limpiar filtro',
+        clearAllFilters: 'Limpiar filtros',
         validation: {
           nameRequired: 'El nombre es obligatorio',
           nameMinLength: 'El nombre debe tener al menos 3 caracteres',
@@ -302,6 +328,19 @@ const translations: Record<Locale, Translations> = {
         deleteTitle: 'Delete class',
         deleteConfirm: 'Are you sure you want to delete the class "{name}"? This action cannot be undone.',
         noClassesInSchool: 'This school has no classes yet. Click "Add Class" to create one.',
+        searchPlaceholder: 'Search school or class...',
+        noSchoolsFound: 'No schools or classes found with that name',
+        showFilter: 'Show filters',
+        hideFilter: 'Hide filters',
+        searchBy: 'Search by',
+        filterBySchool: 'School',
+        filterByClass: 'Class',
+        filterByTown: 'Town',
+        searchSchoolPlaceholder: 'Type school name...',
+        searchClassPlaceholder: 'Type class name...',
+        searchTownPlaceholder: 'Type town name...',
+        clearFilter: 'Clear filter',
+        clearAllFilters: 'Clear filters',
         validation: {
           nameRequired: 'Name is required',
           nameMinLength: 'Name must be at least 3 characters',

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {BookOpen, Loader2, Building2, Plus, Edit, Trash2} from 'lucide-react';
+import {BookOpen, Loader2, Building2, Plus, Edit, Trash2, Search, X, ChevronDown} from 'lucide-react';
 import {useI18n} from '../../lib/i18n';
 import {SchoolService, School, SchoolClass} from '../../services/SchoolService';
 import {ClassService, ClassRequestDTO} from '../../services/ClassService';
@@ -33,6 +33,11 @@ export function ClassesTab() {
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [classToDelete, setClassToDelete] = useState<SchoolClass | null>(null);
     const [deleting, setDeleting] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showFilter, setShowFilter] = useState(false);
+    const [searchType, setSearchType] = useState<'school' | 'class' | 'town'>('school');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -46,6 +51,19 @@ export function ClassesTab() {
 
     useEffect(() => {
         fetchSchools();
+    }, []);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, []);
 
     const fetchSchools = async () => {
@@ -148,6 +166,24 @@ export function ClassesTab() {
         setSelectedSchoolId(null);
         setFormData({name: '', schoolYear: ''});
         setFormErrors({});
+    };
+
+    const handleClearFilter = () => {
+        setSearchTerm('');
+        setSearchType('school');
+    };
+
+    const getPlaceholderText = (): string => {
+        switch (searchType) {
+            case 'school':
+                return t('dashboard.classes.searchSchoolPlaceholder');
+            case 'class':
+                return t('dashboard.classes.searchClassPlaceholder');
+            case 'town':
+                return t('dashboard.classes.searchTownPlaceholder');
+            default:
+                return t('dashboard.classes.searchSchoolPlaceholder');
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -329,15 +365,149 @@ export function ClassesTab() {
             );
         }
 
+        const filteredSchools = schools.filter(school => {
+            if (!searchTerm) return true;
+
+            const searchLower = searchTerm.toLowerCase();
+
+            switch (searchType) {
+                case 'school':
+                    return school.name.toLowerCase().includes(searchLower);
+                case 'class':
+                    return school.classes?.some(classItem =>
+                        classItem.name.toLowerCase().includes(searchLower)
+                    ) || false;
+                case 'town':
+                    return school.town?.toLowerCase().includes(searchLower) || false;
+                default:
+                    return true;
+            }
+        });
+
+        if (filteredSchools.length === 0) {
+            return (
+                <div className="dashboard-empty">
+                    <BookOpen className="dashboard-empty-icon"/>
+                    <p className="dashboard-empty-text">{t('dashboard.classes.noSchoolsFound')}</p>
+                </div>
+            );
+        }
+
         return (
             <div className="classes-container">
-                {schools.map((school) => renderSchoolSection(school))}
+                {filteredSchools.map((school) => renderSchoolSection(school))}
             </div>
         );
     };
 
     return (
         <div className="dashboard-card">
+            {/* Advanced Search Filter */}
+            {schools.length > 0 && (
+                <div className="filter-section">
+                    <div className="filter-section-buttons">
+                        <button
+                            className="filter-toggle-btn"
+                            onClick={() => setShowFilter(!showFilter)}
+                            aria-label={showFilter ? t('dashboard.classes.hideFilter') : t('dashboard.classes.showFilter')}
+                        >
+                            <Search size={20} />
+                            <span>{showFilter ? t('dashboard.classes.hideFilter') : t('dashboard.classes.showFilter')}</span>
+                        </button>
+
+                        {(searchTerm || searchType !== 'school') && (
+                            <button
+                                className="filter-reset-btn"
+                                onClick={handleClearFilter}
+                                aria-label={t('dashboard.classes.clearAllFilters')}
+                            >
+                                <X size={18} />
+                                <span>{t('dashboard.classes.clearAllFilters')}</span>
+                            </button>
+                        )}
+                    </div>
+
+                    {showFilter && (
+                        <div className="filter-container">
+                            <div className="filter-row">
+                                <div className="filter-select-group">
+                                    <label className="filter-label">
+                                        {t('dashboard.classes.searchBy')}:
+                                    </label>
+                                    <div className="selector-button-group" ref={dropdownRef}>
+                                        <button
+                                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                            className="selector-button"
+                                            type="button"
+                                        >
+                                            <span className="selector-name">
+                                                {searchType === 'school' && t('dashboard.classes.filterBySchool')}
+                                                {searchType === 'class' && t('dashboard.classes.filterByClass')}
+                                                {searchType === 'town' && t('dashboard.classes.filterByTown')}
+                                            </span>
+                                            <ChevronDown size={16} className={`chevron-icon ${isDropdownOpen ? 'open' : ''}`}/>
+                                        </button>
+                                        {isDropdownOpen && (
+                                            <div className="selector-dropdown">
+                                                <button
+                                                    onClick={() => {
+                                                        setSearchType('school');
+                                                        setIsDropdownOpen(false);
+                                                    }}
+                                                    className="selector-option"
+                                                    type="button"
+                                                >
+                                                    {t('dashboard.classes.filterBySchool')}
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setSearchType('class');
+                                                        setIsDropdownOpen(false);
+                                                    }}
+                                                    className="selector-option"
+                                                    type="button"
+                                                >
+                                                    {t('dashboard.classes.filterByClass')}
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setSearchType('town');
+                                                        setIsDropdownOpen(false);
+                                                    }}
+                                                    className="selector-option"
+                                                    type="button"
+                                                >
+                                                    {t('dashboard.classes.filterByTown')}
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="filter-input-group">
+                                    <input
+                                        type="text"
+                                        className="filter-input"
+                                        placeholder={getPlaceholderText()}
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                    {searchTerm && (
+                                        <button
+                                            className="filter-clear-btn"
+                                            onClick={handleClearFilter}
+                                            aria-label={t('dashboard.classes.clearFilter')}
+                                        >
+                                            <X size={18} />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
             {renderContent()}
 
             {/* Form Modal */}
