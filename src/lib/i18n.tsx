@@ -35,6 +35,35 @@ interface Translations {
     logout: string;
     classes: {
       noClasses: string;
+      loadError: string;
+      schoolYear: string;
+      addClass: string;
+      edit: string;
+      delete: string;
+      createTitle: string;
+      editTitle: string;
+      name: string;
+      namePlaceholder: string;
+      schoolYearPlaceholder: string;
+      create: string;
+      update: string;
+      createSuccess: string;
+      updateSuccess: string;
+      deleteSuccess: string;
+      createError: string;
+      updateError: string;
+      deleteError: string;
+      deleteTitle: string;
+      deleteConfirm: string;
+      noClassesInSchool: string;
+      validation: {
+        nameRequired: string;
+        nameMinLength: string;
+        schoolYearRequired: string;
+        schoolYearInvalid: string;
+        schoolYearNotConsecutive: string;
+        schoolRequired: string;
+      };
     };
     schools: {
       title: string;
@@ -129,7 +158,36 @@ const translations: Record<Locale, Translations> = {
       },
       logout: 'Cerrar Sesión',
       classes: {
-        noClasses: 'No hay clases programadas'
+        noClasses: 'No hay clases disponibles',
+        loadError: 'Error al cargar las clases',
+        schoolYear: 'Año escolar',
+        addClass: 'Añadir Clase',
+        edit: 'Editar',
+        delete: 'Eliminar',
+        createTitle: 'Crear Clase',
+        editTitle: 'Editar Clase',
+        name: 'Nombre',
+        namePlaceholder: 'Ej: 1º ESO A',
+        schoolYearPlaceholder: 'Ej: 24/25',
+        create: 'Crear',
+        update: 'Actualizar',
+        createSuccess: 'Clase creada correctamente',
+        updateSuccess: 'Clase actualizada correctamente',
+        deleteSuccess: 'Clase eliminada correctamente',
+        createError: 'Error al crear la clase',
+        updateError: 'Error al actualizar la clase',
+        deleteError: 'Error al eliminar la clase',
+        deleteTitle: 'Eliminar clase',
+        deleteConfirm: '¿Está seguro que desea eliminar la clase "{name}"? Esta acción no se puede deshacer.',
+        noClassesInSchool: 'Este colegio no tiene clases todavía. Haz clic en "Añadir Clase" para crear una.',
+        validation: {
+          nameRequired: 'El nombre es obligatorio',
+          nameMinLength: 'El nombre debe tener al menos 3 caracteres',
+          schoolYearRequired: 'El año escolar es obligatorio',
+          schoolYearInvalid: 'El formato debe ser NN/NN (ej: 24/25)',
+          schoolYearNotConsecutive: 'Los números del año escolar deben ser consecutivos (ej: 24/25)',
+          schoolRequired: 'Debe seleccionar un colegio',
+        },
       },
       schools: {
         title: 'Gestión de Colegios',
@@ -222,7 +280,36 @@ const translations: Record<Locale, Translations> = {
       },
       logout: 'Log Out',
       classes: {
-        noClasses: 'No classes scheduled'
+        noClasses: 'No classes available',
+        loadError: 'Error loading classes',
+        schoolYear: 'School year',
+        addClass: 'Add Class',
+        edit: 'Edit',
+        delete: 'Delete',
+        createTitle: 'Create Class',
+        editTitle: 'Edit Class',
+        name: 'Name',
+        namePlaceholder: 'E.g: 1st Grade A',
+        schoolYearPlaceholder: 'E.g: 24/25',
+        create: 'Create',
+        update: 'Update',
+        createSuccess: 'Class created successfully',
+        updateSuccess: 'Class updated successfully',
+        deleteSuccess: 'Class deleted successfully',
+        createError: 'Error creating class',
+        updateError: 'Error updating class',
+        deleteError: 'Error deleting class',
+        deleteTitle: 'Delete class',
+        deleteConfirm: 'Are you sure you want to delete the class "{name}"? This action cannot be undone.',
+        noClassesInSchool: 'This school has no classes yet. Click "Add Class" to create one.',
+        validation: {
+          nameRequired: 'Name is required',
+          nameMinLength: 'Name must be at least 3 characters',
+          schoolYearRequired: 'School year is required',
+          schoolYearInvalid: 'Format must be NN/NN (e.g: 24/25)',
+          schoolYearNotConsecutive: 'School year numbers must be consecutive (e.g: 24/25)',
+          schoolRequired: 'A school must be selected',
+        },
       },
       schools: {
         title: 'School Management',
