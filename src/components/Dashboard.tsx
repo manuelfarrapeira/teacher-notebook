@@ -106,7 +106,7 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
         />
       )}
 
-      <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`} aria-label={t('dashboard.sidebar.ariaLabel')}>
+      <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
         <div className="dashboard-menu">
           {tabs.map((tab) => {
             const Icon = tab.icon;

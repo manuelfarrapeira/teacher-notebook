@@ -13,10 +13,16 @@ if (started) {
 
 const createWindow = () => {
   // Create the browser window.
+  // Use ICO for Windows, PNG for Linux, let Electron handle macOS
+  const iconPath = process.platform === 'win32'
+    ? path.join(__dirname, '../../public/favicon.ico')
+    : path.join(__dirname, '../../public/favicon.png');
+
   const mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
     autoHideMenuBar: true,
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
