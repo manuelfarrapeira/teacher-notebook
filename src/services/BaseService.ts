@@ -39,7 +39,7 @@ export abstract class BaseService {
    * @param additionalHeaders - Optional additional headers
    * @returns Headers combined with Authorization, Accept-Language, and Content-Type
    */
-  protected static buildHeaders(additionalHeaders?: HeadersInit): Headers {
+  public static buildHeaders(additionalHeaders?: HeadersInit): Headers {
     const token = AuthService.getAccessToken();
     const locale = getCurrentLocale();
 
@@ -165,7 +165,18 @@ export abstract class BaseService {
         await this.handleErrorResponse(response);
       }
 
-      return await response.json();
+      // Some PUT requests return 204 No Content (e.g., assign student to class)
+      if (response.status === 204) {
+        return {} as T;
+      }
+
+      // Check if response has JSON content
+      const contentType = response.headers.get('content-type');
+      if (contentType?.includes('application/json')) {
+        return await response.json();
+      }
+
+      return {} as T;
     } catch (error) {
       if (error instanceof Error) {
         throw error;
@@ -204,7 +215,18 @@ export abstract class BaseService {
         await this.handleErrorResponse(response);
       }
 
-      return await response.json();
+      // Some PUT requests return 204 No Content (e.g., assign student to class)
+      if (response.status === 204) {
+        return {} as T;
+      }
+
+      // Check if response has JSON content
+      const contentType = response.headers.get('content-type');
+      if (contentType?.includes('application/json')) {
+        return await response.json();
+      }
+
+      return {} as T;
     } catch (error) {
       if (error instanceof Error) {
         throw error;
@@ -277,6 +299,17 @@ export abstract class BaseService {
       await this.handleErrorResponse(response);
     }
 
-    return await response.json();
+    // Handle 204 No Content responses
+    if (response.status === 204) {
+      return {} as T;
+    }
+
+    // Check if response has JSON content
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      return await response.json();
+    }
+
+    return {} as T;
   }
 }

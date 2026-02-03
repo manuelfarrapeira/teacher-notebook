@@ -112,6 +112,60 @@ interface Translations {
       deleteConfirmBtn: string;
       deleteError: string;
     };
+    students: {
+      allStudents: string;
+      classStudents: string;
+      addStudent: string;
+      editStudent: string;
+      name: string;
+      surnames: string;
+      dateOfBirth: string;
+      additionalInfo: string;
+      photo: string;
+      uploadPhoto: string;
+      deletePhoto: string;
+      namePlaceholder: string;
+      surnamesPlaceholder: string;
+      additionalInfoPlaceholder: string;
+      assignToClass: string;
+      removeFromClass: string;
+      addToThisClass: string;
+      searchStudents: string;
+      confirmAssignTitle: string;
+      confirmAssignMessage: string;
+      confirmAssign: string;
+      noStudents: string;
+      noStudentsInClass: string;
+      createSuccess: string;
+      updateSuccess: string;
+      assignSuccess: string;
+      removeSuccess: string;
+      photoUploadSuccess: string;
+      photoDeleteSuccess: string;
+      createError: string;
+      updateError: string;
+      loadError: string;
+      assignError: string;
+      removeError: string;
+      photoUploadError: string;
+      photoDeleteError: string;
+      assignedClasses: string;
+      noClassesAssigned: string;
+      selectSchoolAndClass: string;
+      selectSchool: string;
+      selectClass: string;
+      deleteStudent: string;
+      deleteTitle: string;
+      deleteConfirm: string;
+      validation: {
+        nameRequired: string;
+        surnamesRequired: string;
+        dateOfBirthRequired: string;
+        dateOfBirthInvalid: string;
+        fileTooLarge: string;
+        fileInvalidType: string;
+      };
+    };
     loadingData: string;
     errors: {
       noSchools: string;
@@ -249,6 +303,60 @@ const translations: Record<Locale, Translations> = {
         deleteConfirmBtn: 'Sí, eliminar',
         deleteError: 'Error al eliminar el colegio',
       },
+      students: {
+        allStudents: 'Todos los Alumnos',
+        classStudents: 'Alumnos de la Clase',
+        addStudent: 'Añadir Alumno',
+        editStudent: 'Editar Alumno',
+        name: 'Nombre',
+        surnames: 'Apellidos',
+        dateOfBirth: 'Fecha de Nacimiento',
+        additionalInfo: 'Información Adicional',
+        photo: 'Foto',
+        uploadPhoto: 'Subir Foto',
+        deletePhoto: 'Eliminar Foto',
+        namePlaceholder: 'Nombre del alumno',
+        surnamesPlaceholder: 'Apellidos del alumno',
+        additionalInfoPlaceholder: 'Notas adicionales sobre el alumno...',
+        assignToClass: 'Asignar a Clase',
+        removeFromClass: 'Quitar de Clase',
+        addToThisClass: 'Añadir a esta Clase',
+        searchStudents: 'Buscar alumnos...',
+        confirmAssignTitle: 'Confirmar Asignación',
+        confirmAssignMessage: '¿Deseas añadir este alumno a la clase actual?',
+        confirmAssign: 'Añadir a Clase',
+        noStudents: 'No hay alumnos registrados',
+        noStudentsInClass: 'No hay alumnos en esta clase',
+        createSuccess: 'Alumno creado correctamente',
+        updateSuccess: 'Alumno actualizado correctamente',
+        assignSuccess: 'Alumno asignado a la clase correctamente',
+        removeSuccess: 'Alumno quitado de la clase correctamente',
+        photoUploadSuccess: 'Foto subida correctamente',
+        photoDeleteSuccess: 'Foto eliminada correctamente',
+        createError: 'Error al crear el alumno',
+        updateError: 'Error al actualizar el alumno',
+        loadError: 'Error al cargar los alumnos',
+        assignError: 'Error al asignar el alumno a la clase',
+        removeError: 'Error al quitar el alumno de la clase',
+        photoUploadError: 'Error al subir la foto',
+        photoDeleteError: 'Error al eliminar la foto',
+        assignedClasses: 'Clases asignadas',
+        noClassesAssigned: 'Sin clases asignadas',
+        selectSchoolAndClass: 'Seleccionar Colegio y Clase',
+        selectSchool: 'Seleccionar colegio',
+        selectClass: 'Seleccionar clase',
+        deleteStudent: 'Eliminar Alumno',
+        deleteTitle: 'Eliminar alumno',
+        deleteConfirm: '¿Está seguro que desea eliminar al alumno "{name}"? Esta acción no se puede deshacer.',
+        validation: {
+          nameRequired: 'El nombre es obligatorio',
+          surnamesRequired: 'Los apellidos son obligatorios',
+          dateOfBirthRequired: 'La fecha de nacimiento es obligatoria',
+          dateOfBirthInvalid: 'La fecha de nacimiento no puede ser futura',
+          fileTooLarge: 'El archivo es demasiado grande. Máximo 5MB',
+          fileInvalidType: 'Tipo de archivo no válido. Solo se permiten imágenes JPEG y PNG',
+        },
+      },
       loadingData: 'Cargando datos...',
       errors: {
         noSchools: 'No se encontraron colegios.',
@@ -383,6 +491,60 @@ const translations: Record<Locale, Translations> = {
         deleteConfirm: 'Are you sure you want to delete the school "{name}"? This action cannot be undone.',
         deleteConfirmBtn: 'Yes, delete',
         deleteError: 'Error deleting school',
+      },
+      students: {
+        allStudents: 'All Students',
+        classStudents: 'Class Students',
+        addStudent: 'Add Student',
+        editStudent: 'Edit Student',
+        name: 'Name',
+        surnames: 'Surnames',
+        dateOfBirth: 'Date of Birth',
+        additionalInfo: 'Additional Information',
+        photo: 'Photo',
+        uploadPhoto: 'Upload Photo',
+        deletePhoto: 'Delete Photo',
+        namePlaceholder: 'Student name',
+        surnamesPlaceholder: 'Student surnames',
+        additionalInfoPlaceholder: 'Additional notes about the student...',
+        assignToClass: 'Assign to Class',
+        removeFromClass: 'Remove from Class',
+        addToThisClass: 'Add to this Class',
+        searchStudents: 'Search students...',
+        confirmAssignTitle: 'Confirm Assignment',
+        confirmAssignMessage: 'Do you want to add this student to the current class?',
+        confirmAssign: 'Add to Class',
+        noStudents: 'No students registered',
+        noStudentsInClass: 'No students in this class',
+        createSuccess: 'Student created successfully',
+        updateSuccess: 'Student updated successfully',
+        assignSuccess: 'Student assigned to class successfully',
+        removeSuccess: 'Student removed from class successfully',
+        photoUploadSuccess: 'Photo uploaded successfully',
+        photoDeleteSuccess: 'Photo deleted successfully',
+        createError: 'Error creating student',
+        updateError: 'Error updating student',
+        loadError: 'Error loading students',
+        assignError: 'Error assigning student to class',
+        removeError: 'Error removing student from class',
+        photoUploadError: 'Error uploading photo',
+        photoDeleteError: 'Error deleting photo',
+        assignedClasses: 'Assigned Classes',
+        noClassesAssigned: 'No classes assigned',
+        selectSchoolAndClass: 'Select School and Class',
+        selectSchool: 'Select school',
+        selectClass: 'Select class',
+        deleteStudent: 'Delete Student',
+        deleteTitle: 'Delete student',
+        deleteConfirm: 'Are you sure you want to delete the student "{name}"? This action cannot be undone.',
+        validation: {
+          nameRequired: 'Name is required',
+          surnamesRequired: 'Surnames are required',
+          dateOfBirthRequired: 'Date of birth is required',
+          dateOfBirthInvalid: 'Date of birth cannot be in the future',
+          fileTooLarge: 'File is too large. Maximum 5MB',
+          fileInvalidType: 'Invalid file type. Only JPEG and PNG images are allowed',
+        },
       },
       loadingData: 'Loading data...',
       errors: {

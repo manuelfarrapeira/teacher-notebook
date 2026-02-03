@@ -1690,3 +1690,495 @@ dialog.modal-overlay::backdrop {
   background-color: #fee2e2;
 }
 
+/* ========================================
+   STUDENT MANAGEMENT STYLES
+   ======================================== */
+
+/* Student Sub-tabs Navigation */
+.student-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.student-tabs button {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+
+.student-tabs button:hover {
+  color: #3b82f6;
+}
+
+.student-tabs button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+/* Class Info Header */
+.student-class-info-header {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.student-class-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.student-class-info-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0;
+}
+
+.student-class-info-school {
+  font-size: 0.875rem;
+  color: #3b82f6;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Student Cards Grid */
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.student-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: box-shadow 0.2s;
+}
+
+.student-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.student-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Student Photo Component */
+.student-photo-container {
+  position: relative;
+  border-radius: 0;
+  overflow: hidden;
+  background-color: #dbeafe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #93c5fd;
+  aspect-ratio: 3 / 4;
+}
+
+.student-photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-photo-container svg {
+  color: #1d4ed8;
+}
+
+.student-card-info {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.student-card-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.student-card-detail {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Additional Info Icon Button */
+.student-info-icon-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: #3b82f6;
+  opacity: 0.7;
+  transition: all 0.2s;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student-info-icon-btn:hover {
+  opacity: 1;
+  background-color: #eff6ff;
+}
+
+
+/* Student Classes Badges */
+.student-classes-section {
+  margin-top: 0.5rem;
+}
+
+.student-classes-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.student-classes-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.student-class-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: #eff6ff;
+  color: #1e40af;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #bfdbfe;
+}
+
+.student-class-badge button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: #1e40af;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.student-class-badge button:hover {
+  opacity: 1;
+}
+
+/* Student Actions */
+.student-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.student-action-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.student-action-btn:hover {
+  background: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.student-action-btn svg {
+  flex-shrink: 0;
+}
+
+.student-action-btn.danger:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.student-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Student Search Bar */
+.student-search-bar {
+  margin-bottom: 1.5rem;
+}
+
+.student-search-wrapper {
+  position: relative;
+}
+
+.student-search-input {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  padding-left: 3rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.student-search-input:hover {
+  border-color: #d1d5db;
+}
+
+.student-search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+  background: #fefefe;
+}
+
+.student-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.student-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.student-search-input:focus + .student-search-icon {
+  color: #3b82f6;
+}
+
+.student-search-input.has-suggestions {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: #3b82f6;
+}
+
+/* Student List View (for class students tab) */
+.students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.student-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  transition: box-shadow 0.2s;
+}
+
+.student-list-item:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.student-list-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.student-list-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Search Suggestions Dropdown */
+.student-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 0.75rem 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.05);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 10;
+  margin-top: -1px;
+}
+
+.student-suggestion-item {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  text-align: left;
+  background: white;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.student-suggestion-item::after {
+  content: '→';
+  position: absolute;
+  right: 1.25rem;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.15s ease;
+  color: #3b82f6;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.student-suggestion-item:hover {
+  background: linear-gradient(90deg, #eff6ff 0%, #f9fafb 100%);
+  border-left-color: #3b82f6;
+  padding-left: 1.5rem;
+}
+
+.student-suggestion-item:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.student-suggestion-item:active {
+  background: #dbeafe;
+}
+
+.student-suggestion-item:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.student-suggestion-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.student-suggestion-name {
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: #111827;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.student-suggestion-item:hover .student-suggestion-name {
+  color: #1e40af;
+}
+
+.student-suggestion-detail {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Photo Upload Section in Modal */
+.photo-upload-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.photo-upload-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+}
+
+.photo-upload-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.photo-upload-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.photo-upload-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.photo-upload-btn:hover {
+  background: #f9fafb;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.photo-upload-btn.delete:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.photo-upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.photo-upload-input {
+  display: none;
+}

@@ -11,6 +11,7 @@ import { SchoolService, School } from '../services/SchoolService';
 import { LoadingModal } from './modals/LoadingModal';
 import { AlertMessage } from './ui/alert';
 import { useI18n } from '../lib/i18n';
+import { StudentPhotoProvider } from '../contexts/StudentPhotoContext';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -93,85 +94,94 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
   const currentSchool = schools.find(s => s.id === selectedSchool);
 
   return (
-    <div className="dashboard-container">
-      {isMenuOpen && (
-        <button
-          type="button"
-          className="mobile-menu-overlay"
-          aria-label={t('dashboard.sidebar.closeMenu')}
-          onClick={() => setIsMenuOpen(false)}
-          onKeyDown={e => {
-            if (e.key === 'Enter' || e.key === ' ') setIsMenuOpen(false);
-          }}
-        />
-      )}
-
-      <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
-        <div className="dashboard-menu">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                className={`dashboard-tab ${isActive ? 'active' : ''}`}
-                onClick={() => handleTabChange(tab.id)}
-                tabIndex={0}
-                aria-current={isActive ? 'page' : undefined}
-                aria-label={tab.label}
-              >
-                <Icon className="icon-tab" size={20} />
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-      </nav>
-
-      <main className="dashboard-main-content">
-        <header className="dashboard-header">
-          <TopBar
-            schools={schools}
-            selectedSchool={selectedSchool}
-            selectedClass={selectedClass}
-            currentSchool={currentSchool}
-            userName={userName}
-            onSchoolChange={handleSchoolChange}
-            onClassChange={handleClassChange}
-            onLogout={onLogout}
-            onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+    <StudentPhotoProvider>
+      <div className="dashboard-container">
+        {isMenuOpen && (
+          <button
+            type="button"
+            className="mobile-menu-overlay"
+            aria-label={t('dashboard.sidebar.closeMenu')}
+            onClick={() => setIsMenuOpen(false)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') setIsMenuOpen(false);
+            }}
           />
-        </header>
+        )}
+
+        <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
+          <div className="dashboard-menu">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  className={`dashboard-tab ${isActive ? 'active' : ''}`}
+                  onClick={() => handleTabChange(tab.id)}
+                  tabIndex={0}
+                  aria-current={isActive ? 'page' : undefined}
+                  aria-label={tab.label}
+                >
+                  <Icon className="icon-tab" size={20} />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+
+        <main className="dashboard-main-content">
+          <header className="dashboard-header">
+            <TopBar
+              schools={schools}
+              selectedSchool={selectedSchool}
+              selectedClass={selectedClass}
+              currentSchool={currentSchool}
+              userName={userName}
+              onSchoolChange={handleSchoolChange}
+              onClassChange={handleClassChange}
+              onLogout={onLogout}
+              onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+            />
+          </header>
 
 
-        <div className="dashboard-tabs-content">
-          {activeTab === 'schools' && <SchoolsTab onSchoolsChange={fetchSchools} />}
-          {activeTab === 'classes' && <ClassesTab />}
-          {activeTab === 'students' && <StudentsTab/>}
-          {activeTab === 'schedule' && <ScheduleTab />}
-          {activeTab === 'timetable' && <TimetableTab />}
-          {activeTab === 'settings' && <SettingsTab />}
-        </div>
-      </main>
+          <div className="dashboard-tabs-content">
+            {activeTab === 'schools' && <SchoolsTab onSchoolsChange={fetchSchools} />}
+            {activeTab === 'classes' && <ClassesTab />}
+            {activeTab === 'students' && (
+              <StudentsTab
+                selectedSchool={selectedSchool}
+                selectedClass={selectedClass}
+                schools={schools}
+                onRefreshSchools={fetchSchools}
+              />
+            )}
+            {activeTab === 'schedule' && <ScheduleTab />}
+            {activeTab === 'timetable' && <TimetableTab />}
+            {activeTab === 'settings' && <SettingsTab />}
+          </div>
+        </main>
 
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3 className="modal-title">Añadir Nuevo Elemento</h3>
-            <div className="modal-body">
-              <input placeholder="Nombre" className="modal-input" />
-              <input placeholder="Email" className="modal-input" />
-              <div className="modal-footer">
-                <button onClick={() => setIsModalOpen(false)} className="modal-button cancel">Cancelar</button>
-                <button onClick={() => setIsModalOpen(false)} className="modal-button save">Guardar</button>
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3 className="modal-title">Añadir Nuevo Elemento</h3>
+              <div className="modal-body">
+                <input placeholder="Nombre" className="modal-input" />
+                <input placeholder="Email" className="modal-input" />
+                <div className="modal-footer">
+                  <button onClick={() => setIsModalOpen(false)} className="modal-button cancel">Cancelar</button>
+                  <button onClick={() => setIsModalOpen(false)} className="modal-button save">Guardar</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {loading && <LoadingModal />}
-      {errorMessage && <AlertMessage message={errorMessage} onClose={() => setErrorMessage(null)} />}
-    </div>
+        {loading && <LoadingModal />}
+        {errorMessage && <AlertMessage message={errorMessage} onClose={() => setErrorMessage(null)} />}
+      </div>
+    </StudentPhotoProvider>
   );
 }
