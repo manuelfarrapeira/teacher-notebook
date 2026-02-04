@@ -21,7 +21,7 @@ interface DashboardProps {
 export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
   const { t } = useI18n();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('schools');
+  const [activeTab, setActiveTab] = useState('students');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const [schools, setSchools] = useState<School[]>([]);
@@ -63,9 +63,9 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
   }, [fetchSchools]);
 
   const tabs = [
+    { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
     { id: 'schools', label: t('dashboard.tabs.schools'), icon: Building2 },
     { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
-    { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
     { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
     { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
     { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
