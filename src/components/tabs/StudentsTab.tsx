@@ -45,6 +45,7 @@ export function StudentsTab({
   const [removingFromClass, setRemovingFromClass] = useState(false);
   const [infoPopupStudent, setInfoPopupStudent] = useState<Student | null>(null);
   const [confirmQuickAssign, setConfirmQuickAssign] = useState<Student | null>(null);
+  const [confirmRemoveFromClass, setConfirmRemoveFromClass] = useState<{student: Student; classId: number} | null>(null);
 
   useEffect(() => {
     fetchStudents();
@@ -104,7 +105,14 @@ export function StudentsTab({
     setShowAssignModal(true);
   };
 
-  const handleRemoveFromClass = async (student: Student, classId: number) => {
+  const handleRemoveFromClassClick = (student: Student, classId: number) => {
+    setConfirmRemoveFromClass({ student, classId });
+  };
+
+  const handleRemoveFromClass = async () => {
+    if (!confirmRemoveFromClass) return;
+
+    const { student, classId } = confirmRemoveFromClass;
     setRemovingFromClass(true);
     try {
       await StudentService.removeFromClass(classId, student.id);
@@ -117,6 +125,7 @@ export function StudentsTab({
       setErrorDialogOpen(true);
     } finally {
       setRemovingFromClass(false);
+      setConfirmRemoveFromClass(null);
     }
   };
 
@@ -266,7 +275,7 @@ export function StudentsTab({
                         <div key={cls.classId} className="student-class-badge">
                           <span>{cls.schoolName} - {cls.className} - {cls.schoolYear}</span>
                           <button
-                            onClick={() => handleRemoveFromClass(student, cls.classId)}
+                            onClick={() => handleRemoveFromClassClick(student, cls.classId)}
                             disabled={removingFromClass}
                             aria-label={`${t('dashboard.students.removeFromClass')} ${cls.className}`}
                           >
@@ -418,7 +427,7 @@ export function StudentsTab({
                     <Edit size={16} />
                   </button>
                   <button
-                    onClick={() => handleRemoveFromClass(student, selectedClass)}
+                    onClick={() => handleRemoveFromClassClick(student, selectedClass)}
                     className="student-action-btn danger"
                     disabled={removingFromClass}
                     aria-label={t('dashboard.students.removeFromClass')}
@@ -614,6 +623,91 @@ export function StudentsTab({
           </div>
         </dialog>
       )}
+
+      {/* Remove from Class Confirmation Modal */}
+      {confirmRemoveFromClass && (() => {
+        const classInfo = schools
+          .flatMap(school =>
+            school.classes.map(cls => ({
+              ...cls,
+              schoolName: school.name
+            }))
+          )
+          .find(cls => cls.id === confirmRemoveFromClass.classId);
+
+        const className = classInfo ? `${classInfo.name} (${classInfo.schoolYear})` : '';
+        const studentName = `${confirmRemoveFromClass.student.name} ${confirmRemoveFromClass.student.surnames}`;
+        const message = t('dashboard.students.confirmRemoveMessage')
+          .replace('{studentName}', studentName)
+          .replace('{className}', className);
+
+        return (
+          <dialog className="modal-overlay" open={true}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '1rem' }}>
+              <div className="modal-content" style={{ maxWidth: '450px', width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                  <h3 className="modal-title">{t('dashboard.students.removeFromClassTitle')}</h3>
+                  <button
+                    onClick={() => setConfirmRemoveFromClass(null)}
+                    className="modal-button cancel"
+                    style={{ padding: '0.5rem', minWidth: 'auto' }}
+                    aria-label={t('common.close')}
+                    disabled={removingFromClass}
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="modal-body">
+                  <p style={{ fontSize: '0.95rem', color: '#374151', lineHeight: '1.6', marginBottom: '1rem' }}>
+                    {message}
+                  </p>
+                  <div style={{
+                    background: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    borderRadius: '0.5rem',
+                    padding: '1rem',
+                    marginBottom: '1rem'
+                  }}>
+                    <p style={{ fontWeight: 600, color: '#991b1b', margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
+                      {studentName}
+                    </p>
+                    {classInfo && (
+                      <>
+                        <p style={{ fontSize: '0.875rem', color: '#dc2626', margin: '0.25rem 0' }}>
+                          <strong>{t('dashboard.students.school')}:</strong> {classInfo.schoolName}
+                        </p>
+                        <p style={{ fontSize: '0.875rem', color: '#dc2626', margin: '0.25rem 0 0 0' }}>
+                          <strong>{t('dashboard.students.class')}:</strong> {classInfo.name} - {classInfo.schoolYear}
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    onClick={() => setConfirmRemoveFromClass(null)}
+                    className="modal-button cancel"
+                    disabled={removingFromClass}
+                  >
+                    {t('common.cancel')}
+                  </button>
+                  <button
+                    onClick={handleRemoveFromClass}
+                    className="modal-button save"
+                    style={{ backgroundColor: '#dc2626' }}
+                    disabled={removingFromClass}
+                  >
+                    {removingFromClass && <Loader2 className="animate-spin" size={16} />}
+                    {t('dashboard.students.confirmRemove')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </dialog>
+        );
+      })()}
     </div>
   );
 }

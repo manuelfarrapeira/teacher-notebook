@@ -134,6 +134,11 @@ interface Translations {
       confirmAssignTitle: string;
       confirmAssignMessage: string;
       confirmAssign: string;
+      removeFromClassTitle: string;
+      confirmRemoveMessage: string;
+      confirmRemove: string;
+      school: string;
+      class: string;
       noStudents: string;
       noStudentsInClass: string;
       createSuccess: string;
@@ -325,6 +330,11 @@ const translations: Record<Locale, Translations> = {
         confirmAssignTitle: 'Confirmar Asignación',
         confirmAssignMessage: '¿Deseas añadir este alumno a la clase actual?',
         confirmAssign: 'Añadir a Clase',
+        removeFromClassTitle: 'Quitar Alumno de la Clase',
+        confirmRemoveMessage: '¿Está seguro que desea quitar a {studentName} de la clase "{className}"?',
+        confirmRemove: 'Quitar de Clase',
+        school: 'Colegio',
+        class: 'Clase',
         noStudents: 'No hay alumnos registrados',
         noStudentsInClass: 'No hay alumnos en esta clase',
         createSuccess: 'Alumno creado correctamente',
@@ -514,6 +524,11 @@ const translations: Record<Locale, Translations> = {
         confirmAssignTitle: 'Confirm Assignment',
         confirmAssignMessage: 'Do you want to add this student to the current class?',
         confirmAssign: 'Add to Class',
+        removeFromClassTitle: 'Remove Student from Class',
+        confirmRemoveMessage: 'Are you sure you want to remove {studentName} from the class "{className}"?',
+        confirmRemove: 'Remove from Class',
+        school: 'School',
+        class: 'Class',
         noStudents: 'No students registered',
         noStudentsInClass: 'No students in this class',
         createSuccess: 'Student created successfully',
