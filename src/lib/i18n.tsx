@@ -134,6 +134,10 @@ interface Translations {
       noSubjects: string;
       deleteTitle: string;
       deleteConfirm: string;
+      searchSubjects: string;
+      noResults: string;
+      gridView: string;
+      listView: string;
       validation: {
         nameRequired: string;
         nameMinLength: string;
@@ -158,6 +162,8 @@ interface Translations {
       removeFromClass: string;
       addToThisClass: string;
       searchStudents: string;
+      gridView: string;
+      listView: string;
       confirmAssignTitle: string;
       confirmAssignMessage: string;
       confirmAssign: string;
@@ -359,6 +365,8 @@ const translations: Record<Locale, Translations> = {
         deleteConfirm: '¿Está seguro que desea eliminar la asignatura "{name}"? Esta acción no se puede deshacer.',
         searchSubjects: 'Buscar asignaturas...',
         noResults: 'No se encontraron asignaturas',
+        gridView: 'Vista en cuadrícula',
+        listView: 'Vista en lista',
         validation: {
           nameRequired: 'El nombre es obligatorio',
           nameMinLength: 'El nombre debe tener al menos 3 caracteres',
@@ -383,6 +391,8 @@ const translations: Record<Locale, Translations> = {
         removeFromClass: 'Quitar de Clase',
         addToThisClass: 'Añadir a esta Clase',
         searchStudents: 'Buscar alumnos...',
+        gridView: 'Vista en cuadrícula',
+        listView: 'Vista en lista',
         confirmAssignTitle: 'Confirmar Asignación',
         confirmAssignMessage: '¿Deseas añadir este alumno a la clase actual?',
         confirmAssign: 'Añadir a Clase',
@@ -582,6 +592,8 @@ const translations: Record<Locale, Translations> = {
         deleteConfirm: 'Are you sure you want to delete the subject "{name}"? This action cannot be undone.',
         searchSubjects: 'Search subjects...',
         noResults: 'No subjects found',
+        gridView: 'Grid view',
+        listView: 'List view',
         validation: {
           nameRequired: 'Name is required',
           nameMinLength: 'Name must be at least 3 characters',
@@ -606,6 +618,8 @@ const translations: Record<Locale, Translations> = {
         removeFromClass: 'Remove from Class',
         addToThisClass: 'Add to this Class',
         searchStudents: 'Search students...',
+        gridView: 'Grid view',
+        listView: 'List view',
         confirmAssignTitle: 'Confirm Assignment',
         confirmAssignMessage: 'Do you want to add this student to the current class?',
         confirmAssign: 'Add to Class',

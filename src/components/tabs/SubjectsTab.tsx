@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { BookType, Loader2, Plus, Edit, Trash2, Search } from 'lucide-react';
+import { BookType, Loader2, Plus, Edit, Trash2, Search, Grid3x3, List } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SubjectService, Subject } from '../../services/SubjectService';
 import { ErrorModal } from '../modals/ErrorModal';
@@ -24,6 +24,10 @@ export function SubjectsTab() {
   const [subjectName, setSubjectName] = useState('');
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
+    const saved = localStorage.getItem('subjectsViewMode');
+    return (saved === 'grid' || saved === 'list') ? saved : 'list';
+  });
 
   // Modal states
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -48,6 +52,11 @@ export function SubjectsTab() {
   useEffect(() => {
     fetchSubjects();
   }, []);
+
+  // Save view mode preference to localStorage
+  useEffect(() => {
+    localStorage.setItem('subjectsViewMode', viewMode);
+  }, [viewMode]);
 
   const fetchSubjects = async () => {
     setLoading(true);
@@ -207,6 +216,30 @@ export function SubjectsTab() {
         </div>
       )}
 
+      {/* View Mode Toggle */}
+      {subjects.length > 0 && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', background: '#f3f4f6', padding: '0.25rem', borderRadius: '0.5rem' }}>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              aria-label={t('dashboard.subjects.gridView')}
+              title={t('dashboard.subjects.gridView')}
+            >
+              <Grid3x3 size={18} />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+              aria-label={t('dashboard.subjects.listView')}
+              title={t('dashboard.subjects.listView')}
+            >
+              <List size={18} />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Form Modal */}
       {showForm && (
         <dialog className="modal-overlay" open={showForm} aria-label={editingSubject ? t('dashboard.subjects.editTitle') : t('dashboard.subjects.createTitle')}>
@@ -271,7 +304,7 @@ export function SubjectsTab() {
           <p className="dashboard-empty-text">{t('dashboard.subjects.noResults')}</p>
         </div>
       ) : (
-        <div className="dashboard-students">
+        <div className={viewMode === 'grid' ? 'subjects-grid' : 'subjects-list'}>
           {filteredSubjects.map((subject) => (
             <div key={subject.id} className="dashboard-student">
               <div className="dashboard-student-info">

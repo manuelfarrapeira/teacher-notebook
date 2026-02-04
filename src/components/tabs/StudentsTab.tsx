@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info } from 'lucide-react';
+import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
@@ -26,6 +26,10 @@ export function StudentsTab({
 }: Readonly<StudentsTabProps>) {
   const { t } = useI18n();
   const [activeSubTab, setActiveSubTab] = useState<'all' | 'class'>('class');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
+    const saved = localStorage.getItem('studentsViewMode');
+    return (saved === 'grid' || saved === 'list') ? saved : 'grid';
+  });
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(''); // Para sugerencias de asignación rápida
@@ -50,6 +54,11 @@ export function StudentsTab({
   useEffect(() => {
     fetchStudents();
   }, []);
+
+  // Save view mode preference to localStorage
+  useEffect(() => {
+    localStorage.setItem('studentsViewMode', viewMode);
+  }, [viewMode]);
 
   const fetchStudents = async () => {
     setLoading(true);
@@ -395,6 +404,30 @@ export function StudentsTab({
           </div>
         </div>
 
+        {/* View Mode Toggle */}
+        {classStudents.length > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', background: '#f3f4f6', padding: '0.25rem', borderRadius: '0.5rem' }}>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                aria-label={t('dashboard.students.gridView')}
+                title={t('dashboard.students.gridView')}
+              >
+                <Grid3x3 size={18} />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+                aria-label={t('dashboard.students.listView')}
+                title={t('dashboard.students.listView')}
+              >
+                <List size={18} />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Students List */}
         {classStudents.length === 0 ? (
           <div className="dashboard-empty">
@@ -402,7 +435,7 @@ export function StudentsTab({
             <p className="dashboard-empty-text">{t('dashboard.students.noStudentsInClass')}</p>
           </div>
         ) : (
-          <div className="students-grid">
+          <div className={viewMode === 'grid' ? 'students-grid' : 'students-list'}>
             {classStudents.map((student) => (
               <div key={student.id} className="student-list-item">
                 <div className="student-list-left">
