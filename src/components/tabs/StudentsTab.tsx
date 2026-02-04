@@ -393,21 +393,18 @@ export function StudentsTab({
             <p className="dashboard-empty-text">{t('dashboard.students.noStudentsInClass')}</p>
           </div>
         ) : (
-          <div className="students-list">
+          <div className="students-grid">
             {classStudents.map((student) => (
               <div key={student.id} className="student-list-item">
                 <div className="student-list-left">
                   <StudentPhoto
                     studentId={student.id}
                     photoFileName={student.photo}
-                    size={60}
+                    size={80}
                     alt={`${student.name} ${student.surnames}`}
                   />
                   <div className="student-card-info">
                     <h4 className="student-card-name">{student.name} {student.surnames}</h4>
-                    <p className="student-card-detail">
-                      {t('dashboard.students.dateOfBirth')}: {student.dateOfBirth}
-                    </p>
                   </div>
                 </div>
                 <div className="student-list-actions">
