@@ -27,6 +27,7 @@ interface Translations {
     tabs: {
       students: string;
       classes: string;
+      subjects: string;
       schedule: string;
       timetable: string;
       settings: string;
@@ -111,6 +112,32 @@ interface Translations {
       deleteConfirm: string;
       deleteConfirmBtn: string;
       deleteError: string;
+    };
+    subjects: {
+      title: string;
+      addNew: string;
+      name: string;
+      namePlaceholder: string;
+      edit: string;
+      delete: string;
+      createTitle: string;
+      editTitle: string;
+      create: string;
+      update: string;
+      createSuccess: string;
+      updateSuccess: string;
+      deleteSuccess: string;
+      createError: string;
+      updateError: string;
+      deleteError: string;
+      loadError: string;
+      noSubjects: string;
+      deleteTitle: string;
+      deleteConfirm: string;
+      validation: {
+        nameRequired: string;
+        nameMinLength: string;
+      };
     };
     students: {
       allStudents: string;
@@ -223,6 +250,7 @@ const translations: Record<Locale, Translations> = {
       tabs: {
         students: 'Alumnos',
         classes: 'Clases',
+        subjects: 'Asignaturas',
         schedule: 'Calendario',
         timetable: 'Horario',
         settings: 'Configuración',
@@ -307,6 +335,34 @@ const translations: Record<Locale, Translations> = {
         deleteConfirm: '¿Está seguro que quiere dar de baja el colegio "{name}"? Esta acción no se puede deshacer.',
         deleteConfirmBtn: 'Sí, eliminar',
         deleteError: 'Error al eliminar el colegio',
+      },
+      subjects: {
+        title: 'Gestión de Asignaturas',
+        addNew: 'Crear Asignatura',
+        name: 'Nombre',
+        namePlaceholder: 'Nombre de la asignatura',
+        edit: 'Editar',
+        delete: 'Eliminar',
+        createTitle: 'Crear Asignatura',
+        editTitle: 'Editar Asignatura',
+        create: 'Crear',
+        update: 'Actualizar',
+        createSuccess: 'Asignatura creada correctamente',
+        updateSuccess: 'Asignatura actualizada correctamente',
+        deleteSuccess: 'Asignatura eliminada correctamente',
+        createError: 'Error al crear la asignatura',
+        updateError: 'Error al actualizar la asignatura',
+        deleteError: 'Error al eliminar la asignatura',
+        loadError: 'Error al cargar las asignaturas',
+        noSubjects: 'No hay asignaturas registradas',
+        deleteTitle: 'Eliminar asignatura',
+        deleteConfirm: '¿Está seguro que desea eliminar la asignatura "{name}"? Esta acción no se puede deshacer.',
+        searchSubjects: 'Buscar asignaturas...',
+        noResults: 'No se encontraron asignaturas',
+        validation: {
+          nameRequired: 'El nombre es obligatorio',
+          nameMinLength: 'El nombre debe tener al menos 3 caracteres',
+        },
       },
       students: {
         allStudents: 'Todos los Alumnos',
@@ -417,6 +473,7 @@ const translations: Record<Locale, Translations> = {
       tabs: {
         students: 'Students',
         classes: 'Classes',
+        subjects: 'Subjects',
         schedule: 'Schedule',
         timetable: 'Timetable',
         settings: 'Settings',
@@ -501,6 +558,34 @@ const translations: Record<Locale, Translations> = {
         deleteConfirm: 'Are you sure you want to delete the school "{name}"? This action cannot be undone.',
         deleteConfirmBtn: 'Yes, delete',
         deleteError: 'Error deleting school',
+      },
+      subjects: {
+        title: 'Subject Management',
+        addNew: 'Create Subject',
+        name: 'Name',
+        namePlaceholder: 'Subject name',
+        edit: 'Edit',
+        delete: 'Delete',
+        createTitle: 'Create Subject',
+        editTitle: 'Edit Subject',
+        create: 'Create',
+        update: 'Update',
+        createSuccess: 'Subject created successfully',
+        updateSuccess: 'Subject updated successfully',
+        deleteSuccess: 'Subject deleted successfully',
+        createError: 'Error creating subject',
+        updateError: 'Error updating subject',
+        deleteError: 'Error deleting subject',
+        loadError: 'Error loading subjects',
+        noSubjects: 'No subjects registered',
+        deleteTitle: 'Delete subject',
+        deleteConfirm: 'Are you sure you want to delete the subject "{name}"? This action cannot be undone.',
+        searchSubjects: 'Search subjects...',
+        noResults: 'No subjects found',
+        validation: {
+          nameRequired: 'Name is required',
+          nameMinLength: 'Name must be at least 3 characters',
+        },
       },
       students: {
         allStudents: 'All Students',

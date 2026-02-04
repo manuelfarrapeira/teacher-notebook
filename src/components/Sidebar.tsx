@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Users, Calendar, Settings, LogOut, Clock } from 'lucide-react';
+import { BookOpen, Users, Calendar, Settings, LogOut, Clock, BookType } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 interface SidebarProps {
@@ -15,6 +15,7 @@ export function Sidebar({ activeTab, isMenuOpen, onTabChange, onLogout }: Sideba
   const tabs = [
     { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
     { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
+    { id: 'subjects', label: t('dashboard.tabs.subjects'), icon: BookType },
     { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
     { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
     { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },

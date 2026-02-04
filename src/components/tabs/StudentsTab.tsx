@@ -251,7 +251,7 @@ export function StudentsTab({
                 />
                 <div className="student-card-info">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <h4 className="student-card-name">{student.name} {student.surnames}</h4>
+                    <h4 className="student-card-name">{student.surnames}, {student.name}</h4>
                     {student.additionalInfo && (
                       <button
                         onClick={() => toggleAdditionalInfo(student)}
@@ -291,30 +291,30 @@ export function StudentsTab({
               <div className="student-list-actions">
                 <button
                   onClick={() => handleAssignClick(student)}
-                  className="student-action-btn"
+                  className="school-action-btn edit tooltip-container"
                   disabled={removingFromClass}
                   aria-label={t('dashboard.students.assignToClass')}
-                  title={t('dashboard.students.assignToClass')}
+                  data-tooltip={t('dashboard.students.assignToClass')}
                 >
-                  <UserPlus size={16} />
+                  <UserPlus size={20} />
                 </button>
                 <button
                   onClick={() => handleEditStudent(student)}
-                  className="student-action-btn"
+                  className="school-action-btn edit tooltip-container"
                   disabled={removingFromClass}
                   aria-label={t('common.edit')}
-                  title={t('common.edit')}
+                  data-tooltip={t('common.edit')}
                 >
-                  <Edit size={16} />
+                  <Edit size={20} />
                 </button>
                 <button
                   onClick={() => handleDeleteClick(student)}
-                  className="student-action-btn danger"
+                  className="school-action-btn delete tooltip-container"
                   disabled={removingFromClass}
                   aria-label={t('common.delete')}
-                  title={t('common.delete')}
+                  data-tooltip={t('common.delete')}
                 >
-                  <Trash2 size={16} />
+                  <Trash2 size={20} />
                 </button>
               </div>
             </div>
@@ -371,7 +371,7 @@ export function StudentsTab({
                       disabled={removingFromClass}
                     >
                       <div className="student-suggestion-info">
-                        <p className="student-suggestion-name">{student.name} {student.surnames}</p>
+                        <p className="student-suggestion-name">{student.surnames}, {student.name}</p>
                       </div>
                     </button>
                   ))}
@@ -413,27 +413,27 @@ export function StudentsTab({
                     alt={`${student.name} ${student.surnames}`}
                   />
                   <div className="student-card-info">
-                    <h4 className="student-card-name">{student.name} {student.surnames}</h4>
+                    <h4 className="student-card-name">{student.surnames}, {student.name}</h4>
                   </div>
                 </div>
                 <div className="student-list-actions">
                   <button
                     onClick={() => handleEditStudent(student)}
-                    className="student-action-btn"
+                    className="school-action-btn edit tooltip-container"
                     disabled={removingFromClass}
                     aria-label={t('common.edit')}
-                    title={t('common.edit')}
+                    data-tooltip={t('common.edit')}
                   >
-                    <Edit size={16} />
+                    <Edit size={20} />
                   </button>
                   <button
                     onClick={() => handleRemoveFromClassClick(student, selectedClass)}
-                    className="student-action-btn danger"
+                    className="school-action-btn delete tooltip-container"
                     disabled={removingFromClass}
                     aria-label={t('dashboard.students.removeFromClass')}
-                    title={t('dashboard.students.removeFromClass')}
+                    data-tooltip={t('dashboard.students.removeFromClass')}
                   >
-                    <UserMinus size={16} />
+                    <UserMinus size={20} />
                   </button>
                 </div>
               </div>
