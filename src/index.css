@@ -2678,7 +2678,7 @@ dialog.modal-overlay::backdrop {
 
 .schedule-cell-time {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.60rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
@@ -2903,5 +2903,70 @@ dialog.modal-overlay::backdrop {
 .schedule-item-error {
   background-color: #fef2f2;
   border-color: #fca5a5;
+}
+
+
+/* Print styles */
+@media print {
+  /* Hide UI elements */
+  .dashboard-sidebar,
+  .dashboard-header,
+  .dashboard-section-header,
+  .schedule-cell-actions,
+  .mobile-menu-overlay,
+  .schedule-add-item-btn,
+  .dashboard-add-btn {
+    display: none !important;
+  }
+
+  /* Reset layout constraints */
+  body {
+    zoom: 50%;
+  }
+
+  body,
+  .dashboard-layout,
+  .dashboard-main-content,
+  .dashboard-tabs-content,
+  .dashboard-card {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Schedule specific adjustments */
+  .schedule-table-container {
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  .schedule-table {
+    min-width: 0 !important;
+    width: 100% !important;
+    font-size: 0.8rem; /* Smaller font for print */
+  }
+
+  /* Ensure colors and backgrounds print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ensure page breaks */
+  .schedule-row {
+    break-inside: avoid;
+  }
+
+  /* Add page margins manually if needed, usually browser handles it */
+  @page {
+    margin: 1cm;
+    size: landscape; /* Suggest landscape for timetable */
+  }
 }
 

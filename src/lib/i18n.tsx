@@ -261,6 +261,7 @@ interface Translations {
     delete: string;
     edit: string;
     close: string;
+    print: string;
     language: {
       es: string;
       en: string;
@@ -528,6 +529,7 @@ const translations: Record<Locale, Translations> = {
       delete: 'Eliminar',
       edit: 'Editar',
       close: 'Cerrar',
+      print: 'Imprimir',
       language: {
         es: 'ESPAÑOL',
         en: 'INGLÉS'
@@ -793,6 +795,7 @@ const translations: Record<Locale, Translations> = {
       delete: 'Delete',
       edit: 'Edit',
       close: 'Close',
+      print: 'Print',
       language: {
         es: 'SPANISH',
         en: 'ENGLISH'

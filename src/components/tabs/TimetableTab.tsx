@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Clock, Loader2, Plus, Edit, Trash2, X } from 'lucide-react';
+import { Clock, Loader2, Plus, Edit, Trash2, X, Printer } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { ScheduleService, ScheduleItem, ScheduleItemRequest } from '../../services/ScheduleService';
 import { SubjectService, Subject } from '../../services/SubjectService';
@@ -212,6 +212,14 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     { bg: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '#a855f7', text: '#7e22ce' },  // Purple
     { bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', border: '#f97316', text: '#9a3412' },  // Orange
     { bg: 'linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%)', border: '#06b6d4', text: '#155e75' },  // Cyan
+    { bg: 'linear-gradient(135deg, #ecfccb 0%, #d9f99d 100%)', border: '#84cc16', text: '#3f6212' },  // Lime
+    { bg: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '#10b981', text: '#064e3b' },  // Emerald
+    { bg: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', border: '#0ea5e9', text: '#075985' },  // Sky
+    { bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', border: '#8b5cf6', text: '#5b21b6' },  // Violet
+    { bg: 'linear-gradient(135deg, #fae8ff 0%, #f5d0fe 100%)', border: '#d946ef', text: '#86198f' },  // Fuchsia
+    { bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', border: '#f43f5e', text: '#9f1239' },  // Rose
+    { bg: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', border: '#64748b', text: '#334155' },  // Slate
+    { bg: 'linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%)', border: '#78716c', text: '#44403c' },  // Stone
   ];
 
   // Get color for a subject based on its ID
@@ -468,6 +476,10 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   // Render no class selected state
   if (!selectedClass) {
     return (
@@ -485,10 +497,21 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
       {/* Header */}
       <div className="dashboard-section-header">
         <h2 className="dashboard-section-title">{t('dashboard.schedule.title')}</h2>
-        <button className="dashboard-add-btn" onClick={handleAddClick}>
-          <Plus size={16} style={{ marginRight: '0.5rem' }} />
-          {t('dashboard.schedule.addEntry')}
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div className="tooltip-container" data-tooltip={t('common.print')}>
+            <button
+              className="dashboard-add-btn"
+              onClick={handlePrint}
+              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #d1d5db' }}
+            >
+              <Printer size={16} />
+            </button>
+          </div>
+          <button className="dashboard-add-btn" onClick={handleAddClick}>
+            <Plus size={16} style={{ marginRight: '0.5rem' }} />
+            {t('dashboard.schedule.addEntry')}
+          </button>
+        </div>
       </div>
 
       {/* Loading state */}
@@ -563,20 +586,22 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
                               {scheduleStartingHere.start} - {scheduleStartingHere.end}
                             </span>
                             <div className="schedule-cell-actions">
-                              <button
-                                className="schedule-action-btn edit"
-                                onClick={() => handleEditClick(scheduleStartingHere)}
-                                title={t('dashboard.schedule.editEntry')}
-                              >
-                                <Edit size={16} />
-                              </button>
-                              <button
-                                className="schedule-action-btn delete"
-                                onClick={() => handleDeleteClick(scheduleStartingHere)}
-                                title={t('common.delete')}
-                              >
-                                <Trash2 size={16} />
-                              </button>
+                              <div className="tooltip-container" data-tooltip={t('dashboard.schedule.editEntry')}>
+                                <button
+                                  className="schedule-action-btn edit"
+                                  onClick={() => handleEditClick(scheduleStartingHere)}
+                                >
+                                  <Edit size={16} />
+                                </button>
+                              </div>
+                              <div className="tooltip-container" data-tooltip={t('common.delete')}>
+                                <button
+                                  className="schedule-action-btn delete"
+                                  onClick={() => handleDeleteClick(scheduleStartingHere)}
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </td>
