@@ -161,7 +161,9 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
               />
             )}
             {activeTab === 'schedule' && <ScheduleTab />}
-            {activeTab === 'timetable' && <TimetableTab />}
+            {activeTab === 'timetable' && (
+              <TimetableTab selectedClass={selectedClass} />
+            )}
             {activeTab === 'settings' && <SettingsTab />}
           </div>
         </main>

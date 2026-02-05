@@ -143,6 +143,44 @@ interface Translations {
         nameMinLength: string;
       };
     };
+    schedule: {
+      title: string;
+      addEntry: string;
+      editEntry: string;
+      noClassSelected: string;
+      noEntries: string;
+      time: string;
+      subject: string;
+      start: string;
+      end: string;
+      day: string;
+      monday: string;
+      tuesday: string;
+      wednesday: string;
+      thursday: string;
+      friday: string;
+      selectDay: string;
+      selectSubject: string;
+      createSuccess: string;
+      updateSuccess: string;
+      deleteSuccess: string;
+      loadError: string;
+      createError: string;
+      updateError: string;
+      deleteError: string;
+      deleteTitle: string;
+      deleteConfirm: string;
+      validation: {
+        startRequired: string;
+        endRequired: string;
+        endAfterStart: string;
+        subjectRequired: string;
+        dayRequired: string;
+        noOverlap: string;
+      };
+      addItem: string;
+      removeItem: string;
+    };
     students: {
       allStudents: string;
       classStudents: string;
@@ -372,6 +410,44 @@ const translations: Record<Locale, Translations> = {
           nameMinLength: 'El nombre debe tener al menos 3 caracteres',
         },
       },
+      schedule: {
+        title: 'Horario Escolar',
+        addEntry: 'Añadir Horario',
+        editEntry: 'Editar Horario',
+        noClassSelected: 'Selecciona una clase para ver el horario',
+        noEntries: 'No hay horarios registrados para esta clase',
+        time: 'Hora',
+        subject: 'Asignatura',
+        start: 'Hora inicio',
+        end: 'Hora fin',
+        day: 'Día',
+        monday: 'Lunes',
+        tuesday: 'Martes',
+        wednesday: 'Miércoles',
+        thursday: 'Jueves',
+        friday: 'Viernes',
+        selectDay: 'Selecciona un día',
+        selectSubject: 'Selecciona una asignatura',
+        createSuccess: 'Horario creado correctamente',
+        updateSuccess: 'Horario actualizado correctamente',
+        deleteSuccess: 'Horario eliminado correctamente',
+        loadError: 'Error al cargar los horarios',
+        createError: 'Error al crear el horario',
+        updateError: 'Error al actualizar el horario',
+        deleteError: 'Error al eliminar el horario',
+        deleteTitle: 'Eliminar horario',
+        deleteConfirm: '¿Está seguro que desea eliminar este horario? Esta acción no se puede deshacer.',
+        validation: {
+          startRequired: 'La hora de inicio es obligatoria',
+          endRequired: 'La hora de fin es obligatoria',
+          endAfterStart: 'La hora de fin debe ser posterior a la de inicio',
+          subjectRequired: 'Debe seleccionar una asignatura',
+          dayRequired: 'Debe seleccionar un día',
+          noOverlap: 'Los horarios no pueden solaparse',
+        },
+        addItem: 'Añadir asignatura',
+        removeItem: 'Eliminar',
+      },
       students: {
         allStudents: 'Todos los Alumnos',
         classStudents: 'Alumnos de la Clase',
@@ -598,6 +674,44 @@ const translations: Record<Locale, Translations> = {
           nameRequired: 'Name is required',
           nameMinLength: 'Name must be at least 3 characters',
         },
+      },
+      schedule: {
+        title: 'School Schedule',
+        addEntry: 'Add Schedule',
+        editEntry: 'Edit Schedule',
+        noClassSelected: 'Select a class to view the schedule',
+        noEntries: 'No schedules registered for this class',
+        time: 'Time',
+        subject: 'Subject',
+        start: 'Start time',
+        end: 'End time',
+        day: 'Day',
+        monday: 'Monday',
+        tuesday: 'Tuesday',
+        wednesday: 'Wednesday',
+        thursday: 'Thursday',
+        friday: 'Friday',
+        selectDay: 'Select a day',
+        selectSubject: 'Select a subject',
+        createSuccess: 'Schedule created successfully',
+        updateSuccess: 'Schedule updated successfully',
+        deleteSuccess: 'Schedule deleted successfully',
+        loadError: 'Error loading schedules',
+        createError: 'Error creating schedule',
+        updateError: 'Error updating schedule',
+        deleteError: 'Error deleting schedule',
+        deleteTitle: 'Delete schedule',
+        deleteConfirm: 'Are you sure you want to delete this schedule? This action cannot be undone.',
+        validation: {
+          startRequired: 'Start time is required',
+          endRequired: 'End time is required',
+          endAfterStart: 'End time must be after start time',
+          subjectRequired: 'A subject must be selected',
+          dayRequired: 'A day must be selected',
+          noOverlap: 'Schedules cannot overlap',
+        },
+        addItem: 'Add subject',
+        removeItem: 'Remove',
       },
       students: {
         allStudents: 'All Students',

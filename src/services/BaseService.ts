@@ -271,6 +271,44 @@ export abstract class BaseService {
   }
 
   /**
+   * Performs a DELETE request with a body
+   * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
+   * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
+   * @param body - Request body
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with typed data
+   */
+  protected static async deleteWithBody<T>(
+    baseEndpoint: string,
+    endpoint: string,
+    body?: unknown,
+    additionalHeaders?: HeadersInit
+  ): Promise<T> {
+    this.validateToken();
+
+    const apiUrl = getApiUrl();
+    const url = `${apiUrl}${baseEndpoint}${endpoint}`;
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: this.buildHeaders(additionalHeaders),
+      body: body ? JSON.stringify(body) : undefined,
+    });
+
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
+    }
+
+    // Some DELETE requests do not return content
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      return await response.json();
+    }
+
+    return {} as T;
+  }
+
+  /**
    * Performs a PATCH request
    * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
    * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
