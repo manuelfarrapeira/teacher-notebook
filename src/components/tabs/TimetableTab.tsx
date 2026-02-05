@@ -387,6 +387,23 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     setShowForm(true);
   };
 
+  const handleAddSlotClick = (dayId: number, startTime: string, endTime: string) => {
+    setEditingSchedule(null);
+    setFormData({
+      day: dayId,
+      items: [
+        {
+          id: generateId(),
+          subjectId: 0,
+          start: startTime,
+          end: endTime,
+        },
+      ],
+    });
+    setFormErrors({});
+    setShowForm(true);
+  };
+
   const handleEditClick = (schedule: ScheduleItem) => {
     setEditingSchedule(schedule);
     setFormData({
@@ -615,7 +632,12 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
 
                     // Empty cell
                     return (
-                      <td key={day.id} className="schedule-cell schedule-cell-empty">
+                      <td
+                        key={day.id}
+                        className="schedule-cell schedule-cell-empty clickable-cell"
+                        onClick={() => handleAddSlotClick(day.id, slot.start, slot.end)}
+                        title={t('dashboard.schedule.addEntry')}
+                      >
                         {/* Empty */}
                       </td>
                     );

@@ -2432,14 +2432,13 @@ dialog.modal-overlay::backdrop {
 
 /* Schedule Table Styles */
 .schedule-table-container {
-  overflow-x: auto;
+  overflow-x: hidden;
   border-radius: 0.5rem;
   border: 1px solid #6b7280;
 }
 
 .schedule-table {
   width: 100%;
-  min-width: 800px; /* Minimum width to force horizontal scroll on small screens */
   border-collapse: collapse;
   background: white;
   table-layout: fixed;
@@ -2498,6 +2497,9 @@ dialog.modal-overlay::backdrop {
 
 .schedule-cell-filled {
   /* Background and border-left are set dynamically via inline styles based on subject color */
+  position: relative;
+  z-index: 10;
+  overflow: visible;
 }
 
 .schedule-cell-content {
@@ -2513,7 +2515,7 @@ dialog.modal-overlay::backdrop {
 .schedule-cell-subject {
   display: block;
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.0rem;
   text-align: center;
   margin-bottom: 0.25rem;
   /* Color is set dynamically via inline styles */
@@ -2570,7 +2572,15 @@ dialog.modal-overlay::backdrop {
 
 
 /* Responsive schedule table */
-@media (max-width: 768px) {
+@media (max-width: 700px) {
+  .schedule-table-container {
+    overflow-x: auto;
+  }
+
+  .schedule-table {
+    min-width: 800px; /* Force horizontal scroll on small screens */
+  }
+
   .schedule-time-header {
     font-size: 0.9rem;
     padding: 1rem 0.5rem;
@@ -2602,104 +2612,13 @@ dialog.modal-overlay::backdrop {
   }
 }
 
-.schedule-time-cell {
-  background-color: #f9fafb;
-  color: #374151;
-  font-weight: 500;
-  font-size: 0.875rem;
-  width: 100px;
-  white-space: nowrap;
-  padding: 0.5rem;
-  border-right: 2px solid #d1d5db;
-}
-
-.schedule-time-cell-empty {
-  background-color: #f9fafb;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.schedule-cell {
-  position: relative;
-  min-width: 150px;
-  padding: 0;
-}
-
-.schedule-cell-empty {
-  background-color: white;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.schedule-cell-filled {
-  background-color: white;
-  padding: 0; /* Remove padding from cell so entry can fill it completely */
-}
-
-.schedule-entry {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  border: 1px solid #3b82f6;
-  border-left: 4px solid #3b82f6;
-  border-radius: 0.25rem;
-  padding: 1px 2px; /* Minimal padding for 1px rows */
-  position: relative;
-  transition: all 0.2s ease;
-  min-height: 10px; /* Minimum height for very small entries */
-  box-sizing: border-box;
-}
-
-.schedule-entry:hover {
-  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-  transform: scale(1.02);
-  z-index: 10;
-}
-
-.schedule-entry-content {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.schedule-cell-subject {
-  display: block;
-  font-weight: 600;
-  font-size: 1rem;
-  /* Color is set dynamically via inline styles based on subject color */
-  margin-bottom: 0.25rem;
-}
-
-.schedule-cell-time {
-  display: block;
-  font-size: 0.60rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.schedule-cell-actions {
-  display: flex;
-  gap: 1px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  z-index: 5;
-}
 
 .schedule-entry:hover .schedule-entry-actions {
   opacity: 1;
 }
 
 .schedule-entry-actions .schedule-action-btn {
-  padding: 0px;
+  padding: 0;
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid #d1d5db;
   border-radius: 0.125rem;
@@ -2766,7 +2685,7 @@ dialog.modal-overlay::backdrop {
 }
 
 /* Responsive schedule table */
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .schedule-table {
     font-size: 0.8rem;
   }
