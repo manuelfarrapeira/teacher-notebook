@@ -62,5 +62,15 @@ export class SubjectService extends BaseService {
   static async deleteSubject(subjectId: number): Promise<void> {
     return this.delete<void>(this.BASE_ENDPOINT, `/subjects/${subjectId}`);
   }
+
+  /**
+   * Get subjects assigned to a specific class
+   * GET /teacher-notebook/v1/classes/:classId/subjects
+   * @param classId - ID of the class
+   * @returns Array of subjects assigned to the class
+   */
+  static async getSubjectsByClass(classId: number): Promise<Subject[]> {
+    return this.get<Subject[]>(this.BASE_ENDPOINT, `/classes/${classId}/subjects`);
+  }
 }
 

@@ -230,20 +230,20 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
 
 
   useEffect(() => {
-    fetchSubjects();
-  }, []);
-
-  useEffect(() => {
     if (selectedClass) {
+      fetchSubjects();
       fetchSchedules();
     } else {
       setSchedules([]);
+      setSubjects([]);
     }
   }, [selectedClass]);
 
   const fetchSubjects = async () => {
+    if (!selectedClass) return;
+
     try {
-      const data = await SubjectService.getSubjects();
+      const data = await SubjectService.getSubjectsByClass(selectedClass);
       setSubjects(data);
     } catch (error) {
       console.error('Error fetching subjects:', error);
