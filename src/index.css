@@ -2889,3 +2889,153 @@ dialog.modal-overlay::backdrop {
   }
 }
 
+/* Class Subjects Modal */
+.class-subjects-section {
+  margin-bottom: 1.5rem;
+}
+
+.class-subjects-section h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+}
+
+.class-subjects-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+}
+
+.subject-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: #1e40af;
+}
+
+.subject-badge button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #1e40af;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.subject-badge button:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+.subject-badge button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.class-subjects-search {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.class-subjects-search:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.subject-checkbox-list {
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  max-height: 200px;
+}
+
+.subject-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.subject-checkbox-item:last-child {
+  border-bottom: none;
+}
+
+.subject-checkbox-item:hover {
+  background-color: #f3f4f6;
+}
+
+.subject-checkbox-item input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+.subject-checkbox-item span {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.class-subjects-empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.class-subjects-modal-content {
+  max-width: 32rem;
+  min-width: 32rem;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.class-subjects-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.class-subjects-select-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.class-subjects-select-btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  color: #4b5563;
+  transition: background-color 0.2s;
+}
+
+.class-subjects-select-btn:hover {
+  background: #e5e7eb;
+}
+
+

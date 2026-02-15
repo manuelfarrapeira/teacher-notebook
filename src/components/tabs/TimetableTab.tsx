@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Clock, Loader2, Plus, Edit, Trash2, X, Printer } from 'lucide-react';
+import { Clock, Loader2, Plus, Edit, Trash2, X, Printer, BookType } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { ScheduleService, ScheduleItem, ScheduleItemRequest } from '../../services/ScheduleService';
 import { SubjectService, Subject } from '../../services/SubjectService';
@@ -7,6 +7,7 @@ import { ApiErrorException } from '../../services/BaseService';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
+import { ClassSubjectsModal } from '../modals/ClassSubjectsModal';
 
 interface TimetableTabProps {
   selectedClass: number | null;
@@ -79,6 +80,7 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [scheduleToDelete, setScheduleToDelete] = useState<ScheduleItem | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [showSubjectsModal, setShowSubjectsModal] = useState(false);
 
   const daySelectRef = useRef<HTMLSelectElement>(null);
   const subjectSelectRef = useRef<HTMLSelectElement>(null);
@@ -515,6 +517,15 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
       <div className="dashboard-section-header">
         <h2 className="dashboard-section-title">{t('dashboard.schedule.title')}</h2>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div className="tooltip-container" data-tooltip={t('dashboard.classSubjects.manageSubjects')}>
+            <button
+              className="dashboard-add-btn"
+              onClick={() => setShowSubjectsModal(true)}
+              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #d1d5db' }}
+            >
+              <BookType size={16} />
+            </button>
+          </div>
           <div className="tooltip-container" data-tooltip={t('common.print')}>
             <button
               className="dashboard-add-btn"
@@ -847,6 +858,17 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
             setScheduleToDelete(null);
           }}
           isDeleting={deleting}
+        />
+      )}
+
+      {/* Class Subjects Modal */}
+      {selectedClass && (
+        <ClassSubjectsModal
+          isOpen={showSubjectsModal}
+          classId={selectedClass}
+          className=""
+          onClose={() => setShowSubjectsModal(false)}
+          onSubjectsChanged={fetchSubjects}
         />
       )}
     </div>

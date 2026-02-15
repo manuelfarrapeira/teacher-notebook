@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {BookOpen, Loader2, Building2, Plus, Edit, Trash2, Search, X, ChevronDown} from 'lucide-react';
+import {BookOpen, Loader2, Building2, Plus, Edit, Trash2, Search, X, ChevronDown, BookType} from 'lucide-react';
 import {useI18n} from '../../lib/i18n';
 import {SchoolService, School, SchoolClass} from '../../services/SchoolService';
 import {ClassService, ClassRequestDTO} from '../../services/ClassService';
@@ -7,6 +7,7 @@ import {ApiErrorException} from '../../services/BaseService';
 import {ErrorModal} from '../modals/ErrorModal';
 import {SuccessModal} from '../modals/SuccessModal';
 import {ConfirmDeleteModal} from '../modals/ConfirmDeleteModal';
+import {ClassSubjectsModal} from '../modals/ClassSubjectsModal';
 
 interface FormData {
     name: string;
@@ -38,6 +39,10 @@ export function ClassesTab() {
     const [searchType, setSearchType] = useState<'school' | 'class' | 'town'>('school');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // State for subjects modal
+    const [showSubjectsModal, setShowSubjectsModal] = useState(false);
+    const [selectedClassForSubjects, setSelectedClassForSubjects] = useState<SchoolClass | null>(null);
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -158,6 +163,11 @@ export function ClassesTab() {
     const handleDeleteClick = (classItem: SchoolClass) => {
         setClassToDelete(classItem);
         setConfirmDeleteOpen(true);
+    };
+
+    const handleManageSubjectsClick = (classItem: SchoolClass) => {
+        setSelectedClassForSubjects(classItem);
+        setShowSubjectsModal(true);
     };
 
     const handleCancel = () => {
@@ -282,6 +292,15 @@ export function ClassesTab() {
                     <h4 className="school-card-title">{classItem.name}</h4>
                 </div>
                 <div className="school-card-actions">
+                    <button
+                        className="school-action-btn tooltip-container"
+                        onClick={() => handleManageSubjectsClick(classItem)}
+                        disabled={submitting || deleting}
+                        data-tooltip={t('dashboard.classSubjects.manageSubjects')}
+                        aria-label={t('dashboard.classSubjects.manageSubjects')}
+                    >
+                        <BookType size={20}/>
+                    </button>
                     <button
                         className="school-action-btn edit tooltip-container"
                         onClick={() => handleEditClick(classItem)}
@@ -605,6 +624,18 @@ export function ClassesTab() {
                 }}
                 isDeleting={deleting}
             />
+
+            {selectedClassForSubjects && (
+                <ClassSubjectsModal
+                    isOpen={showSubjectsModal}
+                    classId={selectedClassForSubjects.id}
+                    className={selectedClassForSubjects.name}
+                    onClose={() => {
+                        setShowSubjectsModal(false);
+                        setSelectedClassForSubjects(null);
+                    }}
+                />
+            )}
         </div>
     );
 }

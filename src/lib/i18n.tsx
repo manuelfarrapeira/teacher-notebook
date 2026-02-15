@@ -143,6 +143,22 @@ interface Translations {
         nameMinLength: string;
       };
     };
+    classSubjects: {
+      title: string;
+      assignedSubjects: string;
+      availableSubjects: string;
+      assignSelected: string;
+      noAssignedSubjects: string;
+      noAvailableSubjects: string;
+      assignSuccess: string;
+      removeSuccess: string;
+      assignError: string;
+      removeError: string;
+      manageSubjects: string;
+      searchAvailable: string;
+      selectAll: string;
+      deselectAll: string;
+    };
     schedule: {
       title: string;
       addEntry: string;
@@ -411,6 +427,22 @@ const translations: Record<Locale, Translations> = {
           nameMinLength: 'El nombre debe tener al menos 3 caracteres',
         },
       },
+      classSubjects: {
+        title: 'Asignaturas de la Clase',
+        assignedSubjects: 'Asignaturas asignadas',
+        availableSubjects: 'Asignaturas disponibles',
+        assignSelected: 'Asignar seleccionadas',
+        noAssignedSubjects: 'No hay asignaturas asignadas a esta clase',
+        noAvailableSubjects: 'No hay más asignaturas disponibles para asignar',
+        assignSuccess: 'Asignaturas asignadas correctamente',
+        removeSuccess: 'Asignatura eliminada de la clase',
+        assignError: 'Error al asignar asignaturas',
+        removeError: 'Error al eliminar asignatura de la clase',
+        manageSubjects: 'Gestionar Asignaturas',
+        searchAvailable: 'Buscar asignaturas...',
+        selectAll: 'Seleccionar todas',
+        deselectAll: 'Deseleccionar todas',
+      },
       schedule: {
         title: 'Horario Escolar',
         addEntry: 'Añadir Horario',
@@ -676,6 +708,22 @@ const translations: Record<Locale, Translations> = {
           nameRequired: 'Name is required',
           nameMinLength: 'Name must be at least 3 characters',
         },
+      },
+      classSubjects: {
+        title: 'Class Subjects',
+        assignedSubjects: 'Assigned subjects',
+        availableSubjects: 'Available subjects',
+        assignSelected: 'Assign selected',
+        noAssignedSubjects: 'No subjects assigned to this class',
+        noAvailableSubjects: 'No more subjects available to assign',
+        assignSuccess: 'Subjects assigned successfully',
+        removeSuccess: 'Subject removed from class',
+        assignError: 'Error assigning subjects',
+        removeError: 'Error removing subject from class',
+        manageSubjects: 'Manage Subjects',
+        searchAvailable: 'Search subjects...',
+        selectAll: 'Select all',
+        deselectAll: 'Deselect all',
       },
       schedule: {
         title: 'School Schedule',
