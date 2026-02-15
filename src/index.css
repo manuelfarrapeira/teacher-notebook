@@ -2498,8 +2498,12 @@ dialog.modal-overlay::backdrop {
 .schedule-cell-filled {
   /* Background and border-left are set dynamically via inline styles based on subject color */
   position: relative;
-  z-index: 10;
+  z-index: 1;
   overflow: visible;
+}
+
+.schedule-cell-filled:hover {
+  z-index: 100;
 }
 
 .schedule-cell-content {
