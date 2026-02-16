@@ -17,6 +17,7 @@ interface FormData {
 interface FormErrors {
     name?: string;
     schoolYear?: string;
+    school?: string;
 }
 
 export function ClassesTab() {
@@ -53,6 +54,7 @@ export function ClassesTab() {
 
     const nameInputRef = useRef<HTMLInputElement>(null);
     const schoolYearInputRef = useRef<HTMLInputElement>(null);
+    const schoolSelectRef = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
         fetchSchools();
@@ -88,6 +90,11 @@ export function ClassesTab() {
     const validateForm = (): boolean => {
         const errors: FormErrors = {};
 
+        // Validate school selection (only when creating)
+        if (!editingClass && !selectedSchoolId) {
+            errors.school = t('dashboard.classes.validation.schoolRequired');
+        }
+
         const trimmedName = formData.name.trim();
         if (trimmedName.length === 0) {
             errors.name = t('dashboard.classes.validation.nameRequired');
@@ -115,7 +122,9 @@ export function ClassesTab() {
         setFormErrors(errors);
 
         // Focus on first field with error
-        if (errors.name) {
+        if (errors.school) {
+            schoolSelectRef.current?.focus();
+        } else if (errors.name) {
             nameInputRef.current?.focus();
         } else if (errors.schoolYear) {
             schoolYearInputRef.current?.focus();
@@ -141,8 +150,8 @@ export function ClassesTab() {
         }
     };
 
-    const handleAddClick = (schoolId: number) => {
-        setSelectedSchoolId(schoolId);
+    const handleAddClick = () => {
+        setSelectedSchoolId(null);
         setEditingClass(null);
         setFormData({name: '', schoolYear: ''});
         setFormErrors({});
@@ -200,12 +209,6 @@ export function ClassesTab() {
         e.preventDefault();
 
         if (!validateForm()) {
-            return;
-        }
-
-        if (!selectedSchoolId) {
-            setErrorMessage(t('dashboard.classes.validation.schoolRequired'));
-            setErrorDialogOpen(true);
             return;
         }
 
@@ -341,14 +344,6 @@ export function ClassesTab() {
                         <span className="school-section-town">({school.town})</span>
                     )}
                 </div>
-                <button
-                    className="dashboard-add-btn"
-                    onClick={() => handleAddClick(school.id)}
-                    disabled={submitting || deleting}
-                >
-                    <Plus size={16} style={{marginRight: '0.5rem'}}/>
-                    {t('dashboard.classes.addClass')}
-                </button>
             </div>
 
             {/* Classes Grid or Empty State */}
@@ -421,6 +416,19 @@ export function ClassesTab() {
 
     return (
         <div className="dashboard-card">
+            {/* Header with Add Button */}
+            <div className="dashboard-section-header">
+                <h2 className="dashboard-section-title">{t('dashboard.tabs.classes')}</h2>
+                <button
+                    className="dashboard-add-btn"
+                    onClick={handleAddClick}
+                    disabled={submitting || deleting || schools.length === 0}
+                >
+                    <Plus size={16} style={{marginRight: '0.5rem'}}/>
+                    {t('dashboard.classes.addClass')}
+                </button>
+            </div>
+
             {/* Advanced Search Filter */}
             {schools.length > 0 && (
                 <div className="filter-section">
@@ -538,6 +546,37 @@ export function ClassesTab() {
                                 {editingClass ? t('dashboard.classes.editTitle') : t('dashboard.classes.createTitle')}
                             </h3>
                             <form onSubmit={handleSubmit} className="modal-body">
+                                {/* School Selector - only show when creating */}
+                                {!editingClass && (
+                                    <div>
+                                        <label className="login-label">
+                                            {t('dashboard.students.school')} <span className="form-required-asterisk">*</span>
+                                        </label>
+                                        <select
+                                            ref={schoolSelectRef}
+                                            className={`modal-input ${formErrors.school ? 'input-error' : ''}`}
+                                            value={selectedSchoolId || ''}
+                                            onChange={(e) => {
+                                                setSelectedSchoolId(Number(e.target.value) || null);
+                                                if (formErrors.school) {
+                                                    setFormErrors(prev => ({...prev, school: undefined}));
+                                                }
+                                            }}
+                                            disabled={submitting}
+                                        >
+                                            <option value="">{t('dashboard.students.selectSchool')}</option>
+                                            {schools.map((school) => (
+                                                <option key={school.id} value={school.id}>
+                                                    {school.name} {school.town ? `(${school.town})` : ''}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {formErrors.school && (
+                                            <p className="form-error-text">{formErrors.school}</p>
+                                        )}
+                                    </div>
+                                )}
+
                                 <div>
                                     <label className="login-label">
                                         {t('dashboard.classes.name')} <span className="form-required-asterisk">*</span>
