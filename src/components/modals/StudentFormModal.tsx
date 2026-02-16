@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Upload, Trash2, Loader2 } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { StudentService, Student, StudentRequestDTO } from '../../services/StudentService';
+import { StudentService, Student, StudentRequestDTO, Gender } from '../../services/StudentService';
 import { formatDateForApi, formatDateForInput } from '../../lib/utils';
 import { useStudentPhotoCache } from '../../contexts/StudentPhotoContext';
 import { StudentPhoto } from '../students/StudentPhoto';
@@ -20,12 +20,14 @@ interface FormData {
   surnames: string;
   dateOfBirth: string;
   additionalInfo: string;
+  gender: Gender | '';
 }
 
 interface FormErrors {
   name?: string;
   surnames?: string;
   dateOfBirth?: string;
+  gender?: string;
 }
 
 export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readonly<StudentFormModalProps>) {
@@ -44,6 +46,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
     surnames: student?.surnames || '',
     dateOfBirth: student?.dateOfBirth ? formatDateForInput(student.dateOfBirth) : '',
     additionalInfo: student?.additionalInfo || '',
+    gender: student?.gender || '',
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -51,6 +54,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
   const nameInputRef = useRef<HTMLInputElement>(null);
   const surnamesInputRef = useRef<HTMLInputElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
+  const genderInputRef = useRef<HTMLSelectElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -60,6 +64,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         surnames: student.surnames,
         dateOfBirth: formatDateForInput(student.dateOfBirth),
         additionalInfo: student.additionalInfo,
+        gender: student.gender || '',
       });
       setCurrentPhoto(student.photo);
     }
@@ -88,6 +93,10 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       }
     }
 
+    if (!formData.gender) {
+      errors.gender = t('dashboard.students.validation.genderRequired');
+    }
+
     setFormErrors(errors);
 
     if (errors.name) {
@@ -96,6 +105,8 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       surnamesInputRef.current?.focus();
     } else if (errors.dateOfBirth) {
       dateInputRef.current?.focus();
+    } else if (errors.gender) {
+      genderInputRef.current?.focus();
     }
 
     return Object.keys(errors).length === 0;
@@ -118,6 +129,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         surnames: formData.surnames.trim(),
         dateOfBirth: formatDateForApi(formData.dateOfBirth),
         additionalInfo: formData.additionalInfo.trim(),
+        gender: formData.gender as Gender,
       };
 
       if (student) {
@@ -150,6 +162,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       surnames: '',
       dateOfBirth: '',
       additionalInfo: '',
+      gender: '',
     });
     setFormErrors({});
     setCurrentPhoto(null);
@@ -280,6 +293,25 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                   disabled={submitting}
                 />
                 {formErrors.dateOfBirth && <p className="form-error-text">{formErrors.dateOfBirth}</p>}
+              </div>
+
+              {/* Gender Field */}
+              <div className="modal-field">
+                <label className="modal-label">
+                  {t('dashboard.students.gender')} <span className="form-required-asterisk">*</span>
+                </label>
+                <select
+                  ref={genderInputRef}
+                  className={`modal-input ${formErrors.gender ? 'input-error' : ''}`}
+                  value={formData.gender}
+                  onChange={(e) => handleInputChange('gender', e.target.value)}
+                  disabled={submitting}
+                >
+                  <option value="">{t('dashboard.students.genderPlaceholder')}</option>
+                  <option value="M">{t('dashboard.students.genderMale')}</option>
+                  <option value="F">{t('dashboard.students.genderFemale')}</option>
+                </select>
+                {formErrors.gender && <p className="form-error-text">{formErrors.gender}</p>}
               </div>
 
               {/* Additional Info Field */}

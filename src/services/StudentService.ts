@@ -3,6 +3,11 @@ import { getApiUrl } from '../config/environment';
 import { AuthService } from './AuthService';
 
 /**
+ * Gender type for students
+ */
+export type Gender = 'M' | 'F';
+
+/**
  * Interface representing a student
  */
 export interface Student {
@@ -11,6 +16,7 @@ export interface Student {
   surnames: string;
   dateOfBirth: string; // formato DD/MM/YYYY
   additionalInfo: string;
+  gender: Gender;
   photo: string | null;
   classIds: number[]; // IDs de las clases a las que pertenece el alumno
 }
@@ -23,6 +29,7 @@ export interface StudentRequestDTO {
   surnames: string;
   dateOfBirth: string; // formato DD/MM/YYYY
   additionalInfo?: string;
+  gender: Gender;
 }
 
 /**

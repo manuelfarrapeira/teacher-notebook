@@ -206,6 +206,10 @@ interface Translations {
       surnames: string;
       dateOfBirth: string;
       additionalInfo: string;
+      gender: string;
+      genderMale: string;
+      genderFemale: string;
+      genderPlaceholder: string;
       photo: string;
       uploadPhoto: string;
       deletePhoto: string;
@@ -254,6 +258,7 @@ interface Translations {
         surnamesRequired: string;
         dateOfBirthRequired: string;
         dateOfBirthInvalid: string;
+        genderRequired: string;
         fileTooLarge: string;
         fileInvalidType: string;
       };
@@ -490,6 +495,10 @@ const translations: Record<Locale, Translations> = {
         surnames: 'Apellidos',
         dateOfBirth: 'Fecha de Nacimiento',
         additionalInfo: 'Información Adicional',
+        gender: 'Género',
+        genderMale: 'Masculino',
+        genderFemale: 'Femenino',
+        genderPlaceholder: 'Seleccionar género',
         photo: 'Foto',
         uploadPhoto: 'Subir Foto',
         deletePhoto: 'Eliminar Foto',
@@ -538,6 +547,7 @@ const translations: Record<Locale, Translations> = {
           surnamesRequired: 'Los apellidos son obligatorios',
           dateOfBirthRequired: 'La fecha de nacimiento es obligatoria',
           dateOfBirthInvalid: 'La fecha de nacimiento no puede ser futura',
+          genderRequired: 'El género es obligatorio',
           fileTooLarge: 'El archivo es demasiado grande. Máximo 5MB',
           fileInvalidType: 'Tipo de archivo no válido. Solo se permiten imágenes JPEG y PNG',
         },
@@ -772,6 +782,10 @@ const translations: Record<Locale, Translations> = {
         surnames: 'Surnames',
         dateOfBirth: 'Date of Birth',
         additionalInfo: 'Additional Information',
+        gender: 'Gender',
+        genderMale: 'Male',
+        genderFemale: 'Female',
+        genderPlaceholder: 'Select gender',
         photo: 'Photo',
         uploadPhoto: 'Upload Photo',
         deletePhoto: 'Delete Photo',
@@ -820,6 +834,7 @@ const translations: Record<Locale, Translations> = {
           surnamesRequired: 'Surnames are required',
           dateOfBirthRequired: 'Date of birth is required',
           dateOfBirthInvalid: 'Date of birth cannot be in the future',
+          genderRequired: 'Gender is required',
           fileTooLarge: 'File is too large. Maximum 5MB',
           fileInvalidType: 'Invalid file type. Only JPEG and PNG images are allowed',
         },
