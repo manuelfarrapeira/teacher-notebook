@@ -645,9 +645,9 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
                     return (
                       <td
                         key={day.id}
-                        className="schedule-cell schedule-cell-empty clickable-cell"
+                        className="schedule-cell schedule-cell-empty clickable-cell tooltip-container"
                         onClick={() => handleAddSlotClick(day.id, slot.start, slot.end)}
-                        title={t('dashboard.schedule.addEntry')}
+                        data-tooltip={t('dashboard.schedule.addEntry')}
                       >
                         {/* Empty */}
                       </td>
