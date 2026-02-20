@@ -278,7 +278,6 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
         <div className="dashboard-card">
             {/* Header */}
             <div className="dashboard-section-header">
-                <h2 className="dashboard-section-title">{t('dashboard.schools.title')}</h2>
                 <button
                     onClick={() => setShowForm(!showForm)}
                     className="dashboard-add-btn"

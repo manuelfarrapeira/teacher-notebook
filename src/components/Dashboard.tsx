@@ -7,12 +7,13 @@ import { ScheduleTab } from './tabs/ScheduleTab';
 import { TimetableTab } from './tabs/TimetableTab';
 import { SettingsTab } from './tabs/SettingsTab';
 import { SchoolsTab } from './tabs/SchoolsTab';
-import { TopBar } from './TopBar';
+import { TopBar, TabItem } from './TopBar';
 import { SchoolService, School } from '../services/SchoolService';
 import { LoadingModal } from './modals/LoadingModal';
 import { AlertMessage } from './ui/alert';
 import { useI18n } from '../lib/i18n';
 import { StudentPhotoProvider } from '../contexts/StudentPhotoContext';
+
 
 interface DashboardProps {
   onLogout: () => void;
@@ -29,11 +30,11 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
   const [selectedSchool, setSelectedSchool] = useState<number | null>(null);
   const [selectedClass, setSelectedClass] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // New state for error messages
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchSchools = useCallback(async () => {
     setLoading(true);
-    setErrorMessage(null); // Clear previous errors
+    setErrorMessage(null);
     try {
       const schoolData = await SchoolService.getSchools();
       setSchools(schoolData);
@@ -63,7 +64,7 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
     fetchSchools();
   }, [fetchSchools]);
 
-  const tabs = [
+  const tabs: TabItem[] = [
     { id: 'students', label: t('dashboard.tabs.students'), icon: Users },
     { id: 'schools', label: t('dashboard.tabs.schools'), icon: Building2 },
     { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
@@ -110,42 +111,25 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
           />
         )}
 
-        <nav className={`dashboard-sidebar ${isMenuOpen ? 'open' : ''}`}>
-          <div className="dashboard-menu">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  className={`dashboard-tab ${isActive ? 'active' : ''}`}
-                  onClick={() => handleTabChange(tab.id)}
-                  tabIndex={0}
-                  aria-current={isActive ? 'page' : undefined}
-                  aria-label={tab.label}
-                >
-                  <Icon className="icon-tab" size={20} />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
+        <header className="dashboard-header">
+          <TopBar
+            schools={schools}
+            selectedSchool={selectedSchool}
+            selectedClass={selectedClass}
+            currentSchool={currentSchool}
+            userName={userName}
+            tabs={tabs}
+            activeTab={activeTab}
+            isMenuOpen={isMenuOpen}
+            onTabChange={handleTabChange}
+            onSchoolChange={handleSchoolChange}
+            onClassChange={handleClassChange}
+            onLogout={onLogout}
+            onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+          />
+        </header>
 
         <main className="dashboard-main-content">
-          <header className="dashboard-header">
-            <TopBar
-              schools={schools}
-              selectedSchool={selectedSchool}
-              selectedClass={selectedClass}
-              currentSchool={currentSchool}
-              userName={userName}
-              onSchoolChange={handleSchoolChange}
-              onClassChange={handleClassChange}
-              onLogout={onLogout}
-              onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
-            />
-          </header>
 
 
           <div className="dashboard-tabs-content">

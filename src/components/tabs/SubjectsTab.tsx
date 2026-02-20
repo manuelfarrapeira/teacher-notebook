@@ -5,6 +5,7 @@ import { SubjectService, Subject } from '../../services/SubjectService';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
+import { useIsMobile } from '../../lib/utils';
 
 interface FormErrors {
   name?: string;
@@ -16,6 +17,7 @@ interface FormErrors {
  */
 export function SubjectsTab() {
   const { t } = useI18n();
+  const isMobile = useIsMobile();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -28,6 +30,7 @@ export function SubjectsTab() {
     const saved = localStorage.getItem('subjectsViewMode');
     return (saved === 'grid' || saved === 'list') ? saved : 'list';
   });
+  const effectiveViewMode = isMobile ? 'list' : viewMode;
 
   // Modal states
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -191,35 +194,25 @@ export function SubjectsTab() {
 
   return (
     <div className="dashboard-card">
-      {/* Header */}
-      <div className="dashboard-section-header">
-        <h2 className="dashboard-section-title">{t('dashboard.subjects.title')}</h2>
-        <button className="dashboard-add-btn" onClick={handleAddClick}>
-          <Plus size={16} />
-          {t('dashboard.subjects.addNew')}
-        </button>
-      </div>
-
-      {/* Search Bar */}
-      {subjects.length > 0 && (
-        <div className="student-search-bar">
-          <div className="student-search-wrapper">
-            <Search className="student-search-icon" size={18} />
-            <input
-              type="text"
-              className="student-search-input"
-              placeholder={t('dashboard.subjects.searchSubjects')}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+      {/* Header: Search, View Toggle, Add Button */}
+      <div className="dashboard-section-header" style={{ justifyContent: 'flex-start' }}>
+        {subjects.length > 0 && (
+          <div className="student-search-bar" style={{ flex: 1, marginBottom: 0 }}>
+            <div className="student-search-wrapper">
+              <Search className="student-search-icon" size={18} />
+              <input
+                type="text"
+                className="student-search-input"
+                placeholder={t('dashboard.subjects.searchSubjects')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* View Mode Toggle */}
-      {subjects.length > 0 && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', background: '#f3f4f6', padding: '0.25rem', borderRadius: '0.5rem' }}>
+        {subjects.length > 0 && !isMobile && (
+          <div className="view-toggle-group">
             <button
               onClick={() => setViewMode('grid')}
               className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
@@ -237,8 +230,13 @@ export function SubjectsTab() {
               <List size={18} />
             </button>
           </div>
-        </div>
-      )}
+        )}
+
+        <button className="dashboard-add-btn" style={{ marginLeft: subjects.length > 0 ? '0' : 'auto' }} onClick={handleAddClick}>
+          <Plus size={16} />
+          {t('dashboard.subjects.addNew')}
+        </button>
+      </div>
 
       {/* Form Modal */}
       {showForm && (
@@ -304,11 +302,11 @@ export function SubjectsTab() {
           <p className="dashboard-empty-text">{t('dashboard.subjects.noResults')}</p>
         </div>
       ) : (
-        <div className={viewMode === 'grid' ? 'subjects-grid' : 'subjects-list'}>
+        <div className={effectiveViewMode === 'grid' ? 'subjects-grid' : 'subjects-list'}>
           {filteredSubjects.map((subject) => (
             <div key={subject.id} className="dashboard-student">
               <div className="dashboard-student-info">
-                <BookType size={20} style={{ color: '#6366f1', marginRight: '0.75rem' }} />
+                <BookType size={20} style={{ color: '#624db6', marginRight: '0.75rem' }} />
                 <span className="dashboard-student-name">{subject.name}</span>
               </div>
               <div className="school-card-actions">

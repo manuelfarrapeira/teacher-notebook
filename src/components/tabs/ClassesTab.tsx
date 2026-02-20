@@ -416,22 +416,9 @@ export function ClassesTab() {
 
     return (
         <div className="dashboard-card">
-            {/* Header with Add Button */}
-            <div className="dashboard-section-header">
-                <h2 className="dashboard-section-title">{t('dashboard.tabs.classes')}</h2>
-                <button
-                    className="dashboard-add-btn"
-                    onClick={handleAddClick}
-                    disabled={submitting || deleting || schools.length === 0}
-                >
-                    <Plus size={16} style={{marginRight: '0.5rem'}}/>
-                    {t('dashboard.classes.addClass')}
-                </button>
-            </div>
-
-            {/* Advanced Search Filter */}
-            {schools.length > 0 && (
-                <div className="filter-section">
+            {/* Header with Filter Toggle and Add Button */}
+            <div className="dashboard-section-header" style={{justifyContent: 'flex-start'}}>
+                {schools.length > 0 && (
                     <div className="filter-section-buttons">
                         <button
                             className="filter-toggle-btn"
@@ -453,85 +440,98 @@ export function ClassesTab() {
                             </button>
                         )}
                     </div>
+                )}
 
-                    {showFilter && (
-                        <div className="filter-container">
-                            <div className="filter-row">
-                                <div className="filter-select-group">
-                                    <label className="filter-label">
-                                        {t('dashboard.classes.searchBy')}:
-                                    </label>
-                                    <div className="selector-button-group" ref={dropdownRef}>
-                                        <button
-                                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                            className="selector-button"
-                                            type="button"
-                                        >
-                                            <span className="selector-name">
-                                                {searchType === 'school' && t('dashboard.classes.filterBySchool')}
-                                                {searchType === 'class' && t('dashboard.classes.filterByClass')}
-                                                {searchType === 'town' && t('dashboard.classes.filterByTown')}
-                                            </span>
-                                            <ChevronDown size={16} className={`chevron-icon ${isDropdownOpen ? 'open' : ''}`}/>
-                                        </button>
-                                        {isDropdownOpen && (
-                                            <div className="selector-dropdown">
-                                                <button
-                                                    onClick={() => {
-                                                        setSearchType('school');
-                                                        setIsDropdownOpen(false);
-                                                    }}
-                                                    className="selector-option"
-                                                    type="button"
-                                                >
-                                                    {t('dashboard.classes.filterBySchool')}
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        setSearchType('class');
-                                                        setIsDropdownOpen(false);
-                                                    }}
-                                                    className="selector-option"
-                                                    type="button"
-                                                >
-                                                    {t('dashboard.classes.filterByClass')}
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        setSearchType('town');
-                                                        setIsDropdownOpen(false);
-                                                    }}
-                                                    className="selector-option"
-                                                    type="button"
-                                                >
-                                                    {t('dashboard.classes.filterByTown')}
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                <button
+                    className="dashboard-add-btn"
+                    style={{marginLeft: 'auto'}}
+                    onClick={handleAddClick}
+                    disabled={submitting || deleting || schools.length === 0}
+                >
+                    <Plus size={16} style={{marginRight: '0.5rem'}}/>
+                    {t('dashboard.classes.addClass')}
+                </button>
+            </div>
 
-                                <div className="filter-input-group">
-                                    <input
-                                        type="text"
-                                        className="filter-input"
-                                        placeholder={getPlaceholderText()}
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                    {searchTerm && (
-                                        <button
-                                            className="filter-clear-btn"
-                                            onClick={handleClearFilter}
-                                            aria-label={t('dashboard.classes.clearFilter')}
-                                        >
-                                            <X size={18} />
-                                        </button>
+            {/* Advanced Search Filter */}
+            {schools.length > 0 && showFilter && (
+                <div className="filter-section">
+                    <div className="filter-container">
+                        <div className="filter-row">
+                            <div className="filter-select-group">
+                                <label className="filter-label">
+                                    {t('dashboard.classes.searchBy')}:
+                                </label>
+                                <div className="selector-button-group" ref={dropdownRef}>
+                                    <button
+                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                        className="selector-button"
+                                        type="button"
+                                    >
+                                        <span className="selector-name">
+                                            {searchType === 'school' && t('dashboard.classes.filterBySchool')}
+                                            {searchType === 'class' && t('dashboard.classes.filterByClass')}
+                                            {searchType === 'town' && t('dashboard.classes.filterByTown')}
+                                        </span>
+                                        <ChevronDown size={16} className={`chevron-icon ${isDropdownOpen ? 'open' : ''}`}/>
+                                    </button>
+                                    {isDropdownOpen && (
+                                        <div className="selector-dropdown">
+                                            <button
+                                                onClick={() => {
+                                                    setSearchType('school');
+                                                    setIsDropdownOpen(false);
+                                                }}
+                                                className="selector-option"
+                                                type="button"
+                                            >
+                                                {t('dashboard.classes.filterBySchool')}
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setSearchType('class');
+                                                    setIsDropdownOpen(false);
+                                                }}
+                                                className="selector-option"
+                                                type="button"
+                                            >
+                                                {t('dashboard.classes.filterByClass')}
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setSearchType('town');
+                                                    setIsDropdownOpen(false);
+                                                }}
+                                                className="selector-option"
+                                                type="button"
+                                            >
+                                                {t('dashboard.classes.filterByTown')}
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                             </div>
+
+                            <div className="filter-input-group">
+                                <input
+                                    type="text"
+                                    className="filter-input"
+                                    placeholder={getPlaceholderText()}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                {searchTerm && (
+                                    <button
+                                        className="filter-clear-btn"
+                                        onClick={handleClearFilter}
+                                        aria-label={t('dashboard.classes.clearFilter')}
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                    )}
+                    </div>
                 </div>
             )}
 

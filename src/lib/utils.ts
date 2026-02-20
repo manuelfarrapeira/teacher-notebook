@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { useState, useEffect } from "react"
 import { School } from "../services/SchoolService"
 
 export function cn(...inputs: ClassValue[]) {
@@ -51,3 +52,23 @@ export function getStudentClasses(classIds: number[], schools: School[]) {
   return classes;
 }
 
+/**
+ * Hook que detecta si la pantalla es móvil (≤768px).
+ * Se actualiza automáticamente al redimensionar la ventana.
+ * @returns true si el ancho de la ventana es ≤ 768px
+ */
+export function useIsMobile(breakpoint = 768): boolean {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+
+    mediaQuery.addEventListener('change', handler);
+    setIsMobile(mediaQuery.matches);
+
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, [breakpoint]);
+
+  return isMobile;
+}

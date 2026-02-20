@@ -122,6 +122,15 @@ export class StudentService extends BaseService {
   }
 
   /**
+   * Delete a student
+   * DELETE /teacher-notebook/v1/students/:id
+   * @param studentId - Student ID
+   */
+  static async deleteStudent(studentId: number): Promise<void> {
+    return this.delete<void>(this.BASE_ENDPOINT, `/students/${studentId}`);
+  }
+
+  /**
    * Assign a student to a class
    * PUT /teacher-notebook/v1/classes/:classId/students/:studentId
    * @param classId - Class ID

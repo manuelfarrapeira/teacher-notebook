@@ -2,6 +2,14 @@ import React, {useState, useEffect, useRef} from 'react';
 import {School} from '../services/SchoolService';
 import {UserMenu} from './UserMenu';
 import { Menu, ChevronDown } from 'lucide-react';
+import { useI18n } from '../lib/i18n';
+
+/** Tipo para un tab de navegación */
+export interface TabItem {
+    readonly id: string;
+    readonly label: string;
+    readonly icon: React.ComponentType<{ className?: string; size?: number }>;
+}
 
 interface TopBarProps {
     readonly schools: School[];
@@ -9,6 +17,10 @@ interface TopBarProps {
     readonly selectedClass: number | null;
     readonly currentSchool: School | undefined;
     readonly userName: string;
+    readonly tabs: TabItem[];
+    readonly activeTab: string;
+    readonly isMenuOpen: boolean;
+    readonly onTabChange: (tabId: string) => void;
     readonly onSchoolChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     readonly onClassChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     readonly onLogout: () => void;
@@ -21,19 +33,24 @@ export function TopBar({
     selectedClass,
     currentSchool,
     userName,
+    tabs,
+    activeTab,
+    isMenuOpen,
+    onTabChange,
     onSchoolChange,
     onClassChange,
     onLogout,
     onToggleMenu,
 }: TopBarProps) {
+    const { t } = useI18n();
     const [isSchoolOpen, setIsSchoolOpen] = useState(false);
     const [isClassOpen, setIsClassOpen] = useState(false);
     const schoolRef = useRef<HTMLDivElement>(null);
     const classRef = useRef<HTMLDivElement>(null);
 
-    const currentSchoolName = schools.find(s => s.id === selectedSchool)?.name || 'Seleccionar escuela';
+    const currentSchoolName = schools.find(s => s.id === selectedSchool)?.name || t('dashboard.students.selectSchool');
     const selectedClassObj = currentSchool?.classes.find(c => c.id === selectedClass);
-    const currentClassName = selectedClassObj ? `${selectedClassObj.name} - ${selectedClassObj.schoolYear}` : 'Seleccionar clase';
+    const currentClassName = selectedClassObj ? `${selectedClassObj.name} - ${selectedClassObj.schoolYear}` : t('dashboard.students.selectClass');
 
     // Handle clicks outside the selectors
     useEffect(() => {
@@ -55,9 +72,53 @@ export function TopBar({
     return (
         <div className="top-bar-container">
             <div className="top-bar-left">
-                <button className="menu-button" onClick={onToggleMenu}>
-                    <Menu size={24}/>
+                <button className="menu-button" onClick={onToggleMenu} aria-label={t('dashboard.sidebar.closeMenu')}>
+                    <Menu size={22}/>
                 </button>
+            </div>
+
+            <nav className="topbar-nav" aria-label="Main navigation">
+                {tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    const isActive = activeTab === tab.id;
+                    return (
+                        <button
+                            key={tab.id}
+                            className={`topbar-tab ${isActive ? 'active' : ''}`}
+                            onClick={() => onTabChange(tab.id)}
+                            title={tab.label}
+                            aria-current={isActive ? 'page' : undefined}
+                            aria-label={tab.label}
+                        >
+                            <Icon size={20} />
+                            <span className="topbar-tab-label">{tab.label}</span>
+                        </button>
+                    );
+                })}
+            </nav>
+
+            {/* Dropdown de navegación para móvil */}
+            {isMenuOpen && (
+                <div className="topbar-nav-dropdown">
+                    {tabs.map((tab) => {
+                        const Icon = tab.icon;
+                        const isActive = activeTab === tab.id;
+                        return (
+                            <button
+                                key={tab.id}
+                                className={`topbar-dropdown-tab ${isActive ? 'active' : ''}`}
+                                onClick={() => onTabChange(tab.id)}
+                                aria-current={isActive ? 'page' : undefined}
+                            >
+                                <Icon size={18} />
+                                <span>{tab.label}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
+            <div className="top-bar-right">
                 <div className="course-selectors">
                     <div className="selector-button-group" ref={schoolRef}>
                         <button
@@ -117,8 +178,6 @@ export function TopBar({
                         )}
                     </div>
                 </div>
-            </div>
-            <div className="top-bar-actions">
                 <UserMenu userName={userName} onLogout={onLogout}/>
             </div>
         </div>

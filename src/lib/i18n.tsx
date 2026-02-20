@@ -253,6 +253,8 @@ interface Translations {
       deleteStudent: string;
       deleteTitle: string;
       deleteConfirm: string;
+      deleteSuccess: string;
+      deleteError: string;
       validation: {
         nameRequired: string;
         surnamesRequired: string;
@@ -542,6 +544,8 @@ const translations: Record<Locale, Translations> = {
         deleteStudent: 'Eliminar Alumno',
         deleteTitle: 'Eliminar alumno',
         deleteConfirm: '¿Está seguro que desea eliminar al alumno "{name}"? Esta acción no se puede deshacer.',
+        deleteSuccess: 'Alumno eliminado correctamente',
+        deleteError: 'Error al eliminar el alumno',
         validation: {
           nameRequired: 'El nombre es obligatorio',
           surnamesRequired: 'Los apellidos son obligatorios',
@@ -829,6 +833,8 @@ const translations: Record<Locale, Translations> = {
         deleteStudent: 'Delete Student',
         deleteTitle: 'Delete student',
         deleteConfirm: 'Are you sure you want to delete the student "{name}"? This action cannot be undone.',
+        deleteSuccess: 'Student deleted successfully',
+        deleteError: 'Error deleting student',
         validation: {
           nameRequired: 'Name is required',
           surnamesRequired: 'Surnames are required',

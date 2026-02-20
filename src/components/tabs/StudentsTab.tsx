@@ -3,7 +3,7 @@ import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Inf
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
-import { getStudentClasses } from '../../lib/utils';
+import { getStudentClasses, useIsMobile } from '../../lib/utils';
 import { StudentPhoto } from '../students/StudentPhoto';
 import { StudentFormModal } from '../modals/StudentFormModal';
 import { AssignToClassModal } from '../modals/AssignToClassModal';
@@ -25,11 +25,13 @@ export function StudentsTab({
   onRefreshSchools
 }: Readonly<StudentsTabProps>) {
   const { t } = useI18n();
+  const isMobile = useIsMobile();
   const [activeSubTab, setActiveSubTab] = useState<'all' | 'class'>('class');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
     const saved = localStorage.getItem('studentsViewMode');
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
   });
+  const effectiveViewMode = isMobile ? 'list' : viewMode;
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(''); // Para sugerencias de asignación rápida
@@ -94,13 +96,13 @@ export function StudentsTab({
 
     setDeleting(true);
     try {
-      // Note: API endpoint for delete student not provided, assuming it exists
-      // await StudentService.deleteStudent(studentToDelete.id);
-      setSuccessMessage(t('dashboard.students.updateSuccess'));
+      await StudentService.deleteStudent(studentToDelete.id);
+      setSuccessMessage(t('dashboard.students.deleteSuccess'));
       setSuccessDialogOpen(true);
       fetchStudents();
+      onRefreshSchools();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.students.updateError'));
+      setErrorMessage(error instanceof Error ? error.message : t('dashboard.students.deleteError'));
       setErrorDialogOpen(true);
     } finally {
       setDeleting(false);
@@ -224,18 +226,29 @@ export function StudentsTab({
 
     return (
       <>
-        {/* Search Bar */}
-        <div className="student-search-bar">
-          <div className="student-search-wrapper">
-            <Search className="student-search-icon" size={18} />
-            <input
-              type="text"
-              className="student-search-input"
-              placeholder={t('dashboard.students.searchStudents')}
-              value={filterAllStudents}
-              onChange={(e) => setFilterAllStudents(e.target.value)}
-            />
+        {/* Search Bar + Add Button */}
+        <div className="dashboard-section-header" style={{ justifyContent: 'flex-start' }}>
+          <div className="student-search-bar" style={{ flex: 1, marginBottom: 0 }}>
+            <div className="student-search-wrapper">
+              <Search className="student-search-icon" size={18} />
+              <input
+                type="text"
+                className="student-search-input"
+                placeholder={t('dashboard.students.searchStudents')}
+                value={filterAllStudents}
+                onChange={(e) => setFilterAllStudents(e.target.value)}
+              />
+            </div>
           </div>
+
+          <button
+            onClick={handleAddStudent}
+            className="dashboard-add-btn"
+            disabled={loading}
+          >
+            <Plus size={16} className="icon-margin-right" />
+            {t('dashboard.students.addStudent')}
+          </button>
         </div>
 
         {allStudentsFiltered.length === 0 ? (
@@ -355,10 +368,10 @@ export function StudentsTab({
 
     return (
       <>
-        {/* Search Bars Container - Both in same line */}
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+        {/* Search Bars Container + View Toggle - All in same line */}
+        <div className="dashboard-section-header" style={{ justifyContent: 'flex-start' }}>
           {/* Search Bar for Quick Add */}
-          <div style={{ flex: 1 }}>
+          <div className="student-search-bar" style={{ flex: 1, marginBottom: 0 }}>
             <div className="student-search-wrapper">
               <input
                 type="text"
@@ -390,7 +403,7 @@ export function StudentsTab({
           </div>
 
           {/* Filter Bar for Class Students */}
-          <div style={{ flex: 1 }}>
+          <div className="student-search-bar" style={{ flex: 1, marginBottom: 0 }}>
             <div className="student-search-wrapper">
               <Search className="student-search-icon" size={18} />
               <input
@@ -402,12 +415,10 @@ export function StudentsTab({
               />
             </div>
           </div>
-        </div>
 
-        {/* View Mode Toggle */}
-        {classStudents.length > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', gap: '0.5rem', background: '#f3f4f6', padding: '0.25rem', borderRadius: '0.5rem' }}>
+          {/* View Mode Toggle */}
+          {classStudents.length > 0 && !isMobile && (
+            <div className="view-toggle-group">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
@@ -425,8 +436,8 @@ export function StudentsTab({
                 <List size={18} />
               </button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Students List */}
         {classStudents.length === 0 ? (
@@ -435,7 +446,7 @@ export function StudentsTab({
             <p className="dashboard-empty-text">{t('dashboard.students.noStudentsInClass')}</p>
           </div>
         ) : (
-          <div className={viewMode === 'grid' ? 'students-grid' : 'students-list'}>
+          <div className={effectiveViewMode === 'grid' ? 'students-grid' : 'students-list'}>
             {classStudents.map((student) => (
               <div key={student.id} className="student-list-item">
                 <div className="student-list-left">
@@ -479,18 +490,6 @@ export function StudentsTab({
 
   return (
     <div className="dashboard-card">
-      {/* Header */}
-      <div className="dashboard-section-header">
-        <h2 className="dashboard-section-title">{t('dashboard.tabs.students')}</h2>
-        <button
-          onClick={handleAddStudent}
-          className="dashboard-add-btn"
-          disabled={loading}
-        >
-          <Plus size={16} className="icon-margin-right" />
-          {t('dashboard.students.addStudent')}
-        </button>
-      </div>
 
       {/* Sub-tabs Navigation */}
       <div className="student-tabs">
