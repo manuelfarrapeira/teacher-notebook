@@ -251,6 +251,7 @@ interface Translations {
       selectSchool: string;
       selectClass: string;
       deleteStudent: string;
+      birthdayToday: string;
       deleteTitle: string;
       deleteConfirm: string;
       deleteSuccess: string;
@@ -542,6 +543,7 @@ const translations: Record<Locale, Translations> = {
         selectSchool: 'Seleccionar colegio',
         selectClass: 'Seleccionar clase',
         deleteStudent: 'Eliminar Alumno',
+        birthdayToday: '¡Hoy es su cumpleaños! 🎂',
         deleteTitle: 'Eliminar alumno',
         deleteConfirm: '¿Está seguro que desea eliminar al alumno "{name}"? Esta acción no se puede deshacer.',
         deleteSuccess: 'Alumno eliminado correctamente',
@@ -831,6 +833,7 @@ const translations: Record<Locale, Translations> = {
         selectSchool: 'Select school',
         selectClass: 'Select class',
         deleteStudent: 'Delete Student',
+        birthdayToday: "It's their birthday today! 🎂",
         deleteTitle: 'Delete student',
         deleteConfirm: 'Are you sure you want to delete the student "{name}"? This action cannot be undone.',
         deleteSuccess: 'Student deleted successfully',

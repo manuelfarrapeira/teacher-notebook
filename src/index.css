@@ -1953,6 +1953,9 @@ dialog.modal-overlay::backdrop {
 .students-grid .student-card-info {
   width: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .students-grid .student-card-name {
@@ -2269,6 +2272,48 @@ dialog.modal-overlay::backdrop {
   flex-direction: column;
   gap: 0.5rem;
   flex-shrink: 0;
+}
+
+/* Search Suggestions Dropdown */
+
+/* Birthday Styles */
+.student-list-item.birthday {
+  border: 2px solid #ef4444;
+  background: linear-gradient(135deg, #fff5f5 0%, #fef2f2 50%, #fff1f2 100%);
+  position: relative;
+}
+
+.student-list-item.birthday:hover {
+  border-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.birthday-icon {
+  color: #ef4444;
+  flex-shrink: 0;
+  animation: birthday-bounce 1s ease infinite;
+}
+
+.birthday-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid #fecaca;
+  white-space: nowrap;
+}
+
+@keyframes birthday-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 /* Search Suggestions Dropdown */

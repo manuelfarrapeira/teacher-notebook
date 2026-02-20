@@ -72,3 +72,21 @@ export function useIsMobile(breakpoint = 768): boolean {
 
   return isMobile;
 }
+
+/**
+ * Comprueba si hoy es el cumpleaños de un alumno comparando día y mes.
+ * @param dateOfBirth - Fecha de nacimiento en formato DD/MM/YYYY
+ * @returns true si hoy es el cumpleaños del alumno
+ */
+export function isBirthday(dateOfBirth: string): boolean {
+  if (!dateOfBirth) return false;
+  const parts = dateOfBirth.split('/');
+  if (parts.length !== 3) return false;
+
+  const day = Number.parseInt(parts[0], 10);
+  const month = Number.parseInt(parts[1], 10);
+  const today = new Date();
+
+  return today.getDate() === day && today.getMonth() + 1 === month;
+}
+

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List } from 'lucide-react';
+import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
-import { getStudentClasses, useIsMobile } from '../../lib/utils';
+import { getStudentClasses, useIsMobile, isBirthday } from '../../lib/utils';
 import { StudentPhoto } from '../students/StudentPhoto';
 import { StudentFormModal } from '../modals/StudentFormModal';
 import { AssignToClassModal } from '../modals/AssignToClassModal';
@@ -260,9 +260,10 @@ export function StudentsTab({
           <div className="students-list">
             {allStudentsFiltered.map((student) => {
               const studentClasses = getStudentClasses(student.classIds, schools);
+              const hasBirthday = isBirthday(student.dateOfBirth);
 
               return (
-                <div key={student.id} className="student-list-item">
+                <div key={student.id} className={`student-list-item ${hasBirthday ? 'birthday' : ''}`}>
                   {/* ...existing student item code... */}
               <div className="student-list-left">
                 <StudentPhoto
@@ -274,6 +275,9 @@ export function StudentsTab({
                 <div className="student-card-info">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <h4 className="student-card-name">{student.surnames}, {student.name}</h4>
+                    {hasBirthday && (
+                      <Cake size={18} className="birthday-icon" aria-label={t('dashboard.students.birthdayToday')} />
+                    )}
                     {student.additionalInfo && (
                       <button
                         onClick={() => toggleAdditionalInfo(student)}
@@ -289,6 +293,12 @@ export function StudentsTab({
                   <p className="student-card-detail">
                     {t('dashboard.students.dateOfBirth')}: {student.dateOfBirth}
                   </p>
+                  {hasBirthday && (
+                    <span className="birthday-badge">
+                      <Cake size={12} />
+                      {t('dashboard.students.birthdayToday')}
+                    </span>
+                  )}
 
                   {/* Assigned Classes */}
                   {studentClasses.length > 0 && (
@@ -447,8 +457,10 @@ export function StudentsTab({
           </div>
         ) : (
           <div className={effectiveViewMode === 'grid' ? 'students-grid' : 'students-list'}>
-            {classStudents.map((student) => (
-              <div key={student.id} className="student-list-item">
+            {classStudents.map((student) => {
+              const hasBirthday = isBirthday(student.dateOfBirth);
+              return (
+              <div key={student.id} className={`student-list-item ${hasBirthday ? 'birthday' : ''}`}>
                 <div className="student-list-left">
                   <StudentPhoto
                     studentId={student.id}
@@ -457,7 +469,18 @@ export function StudentsTab({
                     alt={`${student.name} ${student.surnames}`}
                   />
                   <div className="student-card-info">
-                    <h4 className="student-card-name">{student.surnames}, {student.name}</h4>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <h4 className="student-card-name">{student.surnames}, {student.name}</h4>
+                      {hasBirthday && (
+                        <Cake size={18} className="birthday-icon" aria-label={t('dashboard.students.birthdayToday')} />
+                      )}
+                    </div>
+                    {hasBirthday && (
+                      <span className="birthday-badge">
+                        <Cake size={12} />
+                        {t('dashboard.students.birthdayToday')}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="student-list-actions">
@@ -481,7 +504,8 @@ export function StudentsTab({
                   </button>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </>
