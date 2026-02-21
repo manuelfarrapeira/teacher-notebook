@@ -20,7 +20,13 @@ interface FormErrors {
     school?: string;
 }
 
-export function ClassesTab() {
+/** Props del componente ClassesTab */
+interface ClassesTabProps {
+    /** Callback para notificar cambios en las clases (crear/editar/eliminar) */
+    onClassesChange?: () => void;
+}
+
+export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
     const {t} = useI18n();
     const [schools, setSchools] = useState<School[]>([]);
     const [loading, setLoading] = useState(false);
@@ -234,6 +240,10 @@ export function ClassesTab() {
             setSelectedSchoolId(null);
             setFormData({name: '', schoolYear: ''});
             await fetchSchools();
+
+            if (onClassesChange) {
+                onClassesChange();
+            }
         } catch (error: unknown) {
             let message = editingClass
                 ? t('dashboard.classes.updateError')
@@ -269,6 +279,10 @@ export function ClassesTab() {
             setSuccessMessage(t('dashboard.classes.deleteSuccess'));
             setSuccessDialogOpen(true);
             await fetchSchools();
+
+            if (onClassesChange) {
+                onClassesChange();
+            }
         } catch (error: unknown) {
             setConfirmDeleteOpen(false);
             setClassToDelete(null);

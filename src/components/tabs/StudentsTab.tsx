@@ -215,14 +215,6 @@ export function StudentsTab({
       );
     }
 
-    if (students.length === 0) {
-      return (
-        <div className="dashboard-empty">
-          <Users className="dashboard-empty-icon" />
-          <p className="dashboard-empty-text">{t('dashboard.students.noStudents')}</p>
-        </div>
-      );
-    }
 
     return (
       <>
