@@ -482,10 +482,10 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                 </tr>
               </thead>
               <tbody>
-                {classStudents.map(student => (
+                {classStudents.map((student, index) => (
                   <tr key={student.id}>
                     <td className="rubrics-student-col">
-                      {student.surnames}, {student.name}
+                      {index + 1}. {student.surnames}, {student.name}
                     </td>
                     {filteredExercises.map(ex => {
                       const gradeData = getStudentGrade(student.id, ex.id);

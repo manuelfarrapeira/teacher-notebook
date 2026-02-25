@@ -3332,12 +3332,14 @@ dialog.modal-overlay::backdrop {
 .rubrics-table thead th.rubrics-student-col {
   z-index: 3;
   background: #f3f4f6;
+  text-align: left;
 }
 
 .rubrics-table tbody td.rubrics-student-col {
   background: #f9fafb;
   color: #374151;
   font-size: 0.83rem;
+  text-align: left;
 }
 
 /* Zebra striping – filas alternas */
@@ -3356,6 +3358,29 @@ dialog.modal-overlay::backdrop {
 
 .rubrics-table tbody tr:nth-child(even) td.rubrics-student-col {
   background: #eef0f3;
+}
+
+/* Row hover highlight */
+.rubrics-table tbody tr:hover td {
+  background: #ede9fe;
+  border-top: 1.5px solid #624db6;
+  border-bottom: 1.5px solid #624db6;
+}
+
+.rubrics-table tbody tr:hover td:first-child {
+  border-left: 1.5px solid #624db6;
+}
+
+.rubrics-table tbody tr:hover td:last-child {
+  border-right: 1.5px solid #624db6;
+}
+
+.rubrics-table tbody tr:hover td.rubrics-student-col {
+  background: #e0dbf5;
+}
+
+.rubrics-table tbody tr:hover td.rubrics-total-col {
+  background: #ddd6f3;
 }
 
 /* Exercise header in column */
