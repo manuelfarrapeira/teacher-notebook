@@ -58,6 +58,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (!isOpen) return;
     if (student) {
       setFormData({
         name: student.name,
@@ -67,8 +68,18 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         gender: student.gender || '',
       });
       setCurrentPhoto(student.photo);
+    } else {
+      setFormData({
+        name: '',
+        surnames: '',
+        dateOfBirth: '',
+        additionalInfo: '',
+        gender: '',
+      });
+      setCurrentPhoto(null);
     }
-  }, [student]);
+    setFormErrors({});
+  }, [isOpen, student]);
 
   const validateForm = (): boolean => {
     const errors: FormErrors = {};

@@ -72,6 +72,9 @@ export function GradeFormModal({
     }
     setFormErrors({});
     setErrorMessage('');
+    if (isOpen) {
+      setTimeout(() => gradeRef.current?.focus(), 50);
+    }
   }, [isOpen, existingGrade]);
 
   const handleClose = () => {
@@ -190,13 +193,14 @@ export function GradeFormModal({
             {/* Description */}
             <div>
               <label className="filter-label">{t('dashboard.rubrics.description')}</label>
-              <input
-                type="text"
+              <textarea
                 className="modal-input"
                 placeholder={t('dashboard.rubrics.descriptionPlaceholder')}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 disabled={submitting}
+                rows={3}
+                style={{ resize: 'vertical' }}
               />
             </div>
           </div>
