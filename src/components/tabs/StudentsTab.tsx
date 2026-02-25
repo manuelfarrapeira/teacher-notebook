@@ -10,6 +10,7 @@ import { AssignToClassModal } from '../modals/AssignToClassModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
+import { RubricsTab } from './RubricsTab';
 
 interface StudentsTabProps {
   selectedSchool: number | null;
@@ -26,7 +27,7 @@ export function StudentsTab({
 }: Readonly<StudentsTabProps>) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
-  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class'>('class');
+  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'rubrics'>('class');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
     const saved = localStorage.getItem('studentsViewMode');
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
@@ -521,10 +522,18 @@ export function StudentsTab({
         >
           {t('dashboard.students.allStudents')}
         </button>
+        <button
+          className={activeSubTab === 'rubrics' ? 'active' : ''}
+          onClick={() => setActiveSubTab('rubrics')}
+        >
+          {t('dashboard.rubrics.title')}
+        </button>
       </div>
 
       {/* Content */}
-      {activeSubTab === 'class' ? renderClassStudents() : renderAllStudents()}
+      {activeSubTab === 'class' && renderClassStudents()}
+      {activeSubTab === 'all' && renderAllStudents()}
+      {activeSubTab === 'rubrics' && <RubricsTab selectedClass={selectedClass} />}
 
       {/* Modals */}
       <StudentFormModal

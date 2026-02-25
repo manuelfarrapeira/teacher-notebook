@@ -267,6 +267,81 @@ interface Translations {
       };
     };
     loadingData: string;
+    rubrics: {
+      title: string;
+      selectSubject: string;
+      quarter: string;
+      quarter1: string;
+      quarter2: string;
+      quarter3: string;
+      createExercise: string;
+      editExercise: string;
+      editGrade: string;
+      createGrade: string;
+      exerciseTitle: string;
+      exerciseTitlePlaceholder: string;
+      description: string;
+      descriptionPlaceholder: string;
+      percentageGrade: string;
+      maxGrade: string;
+      grade: string;
+      noExercises: string;
+      noClassSelected: string;
+      selectSubjectFirst: string;
+      noGrade: string;
+      student: string;
+      total: string;
+      documents: string;
+      uploadDocument: string;
+      documentFile: string;
+      documentDescription: string;
+      documentDescriptionPlaceholder: string;
+      noDocuments: string;
+      downloadDocument: string;
+      downloadError: string;
+      editDescription: string;
+      deleteDocument: string;
+      deleteDocumentTitle: string;
+      deleteDocumentConfirm: string;
+      deleteExerciseTitle: string;
+      deleteExerciseConfirm: string;
+      deleteGradeTitle: string;
+      deleteGradeConfirm: string;
+      createExerciseSuccess: string;
+      createExerciseError: string;
+      updateExerciseSuccess: string;
+      updateExerciseError: string;
+      deleteExerciseSuccess: string;
+      deleteExerciseError: string;
+      createGradeSuccess: string;
+      createGradeError: string;
+      updateGradeSuccess: string;
+      updateGradeError: string;
+      deleteGradeSuccess: string;
+      deleteGradeError: string;
+      uploadDocumentSuccess: string;
+      uploadDocumentError: string;
+      deleteDocumentSuccess: string;
+      deleteDocumentError: string;
+      updateDescriptionSuccess: string;
+      updateDescriptionError: string;
+      loadError: string;
+      exerciseInfo: string;
+      validation: {
+        titleRequired: string;
+        titleMaxLength: string;
+        quarterRequired: string;
+        percentageRequired: string;
+        percentageRange: string;
+        percentageExceeds: string;
+        maxGradeRequired: string;
+        maxGradeRange: string;
+        gradeRequired: string;
+        gradeRange: string;
+        fileRequired: string;
+        fileTooLarge: string;
+      };
+    };
     errors: {
       noSchools: string;
       loadSchoolsError: string;
@@ -559,6 +634,81 @@ const translations: Record<Locale, Translations> = {
         },
       },
       loadingData: 'Cargando datos...',
+      rubrics: {
+        title: 'Rúbricas',
+        selectSubject: 'Seleccionar asignatura',
+        quarter: 'Trimestre',
+        quarter1: 'Trimestre 1',
+        quarter2: 'Trimestre 2',
+        quarter3: 'Trimestre 3',
+        createExercise: 'Crear Ejercicio',
+        editExercise: 'Editar Ejercicio',
+        editGrade: 'Editar Nota',
+        createGrade: 'Añadir Nota',
+        exerciseTitle: 'Título del ejercicio',
+        exerciseTitlePlaceholder: 'Ej: Examen unidad 3',
+        description: 'Descripción',
+        descriptionPlaceholder: 'Descripción opcional...',
+        percentageGrade: 'Porcentaje',
+        maxGrade: 'Nota máxima',
+        grade: 'Nota',
+        noExercises: 'No hay ejercicios para esta asignatura y trimestre',
+        noClassSelected: 'Selecciona una clase para ver las rúbricas',
+        selectSubjectFirst: 'No hay asignaturas asignadas a esta clase',
+        noGrade: 'Sin nota',
+        student: 'Alumno',
+        total: 'Total',
+        documents: 'Documentos',
+        uploadDocument: 'Subir Documento',
+        documentFile: 'Archivo',
+        documentDescription: 'Descripción del documento',
+        documentDescriptionPlaceholder: 'Descripción del documento...',
+        noDocuments: 'No hay documentos adjuntos',
+        downloadDocument: 'Descargar',
+        downloadError: 'Error al descargar el documento',
+        editDescription: 'Editar descripción',
+        deleteDocument: 'Eliminar documento',
+        deleteDocumentTitle: 'Eliminar documento',
+        deleteDocumentConfirm: '¿Está seguro que desea eliminar el documento "{name}"? Esta acción no se puede deshacer.',
+        deleteExerciseTitle: 'Eliminar ejercicio',
+        deleteExerciseConfirm: '¿Está seguro que desea eliminar el ejercicio "{name}"? Se eliminarán también todas sus notas y documentos. Esta acción no se puede deshacer.',
+        deleteGradeTitle: 'Eliminar nota',
+        deleteGradeConfirm: '¿Está seguro que desea eliminar la nota del ejercicio "{name}"? Esta acción no se puede deshacer.',
+        createExerciseSuccess: 'Ejercicio creado correctamente',
+        createExerciseError: 'Error al crear el ejercicio',
+        updateExerciseSuccess: 'Ejercicio actualizado correctamente',
+        updateExerciseError: 'Error al actualizar el ejercicio',
+        deleteExerciseSuccess: 'Ejercicio eliminado correctamente',
+        deleteExerciseError: 'Error al eliminar el ejercicio',
+        createGradeSuccess: 'Nota creada correctamente',
+        createGradeError: 'Error al crear la nota',
+        updateGradeSuccess: 'Nota actualizada correctamente',
+        updateGradeError: 'Error al actualizar la nota',
+        deleteGradeSuccess: 'Nota eliminada correctamente',
+        deleteGradeError: 'Error al eliminar la nota',
+        uploadDocumentSuccess: 'Documento subido correctamente',
+        uploadDocumentError: 'Error al subir el documento',
+        deleteDocumentSuccess: 'Documento eliminado correctamente',
+        deleteDocumentError: 'Error al eliminar el documento',
+        updateDescriptionSuccess: 'Descripción actualizada correctamente',
+        updateDescriptionError: 'Error al actualizar la descripción',
+        loadError: 'Error al cargar los datos de rúbricas',
+        exerciseInfo: 'Información del ejercicio',
+        validation: {
+          titleRequired: 'El título es obligatorio',
+          titleMaxLength: 'El título no puede superar los 60 caracteres',
+          quarterRequired: 'El trimestre es obligatorio',
+          percentageRequired: 'El porcentaje es obligatorio',
+          percentageRange: 'El porcentaje debe estar entre 1 y 100',
+          percentageExceeds: 'El porcentaje máximo disponible es {available}%',
+          maxGradeRequired: 'La nota máxima es obligatoria',
+          maxGradeRange: 'La nota máxima debe estar entre 1 y 20',
+          gradeRequired: 'La nota es obligatoria',
+          gradeRange: 'La nota debe estar entre 0 y {max}',
+          fileRequired: 'Debe seleccionar un archivo',
+          fileTooLarge: 'El archivo es demasiado grande. Máximo 2MB',
+        },
+      },
       errors: {
         noSchools: 'No se encontraron colegios.',
         loadSchoolsError: 'Error al cargar los colegios. Por favor, inténtalo de nuevo.'
@@ -849,6 +999,81 @@ const translations: Record<Locale, Translations> = {
         },
       },
       loadingData: 'Loading data...',
+      rubrics: {
+        title: 'Rubrics',
+        selectSubject: 'Select subject',
+        quarter: 'Quarter',
+        quarter1: 'Quarter 1',
+        quarter2: 'Quarter 2',
+        quarter3: 'Quarter 3',
+        createExercise: 'Create Exercise',
+        editExercise: 'Edit Exercise',
+        editGrade: 'Edit Grade',
+        createGrade: 'Add Grade',
+        exerciseTitle: 'Exercise title',
+        exerciseTitlePlaceholder: 'E.g: Unit 3 Exam',
+        description: 'Description',
+        descriptionPlaceholder: 'Optional description...',
+        percentageGrade: 'Percentage',
+        maxGrade: 'Max grade',
+        grade: 'Grade',
+        noExercises: 'No exercises for this subject and quarter',
+        noClassSelected: 'Select a class to view rubrics',
+        selectSubjectFirst: 'No subjects assigned to this class',
+        noGrade: 'No grade',
+        student: 'Student',
+        total: 'Total',
+        documents: 'Documents',
+        uploadDocument: 'Upload Document',
+        documentFile: 'File',
+        documentDescription: 'Document description',
+        documentDescriptionPlaceholder: 'Document description...',
+        noDocuments: 'No documents attached',
+        downloadDocument: 'Download',
+        downloadError: 'Error downloading document',
+        editDescription: 'Edit description',
+        deleteDocument: 'Delete document',
+        deleteDocumentTitle: 'Delete document',
+        deleteDocumentConfirm: 'Are you sure you want to delete the document "{name}"? This action cannot be undone.',
+        deleteExerciseTitle: 'Delete exercise',
+        deleteExerciseConfirm: 'Are you sure you want to delete the exercise "{name}"? All grades and documents will also be deleted. This action cannot be undone.',
+        deleteGradeTitle: 'Delete grade',
+        deleteGradeConfirm: 'Are you sure you want to delete the grade for exercise "{name}"? This action cannot be undone.',
+        createExerciseSuccess: 'Exercise created successfully',
+        createExerciseError: 'Error creating exercise',
+        updateExerciseSuccess: 'Exercise updated successfully',
+        updateExerciseError: 'Error updating exercise',
+        deleteExerciseSuccess: 'Exercise deleted successfully',
+        deleteExerciseError: 'Error deleting exercise',
+        createGradeSuccess: 'Grade created successfully',
+        createGradeError: 'Error creating grade',
+        updateGradeSuccess: 'Grade updated successfully',
+        updateGradeError: 'Error updating grade',
+        deleteGradeSuccess: 'Grade deleted successfully',
+        deleteGradeError: 'Error deleting grade',
+        uploadDocumentSuccess: 'Document uploaded successfully',
+        uploadDocumentError: 'Error uploading document',
+        deleteDocumentSuccess: 'Document deleted successfully',
+        deleteDocumentError: 'Error deleting document',
+        updateDescriptionSuccess: 'Description updated successfully',
+        updateDescriptionError: 'Error updating description',
+        loadError: 'Error loading rubrics data',
+        exerciseInfo: 'Exercise information',
+        validation: {
+          titleRequired: 'Title is required',
+          titleMaxLength: 'Title cannot exceed 60 characters',
+          quarterRequired: 'Quarter is required',
+          percentageRequired: 'Percentage is required',
+          percentageRange: 'Percentage must be between 1 and 100',
+          percentageExceeds: 'Maximum available percentage is {available}%',
+          maxGradeRequired: 'Max grade is required',
+          maxGradeRange: 'Max grade must be between 1 and 20',
+          gradeRequired: 'Grade is required',
+          gradeRange: 'Grade must be between 0 and {max}',
+          fileRequired: 'You must select a file',
+          fileTooLarge: 'File is too large. Maximum 2MB',
+        },
+      },
       errors: {
         noSchools: 'No schools found.',
         loadSchoolsError: 'Error loading schools. Please try again.'

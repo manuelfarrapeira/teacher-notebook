@@ -3217,4 +3217,371 @@ dialog.modal-overlay::backdrop {
   background: #e5e7eb;
 }
 
+/* ========================================
+   RUBRICS TABLE STYLES
+   ======================================== */
 
+/* Toolbar: subject selector + create btn + quarter tabs */
+.rubrics-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.rubrics-subject-select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background: #f8f9fa;
+  min-width: 200px;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.rubrics-subject-select:focus {
+  outline: none;
+  border-color: #624db6;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1);
+}
+
+/* Quarter tabs */
+.rubrics-quarter-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.rubrics-quarter-tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.rubrics-quarter-tab:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.rubrics-quarter-tab.active {
+  background: #624db6;
+  color: white;
+  border-color: #624db6;
+}
+
+/* Table container with scroll */
+.rubrics-table-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.rubrics-table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 320px);
+}
+
+.rubrics-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.85rem;
+  table-layout: auto;
+}
+
+.rubrics-table th,
+.rubrics-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.rubrics-table thead th {
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Sticky student column with box-shadow — width shrinks to longest name */
+.rubrics-student-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #f9fafb;
+  width: 1px;
+  text-align: left;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.1);
+}
+
+.rubrics-table thead th.rubrics-student-col {
+  z-index: 3;
+  background: #f3f4f6;
+}
+
+.rubrics-table tbody td.rubrics-student-col {
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.83rem;
+}
+
+/* Zebra striping – filas alternas */
+.rubrics-table tbody tr:nth-child(odd) td {
+  background: #ffffff;
+}
+
+.rubrics-table tbody tr:nth-child(even) td {
+  background: #f3f4f6;
+}
+
+/* Keep sticky student col background matching zebra stripe */
+.rubrics-table tbody tr:nth-child(odd) td.rubrics-student-col {
+  background: #f9fafb;
+}
+
+.rubrics-table tbody tr:nth-child(even) td.rubrics-student-col {
+  background: #eef0f3;
+}
+
+/* Exercise header in column */
+.rubrics-exercise-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 140px;
+}
+
+.rubrics-exercise-title {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #374151;
+}
+
+.rubrics-exercise-actions {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.rubrics-exercise-btn {
+  padding: 0.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rubrics-exercise-btn:hover {
+  color: #624db6;
+}
+
+.rubrics-exercise-btn.delete:hover {
+  color: #dc2626;
+}
+
+/* Grade cells */
+.rubrics-grade-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  position: relative;
+}
+
+.rubrics-grade-value {
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.rubrics-grade-actions-hover {
+  display: flex;
+  gap: 0.15rem;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rubrics-grade-btn {
+  padding: 0.15rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rubrics-grade-btn:hover {
+  color: #624db6;
+}
+
+.rubrics-grade-btn.delete:hover {
+  color: #dc2626;
+}
+
+/* Hide edit/delete buttons by default, show on hover/touch */
+.rubrics-grade-hover-btn {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.rubrics-grade-cell:hover .rubrics-grade-hover-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile: show on touch (active state) */
+@media (hover: none) {
+  .rubrics-grade-hover-btn {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.rubrics-add-grade-btn {
+  padding: 0.25rem 0.5rem;
+  background: #f3f4f6;
+  border: 1px dashed #d1d5db;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rubrics-add-grade-btn:hover {
+  background: #eff6ff;
+  border-color: #624db6;
+  color: #624db6;
+}
+
+/* Documents list */
+.rubrics-doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.rubrics-doc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.rubrics-doc-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rubrics-doc-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rubrics-doc-desc {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.rubrics-doc-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.rubrics-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1rem;
+}
+
+/* Exercise info popup */
+.rubrics-info-popup {
+  position: absolute;
+  background: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.75rem;
+  max-width: 300px;
+  z-index: 10;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+/* Total column */
+.rubrics-total-col {
+  background: #f0edf8;
+  font-weight: 600;
+  color: #374151;
+  border-left: 2px solid #624db6;
+}
+
+.rubrics-table thead th.rubrics-total-col {
+  background: #e8e4f3;
+}
+
+.rubrics-table tbody tr:nth-child(odd) td.rubrics-total-col {
+  background: #f0edf8;
+}
+
+.rubrics-table tbody tr:nth-child(even) td.rubrics-total-col {
+  background: #e8e4f3;
+}
+
+/* Failing total — below 50% (grade < 5/10) */
+.rubrics-table tbody tr:nth-child(odd) td.rubrics-total-fail {
+  background: #fecaca;
+}
+
+.rubrics-table tbody tr:nth-child(even) td.rubrics-total-fail {
+  background: #fca5a5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+  .rubrics-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rubrics-quarter-tabs {
+    margin-left: 0;
+  }
+
+  .rubrics-subject-select {
+    min-width: 100%;
+  }
+}

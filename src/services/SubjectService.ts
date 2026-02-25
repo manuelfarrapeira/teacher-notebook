@@ -9,6 +9,15 @@ export interface Subject {
 }
 
 /**
+ * Interface representing a subject assigned to a class (new API format)
+ */
+export interface ClassSubject {
+  subjectClassId: number;
+  subjectId: number;
+  subjectName: string;
+}
+
+/**
  * Interface for subject creation/update request
  */
 export interface SubjectRequestDTO {
@@ -64,13 +73,23 @@ export class SubjectService extends BaseService {
   }
 
   /**
-   * Get subjects assigned to a specific class
+   * Get subjects assigned to a specific class (new API format with subjectClassId)
    * GET /teacher-notebook/v1/classes/:classId/subjects
    * @param classId - ID of the class
-   * @returns Array of subjects assigned to the class
+   * @returns Array of ClassSubject with subjectClassId, subjectId and subjectName
+   */
+  static async getClassSubjects(classId: number): Promise<ClassSubject[]> {
+    return this.get<ClassSubject[]>(this.BASE_ENDPOINT, `/classes/${classId}/subjects`);
+  }
+
+  /**
+   * Get subjects assigned to a specific class mapped to Subject format (backward compatibility)
+   * @param classId - ID of the class
+   * @returns Array of subjects mapped from ClassSubject format
    */
   static async getSubjectsByClass(classId: number): Promise<Subject[]> {
-    return this.get<Subject[]>(this.BASE_ENDPOINT, `/classes/${classId}/subjects`);
+    const classSubjects = await this.getClassSubjects(classId);
+    return classSubjects.map(cs => ({ id: cs.subjectId, name: cs.subjectName }));
   }
 
   /**
