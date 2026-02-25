@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, X, MessageSquare, Frown, Smile } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import ReactDOM from 'react-dom';
+import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, MessageSquare, Frown, Smile } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SubjectService, ClassSubject } from '../../services/SubjectService';
 import { StudentService, Student } from '../../services/StudentService';
@@ -17,6 +18,59 @@ import { DocumentsModal } from '../modals/DocumentsModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
+
+/**
+ * Tooltip that renders via portal so it escapes any overflow container.
+ * Shows above by default, below if `position="bottom"`.
+ */
+function RubricsTooltip({ text, children, position = 'top' }: {
+  readonly text: string;
+  readonly children: React.ReactNode;
+  readonly position?: 'top' | 'bottom';
+}) {
+  const triggerRef = useRef<HTMLSpanElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  const show = () => {
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const left = rect.left + rect.width / 2;
+    const top = position === 'bottom' ? rect.bottom + 8 : rect.top - 8;
+    setCoords({ top, left });
+    setVisible(true);
+  };
+
+  const hide = () => setVisible(false);
+
+  return (
+    <>
+      <span
+        ref={triggerRef}
+        className="rubrics-tooltip-trigger"
+        onMouseEnter={show}
+        onMouseLeave={hide}
+      >
+        {children}
+      </span>
+      {visible && ReactDOM.createPortal(
+        <div
+          className="rubrics-tooltip-popup"
+          style={{
+            top: coords.top,
+            left: coords.left,
+            transform: position === 'bottom'
+              ? 'translateX(-50%)'
+              : 'translate(-50%, -100%)',
+          }}
+        >
+          {text}
+        </div>,
+        document.body,
+      )}
+    </>
+  );
+}
 
 /**
  * Props for RubricsTab
@@ -62,7 +116,6 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
   const [exerciseToEdit, setExerciseToEdit] = useState<Exercise | null>(null);
   const [gradeToDelete, setGradeToDelete] = useState<{ gradeId: number; exerciseTitle: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [infoExercise, setInfoExercise] = useState<Exercise | null>(null);
 
   // Feedback modals
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
@@ -381,14 +434,9 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                         </span>
                         <div className="rubrics-exercise-actions">
                           {ex.description && (
-                            <button
-                              className="rubrics-exercise-btn"
-                              onClick={() => setInfoExercise(infoExercise?.id === ex.id ? null : ex)}
-                              aria-label={t('dashboard.rubrics.exerciseInfo')}
-                              title={t('dashboard.rubrics.exerciseInfo')}
-                            >
+                            <RubricsTooltip text={ex.description}>
                               <Info size={14} />
-                            </button>
+                            </RubricsTooltip>
                           )}
                           <button
                             className="rubrics-exercise-btn"
@@ -455,13 +503,9 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                                 {Number.isInteger(gradeData.grade) ? gradeData.grade : gradeData.grade.toFixed(2)} / {gradeData.maxGrade}
                               </span>
                               {gradeData.description && (
-                                <button
-                                  className="rubrics-grade-btn"
-                                  title={gradeData.description}
-                                  aria-label={t('dashboard.rubrics.description')}
-                                >
+                                <RubricsTooltip text={gradeData.description} position="bottom">
                                   <MessageSquare size={12} />
-                                </button>
+                                </RubricsTooltip>
                               )}
                               <div className="rubrics-grade-actions-hover">
                                 <button
@@ -534,29 +578,6 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
         </>
       )}
 
-      {/* Exercise Info Popup */}
-      {infoExercise && (
-        <dialog className="modal-overlay" open={true} aria-label={t('dashboard.rubrics.exerciseInfo')}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-            <div className="modal-content" style={{ maxWidth: '400px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <h3 className="modal-title" style={{ marginBottom: 0 }}>{infoExercise.title}</h3>
-                <button
-                  onClick={() => setInfoExercise(null)}
-                  className="modal-button cancel"
-                  style={{ padding: '0.5rem', minWidth: 'auto' }}
-                  aria-label={t('common.close')}
-                >
-                  <X size={18} />
-                </button>
-              </div>
-              <p style={{ color: '#374151', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                {infoExercise.description}
-              </p>
-            </div>
-          </div>
-        </dialog>
-      )}
 
       {/* Create Exercise Modal */}
       {selectedSubjectClassId > 0 && (

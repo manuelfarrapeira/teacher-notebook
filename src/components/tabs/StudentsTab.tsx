@@ -517,16 +517,16 @@ export function StudentsTab({
           {t('dashboard.students.classStudents')}
         </button>
         <button
-          className={activeSubTab === 'all' ? 'active' : ''}
-          onClick={() => setActiveSubTab('all')}
-        >
-          {t('dashboard.students.allStudents')}
-        </button>
-        <button
           className={activeSubTab === 'rubrics' ? 'active' : ''}
           onClick={() => setActiveSubTab('rubrics')}
         >
           {t('dashboard.rubrics.title')}
+        </button>
+        <button
+          className={activeSubTab === 'all' ? 'active' : ''}
+          onClick={() => setActiveSubTab('all')}
+        >
+          {t('dashboard.students.allStudents')}
         </button>
       </div>
 
