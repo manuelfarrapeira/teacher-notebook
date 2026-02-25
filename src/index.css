@@ -3278,12 +3278,16 @@ dialog.modal-overlay::backdrop {
 .rubrics-table-container {
   flex: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .rubrics-table-wrapper {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: calc(100vh - 320px);
+  flex: 1;
+  min-height: 0;
 }
 
 .rubrics-table {

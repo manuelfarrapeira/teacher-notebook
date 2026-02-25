@@ -370,7 +370,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
   }
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       {/* Toolbar: subject selector + create btn + quarter tabs */}
       <div className="rubrics-toolbar">
         <select
@@ -667,7 +667,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
         message={successMessage}
         onClose={() => setSuccessDialogOpen(false)}
       />
-    </>
+    </div>
   );
 }
 
