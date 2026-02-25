@@ -186,6 +186,17 @@ export class ExerciseService extends BaseService {
   }
 
   /**
+   * Get grades for a single student in a class
+   * GET /teacher-notebook/v1/classes/:classId/students/:studentId/grades
+   * @param classId - Class ID
+   * @param studentId - Student ID
+   * @returns Array of StudentQuarter (quarters with subjects and grades)
+   */
+  static async getStudentGrades(classId: number, studentId: number): Promise<StudentQuarter[]> {
+    return this.get<StudentQuarter[]>(this.BASE_ENDPOINT, `/classes/${classId}/students/${studentId}/grades`);
+  }
+
+  /**
    * Create a grade for an exercise
    * PUT /teacher-notebook/v1/exercises/:exerciseId/grades
    * @param exerciseId - Exercise ID

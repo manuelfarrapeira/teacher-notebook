@@ -3625,3 +3625,86 @@ dialog.modal-overlay::backdrop {
     min-width: 100%;
   }
 }
+
+/* ========================================
+   STUDENT GRADES MODAL STYLES
+   ======================================== */
+
+.student-grades-quarter-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #374151;
+  padding: 0.5rem 0.75rem;
+  background: #f3f4f6;
+  border-left: 3px solid #624db6;
+  margin-bottom: 0.75rem;
+}
+
+.student-grades-subject-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  background: #f9fafb;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Accordion button style */
+.student-grades-accordion-btn {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.student-grades-accordion-btn:hover {
+  background: #f0edf8;
+}
+
+.student-grades-avg {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #624db6;
+}
+
+.student-grades-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+  margin-bottom: 0.25rem;
+}
+
+.student-grades-table th {
+  padding: 0.4rem 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+  font-size: 0.78rem;
+}
+
+.student-grades-table td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+  text-align: center;
+  color: #374151;
+}
+
+.student-grades-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.student-grades-quarter-avg {
+  text-align: right;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #374151;
+  padding: 0.5rem 0.75rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+}
+

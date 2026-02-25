@@ -327,6 +327,12 @@ interface Translations {
       updateDescriptionError: string;
       loadError: string;
       exerciseInfo: string;
+      viewStudentGrades: string;
+      studentGradesTitle: string;
+      subjectAverage: string;
+      quarterAverage: string;
+      finalGrade: string;
+      noGradesForStudent: string;
       validation: {
         titleRequired: string;
         titleMaxLength: string;
@@ -694,6 +700,12 @@ const translations: Record<Locale, Translations> = {
         updateDescriptionError: 'Error al actualizar la descripción',
         loadError: 'Error al cargar los datos de rúbricas',
         exerciseInfo: 'Información de la rúbrica',
+        viewStudentGrades: 'Ver notas',
+        studentGradesTitle: 'Notas de {name}',
+        subjectAverage: 'Media',
+        quarterAverage: 'Media del trimestre',
+        finalGrade: 'Nota Final',
+        noGradesForStudent: 'No hay notas registradas para este alumno',
         validation: {
           titleRequired: 'El título es obligatorio',
           titleMaxLength: 'El título no puede superar los 60 caracteres',
@@ -1059,6 +1071,12 @@ const translations: Record<Locale, Translations> = {
         updateDescriptionError: 'Error updating description',
         loadError: 'Error loading rubrics data',
         exerciseInfo: 'Rubric information',
+        viewStudentGrades: 'View grades',
+        studentGradesTitle: 'Grades for {name}',
+        subjectAverage: 'Average',
+        quarterAverage: 'Quarter average',
+        finalGrade: 'Final Grade',
+        noGradesForStudent: 'No grades recorded for this student',
         validation: {
           titleRequired: 'Title is required',
           titleMaxLength: 'Title cannot exceed 60 characters',

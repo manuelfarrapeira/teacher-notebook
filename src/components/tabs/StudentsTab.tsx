@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake } from 'lucide-react';
+import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
@@ -10,6 +10,7 @@ import { AssignToClassModal } from '../modals/AssignToClassModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
+import { StudentGradesModal } from '../modals/StudentGradesModal';
 import { RubricsTab } from './RubricsTab';
 
 interface StudentsTabProps {
@@ -53,6 +54,7 @@ export function StudentsTab({
   const [infoPopupStudent, setInfoPopupStudent] = useState<Student | null>(null);
   const [confirmQuickAssign, setConfirmQuickAssign] = useState<Student | null>(null);
   const [confirmRemoveFromClass, setConfirmRemoveFromClass] = useState<{student: Student; classId: number} | null>(null);
+  const [gradesStudent, setGradesStudent] = useState<Student | null>(null);
 
   useEffect(() => {
     fetchStudents();
@@ -487,6 +489,14 @@ export function StudentsTab({
                     <Edit size={20} />
                   </button>
                   <button
+                    onClick={() => setGradesStudent(student)}
+                    className="school-action-btn edit tooltip-container"
+                    aria-label={t('dashboard.rubrics.viewStudentGrades')}
+                    data-tooltip={t('dashboard.rubrics.viewStudentGrades')}
+                  >
+                    <ClipboardList size={20} />
+                  </button>
+                  <button
                     onClick={() => handleRemoveFromClassClick(student, selectedClass)}
                     className="school-action-btn delete tooltip-container"
                     disabled={removingFromClass}
@@ -765,6 +775,17 @@ export function StudentsTab({
           </dialog>
         );
       })()}
+
+      {/* Student Grades Modal */}
+      {Boolean(gradesStudent) && Boolean(selectedClass) && gradesStudent && selectedClass && (
+        <StudentGradesModal
+          isOpen={true}
+          onClose={() => setGradesStudent(null)}
+          classId={selectedClass}
+          studentId={gradesStudent.id}
+          studentName={`${gradesStudent.surnames}, ${gradesStudent.name}`}
+        />
+      )}
     </div>
   );
 }
