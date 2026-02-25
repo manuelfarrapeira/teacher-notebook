@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { X, Loader2, Search } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SubjectService, Subject } from '../../services/SubjectService';
@@ -40,6 +40,7 @@ export function ClassSubjectsModal({
   const [assignedSubjects, setAssignedSubjects] = useState<Subject[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Loading states
   const [loading, setLoading] = useState(false);
@@ -77,6 +78,8 @@ export function ClassSubjectsModal({
     if (!isOpen) {
       setSelectedIds([]);
       setSearchTerm('');
+    } else {
+      setTimeout(() => searchInputRef.current?.focus(), 50);
     }
   }, [isOpen]);
 
@@ -238,6 +241,7 @@ export function ClassSubjectsModal({
                       }}
                     />
                     <input
+                      ref={searchInputRef}
                       type="text"
                       className="class-subjects-search"
                       style={{ paddingLeft: '2.25rem' }}

@@ -79,6 +79,9 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       setCurrentPhoto(null);
     }
     setFormErrors({});
+    if (isOpen) {
+      setTimeout(() => nameInputRef.current?.focus(), 50);
+    }
   }, [isOpen, student]);
 
   const validateForm = (): boolean => {

@@ -56,6 +56,13 @@ export function SubjectsTab() {
     fetchSubjects();
   }, []);
 
+  // Auto-focus name input when form opens
+  useEffect(() => {
+    if (showForm) {
+      setTimeout(() => nameInputRef.current?.focus(), 50);
+    }
+  }, [showForm]);
+
   // Save view mode preference to localStorage
   useEffect(() => {
     localStorage.setItem('subjectsViewMode', viewMode);

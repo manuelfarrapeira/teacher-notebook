@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Loader2, X } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
@@ -28,8 +28,15 @@ export function AssignToClassModal({
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const schoolSelectRef = useRef<HTMLSelectElement>(null);
 
   const currentSchool = schools.find(s => s.id === selectedSchoolId);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => schoolSelectRef.current?.focus(), 50);
+    }
+  }, [isOpen]);
 
   const handleAssign = async () => {
     if (!selectedSchoolId || !selectedClassId) return;
@@ -89,6 +96,7 @@ export function AssignToClassModal({
                   {t('dashboard.students.selectSchool')} <span className="form-required-asterisk">*</span>
                 </label>
                 <select
+                  ref={schoolSelectRef}
                   className="modal-input"
                   value={selectedSchoolId || ''}
                   onChange={(e) => {

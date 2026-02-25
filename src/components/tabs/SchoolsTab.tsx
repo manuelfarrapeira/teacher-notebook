@@ -53,6 +53,13 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
         fetchSchools();
     }, []);
 
+    // Auto-focus name input when form opens
+    useEffect(() => {
+        if (showForm) {
+            setTimeout(() => nameInputRef.current?.focus(), 50);
+        }
+    }, [showForm]);
+
     const fetchSchools = async () => {
         setLoading(true);
         try {

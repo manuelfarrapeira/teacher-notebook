@@ -76,6 +76,9 @@ export function ExerciseFormModal({
     }
     setFormErrors({});
     setErrorMessage('');
+    if (isOpen) {
+      setTimeout(() => titleRef.current?.focus(), 50);
+    }
   }, [isOpen, exercise]);
 
   const handleClose = () => {
