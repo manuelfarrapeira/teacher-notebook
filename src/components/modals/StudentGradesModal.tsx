@@ -118,11 +118,12 @@ export function StudentGradesModal({
       }
     }
 
-    const results: { subjectId: number; subjectName: string; quarterAverages: number[]; finalAverage: number }[] = [];
+    const results: { subjectId: number; subjectName: string; quarterAverages: number[]; finalAverage: number | null }[] = [];
     subjectMap.forEach((val, key) => {
-      // Sum of all quarter averages divided by 3 (always 3 quarters)
-      const sum = val.quarterAverages.reduce((a, b) => a + b, 0);
-      const finalAverage = Math.round((sum / 3) * 100) / 100;
+      const count = val.quarterAverages.length;
+      const finalAverage = count > 0
+        ? Math.round((val.quarterAverages.reduce((a, b) => a + b, 0) / count) * 100) / 100
+        : null;
       results.push({ subjectId: key, subjectName: val.subjectName, quarterAverages: val.quarterAverages, finalAverage });
     });
 
@@ -209,6 +210,12 @@ export function StudentGradesModal({
     </>
   );
 
+  const getFinalCellBg = (isFailing: boolean, finalAverage: number | null): string => {
+    if (isFailing) return '#fecaca';
+    if (finalAverage === null) return 'transparent';
+    return '#e8e4f3';
+  };
+
   /** Render the final grade tab */
   const renderFinalGrade = () => (
     <>
@@ -229,27 +236,30 @@ export function StudentGradesModal({
           </thead>
           <tbody>
             {finalGrades.map(fg => {
-              const isFailing = fg.finalAverage < 5;
+              const isFailing = fg.finalAverage !== null && fg.finalAverage < 5;
+              const finalCellBg = getFinalCellBg(isFailing, fg.finalAverage);
               return (
                 <tr key={fg.subjectId}>
                   <td style={{ textAlign: 'left', fontWeight: 600, whiteSpace: 'nowrap' }}>{fg.subjectName}</td>
                   {[0, 1, 2].map(i => (
                     <td key={i}>
-                      {fg.quarterAverages[i] !== undefined ? (
+                      {fg.quarterAverages[i] === undefined ? '—' : (
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                           {fg.quarterAverages[i] < 5 && <Frown size={13} style={{ color: '#f97316' }} />}
                           {fg.quarterAverages[i] >= 9 && <Smile size={13} style={{ color: '#eab308' }} />}
                           {formatGrade(fg.quarterAverages[i])}
                         </span>
-                      ) : '—'}
+                      )}
                     </td>
                   ))}
-                  <td style={{ fontWeight: 700, background: isFailing ? '#fecaca' : '#e8e4f3' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                      {isFailing && <Frown size={14} style={{ color: '#f97316' }} />}
-                      {fg.finalAverage >= 9 && <Smile size={14} style={{ color: '#eab308' }} />}
-                      {formatGrade(fg.finalAverage)} / 10
-                    </span>
+                  <td style={{ fontWeight: 700, background: finalCellBg }}>
+                    {fg.finalAverage === null ? '—' : (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                        {isFailing && <Frown size={14} style={{ color: '#f97316' }} />}
+                        {fg.finalAverage >= 9 && <Smile size={14} style={{ color: '#eab308' }} />}
+                        {formatGrade(fg.finalAverage)} / 10
+                      </span>
+                    )}
                   </td>
                 </tr>
               );
