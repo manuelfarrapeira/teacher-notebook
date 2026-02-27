@@ -15,7 +15,7 @@ interface TimetableTabProps {
 
 /** Single schedule item for the form */
 interface ScheduleFormItem {
-  id: string; // Unique ID for React key
+  id: string;
   subjectId: number;
   start: string;
   end: string;
@@ -72,7 +72,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  // Modal states
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
@@ -87,7 +86,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
   const startInputRef = useRef<HTMLInputElement>(null);
   const endInputRef = useRef<HTMLInputElement>(null);
 
-  // Day names for display
   const dayNames = useMemo(() => [
     { id: 1, name: t('dashboard.schedule.monday') },
     { id: 2, name: t('dashboard.schedule.tuesday') },
@@ -96,13 +94,12 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     { id: 5, name: t('dashboard.schedule.friday') },
   ], [t]);
 
-  // Get day name by id
   const getDayName = (dayId: number): string => {
     const day = dayNames.find(d => d.id === dayId);
     return day ? day.name : '';
   };
 
-  // Get subject name by id
+
   const getSubjectName = (subjectId: number): string => {
     const subject = subjects.find(s => s.id === subjectId);
     return subject ? subject.name : '';
@@ -118,23 +115,19 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     if (error instanceof ApiErrorException) {
       const apiError = error.apiError;
 
-      // If there are detailed validation errors, format them
       if (apiError.details && apiError.details.length > 0) {
         return apiError.details.map(d => d.reason).join('\n');
       }
 
-      // If there's a detail message, use it
       if (apiError.detail) {
         return apiError.detail;
       }
 
-      // Fall back to description
       if (apiError.description) {
         return apiError.description;
       }
     }
 
-    // For regular Error instances
     if (error instanceof Error) {
       return error.message;
     }
@@ -142,28 +135,22 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     return fallbackMessage;
   };
 
-
-  // Convert time string to minutes
   const timeToMinutes = (time: string): number => {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
   };
 
-  // Generate time slots (one per unique start/end time)
   const timeSlots = useMemo(() => {
     if (schedules.length === 0) return [];
 
-    // Collect all unique time points
     const timePoints = new Set<string>();
     schedules.forEach(schedule => {
       timePoints.add(schedule.start);
       timePoints.add(schedule.end);
     });
 
-    // Sort time points
     const sortedTimes = Array.from(timePoints).sort((a, b) => a.localeCompare(b));
 
-    // Create slots between consecutive time points
     const slots: { start: string; end: string }[] = [];
     for (let i = 0; i < sortedTimes.length - 1; i++) {
       slots.push({
@@ -175,8 +162,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     return slots;
   }, [schedules]);
 
-
-  // Calculate rowSpan for a schedule
   const getRowSpan = (schedule: ScheduleItem): number => {
     let span = 0;
     for (const slot of timeSlots) {
@@ -192,7 +177,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     return Math.max(span, 1);
   };
 
-  // Check if slot is covered by a schedule that started earlier
   const isSlotCoveredByEarlierSchedule = (dayId: number, slotStart: string): boolean => {
     return schedules.some(s => {
       if (s.day !== dayId) return false;
@@ -202,29 +186,27 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     });
   };
 
-  // Color palette for subjects - each subject gets a consistent color based on its ID
   const subjectColors = [
-    { bg: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', border: '#3b82f6', text: '#1e40af' },  // Blue
-    { bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', border: '#22c55e', text: '#166534' },  // Green
-    { bg: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '#f59e0b', text: '#92400e' },  // Amber
-    { bg: 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%)', border: '#ec4899', text: '#9d174d' },  // Pink
-    { bg: 'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)', border: '#6366f1', text: '#4338ca' },  // Indigo
-    { bg: 'linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%)', border: '#14b8a6', text: '#115e59' },  // Teal
-    { bg: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)', border: '#ef4444', text: '#991b1b' },  // Red
-    { bg: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '#a855f7', text: '#7e22ce' },  // Purple
-    { bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', border: '#f97316', text: '#9a3412' },  // Orange
-    { bg: 'linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%)', border: '#06b6d4', text: '#155e75' },  // Cyan
-    { bg: 'linear-gradient(135deg, #ecfccb 0%, #d9f99d 100%)', border: '#84cc16', text: '#3f6212' },  // Lime
-    { bg: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '#10b981', text: '#064e3b' },  // Emerald
-    { bg: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', border: '#0ea5e9', text: '#075985' },  // Sky
-    { bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', border: '#8b5cf6', text: '#5b21b6' },  // Violet
-    { bg: 'linear-gradient(135deg, #fae8ff 0%, #f5d0fe 100%)', border: '#d946ef', text: '#86198f' },  // Fuchsia
-    { bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', border: '#f43f5e', text: '#9f1239' },  // Rose
-    { bg: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', border: '#64748b', text: '#334155' },  // Slate
-    { bg: 'linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%)', border: '#78716c', text: '#44403c' },  // Stone
+    { bg: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', border: '#3b82f6', text: '#1e40af' },
+    { bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', border: '#22c55e', text: '#166534' },
+    { bg: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', border: '#f59e0b', text: '#92400e' },
+    { bg: 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%)', border: '#ec4899', text: '#9d174d' },
+    { bg: 'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)', border: '#6366f1', text: '#4338ca' },
+    { bg: 'linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%)', border: '#14b8a6', text: '#115e59' },
+    { bg: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)', border: '#ef4444', text: '#991b1b' },
+    { bg: 'linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)', border: '#a855f7', text: '#7e22ce' },
+    { bg: 'linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%)', border: '#f97316', text: '#9a3412' },
+    { bg: 'linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%)', border: '#06b6d4', text: '#155e75' },
+    { bg: 'linear-gradient(135deg, #ecfccb 0%, #d9f99d 100%)', border: '#84cc16', text: '#3f6212' },
+    { bg: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '#10b981', text: '#064e3b' },
+    { bg: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', border: '#0ea5e9', text: '#075985' },
+    { bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', border: '#8b5cf6', text: '#5b21b6' },
+    { bg: 'linear-gradient(135deg, #fae8ff 0%, #f5d0fe 100%)', border: '#d946ef', text: '#86198f' },
+    { bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', border: '#f43f5e', text: '#9f1239' },
+    { bg: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', border: '#64748b', text: '#334155' },
+    { bg: 'linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%)', border: '#78716c', text: '#44403c' },
   ];
 
-  // Get color for a subject based on its ID
   const getSubjectColor = (subjectId: number) => {
     const colorIndex = subjectId % subjectColors.length;
     return subjectColors[colorIndex];
@@ -275,7 +257,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
       errors.day = t('dashboard.schedule.validation.dayRequired');
     }
 
-    // Validate each item in the form
     const itemsErrors: Record<string, ItemErrors> = {};
     formData.items.forEach(item => {
       const itemErrors: ItemErrors = {};
@@ -296,7 +277,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
         itemErrors.end = t('dashboard.schedule.validation.endAfterStart');
       }
 
-      // Check for overlapping times with other items
       const overlappingItem = formData.items.find(i => i !== item && i.start < item.end && i.end > item.start);
       if (overlappingItem) {
         itemErrors.overlap = t('dashboard.schedule.validation.noOverlap');
@@ -310,11 +290,9 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     errors.items = itemsErrors;
     setFormErrors(errors);
 
-    // Focus on first error field
     if (errors.day) {
       daySelectRef.current?.focus();
     } else if (errors.items) {
-      // Focus on the first item with an error
       const firstErrorItem = Object.keys(errors.items).find(itemId => {
         const itemError = errors.items?.[itemId];
         return itemError?.subjectId || itemError?.start || itemError?.end || itemError?.overlap;
@@ -350,7 +328,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
         item.id === itemId ? { ...item, [field]: value } : item
       ),
     }));
-    // Clear error for this item field
     if (formErrors.items?.[itemId]?.[field as keyof ItemErrors]) {
       setFormErrors(prev => ({
         ...prev,
@@ -375,7 +352,7 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
 
   /** Remove item from the form */
   const handleRemoveItem = (itemId: string) => {
-    if (formData.items.length <= 1) return; // Keep at least one item
+    if (formData.items.length <= 1) return;
     setFormData(prev => ({
       ...prev,
       items: prev.items.filter(item => item.id !== itemId),
@@ -441,7 +418,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     setSubmitting(true);
     try {
       if (editingSchedule) {
-        // Update existing schedule
         await ScheduleService.updateSchedule(editingSchedule.id, {
           day: formData.day,
           start: formData.items[0].start,
@@ -449,7 +425,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
         });
         setSuccessMessage(t('dashboard.schedule.updateSuccess'));
       } else {
-        // Create new schedule
         const itemsToCreate: ScheduleItemRequest[] = formData.items.map(item => ({
           subjectId: item.subjectId,
           start: item.start,
@@ -499,7 +474,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     window.print();
   };
 
-  // Render no class selected state
   if (!selectedClass) {
     return (
       <div className="dashboard-card">
@@ -572,10 +546,8 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
             </thead>
             <tbody>
               {timeSlots.map((slot) => {
-                // Calculate duration of this slot in minutes to set row height
                 const slotDuration = timeToMinutes(slot.end) - timeToMinutes(slot.start);
-                // Base height per minute (e.g., 2.0px per minute)
-                const rowHeight = Math.max(slotDuration * 2.0, 50); // Minimum 50px
+                const rowHeight = Math.max(slotDuration * 2.0, 50);
 
                 return (
                   <tr
@@ -587,7 +559,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
                       {slot.start} - {slot.end}
                     </td>
                   {dayNames.map(day => {
-                    // Check if this slot starts a new schedule
                     const scheduleStartingHere = schedules.find(
                       s => s.day === day.id && s.start === slot.start
                     );
@@ -635,12 +606,10 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
                       );
                     }
 
-                    // Check if this slot is covered by a schedule that started earlier
                     if (isSlotCoveredByEarlierSchedule(day.id, slot.start)) {
-                      return null; // Don't render, covered by rowSpan
+                      return null;
                     }
 
-                    // Empty cell
                     return (
                       <td
                         key={day.id}

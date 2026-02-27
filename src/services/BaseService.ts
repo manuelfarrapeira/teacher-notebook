@@ -89,14 +89,11 @@ export abstract class BaseService {
     }
     try {
       const errorData: ApiError = await response.json();
-      // Throw the backend error as is
       throw new ApiErrorException(errorData);
     } catch (parseError) {
-      // If the error is already ApiErrorException, propagate it
       if (parseError instanceof ApiErrorException) {
         throw parseError;
       }
-      // If JSON parsing fails, throw a generic ApiErrorException
       throw new ApiErrorException({
         code: String(response.status),
         description: response.statusText || 'ERROR',
@@ -165,12 +162,10 @@ export abstract class BaseService {
         await this.handleErrorResponse(response);
       }
 
-      // Some PUT requests return 204 No Content (e.g., assign student to class)
       if (response.status === 204) {
         return {} as T;
       }
 
-      // Check if response has JSON content
       const contentType = response.headers.get('content-type');
       if (contentType?.includes('application/json')) {
         return await response.json();
@@ -215,12 +210,10 @@ export abstract class BaseService {
         await this.handleErrorResponse(response);
       }
 
-      // Some PUT requests return 204 No Content (e.g., assign student to class)
       if (response.status === 204) {
         return {} as T;
       }
 
-      // Check if response has JSON content
       const contentType = response.headers.get('content-type');
       if (contentType?.includes('application/json')) {
         return await response.json();
@@ -261,7 +254,6 @@ export abstract class BaseService {
       await this.handleErrorResponse(response);
     }
 
-    // Some DELETE requests do not return content
     const contentType = response.headers.get('content-type');
     if (contentType?.includes('application/json')) {
       return await response.json();
@@ -299,7 +291,6 @@ export abstract class BaseService {
       await this.handleErrorResponse(response);
     }
 
-    // Some DELETE requests do not return content
     const contentType = response.headers.get('content-type');
     if (contentType?.includes('application/json')) {
       return await response.json();
@@ -337,12 +328,10 @@ export abstract class BaseService {
       await this.handleErrorResponse(response);
     }
 
-    // Handle 204 No Content responses
     if (response.status === 204) {
       return {} as T;
     }
 
-    // Check if response has JSON content
     const contentType = response.headers.get('content-type');
     if (contentType?.includes('application/json')) {
       return await response.json();

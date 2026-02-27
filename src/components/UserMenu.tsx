@@ -13,7 +13,6 @@ export function UserMenu({ userName, onLogout }: Readonly<UserMenuProps>) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Handle clicks outside the menu
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {

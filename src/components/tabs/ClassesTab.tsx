@@ -47,7 +47,6 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // State for subjects modal
     const [showSubjectsModal, setShowSubjectsModal] = useState(false);
     const [selectedClassForSubjects, setSelectedClassForSubjects] = useState<SchoolClass | null>(null);
 
@@ -79,7 +78,6 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
         };
     }, []);
 
-    // Auto-focus name input when form opens
     useEffect(() => {
         if (showForm) {
             setTimeout(() => nameInputRef.current?.focus(), 50);
@@ -103,7 +101,6 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
     const validateForm = (): boolean => {
         const errors: FormErrors = {};
 
-        // Validate school selection (only when creating)
         if (!editingClass && !selectedSchoolId) {
             errors.school = t('dashboard.classes.validation.schoolRequired');
         }
@@ -134,7 +131,6 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
 
         setFormErrors(errors);
 
-        // Focus on first field with error
         if (errors.school) {
             schoolSelectRef.current?.focus();
         } else if (errors.name) {
@@ -147,7 +143,6 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
     };
 
     const handleInputChange = (field: keyof FormData, value: string) => {
-        // Format schoolYear automatically
         if (field === 'schoolYear') {
             value = value.replaceAll(/[^\d/]/g, '');
             if (value.length === 2 && !value.includes('/')) {

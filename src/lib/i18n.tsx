@@ -1141,7 +1141,6 @@ export function I18nProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   const t = (key: string): string => {
     const keys = key.split('.');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value: any = translations[locale];
 
     for (const k of keys) {
@@ -1173,7 +1172,6 @@ export function useI18n() {
   return context;
 }
 
-// Función para obtener el locale actual desde servicios (sin hooks)
 export function getCurrentLocale(): Locale {
   const stored = localStorage.getItem(STORAGE_KEY);
   return (stored === 'es' || stored === 'en') ? stored : 'es';

@@ -60,7 +60,6 @@ export function StudentPhotoProvider({ children }: Readonly<{ children: ReactNod
   const invalidatePhoto = useCallback((studentId: number) => {
     setCache(prev => {
       const newCache = new Map(prev);
-      // Revoke object URL to free memory
       const cached = newCache.get(studentId);
       if (cached) {
         URL.revokeObjectURL(cached.url);
@@ -74,7 +73,6 @@ export function StudentPhotoProvider({ children }: Readonly<{ children: ReactNod
    * Clear all cached photos (used on logout)
    */
   const clearCache = useCallback(() => {
-    // Revoke all object URLs to free memory
     cache.forEach(cached => {
       URL.revokeObjectURL(cached.url);
     });

@@ -86,19 +86,16 @@ interface RubricsTabProps {
 export function RubricsTab({ selectedClass }: RubricsTabProps) {
   const { t } = useI18n();
 
-  // Data
   const [classSubjects, setClassSubjects] = useState<ClassSubject[]>([]);
   const [classStudents, setClassStudents] = useState<Student[]>([]);
   const [quarterExercises, setQuarterExercises] = useState<QuarterExercises[]>([]);
   const [studentGrades, setStudentGrades] = useState<StudentGrades[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Selection
   const [selectedSubjectClassId, setSelectedSubjectClassId] = useState<number>(0);
   const [selectedSubjectId, setSelectedSubjectId] = useState<number>(0);
   const [activeQuarter, setActiveQuarter] = useState<number>(1);
 
-  // Modals
   const [showExerciseForm, setShowExerciseForm] = useState(false);
   const [gradeModal, setGradeModal] = useState<{
     exerciseId: number;
@@ -117,13 +114,11 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
   const [gradeToDelete, setGradeToDelete] = useState<{ gradeId: number; exerciseTitle: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  // Feedback modals
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // ==================== Data loading ====================
 
   const fetchSubjects = useCallback(async () => {
     if (!selectedClass) return;
@@ -194,7 +189,6 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
     }
   }, [selectedClass]);
 
-  // Auto-select first subject when subjects load
   useEffect(() => {
     if (classSubjects.length > 0 && !selectedSubjectClassId) {
       setSelectedSubjectClassId(classSubjects[0].subjectClassId);
@@ -202,7 +196,6 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
     }
   }, [classSubjects]);
 
-  // ==================== Derived data ====================
 
   /** Exercises filtered by selected subject + quarter */
   const filteredExercises: Exercise[] = useMemo(() => {
@@ -234,10 +227,9 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
         hasAnyGrade = true;
         weightedSum += (gradeData.grade / gradeData.maxGrade) * (ex.percentageGrade / 100) * 10;
       }
-      // If no grade, that exercise contributes 0
     }
     if (!hasAnyGrade) return null;
-    return Math.round(weightedSum * 100) / 100; // round to 2 decimals
+    return Math.round(weightedSum * 100) / 100;
   };
 
   /** Helper: get grade for student + exercise */
@@ -255,7 +247,6 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
     return undefined;
   };
 
-  // ==================== Handlers ====================
 
   const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const scId = Number(e.target.value);
@@ -324,16 +315,12 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
   };
 
   const handleDocumentsChanged = () => {
-    // Re-fetch exercises to refresh the documents array
     fetchExercises().then(() => {
-      // Update the docs modal if it is still open
       if (docsModal) {
-        // We'll get the refreshed data from the next render
       }
     });
   };
 
-  // After exercises are refreshed, keep docsModal in sync
   useEffect(() => {
     if (docsModal) {
       const exercise = filteredExercises.find(e => e.id === docsModal.exerciseId);
@@ -343,7 +330,6 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
     }
   }, [filteredExercises]);
 
-  // ==================== Render ====================
 
   if (!selectedClass) {
     return (

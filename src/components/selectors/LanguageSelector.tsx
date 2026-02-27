@@ -29,7 +29,6 @@ export function LanguageSelector() {
     setIsOpen(false);
   };
 
-  // Handle clicks outside the language selector
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -43,16 +42,12 @@ export function LanguageSelector() {
     };
   }, []);
 
-  // Obtener el schoolYear actual si está disponible
   let schoolYear = '';
   if (typeof window !== 'undefined') {
-    // Intentar obtener schoolYear de la URL, contexto global, o variable global
-    // Aquí puedes ajustar la lógica según cómo se obtiene schoolYear en tu app
     const urlParams = new URLSearchParams(window.location.search);
     schoolYear = urlParams.get('schoolYear') || '';
   }
 
-  // Concatenar el nombre del idioma con el schoolYear
   const languageName = `${locale === 'es' ? t('common.language.es') : t('common.language.en')}${schoolYear ? ' - ' + schoolYear : ''}`;
 
   return (

@@ -22,7 +22,6 @@ function App() {
       setCurrentScreen('login');
     }
 
-    // Escuchar evento de logout forzado
     const handleForceLogout = () => {
       setUserName('');
       setCurrentScreen('login');

@@ -53,7 +53,6 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
         fetchSchools();
     }, []);
 
-    // Auto-focus name input when form opens
     useEffect(() => {
         if (showForm) {
             setTimeout(() => nameInputRef.current?.focus(), 50);
@@ -101,7 +100,6 @@ export function SchoolsTab({ onSchoolsChange }: Readonly<SchoolsTabProps>) {
     };
 
     const handleInputChange = (field: keyof FormData, value: string) => {
-        // Filter only numbers for phone field
         if (field === 'tlf') {
             value = value.replaceAll(/\D/g, '');
         }

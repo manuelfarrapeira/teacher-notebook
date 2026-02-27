@@ -35,45 +35,38 @@ export function ClassSubjectsModal({
 }: ClassSubjectsModalProps) {
   const { t } = useI18n();
 
-  // Data states
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
   const [assignedSubjects, setAssignedSubjects] = useState<Subject[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Loading states
   const [loading, setLoading] = useState(false);
   const [assigning, setAssigning] = useState(false);
   const [removingId, setRemovingId] = useState<number | null>(null);
 
-  // Modal states
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Available subjects (not assigned)
   const availableSubjects = useMemo(() => {
     const assignedIds = new Set(assignedSubjects.map(s => s.id));
     return allSubjects.filter(s => !assignedIds.has(s.id));
   }, [allSubjects, assignedSubjects]);
 
-  // Filtered available subjects based on search
   const filteredAvailableSubjects = useMemo(() => {
     if (!searchTerm.trim()) return availableSubjects;
     const term = searchTerm.toLowerCase();
     return availableSubjects.filter(s => s.name.toLowerCase().includes(term));
   }, [availableSubjects, searchTerm]);
 
-  // Load data when modal opens
   useEffect(() => {
     if (isOpen && classId) {
       fetchData();
     }
   }, [isOpen, classId]);
 
-  // Reset state when modal closes
   useEffect(() => {
     if (!isOpen) {
       setSelectedIds([]);

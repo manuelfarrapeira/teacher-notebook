@@ -36,9 +36,9 @@ export function StudentsTab({
   const effectiveViewMode = isMobile ? 'list' : viewMode;
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(''); // Para sugerencias de asignación rápida
-  const [filterAllStudents, setFilterAllStudents] = useState(''); // Filtro para "Todos los Alumnos"
-  const [filterClassStudents, setFilterClassStudents] = useState(''); // Filtro para "Alumnos de la Clase"
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterAllStudents, setFilterAllStudents] = useState('');
+  const [filterClassStudents, setFilterClassStudents] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
@@ -60,7 +60,6 @@ export function StudentsTab({
     fetchStudents();
   }, []);
 
-  // Save view mode preference to localStorage
   useEffect(() => {
     localStorage.setItem('studentsViewMode', viewMode);
   }, [viewMode]);
@@ -171,12 +170,10 @@ export function StudentsTab({
     }
   };
 
-  // Filtered students for class tab
   const classStudents = useMemo(() => {
     if (!selectedClass) return [];
     let filtered = students.filter(s => s.classIds.includes(selectedClass));
 
-    // Apply filter
     if (filterClassStudents.trim()) {
       const term = filterClassStudents.toLowerCase();
       filtered = filtered.filter(s =>
@@ -188,7 +185,6 @@ export function StudentsTab({
     return filtered;
   }, [students, selectedClass, filterClassStudents]);
 
-  // Filtered students for all students tab
   const allStudentsFiltered = useMemo(() => {
     if (!filterAllStudents.trim()) return students;
 
@@ -199,7 +195,6 @@ export function StudentsTab({
     );
   }, [students, filterAllStudents]);
 
-  // Unassigned students for search suggestions
   const unassignedStudents = useMemo(() => {
     if (!selectedClass || !searchTerm.trim()) return [];
     const term = searchTerm.toLowerCase();

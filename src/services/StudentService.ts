@@ -14,11 +14,11 @@ export interface Student {
   id: number;
   name: string;
   surnames: string;
-  dateOfBirth: string; // formato DD/MM/YYYY
+  dateOfBirth: string; // DD/MM/YYYY
   additionalInfo: string;
   gender: Gender;
   photo: string | null;
-  classIds: number[]; // IDs de las clases a las que pertenece el alumno
+  classIds: number[];
 }
 
 /**
@@ -27,7 +27,7 @@ export interface Student {
 export interface StudentRequestDTO {
   name: string;
   surnames: string;
-  dateOfBirth: string; // formato DD/MM/YYYY
+  dateOfBirth: string; // DD/MM/YYYY
   additionalInfo?: string;
   gender: Gender;
 }
@@ -95,7 +95,6 @@ export class StudentService extends BaseService {
     const formData = new FormData();
     formData.append('file', file);
 
-    // Build headers without Content-Type (FormData sets it automatically with boundary)
     const token = this.getToken();
     const headers = new Headers({
       'Authorization': `Bearer ${token}`,

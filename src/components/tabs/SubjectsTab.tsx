@@ -43,7 +43,6 @@ export function SubjectsTab() {
 
   const nameInputRef = useRef<HTMLInputElement>(null);
 
-  // Filtered subjects based on search term
   const filteredSubjects = useMemo(() => {
     if (!searchTerm.trim()) return subjects;
     const term = searchTerm.toLowerCase();
@@ -56,14 +55,12 @@ export function SubjectsTab() {
     fetchSubjects();
   }, []);
 
-  // Auto-focus name input when form opens
   useEffect(() => {
     if (showForm) {
       setTimeout(() => nameInputRef.current?.focus(), 50);
     }
   }, [showForm]);
 
-  // Save view mode preference to localStorage
   useEffect(() => {
     localStorage.setItem('subjectsViewMode', viewMode);
   }, [viewMode]);

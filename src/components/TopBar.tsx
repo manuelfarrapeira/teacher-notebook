@@ -52,7 +52,6 @@ export function TopBar({
     const selectedClassObj = currentSchool?.classes.find(c => c.id === selectedClass);
     const currentClassName = selectedClassObj ? `${selectedClassObj.name} - ${selectedClassObj.schoolYear}` : t('dashboard.students.selectClass');
 
-    // Handle clicks outside the selectors
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (schoolRef.current && !schoolRef.current.contains(event.target as Node)) {
