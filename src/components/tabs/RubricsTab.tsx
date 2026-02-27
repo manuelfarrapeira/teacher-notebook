@@ -28,7 +28,7 @@ function RubricsTooltip({ text, children, position = 'top' }: {
   readonly children: React.ReactNode;
   readonly position?: 'top' | 'bottom';
 }) {
-  const triggerRef = useRef<HTMLSpanElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
@@ -45,14 +45,16 @@ function RubricsTooltip({ text, children, position = 'top' }: {
 
   return (
     <>
-      <span
+      <button
         ref={triggerRef}
         className="rubrics-tooltip-trigger"
         onMouseEnter={show}
         onMouseLeave={hide}
+        type="button"
+        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
       >
         {children}
-      </span>
+      </button>
       {visible && ReactDOM.createPortal(
         <div
           className="rubrics-tooltip-popup"
@@ -315,10 +317,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
   };
 
   const handleDocumentsChanged = () => {
-    fetchExercises().then(() => {
-      if (docsModal) {
-      }
-    });
+    void fetchExercises();
   };
 
   useEffect(() => {
@@ -545,12 +544,12 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                       const isFailing = finalGrade !== null && finalGrade < 5;
                       return (
                         <td className={`rubrics-total-col ${isFailing ? 'rubrics-total-fail' : ''}`}>
-                          {finalGrade !== null ? (
+                          {finalGrade === null ? (
+                            <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>—</span>
+                          ) : (
                             <span className="rubrics-grade-value" style={{ fontWeight: 700 }}>
                               {Number.isInteger(finalGrade) ? finalGrade : finalGrade.toFixed(2)} / 10
                             </span>
-                          ) : (
-                            <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>—</span>
                           )}
                         </td>
                       );

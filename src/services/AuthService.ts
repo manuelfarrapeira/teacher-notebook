@@ -11,41 +11,36 @@ export class AuthService {
 
   static async login(username: string, password: string): Promise<string> {
     const auth = btoa(`${username}:${password}`);
-    const apiUrl = await getApiUrl();
+    const apiUrl = getApiUrl();
     const locale = getCurrentLocale();
 
-    try {
-      const response = await fetch(`${apiUrl}/public/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Basic ${auth}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept-Language': locale
-        },
-        body: new URLSearchParams({ username, password }),
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('Verifica tus credenciales.');
-        }
-        throw new Error('Se ha producido un error al autenticar');
-      }
-      
-      const loginData: LoginResponse = await response.json();
-      sessionStorage.setItem(this.SESSION_KEY, JSON.stringify({
-        userName: loginData.userName,
-        accessToken: loginData.accessToken,
-        timestamp: Date.now()
-      }));
-      return loginData.userName;
-    } catch (error) {
-      if (error instanceof Error && error.message === 'Verifica tus credenciales.') {
-        throw error;
+    const response = await fetch(`${apiUrl}/public/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept-Language': locale
+      },
+      body: new URLSearchParams({ username, password }),
+      credentials: 'include'
+    }).catch(() => {
+      throw new Error('Se ha producido un error al autenticar');
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Verifica tus credenciales.');
       }
       throw new Error('Se ha producido un error al autenticar');
     }
+
+    const loginData: LoginResponse = await response.json() as LoginResponse;
+    sessionStorage.setItem(this.SESSION_KEY, JSON.stringify({
+      userName: loginData.userName,
+      accessToken: loginData.accessToken,
+      timestamp: Date.now()
+    }));
+    return loginData.userName;
   }
 
   static getSession(): { userName: string; accessToken: string } | null {

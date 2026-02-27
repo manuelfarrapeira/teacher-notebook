@@ -84,23 +84,25 @@ export abstract class BaseService {
         code: '401',
         description: 'UNAUTHORIZED',
         detail: 'Your session has expired. Please log in again.',
-        details: null
       });
     }
+
+    let errorData: ApiError | null;
     try {
-      const errorData: ApiError = await response.json();
-      throw new ApiErrorException(errorData);
-    } catch (parseError) {
-      if (parseError instanceof ApiErrorException) {
-        throw parseError;
-      }
-      throw new ApiErrorException({
-        code: String(response.status),
-        description: response.statusText || 'ERROR',
-        detail: 'Unknown error in the request.',
-        details: null
-      });
+      errorData = await response.json() as ApiError;
+    } catch {
+      errorData = null;
     }
+
+    if (errorData) {
+      throw new ApiErrorException(errorData);
+    }
+
+    throw new ApiErrorException({
+      code: String(response.status),
+      description: response.statusText || 'ERROR',
+      detail: 'Unknown error in the request.',
+    });
   }
 
   /**
@@ -132,53 +134,6 @@ export abstract class BaseService {
     return await response.json();
   }
 
-  /**
-   * Performs a POST request
-   * @param baseEndpoint - Service base endpoint (e.g. '/teacher-notebook/v1')
-   * @param endpoint - Relative endpoint (will be concatenated with baseEndpoint)
-   * @param body - Request body
-   * @param additionalHeaders - Optional additional headers
-   * @returns Promise with typed data
-   */
-  protected static async post<T>(
-    baseEndpoint: string,
-    endpoint: string,
-    body?: unknown,
-    additionalHeaders?: HeadersInit
-  ): Promise<T> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${baseEndpoint}${endpoint}`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: this.buildHeaders(additionalHeaders),
-        body: body ? JSON.stringify(body) : undefined,
-      });
-
-      if (!response.ok) {
-        await this.handleErrorResponse(response);
-      }
-
-      if (response.status === 204) {
-        return {} as T;
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType?.includes('application/json')) {
-        return await response.json();
-      }
-
-      return {} as T;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error('Unknown error performing POST request.');
-    }
-  }
 
   /**
    * Performs a PUT request

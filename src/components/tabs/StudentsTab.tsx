@@ -20,8 +20,27 @@ interface StudentsTabProps {
   onRefreshSchools: () => void;
 }
 
+interface ClassBadgeProps {
+  cls: { classId: number; schoolName: string; className: string; schoolYear: string };
+  student: Student;
+  disabled: boolean;
+  onRemoveFromClass: (student: Student, classId: number) => void;
+  label: string;
+}
+
+function ClassBadge({ cls, student, disabled, onRemoveFromClass, label }: Readonly<ClassBadgeProps>) {
+  const handleClick = () => onRemoveFromClass(student, cls.classId);
+  return (
+    <div className="student-class-badge">
+      <span>{cls.schoolName} - {cls.className} - {cls.schoolYear}</span>
+      <button onClick={handleClick} disabled={disabled} aria-label={label}>
+        <X size={14} />
+      </button>
+    </div>
+  );
+}
+
 export function StudentsTab({
-  selectedSchool,
   selectedClass,
   schools,
   onRefreshSchools
@@ -294,16 +313,14 @@ export function StudentsTab({
                   {studentClasses.length > 0 && (
                     <div className="student-classes-badges" style={{ marginTop: '0.5rem' }}>
                       {studentClasses.map((cls) => (
-                        <div key={cls.classId} className="student-class-badge">
-                          <span>{cls.schoolName} - {cls.className} - {cls.schoolYear}</span>
-                          <button
-                            onClick={() => handleRemoveFromClassClick(student, cls.classId)}
-                            disabled={removingFromClass}
-                            aria-label={`${t('dashboard.students.removeFromClass')} ${cls.className}`}
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
+                        <ClassBadge
+                          key={cls.classId}
+                          cls={cls}
+                          student={student}
+                          disabled={removingFromClass}
+                          onRemoveFromClass={handleRemoveFromClassClick}
+                          label={`${t('dashboard.students.removeFromClass')} ${cls.className}`}
+                        />
                       ))}
                     </div>
                   )}
@@ -627,7 +644,7 @@ export function StudentsTab({
       )}
 
       {/* Quick Assign Confirmation Modal */}
-      {confirmQuickAssign && selectedClass && (
+      {confirmQuickAssign !== null && selectedClass !== null && (
         <dialog className="modal-overlay" open={true}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '1rem' }}>
             <div className="modal-content" style={{ maxWidth: '450px', width: '100%' }}>
@@ -772,7 +789,7 @@ export function StudentsTab({
       })()}
 
       {/* Student Grades Modal */}
-      {Boolean(gradesStudent) && Boolean(selectedClass) && gradesStudent && selectedClass && (
+      {gradesStudent !== null && selectedClass !== null && (
         <StudentGradesModal
           isOpen={true}
           onClose={() => setGradesStudent(null)}
