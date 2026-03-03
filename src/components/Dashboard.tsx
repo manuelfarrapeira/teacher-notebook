@@ -7,12 +7,31 @@ import { ScheduleTab } from './tabs/ScheduleTab';
 import { TimetableTab } from './tabs/TimetableTab';
 import { SettingsTab } from './tabs/SettingsTab';
 import { SchoolsTab } from './tabs/SchoolsTab';
-import { TopBar, TabItem } from './TopBar';
+import { TopBar } from './TopBar';
+import type { TabItem } from './TopBar';
 import { SchoolService, School } from '../services/SchoolService';
+import { CalendarAlertService, CalendarAlert } from '../services/CalendarAlertService';
 import { LoadingModal } from './modals/LoadingModal';
 import { AlertMessage } from './ui/alert';
+import { TodayAlertsModal } from './modals/TodayAlertsModal';
 import { useI18n } from '../lib/i18n';
 import { StudentPhotoProvider } from '../contexts/StudentPhotoContext';
+
+function getTodayKey(): string {
+  const now = new Date();
+  const d = String(now.getDate()).padStart(2, '0');
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const y = now.getFullYear();
+  return `${d}/${m}/${y}`;
+}
+
+function isAlertActiveToday(alert: CalendarAlert): boolean {
+  const now = new Date();
+  const nowTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  if (alert.endTime) return alert.endTime > nowTime;
+  if (alert.startTime) return alert.startTime > nowTime;
+  return true;
+}
 
 
 interface DashboardProps {
@@ -31,6 +50,37 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
   const [selectedClass, setSelectedClass] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [hasCurrentAlerts, setHasCurrentAlerts] = useState(false);
+  const [todayAlertsList, setTodayAlertsList] = useState<CalendarAlert[]>([]);
+  const [showTodayAlertsModal, setShowTodayAlertsModal] = useState(false);
+
+  const checkTodayAlerts = useCallback(async () => {
+    try {
+      const now = new Date();
+      const data = await CalendarAlertService.getByMonthYear(now.getFullYear(), now.getMonth() + 1);
+      const todayKey = getTodayKey();
+      const todayAlerts = data.filter(a => a.date === todayKey);
+      const activeAlerts = todayAlerts.filter(isAlertActiveToday);
+      setHasCurrentAlerts(activeAlerts.length > 0);
+      setTodayAlertsList(activeAlerts);
+    } catch {
+    }
+  }, []);
+
+  const hasCheckedOnMount = React.useRef(false);
+
+  useEffect(() => {
+    const run = async () => {
+      await checkTodayAlerts();
+      if (!hasCheckedOnMount.current) {
+        hasCheckedOnMount.current = true;
+        setShowTodayAlertsModal(true);
+      }
+    };
+    run();
+    const interval = setInterval(checkTodayAlerts, 60000);
+    return () => clearInterval(interval);
+  }, [checkTodayAlerts]);
 
   const fetchSchools = useCallback(async () => {
     setLoading(true);
@@ -121,6 +171,7 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
             tabs={tabs}
             activeTab={activeTab}
             isMenuOpen={isMenuOpen}
+            hasCurrentAlerts={hasCurrentAlerts}
             onTabChange={handleTabChange}
             onSchoolChange={handleSchoolChange}
             onClassChange={handleClassChange}
@@ -167,6 +218,13 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
             </div>
           </div>
         )}
+
+        <TodayAlertsModal
+          isOpen={showTodayAlertsModal && todayAlertsList.length > 0}
+          alerts={todayAlertsList}
+          onClose={() => setShowTodayAlertsModal(false)}
+          onGoToCalendar={() => setActiveTab('schedule')}
+        />
 
         {loading && <LoadingModal />}
         {errorMessage && <AlertMessage message={errorMessage} onClose={() => setErrorMessage(null)} />}

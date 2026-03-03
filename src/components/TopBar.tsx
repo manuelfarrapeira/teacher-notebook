@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {School} from '../services/SchoolService';
 import {UserMenu} from './UserMenu';
-import { Menu, ChevronDown } from 'lucide-react';
+import { Menu, ChevronDown, Bell } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 /** Tipo para un tab de navegación */
@@ -20,6 +20,7 @@ interface TopBarProps {
     readonly tabs: TabItem[];
     readonly activeTab: string;
     readonly isMenuOpen: boolean;
+    readonly hasCurrentAlerts: boolean;
     readonly onTabChange: (tabId: string) => void;
     readonly onSchoolChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     readonly onClassChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -36,6 +37,7 @@ export function TopBar({
     tabs,
     activeTab,
     isMenuOpen,
+    hasCurrentAlerts,
     onTabChange,
     onSchoolChange,
     onClassChange,
@@ -80,6 +82,7 @@ export function TopBar({
                 {tabs.map((tab) => {
                     const Icon = tab.icon;
                     const isActive = activeTab === tab.id;
+                    const showBell = tab.id === 'schedule' && hasCurrentAlerts;
                     return (
                         <button
                             key={tab.id}
@@ -91,6 +94,7 @@ export function TopBar({
                         >
                             <Icon size={20} />
                             <span className="topbar-tab-label">{tab.label}</span>
+                            {showBell && <Bell size={12} className="topbar-tab-bell" />}
                         </button>
                     );
                 })}
@@ -102,6 +106,7 @@ export function TopBar({
                     {tabs.map((tab) => {
                         const Icon = tab.icon;
                         const isActive = activeTab === tab.id;
+                        const showBell = tab.id === 'schedule' && hasCurrentAlerts;
                         return (
                             <button
                                 key={tab.id}
@@ -111,6 +116,7 @@ export function TopBar({
                             >
                                 <Icon size={18} />
                                 <span>{tab.label}</span>
+                                {showBell && <Bell size={11} className="topbar-tab-bell" />}
                             </button>
                         );
                     })}

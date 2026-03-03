@@ -348,6 +348,39 @@ interface Translations {
         fileTooLarge: string;
       };
     };
+    calendar: {
+      title: string;
+      newAlert: string;
+      editAlert: string;
+      alertTitle: string;
+      alertTitlePlaceholder: string;
+      alertDescription: string;
+      alertDescriptionPlaceholder: string;
+      alertDate: string;
+      alertStartTime: string;
+      alertEndTime: string;
+      moreEvents: string;
+      months: string[];
+      daysShort: string[];
+      createSuccess: string;
+      updateSuccess: string;
+      deleteSuccess: string;
+      loadError: string;
+      createError: string;
+      updateError: string;
+      deleteError: string;
+      deleteTitle: string;
+      deleteConfirm: string;
+      todayAlerts: string;
+      goToCalendar: string;
+      validation: {
+        titleRequired: string;
+        titleMaxLength: string;
+        dateRequired: string;
+        endTimeRequiresStart: string;
+        endTimeAfterStart: string;
+      };
+    };
     errors: {
       noSchools: string;
       loadSchoolsError: string;
@@ -721,6 +754,42 @@ const translations: Record<Locale, Translations> = {
           fileTooLarge: 'El archivo es demasiado grande. Máximo 2MB',
         },
       },
+      calendar: {
+        title: 'Calendario',
+        newAlert: 'Nueva Alerta',
+        editAlert: 'Editar Alerta',
+        alertTitle: 'Título',
+        alertTitlePlaceholder: 'Título de la alerta...',
+        alertDescription: 'Descripción',
+        alertDescriptionPlaceholder: 'Descripción opcional...',
+        alertDate: 'Fecha',
+        alertStartTime: 'Hora de inicio',
+        alertEndTime: 'Hora de fin',
+        moreEvents: '+{n} más',
+        months: [
+          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        daysShort: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        createSuccess: 'Alerta creada correctamente',
+        updateSuccess: 'Alerta actualizada correctamente',
+        deleteSuccess: 'Alerta eliminada correctamente',
+        loadError: 'Error al cargar las alertas',
+        createError: 'Error al crear la alerta',
+        updateError: 'Error al actualizar la alerta',
+        deleteError: 'Error al eliminar la alerta',
+        deleteTitle: 'Eliminar alerta',
+        deleteConfirm: '¿Está seguro que desea eliminar la alerta "{name}"? Esta acción no se puede deshacer.',
+        todayAlerts: 'Alertas de hoy',
+        goToCalendar: 'Ir al calendario',
+        validation: {
+          titleRequired: 'El título es obligatorio',
+          titleMaxLength: 'El título no puede superar los 100 caracteres',
+          dateRequired: 'La fecha es obligatoria',
+          endTimeRequiresStart: 'Debes indicar hora de inicio si añades hora de fin',
+          endTimeAfterStart: 'La hora de fin debe ser posterior a la hora de inicio',
+        },
+      },
       errors: {
         noSchools: 'No se encontraron colegios.',
         loadSchoolsError: 'Error al cargar los colegios. Por favor, inténtalo de nuevo.'
@@ -1090,6 +1159,42 @@ const translations: Record<Locale, Translations> = {
           gradeRange: 'Grade must be between 0 and {max}',
           fileRequired: 'You must select a file',
           fileTooLarge: 'File is too large. Maximum 2MB',
+        },
+      },
+      calendar: {
+        title: 'Calendar',
+        newAlert: 'New Alert',
+        editAlert: 'Edit Alert',
+        alertTitle: 'Title',
+        alertTitlePlaceholder: 'Alert title...',
+        alertDescription: 'Description',
+        alertDescriptionPlaceholder: 'Optional description...',
+        alertDate: 'Date',
+        alertStartTime: 'Start time',
+        alertEndTime: 'End time',
+        moreEvents: '+{n} more',
+        months: [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ],
+        daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        createSuccess: 'Alert created successfully',
+        updateSuccess: 'Alert updated successfully',
+        deleteSuccess: 'Alert deleted successfully',
+        loadError: 'Error loading alerts',
+        createError: 'Error creating alert',
+        updateError: 'Error updating alert',
+        deleteError: 'Error deleting alert',
+        deleteTitle: 'Delete alert',
+        deleteConfirm: 'Are you sure you want to delete the alert "{name}"? This action cannot be undone.',
+        todayAlerts: "Today's alerts",
+        goToCalendar: 'Go to calendar',
+        validation: {
+          titleRequired: 'Title is required',
+          titleMaxLength: 'Title cannot exceed 100 characters',
+          dateRequired: 'Date is required',
+          endTimeRequiresStart: 'You must provide a start time if you add an end time',
+          endTimeAfterStart: 'End time must be after start time',
         },
       },
       errors: {
