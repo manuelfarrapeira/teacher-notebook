@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, MessageSquare, Frown, Smile, Download } from 'lucide-react';
+import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, Frown, Smile, Download } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SubjectService, ClassSubject } from '../../services/SubjectService';
 import { StudentService, Student } from '../../services/StudentService';
@@ -533,7 +533,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                               </span>
                               {gradeData.description && (
                                 <RubricsTooltip text={gradeData.description} position="bottom">
-                                  <MessageSquare size={12} />
+                                  <Info size={13} />
                                 </RubricsTooltip>
                               )}
                               <div className="rubrics-grade-actions-hover">
