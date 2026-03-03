@@ -325,5 +325,38 @@ export class ExerciseService extends BaseService {
       `/exercises/${exerciseId}/documents/${documentId}`
     );
   }
+
+  // ---------- Export ----------
+
+  /**
+   * Export grades for a class as an Excel file
+   * GET /teacher-notebook/v1/classes/:classId/grades/export
+   * @param classId - Class ID
+   * @returns Blob of the Excel file
+   */
+  static async exportGrades(classId: number): Promise<Blob> {
+    this.validateToken();
+
+    const apiUrl = getApiUrl();
+    const url = `${apiUrl}${this.BASE_ENDPOINT}/classes/${classId}/grades/export`;
+
+    const token = AuthService.getAccessToken();
+    const locale = getCurrentLocale();
+    const headers = new Headers({
+      'Authorization': `Bearer ${token}`,
+      'Accept-Language': locale,
+    });
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
+    }
+
+    return response.blob();
+  }
 }
 

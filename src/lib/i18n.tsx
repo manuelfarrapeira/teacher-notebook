@@ -327,6 +327,8 @@ interface Translations {
       updateDescriptionError: string;
       loadError: string;
       exerciseInfo: string;
+      exportGrades: string;
+      exportGradesError: string;
       viewStudentGrades: string;
       studentGradesTitle: string;
       subjectAverage: string;
@@ -733,6 +735,8 @@ const translations: Record<Locale, Translations> = {
         updateDescriptionError: 'Error al actualizar la descripción',
         loadError: 'Error al cargar los datos de rúbricas',
         exerciseInfo: 'Información de la rúbrica',
+        exportGrades: 'Exportar Excel',
+        exportGradesError: 'Error al exportar las rúbricas',
         viewStudentGrades: 'Ver notas',
         studentGradesTitle: 'Notas de {name}',
         subjectAverage: 'Media',
@@ -1140,6 +1144,8 @@ const translations: Record<Locale, Translations> = {
         updateDescriptionError: 'Error updating description',
         loadError: 'Error loading rubrics data',
         exerciseInfo: 'Rubric information',
+        exportGrades: 'Export Excel',
+        exportGradesError: 'Error exporting rubrics',
         viewStudentGrades: 'View grades',
         studentGradesTitle: 'Grades for {name}',
         subjectAverage: 'Average',

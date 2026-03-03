@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, MessageSquare, Frown, Smile } from 'lucide-react';
+import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, MessageSquare, Frown, Smile, Download } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SubjectService, ClassSubject } from '../../services/SubjectService';
 import { StudentService, Student } from '../../services/StudentService';
@@ -22,13 +22,15 @@ import { SuccessModal } from '../modals/SuccessModal';
 /**
  * Tooltip that renders via portal so it escapes any overflow container.
  * Shows above by default, below if `position="bottom"`.
+ * Use `as="span"` when wrapping interactive elements (buttons) to avoid nesting buttons.
  */
-function RubricsTooltip({ text, children, position = 'top' }: {
+function RubricsTooltip({ text, children, position = 'top', as = 'button' }: {
   readonly text: string;
   readonly children: React.ReactNode;
   readonly position?: 'top' | 'bottom';
+  readonly as?: 'button' | 'span';
 }) {
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
@@ -43,18 +45,20 @@ function RubricsTooltip({ text, children, position = 'top' }: {
 
   const hide = () => setVisible(false);
 
+  const Tag = as;
+
   return (
     <>
-      <button
-        ref={triggerRef}
+      <Tag
+        ref={triggerRef as React.RefObject<HTMLButtonElement & HTMLSpanElement>}
         className="rubrics-tooltip-trigger"
         onMouseEnter={show}
         onMouseLeave={hide}
-        type="button"
+        {...(as === 'button' ? { type: 'button' as const } : {})}
         style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
       >
         {children}
-      </button>
+      </Tag>
       {visible && ReactDOM.createPortal(
         <div
           className="rubrics-tooltip-popup"
@@ -115,6 +119,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
   const [exerciseToEdit, setExerciseToEdit] = useState<Exercise | null>(null);
   const [gradeToDelete, setGradeToDelete] = useState<{ gradeId: number; exerciseTitle: string } | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -320,6 +325,28 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
     void fetchExercises();
   };
 
+  /** Export grades as Excel */
+  const handleExportGrades = async () => {
+    if (!selectedClass) return;
+    setExporting(true);
+    try {
+      const blob = await ExerciseService.exportGrades(selectedClass);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rubrics_class_${selectedClass}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.exportGradesError'));
+      setErrorDialogOpen(true);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   useEffect(() => {
     if (docsModal) {
       const exercise = filteredExercises.find(e => e.id === docsModal.exerciseId);
@@ -390,6 +417,20 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
             </button>
           ))}
         </div>
+
+        <button
+          className="rubrics-export-btn"
+          onClick={handleExportGrades}
+          disabled={exporting}
+          title={t('dashboard.rubrics.exportGrades')}
+        >
+          {exporting ? (
+            <Loader2 className="icon-spin" size={16} style={{ marginRight: '0.25rem' }} />
+          ) : (
+            <Download size={16} style={{ marginRight: '0.25rem' }} />
+          )}
+          {t('dashboard.rubrics.exportGrades')}
+        </button>
       </div>
 
       {/* Table */}
@@ -423,33 +464,36 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                               <Info size={14} />
                             </RubricsTooltip>
                           )}
-                          <button
-                            className="rubrics-exercise-btn"
-                            onClick={() => setDocsModal({ exerciseId: ex.id, exerciseTitle: ex.title, documents: ex.documents })}
-                            aria-label={t('dashboard.rubrics.documents')}
-                            title={`${t('dashboard.rubrics.documents')} (${ex.documents.length})`}
-                          >
-                            <FileText size={14} />
-                            {ex.documents.length > 0 && (
-                              <span style={{ fontSize: '0.65rem', marginLeft: '1px' }}>{ex.documents.length}</span>
-                            )}
-                          </button>
-                          <button
-                            className="rubrics-exercise-btn"
-                            onClick={() => setExerciseToEdit(ex)}
-                            aria-label={t('common.edit')}
-                            title={t('common.edit')}
-                          >
-                            <Edit size={14} />
-                          </button>
-                          <button
-                            className="rubrics-exercise-btn delete"
-                            onClick={() => setExerciseToDelete(ex)}
-                            aria-label={t('common.delete')}
-                            title={t('common.delete')}
-                          >
-                            <Trash2 size={14} />
-                          </button>
+                          <RubricsTooltip text={`${t('dashboard.rubrics.documents')} (${ex.documents.length})`} as="span">
+                            <button
+                              className="rubrics-exercise-btn"
+                              onClick={() => setDocsModal({ exerciseId: ex.id, exerciseTitle: ex.title, documents: ex.documents })}
+                              aria-label={t('dashboard.rubrics.documents')}
+                            >
+                              <FileText size={14} />
+                              {ex.documents.length > 0 && (
+                                <span style={{ fontSize: '0.65rem', marginLeft: '1px' }}>{ex.documents.length}</span>
+                              )}
+                            </button>
+                          </RubricsTooltip>
+                          <RubricsTooltip text={t('common.edit')} as="span">
+                            <button
+                              className="rubrics-exercise-btn"
+                              onClick={() => setExerciseToEdit(ex)}
+                              aria-label={t('common.edit')}
+                            >
+                              <Edit size={14} />
+                            </button>
+                          </RubricsTooltip>
+                          <RubricsTooltip text={t('common.delete')} as="span">
+                            <button
+                              className="rubrics-exercise-btn delete"
+                              onClick={() => setExerciseToDelete(ex)}
+                              aria-label={t('common.delete')}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </RubricsTooltip>
                         </div>
                       </div>
                     </th>
@@ -493,48 +537,51 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                                 </RubricsTooltip>
                               )}
                               <div className="rubrics-grade-actions-hover">
-                                <button
-                                  className="rubrics-grade-btn rubrics-grade-hover-btn"
-                                  onClick={() => setGradeModal({
-                                    exerciseId: ex.id,
-                                    maxGrade: ex.maxGrade,
-                                    studentId: student.id,
-                                    studentName: `${student.surnames}, ${student.name}`,
-                                    existing: {
-                                      gradeId: gradeData.gradeId,
-                                      grade: gradeData.grade,
-                                      description: gradeData.description,
-                                    },
-                                  })}
-                                  aria-label={t('common.edit')}
-                                  title={t('common.edit')}
-                                >
-                                  <Edit size={12} />
-                                </button>
-                                <button
-                                  className="rubrics-grade-btn delete rubrics-grade-hover-btn"
-                                  onClick={() => setGradeToDelete({ gradeId: gradeData.gradeId, exerciseTitle: ex.title })}
-                                  aria-label={t('common.delete')}
-                                  title={t('common.delete')}
-                                >
-                                  <Trash size={12} />
-                                </button>
+                                <RubricsTooltip text={t('common.edit')} as="span">
+                                  <button
+                                    className="rubrics-grade-btn rubrics-grade-hover-btn"
+                                    onClick={() => setGradeModal({
+                                      exerciseId: ex.id,
+                                      maxGrade: ex.maxGrade,
+                                      studentId: student.id,
+                                      studentName: `${student.surnames}, ${student.name}`,
+                                      existing: {
+                                        gradeId: gradeData.gradeId,
+                                        grade: gradeData.grade,
+                                        description: gradeData.description,
+                                      },
+                                    })}
+                                    aria-label={t('common.edit')}
+                                  >
+                                    <Edit size={12} />
+                                  </button>
+                                </RubricsTooltip>
+                                <RubricsTooltip text={t('common.delete')} as="span">
+                                  <button
+                                    className="rubrics-grade-btn delete rubrics-grade-hover-btn"
+                                    onClick={() => setGradeToDelete({ gradeId: gradeData.gradeId, exerciseTitle: ex.title })}
+                                    aria-label={t('common.delete')}
+                                  >
+                                    <Trash size={12} />
+                                  </button>
+                                </RubricsTooltip>
                               </div>
                             </div>
                           ) : (
-                            <button
-                              className="rubrics-add-grade-btn"
-                              onClick={() => setGradeModal({
-                                exerciseId: ex.id,
-                                maxGrade: ex.maxGrade,
-                                studentId: student.id,
-                                studentName: `${student.surnames}, ${student.name}`,
-                                existing: null,
-                              })}
-                              title={t('dashboard.rubrics.createGrade')}
-                            >
-                              <Plus size={14} />
-                            </button>
+                            <RubricsTooltip text={t('dashboard.rubrics.createGrade')} as="span">
+                              <button
+                                className="rubrics-add-grade-btn"
+                                onClick={() => setGradeModal({
+                                  exerciseId: ex.id,
+                                  maxGrade: ex.maxGrade,
+                                  studentId: student.id,
+                                  studentName: `${student.surnames}, ${student.name}`,
+                                  existing: null,
+                                })}
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </RubricsTooltip>
                           )}
                         </td>
                       );

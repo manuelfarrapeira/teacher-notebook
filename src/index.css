@@ -3268,6 +3268,30 @@ dialog.modal-overlay::backdrop {
   transition: all 0.2s;
 }
 
+/* Export button matching quarter tab height */
+.rubrics-export-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: #624db6;
+  color: white;
+  border: 1px solid #624db6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.rubrics-export-btn:hover {
+  background: #503ea0;
+  border-color: #503ea0;
+}
+
+.rubrics-export-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .rubrics-quarter-tab:hover {
   background: #f3f4f6;
   color: #374151;
