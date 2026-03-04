@@ -52,6 +52,7 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
    - Usar solo estilos centralizados
    - Heredar de `BaseService` para nuevos servicios
    - Probar en ambos idiomas y en responsive
+   - **Actualizar `README.md`** con la descripción de la nueva funcionalidad en la sección correspondiente
 
 8. **Errores comunes a evitar**
    - No hardcodear textos
@@ -300,6 +301,14 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia completa de:
 
 ---
 
+## 📖 Documentación del Proyecto (actualizado 2026-03-05)
+
+- El archivo `README.md` en la raíz del proyecto contiene la descripción general, todas las funcionalidades, stack tecnológico, instrucciones de instalación/uso y estructura del proyecto.
+- **Cuando se implemente una nueva funcionalidad**, se debe actualizar el `README.md` añadiendo o modificando la sección correspondiente (features, estructura, servicios, etc.) para que siempre refleje el estado actual de la aplicación.
+- Si se añade un nuevo tab, servicio, modal o módulo relevante, debe reflejarse en el README.
+
+---
+
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
-Última actualización: 2025-12-24
+Última actualización: 2026-03-05
