@@ -2238,8 +2238,9 @@ dialog.modal-overlay::backdrop {
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
-  margin-top: 0.75rem;
-  justify-content: center;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Student List View (for all students tab) */
@@ -2274,9 +2275,11 @@ dialog.modal-overlay::backdrop {
 
 .students-list .student-list-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.5rem;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Search Suggestions Dropdown */
