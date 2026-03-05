@@ -354,10 +354,10 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
         studentId: fullDayStudentId,
         date: fullDayDate,
       });
-      setSuccessMessage(t('dashboard.attendance.fullDayCreated'));
-      setSuccessDialogOpen(true);
       setShowFullDayModal(false);
       await fetchAbsences();
+      setSuccessMessage(t('dashboard.attendance.fullDayCreated'));
+      setSuccessDialogOpen(true);
     } catch (error) {
       setErrorMessage(parseErrorMessage(error, t('dashboard.attendance.createError')));
       setErrorDialogOpen(true);
