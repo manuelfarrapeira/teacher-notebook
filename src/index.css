@@ -1124,12 +1124,6 @@ dialog.modal-overlay::backdrop {
   background-color: #f0f5ff;
 }
 
-.filter-select option:checked {
-  background-color: #e0eaff;
-  color: #2c5282;
-  font-weight: 600;
-}
-
 .filter-input-group {
   position: relative;
   display: flex;
@@ -4302,4 +4296,448 @@ dialog.calendar-day-popup {
   white-space: pre-wrap;
 }
 
+/* ========================================
+   ABSENCE SUMMARY MODAL STYLES
+   ======================================== */
 
+.absence-summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f0edf8;
+  border-left: 3px solid #624db6;
+  margin-bottom: 1rem;
+}
+
+.absence-summary-total-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.absence-summary-total-value {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #624db6;
+}
+
+.absence-summary-section {
+  margin-bottom: 1rem;
+}
+
+.absence-summary-section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.absence-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.absence-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+}
+
+.absence-summary-row:nth-child(even) {
+  background: #f3f4f6;
+}
+
+.absence-summary-row-label {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.absence-summary-row-value {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #624db6;
+  min-width: 2rem;
+  text-align: right;
+}
+
+/* ========================================
+   ATTENDANCE MODULE STYLES
+   ======================================== */
+
+/* Toolbar: subject selector + full day btn */
+.attendance-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.attendance-subject-select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background: #f8f9fa;
+  min-width: 200px;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.attendance-subject-select:focus {
+  outline: none;
+  border-color: #624db6;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1);
+}
+
+.attendance-full-day-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: #624db6;
+  color: white;
+  border: 1px solid #624db6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s;
+  margin-left: auto;
+}
+
+.attendance-full-day-btn:hover {
+  background: #503ea0;
+  border-color: #503ea0;
+}
+
+.attendance-full-day-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Table container with scroll */
+.attendance-table-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.attendance-table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.attendance-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.8rem;
+  table-layout: auto;
+}
+
+.attendance-table th,
+.attendance-table td {
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+/* Sticky header rows */
+.attendance-table thead th {
+  position: sticky;
+  z-index: 1;
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Month header row sticks at top:0, day header at top:~28px */
+.attendance-table thead tr:first-child th {
+  top: 0;
+  z-index: 1;
+}
+
+.attendance-table thead tr:nth-child(2) th {
+  top: 29px;
+  z-index: 1;
+}
+
+/* Sticky student column */
+.attendance-student-col {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: #f9fafb;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: 500;
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  will-change: transform;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attendance-table thead th.attendance-student-col {
+  z-index: 20 !important;
+  background: #f3f4f6 !important;
+  text-align: left;
+}
+
+.attendance-table tbody td.attendance-student-col {
+  z-index: 5;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.8rem;
+}
+
+/* Sticky count column */
+.attendance-count-col {
+  position: sticky;
+  left: 200px;
+  z-index: 5;
+  background: #f0edf8;
+  text-align: center;
+  font-weight: 600;
+  min-width: 50px;
+  width: 50px;
+  max-width: 50px;
+  padding: 0.35rem 0.25rem;
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.1);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.attendance-table thead th.attendance-count-col {
+  z-index: 20 !important;
+  background: #e8e4f3 !important;
+}
+
+.attendance-table tbody td.attendance-count-col {
+  z-index: 5;
+  background: #f0edf8;
+  color: #624db6;
+  font-size: 0.85rem;
+}
+
+/* Month header */
+.attendance-month-header {
+  background: #e8e4f3 !important;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #374151;
+  text-align: center;
+  border-bottom: 2px solid #624db6 !important;
+  padding: 0.4rem 0.5rem;
+  overflow: visible;
+  white-space: nowrap;
+  text-transform: capitalize;
+  letter-spacing: 0.02em;
+}
+
+/* Sticky corners in month header row must stay on top */
+.attendance-table thead tr:first-child th.attendance-student-col {
+  z-index: 20 !important;
+}
+
+.attendance-table thead tr:first-child th.attendance-count-col {
+  z-index: 20 !important;
+}
+
+/* Day header cells */
+.attendance-day-header {
+  font-size: 0.65rem;
+  min-width: 34px;
+  width: 34px;
+  text-align: center;
+  padding: 0.2rem 0.15rem;
+  line-height: 1.2;
+}
+
+.attendance-day-header .attendance-day-name {
+  display: block;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.attendance-day-header .attendance-day-num {
+  display: block;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Today column highlight */
+.attendance-day-today {
+  background: #eff6ff !important;
+  border-bottom: 2px solid #624db6 !important;
+  font-weight: 700 !important;
+}
+
+.attendance-day-today .attendance-day-name,
+.attendance-day-today .attendance-day-num {
+  color: #624db6 !important;
+}
+
+/* Body cells for today */
+td.attendance-cell-today {
+  background: #eff6ff !important;
+}
+
+/* Regular body cells */
+.attendance-cell {
+  text-align: center;
+  padding: 0.2rem;
+  min-width: 34px;
+  width: 34px;
+}
+
+/* Checkbox button */
+.attendance-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 0;
+}
+
+.attendance-checkbox:hover {
+  border-color: #624db6;
+  background: #f0edf8;
+}
+
+.attendance-checkbox.checked {
+  background: #624db6;
+  border-color: #624db6;
+  color: white;
+}
+
+.attendance-checkbox.checked:hover {
+  background: #503ea0;
+  border-color: #503ea0;
+}
+
+/* Weekend columns */
+.attendance-weekend {
+  background: #fecaca !important;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.attendance-weekend .attendance-day-name,
+.attendance-weekend .attendance-day-num {
+  color: #991b1b !important;
+}
+
+td.attendance-weekend-cell {
+  background: #fecaca !important;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Zebra striping */
+.attendance-table tbody tr:nth-child(odd) td {
+  background: #ffffff;
+}
+
+.attendance-table tbody tr:nth-child(even) td {
+  background: #f3f4f6;
+}
+
+/* Keep sticky cols matching zebra */
+.attendance-table tbody tr:nth-child(odd) td.attendance-student-col {
+  background: #f9fafb;
+}
+
+.attendance-table tbody tr:nth-child(even) td.attendance-student-col {
+  background: #eef0f3;
+}
+
+.attendance-table tbody tr:nth-child(odd) td.attendance-count-col {
+  background: #f0edf8;
+}
+
+.attendance-table tbody tr:nth-child(even) td.attendance-count-col {
+  background: #e8e4f3;
+}
+
+/* Row hover */
+.attendance-table tbody tr:hover td {
+  background: #ede9fe;
+  border-top: 1.5px solid #624db6;
+  border-bottom: 1.5px solid #624db6;
+}
+
+.attendance-table tbody tr:hover td:first-child {
+  border-left: 1.5px solid #624db6;
+}
+
+.attendance-table tbody tr:hover td:last-child {
+  border-right: 1.5px solid #624db6;
+}
+
+.attendance-table tbody tr:hover td.attendance-student-col {
+  background: #e0dbf5;
+}
+
+.attendance-table tbody tr:hover td.attendance-count-col {
+  background: #ddd6f3;
+}
+
+/* Override weekend on hover — keep red */
+.attendance-table tbody tr:hover td.attendance-weekend-cell {
+  background: #fecaca !important;
+}
+
+/* Override today on hover */
+.attendance-table tbody tr:hover td.attendance-cell-today {
+  background: #ddd6f3 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .attendance-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .attendance-subject-select {
+    min-width: 100%;
+  }
+
+  .attendance-full-day-btn {
+    margin-left: 0;
+  }
+
+  .attendance-student-col {
+    width: 160px;
+    min-width: 160px;
+    max-width: 160px;
+  }
+
+  .attendance-count-col {
+    left: 160px;
+    min-width: 45px;
+    width: 45px;
+    max-width: 45px;
+  }
+}

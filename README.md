@@ -77,6 +77,15 @@
 - Vista completa de calificaciones por estudiante con desglose por asignatura
 - **Exportación** de datos de calificaciones
 
+### 📋 Gestión de Asistencia
+- **Tabla spreadsheet** con todos los días del curso escolar (sept → jun) parametrizado por año escolar
+- Columna sticky con nombres de alumnos y contador de faltas
+- Control de ausencias **por asignatura** mediante checkboxes
+- **Ausencia de día completo** con un solo clic (marca todas las asignaturas)
+- Fines de semana marcados en **rojo** y deshabilitados
+- **Scroll automático** al día actual al entrar en la pestaña
+- Cabecera agrupada por meses para fácil navegación
+
 ### 📅 Calendario Académico
 - Calendario mensual interactivo con navegación por mes
 - Creación, edición y eliminación de **alertas/eventos** del calendario

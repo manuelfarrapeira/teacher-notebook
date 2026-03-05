@@ -350,6 +350,32 @@ interface Translations {
         fileTooLarge: string;
       };
     };
+    attendance: {
+      title: string;
+      subject: string;
+      fullDayAbsence: string;
+      fullDayConfirm: string;
+      absenceCount: string;
+      noClassSelected: string;
+      noSubjectsInClass: string;
+      createError: string;
+      deleteError: string;
+      selectStudent: string;
+      selectDate: string;
+      absenceCreated: string;
+      absenceDeleted: string;
+      fullDayCreated: string;
+      today: string;
+      monthNames: string[];
+      dayAbbreviations: string[];
+      summaryTitle: string;
+      summaryError: string;
+      noAbsences: string;
+      totalAbsences: string;
+      bySubject: string;
+      byMonth: string;
+      viewAbsences: string;
+    };
     calendar: {
       title: string;
       newAlert: string;
@@ -409,7 +435,7 @@ interface Translations {
   };
 }
 
-const translations: Record<Locale, Translations> = {
+export const translations: Record<Locale, Translations> = {
   es: {
     app: {
       title: 'Teacher Notebook'
@@ -757,6 +783,32 @@ const translations: Record<Locale, Translations> = {
           fileRequired: 'Debe seleccionar un archivo',
           fileTooLarge: 'El archivo es demasiado grande. Máximo 2MB',
         },
+      },
+      attendance: {
+        title: 'Asistencia',
+        subject: 'Asignatura',
+        fullDayAbsence: 'Ausencia día completo',
+        fullDayConfirm: '¿Marcar ausencia en todas las asignaturas para {studentName} el día {date}?',
+        absenceCount: 'Total',
+        noClassSelected: 'Selecciona una clase para ver la asistencia',
+        noSubjectsInClass: 'No hay asignaturas asignadas a esta clase',
+        createError: 'Error al registrar la ausencia',
+        deleteError: 'Error al eliminar la ausencia',
+        selectStudent: 'Seleccionar alumno',
+        selectDate: 'Seleccionar fecha',
+        absenceCreated: 'Ausencia registrada correctamente',
+        absenceDeleted: 'Ausencia eliminada correctamente',
+        fullDayCreated: 'Ausencia de día completo registrada',
+        today: 'Hoy',
+        monthNames: ['Septiembre', 'Octubre', 'Noviembre', 'Diciembre', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+        dayAbbreviations: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
+        summaryTitle: 'Resumen de faltas',
+        summaryError: 'Error al obtener las faltas del alumno',
+        noAbsences: 'Este alumno no tiene faltas registradas',
+        totalAbsences: 'Total de faltas',
+        bySubject: 'Por asignatura',
+        byMonth: 'Por mes',
+        viewAbsences: 'Ver faltas',
       },
       calendar: {
         title: 'Calendario',
@@ -1166,6 +1218,32 @@ const translations: Record<Locale, Translations> = {
           fileRequired: 'You must select a file',
           fileTooLarge: 'File is too large. Maximum 2MB',
         },
+      },
+      attendance: {
+        title: 'Attendance',
+        subject: 'Subject',
+        fullDayAbsence: 'Full day absence',
+        fullDayConfirm: 'Mark absence in all subjects for {studentName} on {date}?',
+        absenceCount: 'Total',
+        noClassSelected: 'Select a class to view attendance',
+        noSubjectsInClass: 'No subjects assigned to this class',
+        createError: 'Error recording absence',
+        deleteError: 'Error deleting absence',
+        selectStudent: 'Select student',
+        selectDate: 'Select date',
+        absenceCreated: 'Absence recorded successfully',
+        absenceDeleted: 'Absence deleted successfully',
+        fullDayCreated: 'Full day absence recorded',
+        today: 'Today',
+        monthNames: ['September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'],
+        dayAbbreviations: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        summaryTitle: 'Absence Summary',
+        summaryError: 'Error fetching student absences',
+        noAbsences: 'This student has no recorded absences',
+        totalAbsences: 'Total absences',
+        bySubject: 'By subject',
+        byMonth: 'By month',
+        viewAbsences: 'View absences',
       },
       calendar: {
         title: 'Calendar',

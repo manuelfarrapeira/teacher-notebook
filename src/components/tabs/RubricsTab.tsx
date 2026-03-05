@@ -12,6 +12,7 @@ import {
   GradeExercise,
   ExerciseDocument,
 } from '../../services/ExerciseService';
+import { ApiErrorException } from '../../services/BaseService';
 import { ExerciseFormModal } from '../modals/ExerciseFormModal';
 import { GradeFormModal } from '../modals/GradeFormModal';
 import { DocumentsModal } from '../modals/DocumentsModal';
@@ -286,7 +287,10 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
       setSuccessDialogOpen(true);
       await Promise.all([fetchExercises(), fetchGrades()]);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.deleteExerciseError'));
+      const msg = error instanceof ApiErrorException
+        ? (error.apiError.detail || error.apiError.description)
+        : (error instanceof Error ? error.message : t('dashboard.rubrics.deleteExerciseError'));
+      setErrorMessage(msg);
       setErrorDialogOpen(true);
     } finally {
       setDeleting(false);
@@ -313,7 +317,10 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
       setSuccessDialogOpen(true);
       fetchGrades();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.deleteGradeError'));
+      const msg = error instanceof ApiErrorException
+        ? (error.apiError.detail || error.apiError.description)
+        : (error instanceof Error ? error.message : t('dashboard.rubrics.deleteGradeError'));
+      setErrorMessage(msg);
       setErrorDialogOpen(true);
     } finally {
       setDeleting(false);
@@ -340,7 +347,10 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
       a.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.exportGradesError'));
+      const msg = error instanceof ApiErrorException
+        ? (error.apiError.detail || error.apiError.description)
+        : (error instanceof Error ? error.message : t('dashboard.rubrics.exportGradesError'));
+      setErrorMessage(msg);
       setErrorDialogOpen(true);
     } finally {
       setExporting(false);

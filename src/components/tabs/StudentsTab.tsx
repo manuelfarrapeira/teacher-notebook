@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList } from 'lucide-react';
+import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList, CalendarDays } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
@@ -11,7 +11,9 @@ import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { StudentGradesModal } from '../modals/StudentGradesModal';
+import { StudentAbsencesModal } from '../modals/StudentAbsencesModal';
 import { RubricsTab } from './RubricsTab';
+import { AttendanceTab } from './AttendanceTab';
 
 interface StudentsTabProps {
   selectedSchool: number | null;
@@ -47,7 +49,7 @@ export function StudentsTab({
 }: Readonly<StudentsTabProps>) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
-  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'rubrics'>('class');
+  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'rubrics' | 'attendance'>('class');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
     const saved = localStorage.getItem('studentsViewMode');
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
@@ -74,6 +76,7 @@ export function StudentsTab({
   const [confirmQuickAssign, setConfirmQuickAssign] = useState<Student | null>(null);
   const [confirmRemoveFromClass, setConfirmRemoveFromClass] = useState<{student: Student; classId: number} | null>(null);
   const [gradesStudent, setGradesStudent] = useState<Student | null>(null);
+  const [absencesStudent, setAbsencesStudent] = useState<Student | null>(null);
 
   useEffect(() => {
     fetchStudents();
@@ -509,6 +512,14 @@ export function StudentsTab({
                     <ClipboardList size={20} />
                   </button>
                   <button
+                    onClick={() => setAbsencesStudent(student)}
+                    className="school-action-btn edit tooltip-container"
+                    aria-label={t('dashboard.attendance.viewAbsences')}
+                    data-tooltip={t('dashboard.attendance.viewAbsences')}
+                  >
+                    <CalendarDays size={20} />
+                  </button>
+                  <button
                     onClick={() => handleRemoveFromClassClick(student, selectedClass)}
                     className="school-action-btn delete tooltip-container"
                     disabled={removingFromClass}
@@ -545,6 +556,12 @@ export function StudentsTab({
           {t('dashboard.rubrics.title')}
         </button>
         <button
+          className={activeSubTab === 'attendance' ? 'active' : ''}
+          onClick={() => setActiveSubTab('attendance')}
+        >
+          {t('dashboard.attendance.title')}
+        </button>
+        <button
           className={activeSubTab === 'all' ? 'active' : ''}
           onClick={() => setActiveSubTab('all')}
         >
@@ -556,6 +573,7 @@ export function StudentsTab({
       {activeSubTab === 'class' && renderClassStudents()}
       {activeSubTab === 'all' && renderAllStudents()}
       {activeSubTab === 'rubrics' && <RubricsTab selectedClass={selectedClass} />}
+      {activeSubTab === 'attendance' && <AttendanceTab selectedClass={selectedClass} schools={schools} />}
 
       {/* Modals */}
       <StudentFormModal
@@ -796,6 +814,17 @@ export function StudentsTab({
           classId={selectedClass}
           studentId={gradesStudent.id}
           studentName={`${gradesStudent.surnames}, ${gradesStudent.name}`}
+        />
+      )}
+
+      {/* Student Absences Summary Modal */}
+      {absencesStudent !== null && selectedClass !== null && (
+        <StudentAbsencesModal
+          isOpen={true}
+          onClose={() => setAbsencesStudent(null)}
+          classId={selectedClass}
+          studentId={absencesStudent.id}
+          studentName={`${absencesStudent.surnames}, ${absencesStudent.name}`}
         />
       )}
     </div>

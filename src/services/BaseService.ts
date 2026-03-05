@@ -21,7 +21,8 @@ export interface ApiError {
 export class ApiErrorException extends Error {
   public apiError: ApiError;
   constructor(apiError: ApiError) {
-    super(apiError.detail || apiError.description || apiError.code);
+    const validationReasons = apiError.details?.map(d => d.reason).join('. ');
+    super(apiError.detail || validationReasons || apiError.description || apiError.code);
     this.name = 'ApiErrorException';
     this.apiError = apiError;
   }
