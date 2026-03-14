@@ -21,7 +21,7 @@
 
 ## 📋 Descripción
 
-**Teacher Notebook** es una aplicación de escritorio multiplataforma construida con **Electron**, **React** y **TypeScript** que ofrece una solución completa de gestión académica para profesores. Permite administrar escuelas, clases, estudiantes, asignaturas, horarios, calendario, calificaciones y rúbricas desde una interfaz moderna, intuitiva y multiidioma.
+**Teacher Notebook** es una aplicación de escritorio multiplataforma construida con **Electron**, **React** y **TypeScript** que ofrece una solución completa de gestión académica para profesores. Permite administrar escuelas, clases, estudiantes, asignaturas, horarios, calendario, calificaciones y criterios de evaluación desde una interfaz moderna, intuitiva y multiidioma.
 
 ---
 
@@ -74,9 +74,9 @@
 - Indicador de **cumpleaños** del estudiante 🎂
 - Modal de detalle con información completa del estudiante
 
-### 📝 Rúbricas y Calificaciones
-- Gestión de **ejercicios** por asignatura y trimestre (Q1, Q2, Q3)
-- Creación de ejercicios con título, descripción, porcentaje de calificación y nota máxima
+### 📝 Criterios de evaluación y Calificaciones
+- Gestión de **criterios de evaluación** por asignatura y trimestre (Q1, Q2, Q3)
+- Creación de criterios de evaluación con título, descripción, porcentaje de calificación y nota máxima
 - **Calificación de estudiantes** por ejercicio con nota y descripción
 - **Media ponderada automática** por asignatura y trimestre
 - Indicadores visuales de rendimiento (😊 aprobado / 😞 suspenso)
@@ -219,7 +219,7 @@ teacher-notebook/
 │   │   │   ├── SubjectsTab.tsx       # Gestión de asignaturas
 │   │   │   ├── SkillsTab.tsx        # Gestión de competencias
 │   │   │   ├── SchoolsTab.tsx        # Gestión de escuelas
-│   │   │   ├── RubricsTab.tsx        # Rúbricas y calificaciones
+│   │   │   ├── RubricsTab.tsx        # Criterios de evaluación y calificaciones
 │   │   │   ├── ScheduleTab.tsx       # Calendario académico
 │   │   │   ├── TimetableTab.tsx      # Horario semanal
 │   │   │   └── SettingsTab.tsx       # Configuración
