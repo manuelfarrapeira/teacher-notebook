@@ -1442,6 +1442,30 @@ dialog.modal-overlay::backdrop {
     padding-top: 0;
     border-top: none;
   }
+
+  .skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skills-grid .dashboard-student {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    height: auto;
+  }
+
+  .skills-grid .dashboard-student-info {
+    margin-bottom: 0;
+  }
+
+  .skills-grid .school-card-actions {
+    width: auto;
+    padding-top: 0;
+    border-top: none;
+  }
 }
 
 /* Dashboard Schools Tab Styles */
@@ -2542,6 +2566,104 @@ dialog.modal-overlay::backdrop {
 }
 
 .subjects-list .school-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Skills Description */
+.skills-description {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  padding-left: 2.75rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Skills Grid View */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.skills-grid .dashboard-student {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  background: #f8f9fa;
+  transition: all 0.2s ease;
+  height: 100%;
+}
+
+.skills-grid .dashboard-student:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #624db6;
+}
+
+.skills-grid .dashboard-student-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+.skills-grid .dashboard-student-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.skills-grid .skills-description {
+  padding-left: 2.75rem;
+}
+
+.skills-grid .school-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: flex-end;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Skills List View */
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skills-list .dashboard-student {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #f8f9fa;
+  transition: box-shadow 0.2s;
+}
+
+.skills-list .dashboard-student:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.skills-list .dashboard-student-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.skills-list .school-card-actions {
   display: flex;
   gap: 0.5rem;
   flex-shrink: 0;

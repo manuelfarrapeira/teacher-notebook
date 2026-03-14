@@ -28,6 +28,7 @@ interface Translations {
       students: string;
       classes: string;
       subjects: string;
+      skills: string;
       schedule: string;
       timetable: string;
       settings: string;
@@ -141,6 +142,40 @@ interface Translations {
       validation: {
         nameRequired: string;
         nameMinLength: string;
+      };
+    };
+    skills: {
+      title: string;
+      addNew: string;
+      titleLabel: string;
+      titlePlaceholder: string;
+      description: string;
+      descriptionPlaceholder: string;
+      edit: string;
+      delete: string;
+      createTitle: string;
+      editTitle: string;
+      create: string;
+      update: string;
+      createSuccess: string;
+      updateSuccess: string;
+      deleteSuccess: string;
+      createError: string;
+      updateError: string;
+      deleteError: string;
+      loadError: string;
+      noSkills: string;
+      deleteTitle: string;
+      deleteConfirm: string;
+      searchSkills: string;
+      noResults: string;
+      gridView: string;
+      listView: string;
+      validation: {
+        titleRequired: string;
+        titleMinLength: string;
+        titleMaxLength: string;
+        descriptionMaxLength: string;
       };
     };
     classSubjects: {
@@ -462,6 +497,7 @@ export const translations: Record<Locale, Translations> = {
         students: 'Alumnos',
         classes: 'Clases',
         subjects: 'Asignaturas',
+        skills: 'Competencias',
         schedule: 'Calendario',
         timetable: 'Horario',
         settings: 'Configuración',
@@ -575,6 +611,40 @@ export const translations: Record<Locale, Translations> = {
         validation: {
           nameRequired: 'El nombre es obligatorio',
           nameMinLength: 'El nombre debe tener al menos 3 caracteres',
+        },
+      },
+      skills: {
+        title: 'Gestión de Competencias',
+        addNew: 'Crear Competencia',
+        titleLabel: 'Título',
+        titlePlaceholder: 'Título de la competencia',
+        description: 'Descripción',
+        descriptionPlaceholder: 'Descripción de la competencia',
+        edit: 'Editar',
+        delete: 'Eliminar',
+        createTitle: 'Crear Competencia',
+        editTitle: 'Editar Competencia',
+        create: 'Crear',
+        update: 'Actualizar',
+        createSuccess: 'Competencia creada correctamente',
+        updateSuccess: 'Competencia actualizada correctamente',
+        deleteSuccess: 'Competencia eliminada correctamente',
+        createError: 'Error al crear la competencia',
+        updateError: 'Error al actualizar la competencia',
+        deleteError: 'Error al eliminar la competencia',
+        loadError: 'Error al cargar las competencias',
+        noSkills: 'No hay competencias registradas',
+        deleteTitle: 'Eliminar competencia',
+        deleteConfirm: '¿Está seguro que desea eliminar la competencia "{name}"? Esta acción no se puede deshacer.',
+        searchSkills: 'Buscar competencias...',
+        noResults: 'No se encontraron competencias',
+        gridView: 'Vista en cuadrícula',
+        listView: 'Vista en lista',
+        validation: {
+          titleRequired: 'El título es obligatorio',
+          titleMinLength: 'El título debe tener al menos 3 caracteres',
+          titleMaxLength: 'El título no puede superar los 200 caracteres',
+          descriptionMaxLength: 'La descripción no puede superar los 200 caracteres',
         },
       },
       classSubjects: {
@@ -897,6 +967,7 @@ export const translations: Record<Locale, Translations> = {
         students: 'Students',
         classes: 'Classes',
         subjects: 'Subjects',
+        skills: 'Skills',
         schedule: 'Schedule',
         timetable: 'Timetable',
         settings: 'Settings',
@@ -1010,6 +1081,40 @@ export const translations: Record<Locale, Translations> = {
         validation: {
           nameRequired: 'Name is required',
           nameMinLength: 'Name must be at least 3 characters',
+        },
+      },
+      skills: {
+        title: 'Skills Management',
+        addNew: 'Create Skill',
+        titleLabel: 'Title',
+        titlePlaceholder: 'Skill title',
+        description: 'Description',
+        descriptionPlaceholder: 'Skill description',
+        edit: 'Edit',
+        delete: 'Delete',
+        createTitle: 'Create Skill',
+        editTitle: 'Edit Skill',
+        create: 'Create',
+        update: 'Update',
+        createSuccess: 'Skill created successfully',
+        updateSuccess: 'Skill updated successfully',
+        deleteSuccess: 'Skill deleted successfully',
+        createError: 'Error creating skill',
+        updateError: 'Error updating skill',
+        deleteError: 'Error deleting skill',
+        loadError: 'Error loading skills',
+        noSkills: 'No skills registered',
+        deleteTitle: 'Delete skill',
+        deleteConfirm: 'Are you sure you want to delete the skill "{name}"? This action cannot be undone.',
+        searchSkills: 'Search skills...',
+        noResults: 'No skills found',
+        gridView: 'Grid view',
+        listView: 'List view',
+        validation: {
+          titleRequired: 'Title is required',
+          titleMinLength: 'Title must be at least 3 characters',
+          titleMaxLength: 'Title cannot exceed 200 characters',
+          descriptionMaxLength: 'Description cannot exceed 200 characters',
         },
       },
       classSubjects: {

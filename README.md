@@ -57,6 +57,13 @@
 - Vista en modo **cuadrícula** o **lista** (con persistencia de preferencia)
 - Asignación de asignaturas a clases mediante modal dedicado
 
+### 🎓 Gestión de Competencias
+- **CRUD completo** de competencias (crear, leer, actualizar, eliminar)
+- Título y descripción con límite de 200 caracteres
+- Búsqueda de competencias por título o descripción
+- Vista en modo **cuadrícula** o **lista** (con persistencia de preferencia)
+- Descripción visible debajo del título en la lista
+
 ### 👨‍🎓 Gestión de Estudiantes
 - **CRUD completo** de estudiantes con datos personales (nombre, apellidos, fecha de nacimiento, género, info adicional)
 - **Fotografía de perfil**: subida, visualización y eliminación de fotos con caché inteligente y carga lazy (Intersection Observer)
@@ -210,6 +217,7 @@ teacher-notebook/
 │   │   │   ├── StudentsTab.tsx       # Gestión de estudiantes
 │   │   │   ├── ClassesTab.tsx        # Gestión de clases
 │   │   │   ├── SubjectsTab.tsx       # Gestión de asignaturas
+│   │   │   ├── SkillsTab.tsx        # Gestión de competencias
 │   │   │   ├── SchoolsTab.tsx        # Gestión de escuelas
 │   │   │   ├── RubricsTab.tsx        # Rúbricas y calificaciones
 │   │   │   ├── ScheduleTab.tsx       # Calendario académico
@@ -248,6 +256,7 @@ teacher-notebook/
 │   │   ├── ClassService.ts          # Operaciones de clases
 │   │   ├── StudentService.ts        # Estudiantes y fotos
 │   │   ├── SubjectService.ts        # Asignaturas
+│   │   ├── SkillService.ts         # Competencias
 │   │   ├── ExerciseService.ts       # Ejercicios, calificaciones y documentos
 │   │   ├── CalendarAlertService.ts  # Alertas del calendario
 │   │   └── ScheduleService.ts       # Horarios semanales
@@ -297,6 +306,7 @@ BaseService (abstracta)
 ├── ClassService       → CRUD de clases
 ├── StudentService     → CRUD de estudiantes + fotos
 ├── SubjectService     → CRUD de asignaturas + asignación a clases
+├── SkillService       → CRUD de competencias
 ├── ExerciseService    → Ejercicios, calificaciones y documentos
 ├── CalendarAlertService → Alertas del calendario
 └── ScheduleService    → Horarios semanales

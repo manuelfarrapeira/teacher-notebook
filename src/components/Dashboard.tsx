@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookOpen, Users, Calendar, Settings, Clock, Building2, BookType } from 'lucide-react';
+import { BookOpen, Users, Calendar, Settings, Clock, Building2, BookType, GraduationCap } from 'lucide-react';
 import { StudentsTab } from './tabs/StudentsTab';
 import { ClassesTab } from './tabs/ClassesTab';
 import { SubjectsTab } from './tabs/SubjectsTab';
+import { SkillsTab } from './tabs/SkillsTab';
 import { ScheduleTab } from './tabs/ScheduleTab';
 import { TimetableTab } from './tabs/TimetableTab';
 import { SettingsTab } from './tabs/SettingsTab';
@@ -119,6 +120,7 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
     { id: 'schools', label: t('dashboard.tabs.schools'), icon: Building2 },
     { id: 'classes', label: t('dashboard.tabs.classes'), icon: BookOpen },
     { id: 'subjects', label: t('dashboard.tabs.subjects'), icon: BookType },
+    { id: 'skills', label: t('dashboard.tabs.skills'), icon: GraduationCap },
     { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
     { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
     { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
@@ -187,6 +189,7 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
             {activeTab === 'schools' && <SchoolsTab onSchoolsChange={fetchSchools} />}
             {activeTab === 'classes' && <ClassesTab onClassesChange={fetchSchools} />}
             {activeTab === 'subjects' && <SubjectsTab />}
+            {activeTab === 'skills' && <SkillsTab />}
             {activeTab === 'students' && (
               <StudentsTab
                 selectedSchool={selectedSchool}
