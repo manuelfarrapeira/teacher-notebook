@@ -12,7 +12,7 @@ import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { StudentGradesModal } from '../modals/StudentGradesModal';
 import { StudentAbsencesModal } from '../modals/StudentAbsencesModal';
-import { RubricsTab } from './RubricsTab';
+import { EvalCriteriaTab } from './EvalCriteriaTab';
 import { AttendanceTab } from './AttendanceTab';
 
 interface StudentsTabProps {
@@ -49,7 +49,7 @@ export function StudentsTab({
 }: Readonly<StudentsTabProps>) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
-  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'rubrics' | 'attendance'>('class');
+  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'evalCriteria' | 'attendance'>('class');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
     const saved = localStorage.getItem('studentsViewMode');
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
@@ -550,8 +550,8 @@ export function StudentsTab({
           {t('dashboard.students.classStudents')}
         </button>
         <button
-          className={activeSubTab === 'rubrics' ? 'active' : ''}
-          onClick={() => setActiveSubTab('rubrics')}
+          className={activeSubTab === 'evalCriteria' ? 'active' : ''}
+          onClick={() => setActiveSubTab('evalCriteria')}
         >
           {t('dashboard.rubrics.title')}
         </button>
@@ -572,7 +572,7 @@ export function StudentsTab({
       {/* Content */}
       {activeSubTab === 'class' && renderClassStudents()}
       {activeSubTab === 'all' && renderAllStudents()}
-      {activeSubTab === 'rubrics' && <RubricsTab selectedClass={selectedClass} />}
+      {activeSubTab === 'evalCriteria' && <EvalCriteriaTab selectedClass={selectedClass} />}
       {activeSubTab === 'attendance' && <AttendanceTab selectedClass={selectedClass} schools={schools} />}
 
       {/* Modals */}

@@ -157,7 +157,7 @@ export function DocumentsModal({
                   onClick={() => setErrorMessage('')}
                   style={{ marginLeft: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontWeight: 600 }}
                 >
-                  ✕
+                  âœ•
                 </button>
               </div>
             )}
@@ -168,11 +168,11 @@ export function DocumentsModal({
                 {t('dashboard.rubrics.noDocuments')}
               </p>
             ) : (
-              <div className="rubrics-doc-list">
+              <div className="eval-criteria-doc-list">
                 {documents.map((doc) => (
-                  <div key={doc.id} className="rubrics-doc-item">
-                    <div className="rubrics-doc-info">
-                      <div className="rubrics-doc-name" title={doc.document}>{doc.document}</div>
+                  <div key={doc.id} className="eval-criteria-doc-item">
+                    <div className="eval-criteria-doc-info">
+                      <div className="eval-criteria-doc-name" title={doc.document}>{doc.document}</div>
                       {editingId === doc.id ? (
                         <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.25rem' }}>
                           <input
@@ -201,12 +201,12 @@ export function DocumentsModal({
                           </button>
                         </div>
                       ) : (
-                        Boolean(doc.description) && <div className="rubrics-doc-desc">{doc.description}</div>
+                        Boolean(doc.description) && <div className="eval-criteria-doc-desc">{doc.description}</div>
                       )}
                     </div>
-                    <div className="rubrics-doc-actions">
+                    <div className="eval-criteria-doc-actions">
                       <button
-                        className="rubrics-exercise-btn"
+                        className="eval-criteria-exercise-btn"
                         onClick={() => handleDownload(doc)}
                         disabled={downloading === doc.id}
                         aria-label={t('dashboard.rubrics.downloadDocument')}
@@ -215,7 +215,7 @@ export function DocumentsModal({
                         {downloading === doc.id ? <Loader2 size={16} className="icon-spin" /> : <Download size={16} />}
                       </button>
                       <button
-                        className="rubrics-exercise-btn"
+                        className="eval-criteria-exercise-btn"
                         onClick={() => handleStartEdit(doc)}
                         disabled={Boolean(editingId)}
                         aria-label={t('dashboard.rubrics.editDescription')}
@@ -224,7 +224,7 @@ export function DocumentsModal({
                         <Edit size={16} />
                       </button>
                       <button
-                        className="rubrics-exercise-btn delete"
+                        className="eval-criteria-exercise-btn delete"
                         onClick={() => setConfirmDeleteDoc(doc)}
                         disabled={deletingId === doc.id}
                         aria-label={t('common.delete')}
@@ -239,7 +239,7 @@ export function DocumentsModal({
             )}
 
             {/* Upload Form */}
-            <div className="rubrics-upload-form">
+            <div className="eval-criteria-upload-form">
               <label className="filter-label">
                 <Upload size={14} style={{ marginRight: '0.25rem', verticalAlign: 'middle' }} />
                 {t('dashboard.rubrics.uploadDocument')}

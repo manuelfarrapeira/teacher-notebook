@@ -181,7 +181,7 @@ export function StudentGradesModal({
                           {ex.exerciseTitle}
                           {ex.description && (
                             <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginLeft: '0.5rem' }}>
-                              — {ex.description}
+                              â€” {ex.description}
                             </span>
                           )}
                         </td>
@@ -243,7 +243,7 @@ export function StudentGradesModal({
                   <td style={{ textAlign: 'left', fontWeight: 600, whiteSpace: 'nowrap' }}>{fg.subjectName}</td>
                   {[0, 1, 2].map(i => (
                     <td key={i}>
-                      {fg.quarterAverages[i] === undefined ? '—' : (
+                      {fg.quarterAverages[i] === undefined ? 'â€”' : (
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                           {fg.quarterAverages[i] < 5 && <Frown size={13} style={{ color: '#f97316' }} />}
                           {fg.quarterAverages[i] >= 9 && <Smile size={13} style={{ color: '#eab308' }} />}
@@ -253,7 +253,7 @@ export function StudentGradesModal({
                     </td>
                   ))}
                   <td style={{ fontWeight: 700, background: finalCellBg }}>
-                    {fg.finalAverage === null ? '—' : (
+                    {fg.finalAverage === null ? 'â€”' : (
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                         {isFailing && <Frown size={14} style={{ color: '#f97316' }} />}
                         {fg.finalAverage >= 9 && <Smile size={14} style={{ color: '#eab308' }} />}
@@ -289,18 +289,18 @@ export function StudentGradesModal({
 
           {/* Quarter Tabs */}
           {!loading && !error && quarters.length > 0 && (
-            <div className="rubrics-quarter-tabs" style={{ marginBottom: '1rem', marginLeft: 0 }}>
+            <div className="eval-criteria-quarter-tabs" style={{ marginBottom: '1rem', marginLeft: 0 }}>
               {[1, 2, 3].map(q => (
                 <button
                   key={q}
-                  className={`rubrics-quarter-tab ${activeTab === q ? 'active' : ''}`}
+                  className={`eval-criteria-quarter-tab ${activeTab === q ? 'active' : ''}`}
                   onClick={() => setActiveTab(q)}
                 >
                   {t(`dashboard.rubrics.quarter${q}`)}
                 </button>
               ))}
               <button
-                className={`rubrics-quarter-tab ${activeTab === 'final' ? 'active' : ''}`}
+                className={`eval-criteria-quarter-tab ${activeTab === 'final' ? 'active' : ''}`}
                 onClick={() => setActiveTab('final')}
               >
                 {t('dashboard.rubrics.finalGrade')}

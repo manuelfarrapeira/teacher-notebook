@@ -25,7 +25,7 @@ import { SuccessModal } from '../modals/SuccessModal';
  * Shows above by default, below if `position="bottom"`.
  * Use `as="span"` when wrapping interactive elements (buttons) to avoid nesting buttons.
  */
-function RubricsTooltip({ text, children, position = 'top', as = 'button' }: {
+function EvalCriteriaTooltip({ text, children, position = 'top', as = 'button' }: {
   readonly text: string;
   readonly children: React.ReactNode;
   readonly position?: 'top' | 'bottom';
@@ -52,7 +52,7 @@ function RubricsTooltip({ text, children, position = 'top', as = 'button' }: {
     <>
       <Tag
         ref={triggerRef as React.RefObject<HTMLButtonElement & HTMLSpanElement>}
-        className="rubrics-tooltip-trigger"
+        className="eval-criteria-tooltip-trigger"
         onMouseEnter={show}
         onMouseLeave={hide}
         {...(as === 'button' ? { type: 'button' as const } : {})}
@@ -62,7 +62,7 @@ function RubricsTooltip({ text, children, position = 'top', as = 'button' }: {
       </Tag>
       {visible && ReactDOM.createPortal(
         <div
-          className="rubrics-tooltip-popup"
+          className="eval-criteria-tooltip-popup"
           style={{
             top: coords.top,
             left: coords.left,
@@ -80,17 +80,17 @@ function RubricsTooltip({ text, children, position = 'top', as = 'button' }: {
 }
 
 /**
- * Props for RubricsTab
+ * Props for EvalCriteriaTab
  */
-interface RubricsTabProps {
+interface EvalCriteriaTabProps {
   /** Currently selected class ID */
   readonly selectedClass: number | null;
 }
 
 /**
- * RubricsTab – Rubrics table with exercises, grades and documents
+ * EvalCriteriaTab Ã¢â‚¬â€œ Rubrics table with exercises, grades and documents
  */
-export function RubricsTab({ selectedClass }: RubricsTabProps) {
+export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   const { t } = useI18n();
 
   const [classSubjects, setClassSubjects] = useState<ClassSubject[]>([]);
@@ -394,9 +394,9 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       {/* Toolbar: subject selector + create btn + quarter tabs */}
-      <div className="rubrics-toolbar">
+      <div className="eval-criteria-toolbar">
         <select
-          className="rubrics-subject-select"
+          className="eval-criteria-subject-select"
           value={selectedSubjectClassId}
           onChange={handleSubjectChange}
         >
@@ -416,11 +416,11 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
           {t('dashboard.rubrics.createExercise')}
         </button>
 
-        <div className="rubrics-quarter-tabs">
+        <div className="eval-criteria-quarter-tabs">
           {[1, 2, 3].map(q => (
             <button
               key={q}
-              className={`rubrics-quarter-tab ${activeQuarter === q ? 'active' : ''}`}
+              className={`eval-criteria-quarter-tab ${activeQuarter === q ? 'active' : ''}`}
               onClick={() => setActiveQuarter(q)}
             >
               {t(`dashboard.rubrics.quarter${q}`)}
@@ -429,7 +429,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
         </div>
 
         <button
-          className="rubrics-export-btn"
+          className="eval-criteria-export-btn"
           onClick={handleExportGrades}
           disabled={exporting}
           title={t('dashboard.rubrics.exportGrades')}
@@ -455,28 +455,28 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
               {t('dashboard.rubrics.noExercises')}
             </div>
           )}
-        <div className="rubrics-table-container">
-          <div className="rubrics-table-wrapper">
-            <table className="rubrics-table">
+        <div className="eval-criteria-table-container">
+          <div className="eval-criteria-table-wrapper">
+            <table className="eval-criteria-table">
               <thead>
                 <tr>
-                  <th className="rubrics-student-col">{t('dashboard.rubrics.student')}</th>
+                  <th className="eval-criteria-student-col">{t('dashboard.rubrics.student')}</th>
                   {filteredExercises.map(ex => (
                     <th key={ex.id}>
-                      <div className="rubrics-exercise-header">
-                        <span className="rubrics-exercise-title">{ex.title}</span>
+                      <div className="eval-criteria-exercise-header">
+                        <span className="eval-criteria-exercise-title">{ex.title}</span>
                         <span style={{ fontSize: '0.7rem', color: '#9ca3af' }}>
-                          {ex.percentageGrade}% · {t('dashboard.rubrics.maxGrade')}: {ex.maxGrade}
+                          {ex.percentageGrade}% Ã‚Â· {t('dashboard.rubrics.maxGrade')}: {ex.maxGrade}
                         </span>
-                        <div className="rubrics-exercise-actions">
+                        <div className="eval-criteria-exercise-actions">
                           {ex.description && (
-                            <RubricsTooltip text={ex.description}>
+                            <EvalCriteriaTooltip text={ex.description}>
                               <Info size={14} />
-                            </RubricsTooltip>
+                            </EvalCriteriaTooltip>
                           )}
-                          <RubricsTooltip text={`${t('dashboard.rubrics.documents')} (${ex.documents.length})`} as="span">
+                          <EvalCriteriaTooltip text={`${t('dashboard.rubrics.documents')} (${ex.documents.length})`} as="span">
                             <button
-                              className="rubrics-exercise-btn"
+                              className="eval-criteria-exercise-btn"
                               onClick={() => setDocsModal({ exerciseId: ex.id, exerciseTitle: ex.title, documents: ex.documents })}
                               aria-label={t('dashboard.rubrics.documents')}
                             >
@@ -485,33 +485,33 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                                 <span style={{ fontSize: '0.65rem', marginLeft: '1px' }}>{ex.documents.length}</span>
                               )}
                             </button>
-                          </RubricsTooltip>
-                          <RubricsTooltip text={t('common.edit')} as="span">
+                          </EvalCriteriaTooltip>
+                          <EvalCriteriaTooltip text={t('common.edit')} as="span">
                             <button
-                              className="rubrics-exercise-btn"
+                              className="eval-criteria-exercise-btn"
                               onClick={() => setExerciseToEdit(ex)}
                               aria-label={t('common.edit')}
                             >
                               <Edit size={14} />
                             </button>
-                          </RubricsTooltip>
-                          <RubricsTooltip text={t('common.delete')} as="span">
+                          </EvalCriteriaTooltip>
+                          <EvalCriteriaTooltip text={t('common.delete')} as="span">
                             <button
-                              className="rubrics-exercise-btn delete"
+                              className="eval-criteria-exercise-btn delete"
                               onClick={() => setExerciseToDelete(ex)}
                               aria-label={t('common.delete')}
                             >
                               <Trash2 size={14} />
                             </button>
-                          </RubricsTooltip>
+                          </EvalCriteriaTooltip>
                         </div>
                       </div>
                     </th>
                   ))}
                   {filteredExercises.length > 0 && (
-                    <th className="rubrics-total-col">
-                      <div className="rubrics-exercise-header">
-                        <span className="rubrics-exercise-title">{t('dashboard.rubrics.total')}</span>
+                    <th className="eval-criteria-total-col">
+                      <div className="eval-criteria-exercise-header">
+                        <span className="eval-criteria-exercise-title">{t('dashboard.rubrics.total')}</span>
                         <span style={{ fontSize: '0.7rem', color: totalPercentage > 100 ? '#dc2626' : '#9ca3af' }}>
                           {totalPercentage}% / 100%
                         </span>
@@ -523,7 +523,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
               <tbody>
                 {classStudents.map((student, index) => (
                   <tr key={student.id}>
-                    <td className="rubrics-student-col">
+                    <td className="eval-criteria-student-col">
                       {index + 1}. {student.surnames}, {student.name}
                     </td>
                     {filteredExercises.map(ex => {
@@ -531,25 +531,25 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                       return (
                         <td key={ex.id}>
                           {gradeData ? (
-                            <div className="rubrics-grade-cell">
+                            <div className="eval-criteria-grade-cell">
                               {gradeData.grade < gradeData.maxGrade * 0.5 && (
                                 <Frown size={18} style={{ color: '#f97316' }} />
                               )}
                               {gradeData.grade >= gradeData.maxGrade * 0.9 && (
                                 <Smile size={18} style={{ color: '#eab308' }} />
                               )}
-                              <span className="rubrics-grade-value">
+                              <span className="eval-criteria-grade-value">
                                 {Number.isInteger(gradeData.grade) ? gradeData.grade : gradeData.grade.toFixed(2)} / {gradeData.maxGrade}
                               </span>
                               {gradeData.description && (
-                                <RubricsTooltip text={gradeData.description} position="bottom">
+                                <EvalCriteriaTooltip text={gradeData.description} position="bottom">
                                   <Info size={13} />
-                                </RubricsTooltip>
+                                </EvalCriteriaTooltip>
                               )}
-                              <div className="rubrics-grade-actions-hover">
-                                <RubricsTooltip text={t('common.edit')} as="span">
+                              <div className="eval-criteria-grade-actions-hover">
+                                <EvalCriteriaTooltip text={t('common.edit')} as="span">
                                   <button
-                                    className="rubrics-grade-btn rubrics-grade-hover-btn"
+                                    className="eval-criteria-grade-btn eval-criteria-grade-hover-btn"
                                     onClick={() => setGradeModal({
                                       exerciseId: ex.id,
                                       maxGrade: ex.maxGrade,
@@ -565,22 +565,22 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                                   >
                                     <Edit size={12} />
                                   </button>
-                                </RubricsTooltip>
-                                <RubricsTooltip text={t('common.delete')} as="span">
+                                </EvalCriteriaTooltip>
+                                <EvalCriteriaTooltip text={t('common.delete')} as="span">
                                   <button
-                                    className="rubrics-grade-btn delete rubrics-grade-hover-btn"
+                                    className="eval-criteria-grade-btn delete eval-criteria-grade-hover-btn"
                                     onClick={() => setGradeToDelete({ gradeId: gradeData.gradeId, exerciseTitle: ex.title })}
                                     aria-label={t('common.delete')}
                                   >
                                     <Trash size={12} />
                                   </button>
-                                </RubricsTooltip>
+                                </EvalCriteriaTooltip>
                               </div>
                             </div>
                           ) : (
-                            <RubricsTooltip text={t('dashboard.rubrics.createGrade')} as="span">
+                            <EvalCriteriaTooltip text={t('dashboard.rubrics.createGrade')} as="span">
                               <button
-                                className="rubrics-add-grade-btn"
+                                className="eval-criteria-add-grade-btn"
                                 onClick={() => setGradeModal({
                                   exerciseId: ex.id,
                                   maxGrade: ex.maxGrade,
@@ -591,7 +591,7 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                               >
                                 <Plus size={14} />
                               </button>
-                            </RubricsTooltip>
+                            </EvalCriteriaTooltip>
                           )}
                         </td>
                       );
@@ -600,11 +600,11 @@ export function RubricsTab({ selectedClass }: RubricsTabProps) {
                       const finalGrade = calculateFinalGrade(student.id);
                       const isFailing = finalGrade !== null && finalGrade < 5;
                       return (
-                        <td className={`rubrics-total-col ${isFailing ? 'rubrics-total-fail' : ''}`}>
+                        <td className={`eval-criteria-total-col ${isFailing ? 'eval-criteria-total-fail' : ''}`}>
                           {finalGrade === null ? (
-                            <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>—</span>
+                            <span style={{ color: '#9ca3af', fontSize: '0.8rem' }}>-</span>
                           ) : (
-                            <span className="rubrics-grade-value" style={{ fontWeight: 700 }}>
+                            <span className="eval-criteria-grade-value" style={{ fontWeight: 700 }}>
                               {Number.isInteger(finalGrade) ? finalGrade : finalGrade.toFixed(2)} / 10
                             </span>
                           )}

@@ -63,6 +63,10 @@
 - Búsqueda de competencias por título o descripción
 - Vista en modo **cuadrícula** o **lista** (con persistencia de preferencia)
 - Descripción visible debajo del título en la lista
+- **Gestión de rúbricas** por competencia: crear, editar y eliminar rúbricas asociadas a cada competencia
+- **Gestión de criterios de evaluación** por rúbrica: crear, editar y eliminar criterios con rango de notas (0–10) y descripción
+- **Acordeón** para expandir/colapsar criterios dentro de cada rúbrica
+- **Validación de solapamiento** de rangos de notas entre criterios de una misma rúbrica
 
 ### 👨‍🎓 Gestión de Estudiantes
 - **CRUD completo** de estudiantes con datos personales (nombre, apellidos, fecha de nacimiento, género, info adicional)
@@ -219,7 +223,7 @@ teacher-notebook/
 │   │   │   ├── SubjectsTab.tsx       # Gestión de asignaturas
 │   │   │   ├── SkillsTab.tsx        # Gestión de competencias
 │   │   │   ├── SchoolsTab.tsx        # Gestión de escuelas
-│   │   │   ├── RubricsTab.tsx        # Criterios de evaluación y calificaciones
+│   │   │   ├── EvalCriteriaTab.tsx   # Criterios de evaluación y calificaciones
 │   │   │   ├── ScheduleTab.tsx       # Calendario académico
 │   │   │   ├── TimetableTab.tsx      # Horario semanal
 │   │   │   └── SettingsTab.tsx       # Configuración
@@ -257,6 +261,7 @@ teacher-notebook/
 │   │   ├── StudentService.ts        # Estudiantes y fotos
 │   │   ├── SubjectService.ts        # Asignaturas
 │   │   ├── SkillService.ts         # Competencias
+│   │   ├── SkillRubricService.ts   # Rúbricas y criterios de competencias
 │   │   ├── ExerciseService.ts       # Ejercicios, calificaciones y documentos
 │   │   ├── CalendarAlertService.ts  # Alertas del calendario
 │   │   └── ScheduleService.ts       # Horarios semanales

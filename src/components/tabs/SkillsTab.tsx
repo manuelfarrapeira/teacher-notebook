@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { GraduationCap, Loader2, Plus, Edit, Trash2, Search, Grid3x3, List } from 'lucide-react';
+import { GraduationCap, Loader2, Plus, Edit, Trash2, Search, Grid3x3, List, ClipboardList } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SkillService, Skill } from '../../services/SkillService';
+import { SkillRubricService } from '../../services/SkillRubricService';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
+import { SkillRubricsModal } from '../modals/SkillRubricsModal';
 import { useIsMobile } from '../../lib/utils';
 
 /** Form error fields for skill creation/edition */
@@ -74,6 +76,13 @@ export function SkillsTab() {
   const [skillToDelete, setSkillToDelete] = useState<Skill | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  // Rubrics modal state
+  const [showRubricsModal, setShowRubricsModal] = useState(false);
+  const [selectedSkillForRubrics, setSelectedSkillForRubrics] = useState<Skill | null>(null);
+
+  // Track skills that have at least one rubric
+  const [skillsWithRubrics, setSkillsWithRubrics] = useState<Set<number>>(new Set());
+
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -120,10 +129,47 @@ export function SkillsTab() {
     try {
       const data = await SkillService.getSkills();
       setSkills(data);
+      fetchSkillsRubricsStatus(data);
     } catch (error) {
       showError(error, t('dashboard.skills.loadError'));
     } finally {
       setLoading(false);
+    }
+  };
+
+  /** Fetches rubrics for each skill to determine which ones have at least one */
+  const fetchSkillsRubricsStatus = async (skillList: Skill[]) => {
+    const withRubrics = new Set<number>();
+    await Promise.all(
+      skillList.map(async (s) => {
+        try {
+          const rubrics = await SkillRubricService.getRubrics(s.id);
+          if (Array.isArray(rubrics) && rubrics.length > 0) {
+            withRubrics.add(s.id);
+          }
+        } catch {
+          // Ignore errors – just won't highlight
+        }
+      })
+    );
+    setSkillsWithRubrics(withRubrics);
+  };
+
+  /** Refreshes rubric status for a single skill */
+  const refreshSingleSkillRubricStatus = async (skillId: number) => {
+    try {
+      const rubrics = await SkillRubricService.getRubrics(skillId);
+      setSkillsWithRubrics((prev) => {
+        const next = new Set(prev);
+        if (Array.isArray(rubrics) && rubrics.length > 0) {
+          next.add(skillId);
+        } else {
+          next.delete(skillId);
+        }
+        return next;
+      });
+    } catch {
+      // Ignore
     }
   };
 
@@ -174,6 +220,11 @@ export function SkillsTab() {
   const handleDeleteClick = (skill: Skill) => {
     setSkillToDelete(skill);
     setConfirmDeleteOpen(true);
+  };
+
+  const handleRubricsClick = (skill: Skill) => {
+    setSelectedSkillForRubrics(skill);
+    setShowRubricsModal(true);
   };
 
   const handleCancelForm = () => {
@@ -270,7 +321,7 @@ export function SkillsTab() {
     return (
       <div className={effectiveViewMode === 'grid' ? 'skills-grid' : 'skills-list'}>
         {filteredSkills.map((skill) => (
-          <div key={skill.id} className="dashboard-student">
+          <div key={skill.id} className={`dashboard-student ${skillsWithRubrics.has(skill.id) ? 'skills-has-rubrics' : ''}`}>
             <div className="dashboard-student-info" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <GraduationCap size={20} style={{ color: '#624db6', flexShrink: 0 }} />
@@ -281,6 +332,15 @@ export function SkillsTab() {
               )}
             </div>
             <div className="school-card-actions">
+              <button
+                className="school-action-btn edit tooltip-container"
+                onClick={() => handleRubricsClick(skill)}
+                disabled={submitting || deleting}
+                data-tooltip={t('dashboard.skills.rubrics.manageRubrics')}
+                aria-label={t('dashboard.skills.rubrics.manageRubrics')}
+              >
+                <ClipboardList size={20} />
+              </button>
               <button
                 className="school-action-btn edit tooltip-container"
                 onClick={() => handleEditClick(skill)}
@@ -458,6 +518,18 @@ export function SkillsTab() {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isDeleting={deleting}
+      />
+
+      <SkillRubricsModal
+        isOpen={showRubricsModal}
+        onClose={() => {
+          if (selectedSkillForRubrics) {
+            refreshSingleSkillRubricStatus(selectedSkillForRubrics.id);
+          }
+          setShowRubricsModal(false);
+          setSelectedSkillForRubrics(null);
+        }}
+        skill={selectedSkillForRubrics}
       />
     </div>
   );

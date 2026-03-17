@@ -177,6 +177,50 @@ interface Translations {
         titleMaxLength: string;
         descriptionMaxLength: string;
       };
+      rubrics: {
+        modalTitle: string;
+        manageRubrics: string;
+        createRubric: string;
+        editRubric: string;
+        deleteRubric: string;
+        rubricTitle: string;
+        rubricTitlePlaceholder: string;
+        noRubrics: string;
+        criteria: string;
+        addCriterion: string;
+        editCriterion: string;
+        deleteCriterion: string;
+        criterionDescription: string;
+        criterionDescriptionPlaceholder: string;
+        gradeStart: string;
+        gradeEnd: string;
+        noCriteria: string;
+        deleteRubricTitle: string;
+        deleteRubricConfirm: string;
+        deleteCriterionTitle: string;
+        deleteCriterionConfirm: string;
+        createRubricSuccess: string;
+        createRubricError: string;
+        updateRubricSuccess: string;
+        updateRubricError: string;
+        deleteRubricSuccess: string;
+        deleteRubricError: string;
+        createCriterionSuccess: string;
+        createCriterionError: string;
+        updateCriterionSuccess: string;
+        updateCriterionError: string;
+        deleteCriterionSuccess: string;
+        deleteCriterionError: string;
+        loadError: string;
+        validation: {
+          titleRequired: string;
+          titleMaxLength: string;
+          descriptionRequired: string;
+          descriptionMaxLength: string;
+          gradeEndGreaterOrEqual: string;
+          gradeOverlap: string;
+        };
+      };
     };
     classSubjects: {
       title: string;
@@ -645,6 +689,50 @@ export const translations: Record<Locale, Translations> = {
           titleMinLength: 'El título debe tener al menos 3 caracteres',
           titleMaxLength: 'El título no puede superar los 200 caracteres',
           descriptionMaxLength: 'La descripción no puede superar los 200 caracteres',
+        },
+        rubrics: {
+          modalTitle: 'Rúbricas de Competencia',
+          manageRubrics: 'Gestionar rúbricas',
+          createRubric: 'Crear Rúbrica',
+          editRubric: 'Editar Rúbrica',
+          deleteRubric: 'Eliminar Rúbrica',
+          rubricTitle: 'Título',
+          rubricTitlePlaceholder: 'Título de la rúbrica',
+          noRubrics: 'No hay rúbricas registradas',
+          criteria: 'criterios',
+          addCriterion: 'Añadir Criterio',
+          editCriterion: 'Editar Criterio',
+          deleteCriterion: 'Eliminar Criterio',
+          criterionDescription: 'Descripción',
+          criterionDescriptionPlaceholder: 'Descripción del criterio',
+          gradeStart: 'Nota inicio',
+          gradeEnd: 'Nota fin',
+          noCriteria: 'No hay criterios registrados',
+          deleteRubricTitle: 'Eliminar rúbrica',
+          deleteRubricConfirm: '¿Está seguro que desea eliminar la rúbrica "{name}"? Se eliminarán también todos sus criterios. Esta acción no se puede deshacer.',
+          deleteCriterionTitle: 'Eliminar criterio',
+          deleteCriterionConfirm: '¿Está seguro que desea eliminar el criterio "{name}"? Esta acción no se puede deshacer.',
+          createRubricSuccess: 'Rúbrica creada correctamente',
+          createRubricError: 'Error al crear la rúbrica',
+          updateRubricSuccess: 'Rúbrica actualizada correctamente',
+          updateRubricError: 'Error al actualizar la rúbrica',
+          deleteRubricSuccess: 'Rúbrica eliminada correctamente',
+          deleteRubricError: 'Error al eliminar la rúbrica',
+          createCriterionSuccess: 'Criterio creado correctamente',
+          createCriterionError: 'Error al crear el criterio',
+          updateCriterionSuccess: 'Criterio actualizado correctamente',
+          updateCriterionError: 'Error al actualizar el criterio',
+          deleteCriterionSuccess: 'Criterio eliminado correctamente',
+          deleteCriterionError: 'Error al eliminar el criterio',
+          loadError: 'Error al cargar las rúbricas',
+          validation: {
+            titleRequired: 'El título es obligatorio',
+            titleMaxLength: 'El título no puede superar los 200 caracteres',
+            descriptionRequired: 'La descripción es obligatoria',
+            descriptionMaxLength: 'La descripción no puede superar los 200 caracteres',
+            gradeEndGreaterOrEqual: 'La nota fin debe ser mayor o igual que la nota inicio',
+            gradeOverlap: 'El rango de notas se solapa con otro criterio existente',
+          },
         },
       },
       classSubjects: {
@@ -1115,6 +1203,50 @@ export const translations: Record<Locale, Translations> = {
           titleMinLength: 'Title must be at least 3 characters',
           titleMaxLength: 'Title cannot exceed 200 characters',
           descriptionMaxLength: 'Description cannot exceed 200 characters',
+        },
+        rubrics: {
+          modalTitle: 'Skill Rubrics',
+          manageRubrics: 'Manage rubrics',
+          createRubric: 'Create Rubric',
+          editRubric: 'Edit Rubric',
+          deleteRubric: 'Delete Rubric',
+          rubricTitle: 'Title',
+          rubricTitlePlaceholder: 'Rubric title',
+          noRubrics: 'No rubrics registered',
+          criteria: 'criteria',
+          addCriterion: 'Add Criterion',
+          editCriterion: 'Edit Criterion',
+          deleteCriterion: 'Delete Criterion',
+          criterionDescription: 'Description',
+          criterionDescriptionPlaceholder: 'Criterion description',
+          gradeStart: 'Grade start',
+          gradeEnd: 'Grade end',
+          noCriteria: 'No criteria registered',
+          deleteRubricTitle: 'Delete rubric',
+          deleteRubricConfirm: 'Are you sure you want to delete the rubric "{name}"? All its criteria will also be deleted. This action cannot be undone.',
+          deleteCriterionTitle: 'Delete criterion',
+          deleteCriterionConfirm: 'Are you sure you want to delete the criterion "{name}"? This action cannot be undone.',
+          createRubricSuccess: 'Rubric created successfully',
+          createRubricError: 'Error creating rubric',
+          updateRubricSuccess: 'Rubric updated successfully',
+          updateRubricError: 'Error updating rubric',
+          deleteRubricSuccess: 'Rubric deleted successfully',
+          deleteRubricError: 'Error deleting rubric',
+          createCriterionSuccess: 'Criterion created successfully',
+          createCriterionError: 'Error creating criterion',
+          updateCriterionSuccess: 'Criterion updated successfully',
+          updateCriterionError: 'Error updating criterion',
+          deleteCriterionSuccess: 'Criterion deleted successfully',
+          deleteCriterionError: 'Error deleting criterion',
+          loadError: 'Error loading rubrics',
+          validation: {
+            titleRequired: 'Title is required',
+            titleMaxLength: 'Title cannot exceed 200 characters',
+            descriptionRequired: 'Description is required',
+            descriptionMaxLength: 'Description cannot exceed 200 characters',
+            gradeEndGreaterOrEqual: 'Grade end must be greater than or equal to grade start',
+            gradeOverlap: 'Grade range overlaps with an existing criterion',
+          },
         },
       },
       classSubjects: {
