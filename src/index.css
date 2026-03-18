@@ -1552,10 +1552,10 @@ dialog.modal-overlay::backdrop {
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
-  background-color: #1f2937;
+  background-color: #000;
   color: white;
   padding: 0.5rem 0.75rem;
-  border-radius: 0.375rem;
+  border-radius: 0;
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
@@ -1573,7 +1573,7 @@ dialog.modal-overlay::backdrop {
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
   border: 6px solid transparent;
-  border-top-color: #1f2937;
+  border-top-color: #000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -3588,13 +3588,13 @@ dialog.modal-overlay::backdrop {
 /* Tooltip popup (rendered via portal) */
 .eval-criteria-tooltip-popup {
   position: fixed;
-  background: #1f2937;
+  background: #000;
   color: #f9fafb;
   font-size: 0.82rem;
   font-weight: 400;
   line-height: 1.5;
   padding: 0.6rem 0.85rem;
-  border-radius: 8px;
+  border-radius: 0;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   white-space: pre-wrap;
   max-width: 280px;
@@ -4952,10 +4952,10 @@ td.attendance-weekend-cell {
 
 /* Portal tooltip ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ rendered at document.body, never clipped */
 .skill-rubrics-portal-tooltip {
-  background-color: #1f2937;
+  background-color: #000;
   color: #fff;
   padding: 0.45rem 0.75rem;
-  border-radius: 0.375rem;
+  border-radius: 0;
   font-size: 0.85rem;
   font-weight: 500;
   white-space: nowrap;
@@ -5461,13 +5461,13 @@ td.attendance-weekend-cell {
 /* Tooltip popup (rendered via portal) */
 .class-rubrics-tooltip-popup {
   position: fixed;
-  background: #1f2937;
+  background: #000;
   color: #f9fafb;
   font-size: 0.82rem;
   font-weight: 400;
   line-height: 1.5;
   padding: 0.6rem 0.85rem;
-  border-radius: 8px;
+  border-radius: 0;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   white-space: pre-wrap;
   max-width: 280px;
