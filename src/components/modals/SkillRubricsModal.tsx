@@ -708,7 +708,7 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
             {/* Header */}
             <div className="skill-rubrics-modal-header">
               <h3 className="modal-title">
-                {t('dashboard.skills.rubrics.modalTitle')}: {skill.title}
+                {skill.title}
               </h3>
               <button className="skill-rubrics-close-btn" onClick={onClose} aria-label={t('common.close')}>
                 <X size={20} />

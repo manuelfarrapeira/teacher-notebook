@@ -2014,7 +2014,7 @@ dialog.modal-overlay::backdrop {
 .student-photo-container {
   position: relative;
   overflow: hidden;
-  background-color: #f5f3ff;
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2438,7 +2438,6 @@ dialog.modal-overlay::backdrop {
 }
 
 .student-suggestion-item::after {
-  content: 'ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢';
   position: absolute;
   right: 1.25rem;
   opacity: 0;
@@ -2546,6 +2545,18 @@ dialog.modal-overlay::backdrop {
 .photo-upload-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.photo-upload-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Subjects Grid View */

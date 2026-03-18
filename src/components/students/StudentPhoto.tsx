@@ -1,11 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Loader2 } from 'lucide-react';
-import { StudentService } from '../../services/StudentService';
+import { Loader2 } from 'lucide-react';
+import { StudentService, Gender } from '../../services/StudentService';
 import { useStudentPhotoCache } from '../../contexts/StudentPhotoContext';
+
+/** Default silhouette paths based on gender */
+const DEFAULT_SILHOUETTES: Record<Gender, string> = {
+  M: '/shiluetas/niño.png',
+  F: '/shiluetas/niña.png',
+};
 
 interface StudentPhotoProps {
   studentId: number;
   photoFileName: string | null;
+  /** Gender of the student, used to pick the default silhouette */
+  gender: Gender;
   size?: number;
   alt?: string;
 }
@@ -13,6 +21,7 @@ interface StudentPhotoProps {
 export function StudentPhoto({
   studentId,
   photoFileName,
+  gender,
   size = 64,
   alt = 'Student photo'
 }: Readonly<StudentPhotoProps>) {
@@ -96,7 +105,12 @@ export function StudentPhoto({
       ref={containerRef}
     >
       {loading && <Loader2 className="animate-spin" size={size * 0.4} />}
-      {(error || !photoFileName) && !loading && <User size={size * 0.6} />}
+      {(error || !photoFileName) && !loading && (
+        <img
+          src={DEFAULT_SILHOUETTES[gender]}
+          alt={alt}
+        />
+      )}
       {imageUrl && !loading && !error && <img src={imageUrl} alt={alt} />}
     </div>
   );

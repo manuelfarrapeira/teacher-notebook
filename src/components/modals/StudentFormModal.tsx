@@ -352,6 +352,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                     <StudentPhoto
                       studentId={student.id}
                       photoFileName={currentPhoto}
+                      gender={student.gender}
                       size={120}
                       alt={`${student.name} ${student.surnames}`}
                     />

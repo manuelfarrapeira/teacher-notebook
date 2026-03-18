@@ -296,6 +296,7 @@ export function StudentsTab({
                 <StudentPhoto
                   studentId={student.id}
                   photoFileName={student.photo}
+                  gender={student.gender}
                   size={60}
                   alt={`${student.name} ${student.surnames}`}
                 />
@@ -489,6 +490,7 @@ export function StudentsTab({
                   <StudentPhoto
                     studentId={student.id}
                     photoFileName={student.photo}
+                    gender={student.gender}
                     size={80}
                     alt={`${student.name} ${student.surnames}`}
                   />
