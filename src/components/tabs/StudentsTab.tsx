@@ -296,10 +296,9 @@ export function StudentsTab({
                     {student.additionalInfo && (
                       <button
                         onClick={() => toggleAdditionalInfo(student)}
-                        className="student-info-icon-btn"
-                        style={{ position: 'static' }}
+                        className="student-info-icon-btn tooltip-container"
                         aria-label={t('dashboard.students.additionalInfo')}
-                        title={t('dashboard.students.additionalInfo')}
+                        data-tooltip={t('dashboard.students.additionalInfo')}
                       >
                         <Info size={16} />
                       </button>

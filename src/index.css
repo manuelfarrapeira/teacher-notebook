@@ -2011,9 +2011,7 @@ dialog.modal-overlay::backdrop {
 
 /* Additional Info Icon Button */
 .student-info-icon-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: relative;
   background: none;
   border: none;
   cursor: pointer;
