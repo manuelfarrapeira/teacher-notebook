@@ -97,6 +97,15 @@
 - **Scroll automático** al día actual al entrar en la pestaña
 - Cabecera agrupada por meses para fácil navegación
 
+### 📋 Rúbricas de Clase
+- **Tabla de rúbricas** por competencia y clase con alumnos como filas y rúbricas como columnas
+- **Selector de competencias** para filtrar rúbricas asignadas a la clase
+- **Asignación/desasignación** de rúbricas de competencias a clases desde un modal de gestión
+- **Asignación de criterios** de evaluación a alumnos por rúbrica mediante modal de selección
+- **Visualización** de rango de notas y descripción del criterio en tooltip
+- Columna sticky de alumnos con zebra striping y resaltado de fila al pasar el ratón
+- Eliminación de criterios asignados con confirmación
+
 ### 📅 Calendario Académico
 - Calendario mensual interactivo con navegación por mes
 - Creación, edición y eliminación de **alertas/eventos** del calendario
@@ -224,6 +233,8 @@ teacher-notebook/
 │   │   │   ├── SkillsTab.tsx        # Gestión de competencias
 │   │   │   ├── SchoolsTab.tsx        # Gestión de escuelas
 │   │   │   ├── EvalCriteriaTab.tsx   # Criterios de evaluación y calificaciones
+│   │   │   ├── ClassRubricsTab.tsx   # Rúbricas de clase por competencia
+│   │   │   ├── AttendanceTab.tsx     # Gestión de asistencia
 │   │   │   ├── ScheduleTab.tsx       # Calendario académico
 │   │   │   ├── TimetableTab.tsx      # Horario semanal
 │   │   │   └── SettingsTab.tsx       # Configuración
@@ -262,6 +273,7 @@ teacher-notebook/
 │   │   ├── SubjectService.ts        # Asignaturas
 │   │   ├── SkillService.ts         # Competencias
 │   │   ├── SkillRubricService.ts   # Rúbricas y criterios de competencias
+│   │   ├── ClassRubricService.ts  # Rúbricas de clase y criterios de alumnos
 │   │   ├── ExerciseService.ts       # Ejercicios, calificaciones y documentos
 │   │   ├── CalendarAlertService.ts  # Alertas del calendario
 │   │   └── ScheduleService.ts       # Horarios semanales
@@ -312,6 +324,8 @@ BaseService (abstracta)
 ├── StudentService     → CRUD de estudiantes + fotos
 ├── SubjectService     → CRUD de asignaturas + asignación a clases
 ├── SkillService       → CRUD de competencias
+├── SkillRubricService → Rúbricas y criterios de competencias
+├── ClassRubricService → Rúbricas de clase y criterios de alumnos
 ├── ExerciseService    → Ejercicios, calificaciones y documentos
 ├── CalendarAlertService → Alertas del calendario
 └── ScheduleService    → Horarios semanales

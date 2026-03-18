@@ -429,6 +429,43 @@ interface Translations {
         fileTooLarge: string;
       };
     };
+    classRubrics: {
+      title: string;
+      selectSkill: string;
+      manageClassRubrics: string;
+      assignRubric: string;
+      removeRubric: string;
+      noClassSelected: string;
+      noSkills: string;
+      noRubricsForSkill: string;
+      noStudentsInClass: string;
+      assignCriterion: string;
+      removeCriterion: string;
+      removeCriterionTitle: string;
+      removeCriterionConfirm: string;
+      removeRubricTitle: string;
+      removeRubricConfirm: string;
+      assignSuccess: string;
+      assignError: string;
+      removeSuccess: string;
+      removeError: string;
+      rubricAssignSuccess: string;
+      rubricAssignError: string;
+      rubricRemoveSuccess: string;
+      rubricRemoveError: string;
+      loadError: string;
+      selectCriterion: string;
+      noCriteriaAvailable: string;
+      availableRubrics: string;
+      assigned: string;
+      notAssigned: string;
+      noCriterion: string;
+      student: string;
+      viewStudentCriteria: string;
+      studentCriteriaSummary: string;
+      noCriteriaForStudent: string;
+      skill: string;
+    };
     attendance: {
       title: string;
       subject: string;
@@ -941,6 +978,43 @@ export const translations: Record<Locale, Translations> = {
           fileRequired: 'Debe seleccionar un archivo',
           fileTooLarge: 'El archivo es demasiado grande. Máximo 2MB',
         },
+      },
+      classRubrics: {
+        title: 'Rúbricas',
+        selectSkill: 'Competencia',
+        manageClassRubrics: 'Gestionar Rúbricas',
+        assignRubric: 'Asignar Rúbrica',
+        removeRubric: 'Desasignar Rúbrica',
+        noClassSelected: 'Selecciona una clase para ver las rúbricas',
+        noSkills: 'No hay competencias registradas',
+        noRubricsForSkill: 'No hay rúbricas asignadas para esta competencia',
+        noStudentsInClass: 'No hay alumnos en esta clase',
+        assignCriterion: 'Asignar Criterio',
+        removeCriterion: 'Eliminar Criterio',
+        removeCriterionTitle: 'Eliminar criterio',
+        removeCriterionConfirm: '¿Está seguro que desea eliminar el criterio de este alumno?',
+        removeRubricTitle: 'Desasignar rúbrica',
+        removeRubricConfirm: '¿Está seguro que desea desasignar la rúbrica "{name}"? Se eliminarán los criterios asignados a los alumnos.',
+        assignSuccess: 'Criterio asignado correctamente',
+        assignError: 'Error al asignar el criterio',
+        removeSuccess: 'Criterio eliminado correctamente',
+        removeError: 'Error al eliminar el criterio',
+        rubricAssignSuccess: 'Rúbrica asignada a la clase',
+        rubricAssignError: 'Error al asignar la rúbrica',
+        rubricRemoveSuccess: 'Rúbrica desasignada de la clase',
+        rubricRemoveError: 'Error al desasignar la rúbrica',
+        loadError: 'Error al cargar las rúbricas',
+        selectCriterion: 'Seleccionar criterio',
+        noCriteriaAvailable: 'No hay criterios disponibles para esta rúbrica',
+        availableRubrics: 'Rúbricas disponibles',
+        assigned: 'Asignada',
+        notAssigned: 'No asignada',
+        noCriterion: 'Sin criterio',
+        student: 'Alumno',
+        viewStudentCriteria: 'Ver rúbricas',
+        studentCriteriaSummary: 'Resumen de rúbricas',
+        noCriteriaForStudent: 'Este alumno no tiene criterios asignados',
+        skill: 'Competencia',
       },
       attendance: {
         title: 'Asistencia',
@@ -1455,6 +1529,43 @@ export const translations: Record<Locale, Translations> = {
           fileRequired: 'You must select a file',
           fileTooLarge: 'File is too large. Maximum 2MB',
         },
+      },
+      classRubrics: {
+        title: 'Rubrics',
+        selectSkill: 'Skill',
+        manageClassRubrics: 'Manage Rubrics',
+        assignRubric: 'Assign Rubric',
+        removeRubric: 'Remove Rubric',
+        noClassSelected: 'Select a class to view rubrics',
+        noSkills: 'No skills registered',
+        noRubricsForSkill: 'No rubrics assigned for this skill',
+        noStudentsInClass: 'No students in this class',
+        assignCriterion: 'Assign Criterion',
+        removeCriterion: 'Remove Criterion',
+        removeCriterionTitle: 'Remove criterion',
+        removeCriterionConfirm: 'Are you sure you want to remove this student\'s criterion?',
+        removeRubricTitle: 'Remove rubric',
+        removeRubricConfirm: 'Are you sure you want to remove the rubric "{name}"? Student criteria will be deleted.',
+        assignSuccess: 'Criterion assigned successfully',
+        assignError: 'Error assigning criterion',
+        removeSuccess: 'Criterion removed successfully',
+        removeError: 'Error removing criterion',
+        rubricAssignSuccess: 'Rubric assigned to class',
+        rubricAssignError: 'Error assigning rubric',
+        rubricRemoveSuccess: 'Rubric removed from class',
+        rubricRemoveError: 'Error removing rubric',
+        loadError: 'Error loading rubrics',
+        selectCriterion: 'Select criterion',
+        noCriteriaAvailable: 'No criteria available for this rubric',
+        availableRubrics: 'Available rubrics',
+        assigned: 'Assigned',
+        notAssigned: 'Not assigned',
+        noCriterion: 'No criterion',
+        student: 'Student',
+        viewStudentCriteria: 'View rubrics',
+        studentCriteriaSummary: 'Rubrics summary',
+        noCriteriaForStudent: 'This student has no criteria assigned',
+        skill: 'Skill',
       },
       attendance: {
         title: 'Attendance',

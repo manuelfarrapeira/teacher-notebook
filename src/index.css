@@ -4492,6 +4492,86 @@ dialog.calendar-day-popup {
 }
 
 /* ========================================
+   STUDENT CRITERIA SUMMARY MODAL STYLES
+   ======================================== */
+
+.student-criteria-summary-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.student-criteria-summary-skill {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.student-criteria-summary-skill-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  background: #f0edf8;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #624db6;
+}
+
+.student-criteria-summary-rubrics {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-criteria-summary-rubric {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.student-criteria-summary-rubric:last-child {
+  border-bottom: none;
+}
+
+.student-criteria-summary-rubric-header {
+  margin-bottom: 0.35rem;
+}
+
+.student-criteria-summary-rubric-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.student-criteria-summary-criterion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.student-criteria-summary-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #624db6;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 50px;
+}
+
+.student-criteria-summary-desc {
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* ========================================
    ATTENDANCE MODULE STYLES
    ======================================== */
 
@@ -5162,3 +5242,364 @@ td.attendance-weekend-cell {
     flex-wrap: wrap;
   }
 }
+
+/* ========================================
+   CLASS RUBRICS TAB STYLES
+   ======================================== */
+
+/* Toolbar: skill selector + manage button */
+.class-rubrics-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.class-rubrics-skill-select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  background: #f8f9fa;
+  min-width: 200px;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.class-rubrics-skill-select:focus {
+  outline: none;
+  border-color: #624db6;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1);
+}
+
+/* Table container with scroll */
+.class-rubrics-table-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.class-rubrics-table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.class-rubrics-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.85rem;
+  table-layout: auto;
+  width: 100%;
+  min-width: 100%;
+}
+
+.class-rubrics-table th,
+.class-rubrics-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.class-rubrics-table thead th {
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Sticky student column */
+.class-rubrics-student-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #f9fafb;
+  width: 1px;
+  text-align: left;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.1);
+}
+
+.class-rubrics-table thead th.class-rubrics-student-col {
+  z-index: 3;
+  background: #f3f4f6;
+  text-align: left;
+}
+
+.class-rubrics-table tbody td.class-rubrics-student-col {
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.83rem;
+  text-align: left;
+}
+
+/* Zebra striping */
+.class-rubrics-table tbody tr:nth-child(odd) td {
+  background: #ffffff;
+}
+
+.class-rubrics-table tbody tr:nth-child(even) td {
+  background: #f3f4f6;
+}
+
+/* Keep sticky student col matching zebra */
+.class-rubrics-table tbody tr:nth-child(odd) td.class-rubrics-student-col {
+  background: #f9fafb;
+}
+
+.class-rubrics-table tbody tr:nth-child(even) td.class-rubrics-student-col {
+  background: #eef0f3;
+}
+
+/* Row hover highlight */
+.class-rubrics-table tbody tr:hover td {
+  background: #ede9fe;
+  border-top: 1.5px solid #624db6;
+  border-bottom: 1.5px solid #624db6;
+}
+
+.class-rubrics-table tbody tr:hover td:first-child {
+  border-left: 1.5px solid #624db6;
+}
+
+.class-rubrics-table tbody tr:hover td:last-child {
+  border-right: 1.5px solid #624db6;
+}
+
+.class-rubrics-table tbody tr:hover td.class-rubrics-student-col {
+  background: #e0dbf5;
+}
+
+/* Criterion cell */
+.class-rubrics-criterion-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+/* Grade range badge */
+.class-rubrics-grade-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #624db6;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 50px;
+}
+
+/* Criterion action buttons */
+.class-rubrics-criterion-actions {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.class-rubrics-criterion-btn {
+  padding: 0.15rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.class-rubrics-criterion-btn:hover {
+  color: #624db6;
+}
+
+.class-rubrics-criterion-btn.delete:hover {
+  color: #dc2626;
+}
+
+/* Add criterion button in empty cell */
+.class-rubrics-add-criterion-btn {
+  padding: 0.25rem 0.5rem;
+  background: #f3f4f6;
+  border: 1px dashed #d1d5db;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.class-rubrics-add-criterion-btn:hover {
+  background: #eff6ff;
+  border-color: #624db6;
+  color: #624db6;
+}
+
+/* Tooltip trigger */
+.class-rubrics-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  color: #9ca3af;
+  cursor: default;
+  transition: color 0.2s;
+}
+
+.class-rubrics-tooltip-trigger:hover {
+  color: #624db6;
+}
+
+/* Tooltip popup (rendered via portal) */
+.class-rubrics-tooltip-popup {
+  position: fixed;
+  background: #1f2937;
+  color: #f9fafb;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  white-space: pre-wrap;
+  max-width: 280px;
+  min-width: 120px;
+  width: max-content;
+  text-align: center;
+  pointer-events: none;
+  z-index: 99999;
+  animation: class-rubrics-tooltip-fade-in 0.15s ease;
+}
+
+@keyframes class-rubrics-tooltip-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Manage rubrics modal list */
+.class-rubrics-manage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.class-rubrics-manage-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  gap: 0.75rem;
+}
+
+.class-rubrics-manage-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.class-rubrics-manage-item-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.class-rubrics-manage-item-criteria {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.class-rubrics-manage-item-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.class-rubrics-manage-item-badge.assigned {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.class-rubrics-manage-item-badge.not-assigned {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Criterion select modal list */
+.class-rubrics-select-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.class-rubrics-select-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: left;
+}
+
+.class-rubrics-select-item:hover {
+  background: #ede9fe;
+  border-color: #624db6;
+}
+
+.class-rubrics-select-item-desc {
+  font-size: 0.88rem;
+  color: #374151;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Rubric column header */
+.class-rubrics-rubric-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  min-width: 140px;
+}
+
+.class-rubrics-rubric-title {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #374151;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .class-rubrics-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .class-rubrics-skill-select {
+    min-width: 100%;
+  }
+}
+

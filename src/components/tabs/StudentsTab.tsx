@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList, CalendarDays } from 'lucide-react';
+import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList, CalendarDays, Award } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
@@ -12,7 +12,9 @@ import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { StudentGradesModal } from '../modals/StudentGradesModal';
 import { StudentAbsencesModal } from '../modals/StudentAbsencesModal';
+import { StudentRubricCriteriaModal } from '../modals/StudentRubricCriteriaModal';
 import { EvalCriteriaTab } from './EvalCriteriaTab';
+import { ClassRubricsTab } from './ClassRubricsTab';
 import { AttendanceTab } from './AttendanceTab';
 
 interface StudentsTabProps {
@@ -49,7 +51,7 @@ export function StudentsTab({
 }: Readonly<StudentsTabProps>) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
-  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'evalCriteria' | 'attendance'>('class');
+  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'evalCriteria' | 'classRubrics' | 'attendance'>('class');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
     const saved = localStorage.getItem('studentsViewMode');
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
@@ -77,6 +79,7 @@ export function StudentsTab({
   const [confirmRemoveFromClass, setConfirmRemoveFromClass] = useState<{student: Student; classId: number} | null>(null);
   const [gradesStudent, setGradesStudent] = useState<Student | null>(null);
   const [absencesStudent, setAbsencesStudent] = useState<Student | null>(null);
+  const [rubricCriteriaStudent, setRubricCriteriaStudent] = useState<Student | null>(null);
 
   useEffect(() => {
     fetchStudents();
@@ -520,6 +523,14 @@ export function StudentsTab({
                     <CalendarDays size={20} />
                   </button>
                   <button
+                    onClick={() => setRubricCriteriaStudent(student)}
+                    className="school-action-btn edit tooltip-container"
+                    aria-label={t('dashboard.classRubrics.viewStudentCriteria')}
+                    data-tooltip={t('dashboard.classRubrics.viewStudentCriteria')}
+                  >
+                    <Award size={20} />
+                  </button>
+                  <button
                     onClick={() => handleRemoveFromClassClick(student, selectedClass)}
                     className="school-action-btn delete tooltip-container"
                     disabled={removingFromClass}
@@ -556,6 +567,12 @@ export function StudentsTab({
           {t('dashboard.rubrics.title')}
         </button>
         <button
+          className={activeSubTab === 'classRubrics' ? 'active' : ''}
+          onClick={() => setActiveSubTab('classRubrics')}
+        >
+          {t('dashboard.classRubrics.title')}
+        </button>
+        <button
           className={activeSubTab === 'attendance' ? 'active' : ''}
           onClick={() => setActiveSubTab('attendance')}
         >
@@ -573,6 +590,7 @@ export function StudentsTab({
       {activeSubTab === 'class' && renderClassStudents()}
       {activeSubTab === 'all' && renderAllStudents()}
       {activeSubTab === 'evalCriteria' && <EvalCriteriaTab selectedClass={selectedClass} />}
+      {activeSubTab === 'classRubrics' && <ClassRubricsTab selectedClass={selectedClass} />}
       {activeSubTab === 'attendance' && <AttendanceTab selectedClass={selectedClass} schools={schools} />}
 
       {/* Modals */}
@@ -825,6 +843,17 @@ export function StudentsTab({
           classId={selectedClass}
           studentId={absencesStudent.id}
           studentName={`${absencesStudent.surnames}, ${absencesStudent.name}`}
+        />
+      )}
+
+      {/* Student Rubric Criteria Summary Modal */}
+      {rubricCriteriaStudent !== null && selectedClass !== null && (
+        <StudentRubricCriteriaModal
+          isOpen={true}
+          onClose={() => setRubricCriteriaStudent(null)}
+          classId={selectedClass}
+          studentId={rubricCriteriaStudent.id}
+          studentName={`${rubricCriteriaStudent.surnames}, ${rubricCriteriaStudent.name}`}
         />
       )}
     </div>
