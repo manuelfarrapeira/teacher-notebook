@@ -181,7 +181,7 @@ export function StudentGradesModal({
                           {ex.exerciseTitle}
                           {ex.description && (
                             <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginLeft: '0.5rem' }}>
-                              â€” {ex.description}
+                              - {ex.description}
                             </span>
                           )}
                         </td>
@@ -243,7 +243,7 @@ export function StudentGradesModal({
                   <td style={{ textAlign: 'left', fontWeight: 600, whiteSpace: 'nowrap' }}>{fg.subjectName}</td>
                   {[0, 1, 2].map(i => (
                     <td key={i}>
-                      {fg.quarterAverages[i] === undefined ? 'â€”' : (
+                      {fg.quarterAverages[i] === undefined ? '-' : (
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                           {fg.quarterAverages[i] < 5 && <Frown size={13} style={{ color: '#f97316' }} />}
                           {fg.quarterAverages[i] >= 9 && <Smile size={13} style={{ color: '#eab308' }} />}
@@ -253,7 +253,7 @@ export function StudentGradesModal({
                     </td>
                   ))}
                   <td style={{ fontWeight: 700, background: finalCellBg }}>
-                    {fg.finalAverage === null ? 'â€”' : (
+                    {fg.finalAverage === null ? '-' : (
                       <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
                         {isFailing && <Frown size={14} style={{ color: '#f97316' }} />}
                         {fg.finalAverage >= 9 && <Smile size={14} style={{ color: '#eab308' }} />}
