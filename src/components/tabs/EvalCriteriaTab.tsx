@@ -466,7 +466,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                       <div className="eval-criteria-exercise-header">
                         <span className="eval-criteria-exercise-title">{ex.title}</span>
                         <span style={{ fontSize: '0.7rem', color: '#9ca3af' }}>
-                          {ex.percentageGrade}% Ã‚Â· {t('dashboard.rubrics.maxGrade')}: {ex.maxGrade}
+                          {ex.percentageGrade}% - {t('dashboard.rubrics.maxGrade')}: {ex.maxGrade}
                         </span>
                         <div className="eval-criteria-exercise-actions">
                           {ex.description && (
