@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList, CalendarDays, Award } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList, CalendarDays, Award, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
@@ -80,6 +80,8 @@ export function StudentsTab({
   const [gradesStudent, setGradesStudent] = useState<Student | null>(null);
   const [absencesStudent, setAbsencesStudent] = useState<Student | null>(null);
   const [rubricCriteriaStudent, setRubricCriteriaStudent] = useState<Student | null>(null);
+  const [isSubTabDropdownOpen, setIsSubTabDropdownOpen] = useState(false);
+  const subTabDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchStudents();
@@ -88,6 +90,16 @@ export function StudentsTab({
   useEffect(() => {
     localStorage.setItem('studentsViewMode', viewMode);
   }, [viewMode]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (subTabDropdownRef.current && !subTabDropdownRef.current.contains(event.target as Node)) {
+        setIsSubTabDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const fetchStudents = async () => {
     setLoading(true);
@@ -552,38 +564,90 @@ export function StudentsTab({
     <div className="dashboard-card">
 
       {/* Sub-tabs Navigation */}
-      <div className="student-tabs">
-        <button
-          className={activeSubTab === 'class' ? 'active' : ''}
-          onClick={() => setActiveSubTab('class')}
-        >
-          {t('dashboard.students.classStudents')}
-        </button>
-        <button
-          className={activeSubTab === 'evalCriteria' ? 'active' : ''}
-          onClick={() => setActiveSubTab('evalCriteria')}
-        >
-          {t('dashboard.rubrics.title')}
-        </button>
-        <button
-          className={activeSubTab === 'classRubrics' ? 'active' : ''}
-          onClick={() => setActiveSubTab('classRubrics')}
-        >
-          {t('dashboard.classRubrics.title')}
-        </button>
-        <button
-          className={activeSubTab === 'attendance' ? 'active' : ''}
-          onClick={() => setActiveSubTab('attendance')}
-        >
-          {t('dashboard.attendance.title')}
-        </button>
-        <button
-          className={activeSubTab === 'all' ? 'active' : ''}
-          onClick={() => setActiveSubTab('all')}
-        >
-          {t('dashboard.students.allStudents')}
-        </button>
-      </div>
+      {isMobile ? (
+        <div className="student-tabs-dropdown" ref={subTabDropdownRef}>
+          <button
+            className="student-tabs-dropdown-trigger"
+            onClick={() => setIsSubTabDropdownOpen(!isSubTabDropdownOpen)}
+          >
+            <span>
+              {activeSubTab === 'class' && t('dashboard.students.classStudents')}
+              {activeSubTab === 'evalCriteria' && t('dashboard.rubrics.title')}
+              {activeSubTab === 'classRubrics' && t('dashboard.classRubrics.title')}
+              {activeSubTab === 'attendance' && t('dashboard.attendance.title')}
+              {activeSubTab === 'all' && t('dashboard.students.allStudents')}
+            </span>
+            <ChevronDown size={16} className={`chevron-icon ${isSubTabDropdownOpen ? 'open' : ''}`} />
+          </button>
+          {isSubTabDropdownOpen && (
+            <div className="student-tabs-dropdown-menu">
+              <button
+                className={`student-tabs-dropdown-option ${activeSubTab === 'class' ? 'active' : ''}`}
+                onClick={() => { setActiveSubTab('class'); setIsSubTabDropdownOpen(false); }}
+              >
+                {t('dashboard.students.classStudents')}
+              </button>
+              <button
+                className={`student-tabs-dropdown-option ${activeSubTab === 'evalCriteria' ? 'active' : ''}`}
+                onClick={() => { setActiveSubTab('evalCriteria'); setIsSubTabDropdownOpen(false); }}
+              >
+                {t('dashboard.rubrics.title')}
+              </button>
+              <button
+                className={`student-tabs-dropdown-option ${activeSubTab === 'classRubrics' ? 'active' : ''}`}
+                onClick={() => { setActiveSubTab('classRubrics'); setIsSubTabDropdownOpen(false); }}
+              >
+                {t('dashboard.classRubrics.title')}
+              </button>
+              <button
+                className={`student-tabs-dropdown-option ${activeSubTab === 'attendance' ? 'active' : ''}`}
+                onClick={() => { setActiveSubTab('attendance'); setIsSubTabDropdownOpen(false); }}
+              >
+                {t('dashboard.attendance.title')}
+              </button>
+              <button
+                className={`student-tabs-dropdown-option ${activeSubTab === 'all' ? 'active' : ''}`}
+                onClick={() => { setActiveSubTab('all'); setIsSubTabDropdownOpen(false); }}
+              >
+                {t('dashboard.students.allStudents')}
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="student-tabs">
+          <button
+            className={activeSubTab === 'class' ? 'active' : ''}
+            onClick={() => setActiveSubTab('class')}
+          >
+            {t('dashboard.students.classStudents')}
+          </button>
+          <button
+            className={activeSubTab === 'evalCriteria' ? 'active' : ''}
+            onClick={() => setActiveSubTab('evalCriteria')}
+          >
+            {t('dashboard.rubrics.title')}
+          </button>
+          <button
+            className={activeSubTab === 'classRubrics' ? 'active' : ''}
+            onClick={() => setActiveSubTab('classRubrics')}
+          >
+            {t('dashboard.classRubrics.title')}
+          </button>
+          <button
+            className={activeSubTab === 'attendance' ? 'active' : ''}
+            onClick={() => setActiveSubTab('attendance')}
+          >
+            {t('dashboard.attendance.title')}
+          </button>
+          <button
+            className={activeSubTab === 'all' ? 'active' : ''}
+            onClick={() => setActiveSubTab('all')}
+          >
+            {t('dashboard.students.allStudents')}
+          </button>
+        </div>
+      )}
 
       {/* Content */}
       {activeSubTab === 'class' && renderClassStudents()}

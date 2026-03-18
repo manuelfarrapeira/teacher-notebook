@@ -1889,6 +1889,71 @@ dialog.modal-overlay::backdrop {
   border-bottom-color: #624db6;
 }
 
+/* Student Sub-tabs Dropdown (Mobile) */
+.student-tabs-dropdown {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.student-tabs-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #d4d4d8;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #624db6;
+  transition: all 0.2s;
+}
+
+.student-tabs-dropdown-trigger:hover {
+  background-color: #f5f3ff;
+  border-color: #624db6;
+}
+
+.student-tabs-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-tabs-dropdown-option {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  transition: background-color 0.15s;
+}
+
+.student-tabs-dropdown-option:hover {
+  background-color: #f3f4f6;
+}
+
+.student-tabs-dropdown-option.active {
+  color: #624db6;
+  background-color: #f5f3ff;
+  font-weight: 600;
+}
+
 /* Class Info Header */
 .student-class-info-header {
   background: #f8f9fa;
