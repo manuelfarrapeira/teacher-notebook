@@ -837,6 +837,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .dashboard-card {
@@ -849,6 +850,7 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
 }
 
 .dashboard-section-header {
@@ -2548,15 +2550,7 @@ dialog.modal-overlay::backdrop {
 }
 
 .photo-upload-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  display: none;
 }
 
 /* Subjects Grid View */
@@ -3563,6 +3557,17 @@ dialog.modal-overlay::backdrop {
   color: #374151;
   font-size: 0.83rem;
   text-align: left;
+}
+
+/* Thumbnail photo inside student column */
+.eval-criteria-student-col .student-photo-container {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1 !important;
+  border: 1px solid #d4d4d8;
+  overflow: hidden;
 }
 
 /* Zebra striping Ãƒâ€Ãƒâ€¡ÃƒÂ´ filas alternas */
@@ -4757,9 +4762,9 @@ dialog.calendar-day-popup {
   text-align: left;
   font-weight: 500;
   box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.1);
-  width: 200px;
-  min-width: 200px;
-  max-width: 200px;
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
   padding: 0.35rem 0.5rem;
   font-size: 0.8rem;
   will-change: transform;
@@ -4780,10 +4785,21 @@ dialog.calendar-day-popup {
   font-size: 0.8rem;
 }
 
+/* Thumbnail photo inside attendance student column */
+.attendance-student-col .student-photo-container {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1 !important;
+  border: 1px solid #d4d4d8;
+  overflow: hidden;
+}
+
 /* Sticky count column */
 .attendance-count-col {
   position: sticky;
-  left: 200px;
+  left: 250px;
   z-index: 5;
   background: #f0edf8;
   text-align: center;
@@ -5006,13 +5022,13 @@ td.attendance-weekend-cell {
   }
 
   .attendance-student-col {
-    width: 160px;
-    min-width: 160px;
-    max-width: 160px;
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
   }
 
   .attendance-count-col {
-    left: 160px;
+    left: 250px;
     min-width: 45px;
     width: 45px;
     max-width: 45px;
@@ -5411,6 +5427,17 @@ td.attendance-weekend-cell {
   color: #374151;
   font-size: 0.83rem;
   text-align: left;
+}
+
+/* Thumbnail photo inside class-rubrics student column */
+.class-rubrics-student-col .student-photo-container {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1 !important;
+  border: 1px solid #d4d4d8;
+  overflow: hidden;
 }
 
 /* Zebra striping */

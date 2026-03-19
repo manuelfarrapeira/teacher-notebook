@@ -19,6 +19,7 @@ import { DocumentsModal } from '../modals/DocumentsModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
+import { StudentPhoto } from '../students/StudentPhoto';
 
 /**
  * Tooltip that renders via portal so it escapes any overflow container.
@@ -524,7 +525,16 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                 {classStudents.map((student, index) => (
                   <tr key={student.id}>
                     <td className="eval-criteria-student-col">
-                      {index + 1}. {student.surnames}, {student.name}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                        <span>{index + 1}. {student.surnames}, {student.name}</span>
+                        <StudentPhoto
+                          studentId={student.id}
+                          photoFileName={student.photo}
+                          gender={student.gender}
+                          size={42}
+                          alt={`${student.name} ${student.surnames}`}
+                        />
+                      </div>
                     </td>
                     {filteredExercises.map(ex => {
                       const gradeData = getStudentGrade(student.id, ex.id);

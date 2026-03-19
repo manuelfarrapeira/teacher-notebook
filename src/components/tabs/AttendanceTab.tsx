@@ -8,6 +8,7 @@ import { ApiErrorException } from '../../services/BaseService';
 import { School } from '../../services/SchoolService';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
+import { StudentPhoto } from '../students/StudentPhoto';
 
 /** Represents a single calendar day in the attendance grid */
 interface CalendarDay {
@@ -507,7 +508,16 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                   return (
                     <tr key={student.id}>
                       <td className="attendance-student-col">
-                        {sIdx + 1}. {student.surnames}, {student.name}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                          <span>{sIdx + 1}. {student.surnames}, {student.name}</span>
+                          <StudentPhoto
+                            studentId={student.id}
+                            photoFileName={student.photo}
+                            gender={student.gender}
+                            size={42}
+                            alt={`${student.name} ${student.surnames}`}
+                          />
+                        </div>
                       </td>
                       <td className="attendance-count-col">
                         {count > 0 ? count : ''}

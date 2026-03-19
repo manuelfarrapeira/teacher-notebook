@@ -16,6 +16,7 @@ import { ApiErrorException } from '../../services/BaseService';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
+import { StudentPhoto } from '../students/StudentPhoto';
 
 // ========================
 // Portal Tooltip
@@ -411,7 +412,16 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
               {classStudents.map((student, index) => (
                 <tr key={student.id}>
                   <td className="class-rubrics-student-col">
-                    {index + 1}. {student.surnames}, {student.name}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                      <span>{index + 1}. {student.surnames}, {student.name}</span>
+                      <StudentPhoto
+                        studentId={student.id}
+                        photoFileName={student.photo}
+                        gender={student.gender}
+                        size={42}
+                        alt={`${student.name} ${student.surnames}`}
+                      />
+                    </div>
                   </td>
                   {filteredRubrics.map(rubric => {
                     const assignment = getStudentCriterion(student.id, rubric.id);
