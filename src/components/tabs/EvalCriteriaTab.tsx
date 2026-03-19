@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, Frown, Smile, Download } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SubjectService, ClassSubject } from '../../services/SubjectService';
@@ -11,74 +10,21 @@ import {
   StudentGrades,
   GradeExercise,
   ExerciseDocument,
+  GradeDocument,
 } from '../../services/ExerciseService';
 import { ApiErrorException } from '../../services/BaseService';
 import { ExerciseFormModal } from '../modals/ExerciseFormModal';
 import { GradeFormModal } from '../modals/GradeFormModal';
 import { DocumentsModal } from '../modals/DocumentsModal';
+import { GradeDocumentsModal } from '../modals/GradeDocumentsModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { StudentPhoto } from '../students/StudentPhoto';
+import { PortalTooltip } from '../ui/PortalTooltip';
 
-/**
- * Tooltip that renders via portal so it escapes any overflow container.
- * Shows above by default, below if `position="bottom"`.
- * Use `as="span"` when wrapping interactive elements (buttons) to avoid nesting buttons.
- */
-function EvalCriteriaTooltip({ text, children, position = 'top', as = 'button' }: {
-  readonly text: string;
-  readonly children: React.ReactNode;
-  readonly position?: 'top' | 'bottom';
-  readonly as?: 'button' | 'span';
-}) {
-  const triggerRef = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0 });
-
-  const show = () => {
-    if (!triggerRef.current) return;
-    const rect = triggerRef.current.getBoundingClientRect();
-    const left = rect.left + rect.width / 2;
-    const top = position === 'bottom' ? rect.bottom + 8 : rect.top - 8;
-    setCoords({ top, left });
-    setVisible(true);
-  };
-
-  const hide = () => setVisible(false);
-
-  const Tag = as;
-
-  return (
-    <>
-      <Tag
-        ref={triggerRef as React.RefObject<HTMLButtonElement & HTMLSpanElement>}
-        className="eval-criteria-tooltip-trigger"
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        {...(as === 'button' ? { type: 'button' as const } : {})}
-        style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-      >
-        {children}
-      </Tag>
-      {visible && ReactDOM.createPortal(
-        <div
-          className="eval-criteria-tooltip-popup"
-          style={{
-            top: coords.top,
-            left: coords.left,
-            transform: position === 'bottom'
-              ? 'translateX(-50%)'
-              : 'translate(-50%, -100%)',
-          }}
-        >
-          {text}
-        </div>,
-        document.body,
-      )}
-    </>
-  );
-}
+// Alias for backwards compatibility within this file
+const EvalCriteriaTooltip = PortalTooltip;
 
 /**
  * Props for EvalCriteriaTab
@@ -120,6 +66,11 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   const [exerciseToDelete, setExerciseToDelete] = useState<Exercise | null>(null);
   const [exerciseToEdit, setExerciseToEdit] = useState<Exercise | null>(null);
   const [gradeToDelete, setGradeToDelete] = useState<{ gradeId: number; exerciseTitle: string } | null>(null);
+  const [gradeDocsModal, setGradeDocsModal] = useState<{
+    gradeId: number;
+    title: string;
+    documents: GradeDocument[];
+  } | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [exporting, setExporting] = useState(false);
 
@@ -333,6 +284,10 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
     void fetchExercises();
   };
 
+  const handleGradeDocumentsChanged = () => {
+    void fetchGrades();
+  };
+
   /** Export grades as Excel */
   const handleExportGrades = async () => {
     if (!selectedClass) return;
@@ -366,6 +321,23 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
       }
     }
   }, [filteredExercises]);
+
+  useEffect(() => {
+    if (gradeDocsModal) {
+      for (const sg of studentGrades) {
+        for (const q of sg.quarters) {
+          for (const sub of q.subjects) {
+            for (const ex of sub.exercises) {
+              if (ex.gradeId === gradeDocsModal.gradeId) {
+                setGradeDocsModal(prev => prev ? { ...prev, documents: ex.documents } : null);
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }, [studentGrades]);
 
 
   if (!selectedClass) {
@@ -556,6 +528,25 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                                   <Info size={13} />
                                 </EvalCriteriaTooltip>
                               )}
+                              {/* Documents button: always visible when has docs, hover-only when empty */}
+                              <EvalCriteriaTooltip text={`${t('dashboard.rubrics.gradeDocuments')} (${gradeData.documents.length})`} as="span">
+                                <button
+                                  className={`eval-criteria-grade-btn${gradeData.documents.length === 0 ? ' eval-criteria-grade-hover-btn' : ''}`}
+                                  onClick={() => setGradeDocsModal({
+                                    gradeId: gradeData.gradeId,
+                                    title: t('dashboard.rubrics.gradeDocumentsTitle')
+                                      .replace('{student}', `${student.surnames}, ${student.name}`)
+                                      .replace('{exercise}', ex.title),
+                                    documents: gradeData.documents,
+                                  })}
+                                  aria-label={t('dashboard.rubrics.gradeDocuments')}
+                                >
+                                  <FileText size={12} />
+                                  {gradeData.documents.length > 0 && (
+                                    <span style={{ fontSize: '0.6rem', marginLeft: '1px' }}>{gradeData.documents.length}</span>
+                                  )}
+                                </button>
+                              </EvalCriteriaTooltip>
                               <div className="eval-criteria-grade-actions-hover">
                                 <EvalCriteriaTooltip text={t('common.edit')} as="span">
                                   <button
@@ -679,6 +670,18 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
           exerciseTitle={docsModal.exerciseTitle}
           documents={docsModal.documents}
           onDocumentsChanged={handleDocumentsChanged}
+        />
+      )}
+
+      {/* Grade Documents Modal */}
+      {gradeDocsModal && (
+        <GradeDocumentsModal
+          isOpen={Boolean(gradeDocsModal)}
+          onClose={() => setGradeDocsModal(null)}
+          gradeId={gradeDocsModal.gradeId}
+          title={gradeDocsModal.title}
+          documents={gradeDocsModal.documents}
+          onDocumentsChanged={handleGradeDocumentsChanged}
         />
       )}
 

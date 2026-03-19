@@ -1,41 +1,42 @@
 import React, { useState, useRef } from 'react';
 import { Loader2, Download, Trash2, Edit, X, Upload } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { ExerciseService, ExerciseDocument } from '../../services/ExerciseService';
+import { ExerciseService, GradeDocument } from '../../services/ExerciseService';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { PortalTooltip } from '../ui/PortalTooltip';
 
 /**
- * Props for DocumentsModal
+ * Props for GradeDocumentsModal
  */
-interface DocumentsModalProps {
+interface GradeDocumentsModalProps {
   /** Whether the modal is open */
   readonly isOpen: boolean;
   /** Callback when modal is closed */
   readonly onClose: () => void;
-  /** Exercise ID */
-  readonly exerciseId: number;
-  /** Exercise title for display */
-  readonly exerciseTitle: string;
+  /** Grade ID */
+  readonly gradeId: number;
+  /** Title for display (e.g. "Student - Exercise") */
+  readonly title: string;
   /** Current documents */
-  readonly documents: ExerciseDocument[];
-  /** Callback when documents change */
+  readonly documents: GradeDocument[];
+  /** Callback when documents change (to refresh grades) */
   readonly onDocumentsChanged: () => void;
 }
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
 /**
- * Modal for managing exercise documents (list, upload, download, edit description, delete)
+ * Modal for managing grade documents (list, upload, download, edit description, delete).
+ * Uses the endpoints: POST/GET/PATCH/DELETE /grades/:gradeId/documents/:documentId
  */
-export function DocumentsModal({
+export function GradeDocumentsModal({
   isOpen,
   onClose,
-  exerciseId,
-  exerciseTitle,
+  gradeId,
+  title,
   documents,
   onDocumentsChanged,
-}: DocumentsModalProps) {
+}: GradeDocumentsModalProps) {
   const { t } = useI18n();
 
   const [uploading, setUploading] = useState(false);
@@ -46,10 +47,11 @@ export function DocumentsModal({
   const [savingDescription, setSavingDescription] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [uploadDescription, setUploadDescription] = useState('');
-  const [confirmDeleteDoc, setConfirmDeleteDoc] = useState<ExerciseDocument | null>(null);
+  const [confirmDeleteDoc, setConfirmDeleteDoc] = useState<GradeDocument | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  /** Upload a document to the grade */
   const handleUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
     if (!file) {
@@ -65,7 +67,7 @@ export function DocumentsModal({
     setUploading(true);
     setErrorMessage('');
     try {
-      await ExerciseService.uploadDocument(exerciseId, file, uploadDescription.trim());
+      await ExerciseService.uploadGradeDocument(gradeId, file, uploadDescription.trim());
       setUploadDescription('');
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -78,10 +80,11 @@ export function DocumentsModal({
     }
   };
 
-  const handleDownload = async (doc: ExerciseDocument) => {
+  /** Download a grade document */
+  const handleDownload = async (doc: GradeDocument) => {
     setDownloading(doc.id);
     try {
-      const blob = await ExerciseService.downloadDocument(exerciseId, doc.id);
+      const blob = await ExerciseService.downloadGradeDocument(gradeId, doc.id);
       const url = globalThis.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -97,11 +100,12 @@ export function DocumentsModal({
     }
   };
 
+  /** Confirm and delete a grade document */
   const handleDeleteConfirm = async () => {
     if (!confirmDeleteDoc) return;
     setDeletingId(confirmDeleteDoc.id);
     try {
-      await ExerciseService.deleteDocument(exerciseId, confirmDeleteDoc.id);
+      await ExerciseService.deleteGradeDocument(gradeId, confirmDeleteDoc.id);
       onDocumentsChanged();
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.deleteDocumentError'));
@@ -111,15 +115,17 @@ export function DocumentsModal({
     }
   };
 
-  const handleStartEdit = (doc: ExerciseDocument) => {
+  /** Start editing a document description */
+  const handleStartEdit = (doc: GradeDocument) => {
     setEditingId(doc.id);
     setEditDescription(doc.description || '');
   };
 
-  const handleSaveDescription = async (doc: ExerciseDocument) => {
+  /** Save the edited description */
+  const handleSaveDescription = async (doc: GradeDocument) => {
     setSavingDescription(true);
     try {
-      await ExerciseService.updateDocumentDescription(exerciseId, doc.id, editDescription.trim());
+      await ExerciseService.updateGradeDocumentDescription(gradeId, doc.id, editDescription.trim());
       setEditingId(null);
       onDocumentsChanged();
     } catch (error) {
@@ -133,13 +139,13 @@ export function DocumentsModal({
 
   return (
     <>
-      <dialog className="modal-overlay" open={isOpen} aria-label={t('dashboard.rubrics.documents')}>
+      <dialog className="modal-overlay" open={isOpen} aria-label={t('dashboard.rubrics.gradeDocuments')}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <div className="modal-content" style={{ maxWidth: '36rem', minWidth: '36rem' }}>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 className="modal-title" style={{ marginBottom: 0 }}>
-                {t('dashboard.rubrics.documents')}: {exerciseTitle}
+                {title}
               </h3>
               <button
                 onClick={onClose}
@@ -158,7 +164,7 @@ export function DocumentsModal({
                   onClick={() => setErrorMessage('')}
                   style={{ marginLeft: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontWeight: 600 }}
                 >
-                  âœ•
+                  ✕
                 </button>
               </div>
             )}

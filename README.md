@@ -84,7 +84,7 @@
 - **Calificación de estudiantes** por ejercicio con nota y descripción
 - **Media ponderada automática** por asignatura y trimestre
 - Indicadores visuales de rendimiento (😊 aprobado / 😞 suspenso)
-- **Documentos adjuntos**: subida, descarga, edición y eliminación de documentos por ejercicio (máx. 2MB)
+- **Documentos adjuntos**: subida, descarga, edición y eliminación de documentos por ejercicio y por nota de alumno (máx. 2MB)
 - Vista completa de calificaciones por estudiante con desglose por asignatura
 - **Exportación** de datos de calificaciones
 

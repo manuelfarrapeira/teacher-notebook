@@ -63,6 +63,16 @@ export interface ExerciseRequest {
 // ========================
 
 /**
+ * Document attached to a grade
+ */
+export interface GradeDocument {
+  id: number;
+  gradeId: number;
+  document: string;
+  description: string;
+}
+
+/**
  * Grade for an exercise (inside student grades)
  */
 export interface GradeExercise {
@@ -73,6 +83,7 @@ export interface GradeExercise {
   percentageGrade: number;
   grade: number;
   description: string;
+  documents: GradeDocument[];
 }
 
 /**
@@ -323,6 +334,107 @@ export class ExerciseService extends BaseService {
     return this.delete<void>(
       this.BASE_ENDPOINT,
       `/exercises/${exerciseId}/documents/${documentId}`
+    );
+  }
+
+  // ---------- Grade Documents ----------
+
+  /**
+   * Upload a document for a grade
+   * POST /teacher-notebook/v1/grades/:gradeId/documents
+   * @param gradeId - Grade ID
+   * @param file - File to upload
+   * @param description - Document description
+   */
+  static async uploadGradeDocument(gradeId: number, file: File, description: string): Promise<void> {
+    this.validateToken();
+
+    const apiUrl = getApiUrl();
+    const url = `${apiUrl}${this.BASE_ENDPOINT}/grades/${gradeId}/documents`;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('description', description);
+
+    const token = AuthService.getAccessToken();
+    const locale = getCurrentLocale();
+    const headers = new Headers({
+      'Authorization': `Bearer ${token}`,
+      'Accept-Language': locale,
+    });
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
+    }
+  }
+
+  /**
+   * Download a grade document
+   * GET /teacher-notebook/v1/grades/:gradeId/documents/:documentId
+   * @param gradeId - Grade ID
+   * @param documentId - Document ID
+   * @returns Blob of the document
+   */
+  static async downloadGradeDocument(gradeId: number, documentId: number): Promise<Blob> {
+    this.validateToken();
+
+    const apiUrl = getApiUrl();
+    const url = `${apiUrl}${this.BASE_ENDPOINT}/grades/${gradeId}/documents/${documentId}`;
+
+    const token = AuthService.getAccessToken();
+    const locale = getCurrentLocale();
+    const headers = new Headers({
+      'Authorization': `Bearer ${token}`,
+      'Accept-Language': locale,
+    });
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
+    }
+
+    return response.blob();
+  }
+
+  /**
+   * Update a grade document description
+   * PATCH /teacher-notebook/v1/grades/:gradeId/documents/:documentId
+   * @param gradeId - Grade ID
+   * @param documentId - Document ID
+   * @param description - New description
+   */
+  static async updateGradeDocumentDescription(
+    gradeId: number,
+    documentId: number,
+    description: string
+  ): Promise<void> {
+    return this.patch<void>(
+      this.BASE_ENDPOINT,
+      `/grades/${gradeId}/documents/${documentId}`,
+      { description }
+    );
+  }
+
+  /**
+   * Delete a grade document
+   * DELETE /teacher-notebook/v1/grades/:gradeId/documents/:documentId
+   * @param gradeId - Grade ID
+   * @param documentId - Document ID
+   */
+  static async deleteGradeDocument(gradeId: number, documentId: number): Promise<void> {
+    return this.delete<void>(
+      this.BASE_ENDPOINT,
+      `/grades/${gradeId}/documents/${documentId}`
     );
   }
 

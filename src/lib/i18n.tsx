@@ -414,6 +414,8 @@ interface Translations {
       quarterAverage: string;
       finalGrade: string;
       noGradesForStudent: string;
+      gradeDocuments: string;
+      gradeDocumentsTitle: string;
       validation: {
         titleRequired: string;
         titleMaxLength: string;
@@ -964,6 +966,8 @@ export const translations: Record<Locale, Translations> = {
         quarterAverage: 'Media del trimestre',
         finalGrade: 'Nota Final',
         noGradesForStudent: 'No hay notas registradas para este alumno',
+        gradeDocuments: 'Documentos de la nota',
+        gradeDocumentsTitle: 'Documentos: {student} - {exercise}',
         validation: {
           titleRequired: 'El título es obligatorio',
           titleMaxLength: 'El título no puede superar los 60 caracteres',
@@ -1515,6 +1519,8 @@ export const translations: Record<Locale, Translations> = {
         quarterAverage: 'Quarter average',
         finalGrade: 'Final Grade',
         noGradesForStudent: 'No grades recorded for this student',
+        gradeDocuments: 'Grade documents',
+        gradeDocumentsTitle: 'Documents: {student} - {exercise}',
         validation: {
           titleRequired: 'Title is required',
           titleMaxLength: 'Title cannot exceed 60 characters',
