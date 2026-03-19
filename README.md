@@ -85,7 +85,7 @@
 - **Media ponderada automática** por asignatura y trimestre
 - Indicadores visuales de rendimiento (😊 aprobado / 😞 suspenso)
 - **Documentos adjuntos**: subida, descarga, edición y eliminación de documentos por ejercicio y por nota de alumno (máx. 2MB)
-- Vista completa de calificaciones por estudiante con desglose por asignatura
+- Vista completa de calificaciones por estudiante con desglose por asignatura y **descarga de documentos adjuntos** a cada nota
 - **Exportación** de datos de calificaciones
 
 ### 📋 Gestión de Asistencia

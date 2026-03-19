@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Loader2, X, Frown, Smile, ChevronDown } from 'lucide-react';
+import { Loader2, X, Frown, Smile, ChevronDown, FileText, Download } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { ExerciseService, StudentQuarter, GradeExercise } from '../../services/ExerciseService';
+import { PortalTooltip } from '../ui/PortalTooltip';
 
 /**
  * Props for StudentGradesModal
@@ -57,6 +58,35 @@ export function StudentGradesModal({
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<number | 'final'>(1);
   const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(new Set());
+  const [expandedDocs, setExpandedDocs] = useState<Set<number>>(new Set());
+  const [downloading, setDownloading] = useState<number | null>(null);
+
+  /** Toggle the document list for a grade row */
+  const toggleDocs = (gradeId: number) => {
+    setExpandedDocs(prev => {
+      const next = new Set(prev);
+      if (next.has(gradeId)) { next.delete(gradeId); } else { next.add(gradeId); }
+      return next;
+    });
+  };
+
+  /** Download a single grade document */
+  const handleDownload = async (gradeId: number, docId: number, fileName: string) => {
+    setDownloading(docId);
+    try {
+      const blob = await ExerciseService.downloadGradeDocument(gradeId, docId);
+      const url = globalThis.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      globalThis.URL.revokeObjectURL(url);
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   /** Toggle a subject accordion. Key is `quarter-subjectId` */
   const toggleSubject = (quarter: number, subjectId: number) => {
@@ -170,30 +200,92 @@ export function StudentGradesModal({
                     <th style={{ textAlign: 'left' }}>{t('dashboard.rubrics.exerciseTitle')}</th>
                     <th>{t('dashboard.rubrics.grade')}</th>
                     <th>%</th>
+                    <th>{t('dashboard.rubrics.gradeDocuments')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {subject.exercises.map(ex => {
                     const pct = ex.maxGrade > 0 ? (ex.grade / ex.maxGrade) : 0;
+                    const hasDocuments = ex.documents.length > 0;
+                    const docsExpanded = expandedDocs.has(ex.gradeId);
                     return (
-                      <tr key={ex.gradeId}>
-                        <td style={{ textAlign: 'left' }}>
-                          {ex.exerciseTitle}
-                          {ex.description && (
-                            <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginLeft: '0.5rem' }}>
-                              - {ex.description}
+                      <React.Fragment key={ex.gradeId}>
+                        <tr>
+                          <td style={{ textAlign: 'left' }}>
+                            {ex.exerciseTitle}
+                            {ex.description && (
+                              <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginLeft: '0.5rem' }}>
+                                - {ex.description}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                              {pct < 0.5 && <Frown size={14} style={{ color: '#f97316' }} />}
+                              {pct >= 0.9 && <Smile size={14} style={{ color: '#eab308' }} />}
+                              {formatGrade(ex.grade)} / {ex.maxGrade}
                             </span>
-                          )}
-                        </td>
-                        <td>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-                            {pct < 0.5 && <Frown size={14} style={{ color: '#f97316' }} />}
-                            {pct >= 0.9 && <Smile size={14} style={{ color: '#eab308' }} />}
-                            {formatGrade(ex.grade)} / {ex.maxGrade}
-                          </span>
-                        </td>
-                        <td>{ex.percentageGrade}%</td>
-                      </tr>
+                          </td>
+                          <td>{ex.percentageGrade}%</td>
+                          <td>
+                            {hasDocuments && (
+                              <PortalTooltip text={`${t('dashboard.rubrics.gradeDocuments')} (${ex.documents.length})`} as="span">
+                                <button
+                                  className="eval-criteria-exercise-btn"
+                                  onClick={() => toggleDocs(ex.gradeId)}
+                                  aria-label={t('dashboard.rubrics.gradeDocuments')}
+                                  style={{ color: docsExpanded ? '#624db6' : undefined }}
+                                >
+                                  <FileText size={14} />
+                                  <span style={{ fontSize: '0.7rem', marginLeft: '2px' }}>{ex.documents.length}</span>
+                                </button>
+                              </PortalTooltip>
+                            )}
+                          </td>
+                        </tr>
+                        {hasDocuments && docsExpanded && (
+                          <tr>
+                            <td colSpan={4} style={{ padding: '0.25rem 0.5rem 0.5rem 1rem', background: '#f9fafb' }}>
+                              <table style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse', fontSize: '0.8rem', textAlign: 'left' }}>
+                                <colgroup>
+                                  <col style={{ width: '26px' }} />
+                                  <col />
+                                  <col style={{ width: '40%' }} />
+                                </colgroup>
+                                <tbody>
+                                  {ex.documents.map(doc => (
+                                    <tr key={doc.id}>
+                                      <td style={{ verticalAlign: 'middle', textAlign: 'left', padding: '0.1rem 0.25rem 0.1rem 0' }}>
+                                        <PortalTooltip text={t('dashboard.rubrics.downloadDocument')} as="span">
+                                          <button
+                                            className="eval-criteria-exercise-btn"
+                                            onClick={() => handleDownload(ex.gradeId, doc.id, doc.document)}
+                                            disabled={downloading === doc.id}
+                                            aria-label={t('dashboard.rubrics.downloadDocument')}
+                                          >
+                                            {downloading === doc.id
+                                              ? <Loader2 size={13} className="icon-spin" />
+                                              : <Download size={13} />}
+                                          </button>
+                                        </PortalTooltip>
+                                      </td>
+                                      <td
+                                        style={{ verticalAlign: 'middle', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#374151', padding: '0.1rem 0.4rem 0.1rem 0' }}
+                                        title={doc.document}
+                                      >
+                                        {doc.document}
+                                      </td>
+                                      <td style={{ verticalAlign: 'middle', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#9ca3af', padding: '0.1rem 0' }}>
+                                        {doc.description || ''}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
                     );
                   })}
                 </tbody>
