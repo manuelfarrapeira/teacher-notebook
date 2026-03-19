@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { StudentService, Gender } from '../../services/StudentService';
 import { useStudentPhotoCache } from '../../contexts/StudentPhotoContext';
+import silhouetteBoy from '../../images/shiluetas/niño.png';
+import silhouetteGirl from '../../images/shiluetas/niña.png';
 
 /** Default silhouette paths based on gender */
 const DEFAULT_SILHOUETTES: Record<Gender, string> = {
-  M: '/shiluetas/niño.png',
-  F: '/shiluetas/niña.png',
+  M: silhouetteBoy,
+  F: silhouetteGirl,
 };
 
 interface StudentPhotoProps {
