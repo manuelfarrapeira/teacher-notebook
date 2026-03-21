@@ -71,6 +71,7 @@
 ### 👨‍🎓 Gestión de Estudiantes
 - **CRUD completo** de estudiantes con datos personales (nombre, apellidos, fecha de nacimiento, género, info adicional)
 - **Fotografía de perfil**: subida, visualización y eliminación de fotos con caché inteligente y carga lazy (Intersection Observer)
+- **Figura identificativa** (opcional): asignación de una figura geométrica coloreada (🔴 círculo, 🔵 triángulo, 🟢 cuadrado) para identificación visual rápida en la vista de clase, mostrada como badge en la esquina superior derecha de cada tarjeta
 - Asignación y desasignación de estudiantes a clases
 - Vista por clase o vista global de todos los estudiantes
 - Búsqueda y filtrado de estudiantes

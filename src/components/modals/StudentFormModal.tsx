@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Upload, Trash2, Loader2 } from 'lucide-react';
+import { X, Upload, Trash2, Loader2, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { StudentService, Student, StudentRequestDTO, Gender } from '../../services/StudentService';
+import { StudentService, Student, StudentRequestDTO, Gender, Shape } from '../../services/StudentService';
 import { formatDateForApi, formatDateForInput } from '../../lib/utils';
 import { useStudentPhotoCache } from '../../contexts/StudentPhotoContext';
 import { StudentPhoto } from '../students/StudentPhoto';
@@ -21,6 +21,7 @@ interface FormData {
   dateOfBirth: string;
   additionalInfo: string;
   gender: Gender | '';
+  shape: Shape | '';
 }
 
 interface FormErrors {
@@ -47,9 +48,12 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
     dateOfBirth: student?.dateOfBirth ? formatDateForInput(student.dateOfBirth) : '',
     additionalInfo: student?.additionalInfo || '',
     gender: student?.gender || '',
+    shape: student?.shape || '',
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [shapeDropdownOpen, setShapeDropdownOpen] = useState(false);
+  const shapeDropdownRef = useRef<HTMLDivElement>(null);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const surnamesInputRef = useRef<HTMLInputElement>(null);
@@ -66,6 +70,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         dateOfBirth: formatDateForInput(student.dateOfBirth),
         additionalInfo: student.additionalInfo,
         gender: student.gender || '',
+        shape: student.shape || '',
       });
       setCurrentPhoto(student.photo);
     } else {
@@ -75,14 +80,28 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         dateOfBirth: '',
         additionalInfo: '',
         gender: '',
+        shape: '',
       });
       setCurrentPhoto(null);
     }
     setFormErrors({});
+    setShapeDropdownOpen(false);
     if (isOpen) {
       setTimeout(() => nameInputRef.current?.focus(), 50);
     }
   }, [isOpen, student]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (shapeDropdownRef.current && !shapeDropdownRef.current.contains(e.target as Node)) {
+        setShapeDropdownOpen(false);
+      }
+    };
+    if (shapeDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [shapeDropdownOpen]);
 
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
@@ -144,6 +163,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         dateOfBirth: formatDateForApi(formData.dateOfBirth),
         additionalInfo: formData.additionalInfo.trim(),
         gender: formData.gender as Gender,
+        shape: formData.shape || undefined,
       };
 
       if (student) {
@@ -177,6 +197,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       dateOfBirth: '',
       additionalInfo: '',
       gender: '',
+      shape: '',
     });
     setFormErrors({});
     setCurrentPhoto(null);
@@ -309,23 +330,117 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                 {formErrors.dateOfBirth && <p className="form-error-text">{formErrors.dateOfBirth}</p>}
               </div>
 
-              {/* Gender Field */}
-              <div className="modal-field">
-                <label className="modal-label">
-                  {t('dashboard.students.gender')} <span className="form-required-asterisk">*</span>
-                </label>
-                <select
-                  ref={genderInputRef}
-                  className={`modal-input ${formErrors.gender ? 'input-error' : ''}`}
-                  value={formData.gender}
-                  onChange={(e) => handleInputChange('gender', e.target.value)}
-                  disabled={submitting}
-                >
-                  <option value="">{t('dashboard.students.genderPlaceholder')}</option>
-                  <option value="M">{t('dashboard.students.genderMale')}</option>
-                  <option value="F">{t('dashboard.students.genderFemale')}</option>
-                </select>
-                {formErrors.gender && <p className="form-error-text">{formErrors.gender}</p>}
+              {/* Gender + Shape Fields (same row) */}
+              <div className="modal-fields-row">
+                {/* Gender Field */}
+                <div className="modal-field" style={{ flex: 1 }}>
+                  <label className="modal-label">
+                    {t('dashboard.students.gender')} <span className="form-required-asterisk">*</span>
+                  </label>
+                  <select
+                    ref={genderInputRef}
+                    className={`modal-input ${formErrors.gender ? 'input-error' : ''}`}
+                    value={formData.gender}
+                    onChange={(e) => handleInputChange('gender', e.target.value)}
+                    disabled={submitting}
+                  >
+                    <option value="">{t('dashboard.students.genderPlaceholder')}</option>
+                    <option value="M">{t('dashboard.students.genderMale')}</option>
+                    <option value="F">{t('dashboard.students.genderFemale')}</option>
+                  </select>
+                  {formErrors.gender && <p className="form-error-text">{formErrors.gender}</p>}
+                </div>
+
+                {/* Shape Field */}
+                <div className="modal-field" style={{ flex: 1 }}>
+                  <label className="modal-label">
+                    {t('dashboard.students.shape')}
+                  </label>
+                  <div className="shape-dropdown" ref={shapeDropdownRef}>
+                  <button
+                    type="button"
+                    className="shape-dropdown-trigger modal-input"
+                    onClick={() => setShapeDropdownOpen(prev => !prev)}
+                    disabled={submitting}
+                    aria-haspopup="listbox"
+                    aria-expanded={shapeDropdownOpen}
+                  >
+                    <span className="shape-dropdown-selected">
+                      {!formData.shape && <span className="shape-dropdown-placeholder">—</span>}
+                      {formData.shape === 'CIRCLE' && (
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="12" cy="12" r="9" fill="#ef4444" stroke="#000" strokeWidth="0.8"/>
+                        </svg>
+                      )}
+                      {formData.shape === 'TRIANGLE' && (
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <polygon points="12,3 22,21 2,21" fill="#3b82f6" stroke="#000" strokeWidth="0.8" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                      {formData.shape === 'SQUARE' && (
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="3" y="3" width="18" height="18" rx="2" fill="#22c55e" stroke="#000" strokeWidth="0.8"/>
+                        </svg>
+                      )}
+                    </span>
+                    <ChevronDown size={16} className={`shape-dropdown-chevron ${shapeDropdownOpen ? 'open' : ''}`} />
+                  </button>
+
+                  {shapeDropdownOpen && (
+                    <div className="shape-dropdown-menu" role="listbox">
+                      {/* None */}
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={Boolean(!formData.shape)}
+                        className={`shape-dropdown-item ${!formData.shape ? 'selected' : ''}`}
+                        onClick={() => { handleInputChange('shape', ''); setShapeDropdownOpen(false); }}
+                      >
+                        <span className="shape-dropdown-placeholder">—</span>
+                      </button>
+                      {/* Circle */}
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={formData.shape === 'CIRCLE'}
+                        aria-label={t('dashboard.students.shapeCircle')}
+                        className={`shape-dropdown-item ${formData.shape === 'CIRCLE' ? 'selected' : ''}`}
+                        onClick={() => { handleInputChange('shape', 'CIRCLE'); setShapeDropdownOpen(false); }}
+                      >
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="12" cy="12" r="9" fill="#ef4444" stroke="#000" strokeWidth="0.8"/>
+                        </svg>
+                      </button>
+                      {/* Triangle */}
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={formData.shape === 'TRIANGLE'}
+                        aria-label={t('dashboard.students.shapeTriangle')}
+                        className={`shape-dropdown-item ${formData.shape === 'TRIANGLE' ? 'selected' : ''}`}
+                        onClick={() => { handleInputChange('shape', 'TRIANGLE'); setShapeDropdownOpen(false); }}
+                      >
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <polygon points="12,3 22,21 2,21" fill="#3b82f6" stroke="#000" strokeWidth="0.8" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                      {/* Square */}
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={formData.shape === 'SQUARE'}
+                        aria-label={t('dashboard.students.shapeSquare')}
+                        className={`shape-dropdown-item ${formData.shape === 'SQUARE' ? 'selected' : ''}`}
+                        onClick={() => { handleInputChange('shape', 'SQUARE'); setShapeDropdownOpen(false); }}
+                      >
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="3" y="3" width="18" height="18" rx="2" fill="#22c55e" stroke="#000" strokeWidth="0.8"/>
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+                </div>
               </div>
 
               {/* Additional Info Field */}

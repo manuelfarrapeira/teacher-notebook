@@ -8,6 +8,11 @@ import { AuthService } from './AuthService';
 export type Gender = 'M' | 'F';
 
 /**
+ * Shape type for students (optional visual identifier)
+ */
+export type Shape = 'SQUARE' | 'CIRCLE' | 'TRIANGLE';
+
+/**
  * Interface representing a student
  */
 export interface Student {
@@ -19,6 +24,7 @@ export interface Student {
   gender: Gender;
   photo: string | null;
   classIds: number[];
+  shape?: Shape;
 }
 
 /**
@@ -30,6 +36,7 @@ export interface StudentRequestDTO {
   dateOfBirth: string; // DD/MM/YYYY
   additionalInfo?: string;
   gender: Gender;
+  shape?: Shape;
 }
 
 /**

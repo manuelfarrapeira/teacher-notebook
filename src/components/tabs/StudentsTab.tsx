@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList, CalendarDays, Award, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { Student, StudentService } from '../../services/StudentService';
+import { Student, StudentService, Shape } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
 import { getStudentClasses, useIsMobile, isBirthday } from '../../lib/utils';
 import { StudentPhoto } from '../students/StudentPhoto';
@@ -22,6 +22,41 @@ interface StudentsTabProps {
   selectedClass: number | null;
   schools: School[];
   onRefreshSchools: () => void;
+}
+
+/**
+ * Renders a colored shape badge for a student (optional visual identifier)
+ */
+function renderShapeBadge(shape?: Shape) {
+  if (!shape) return null;
+  if (shape === 'CIRCLE') {
+    return (
+      <span className="student-shape-badge" aria-label="Círculo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" fill="#ef4444" stroke="#000" strokeWidth="0.8"/>
+        </svg>
+      </span>
+    );
+  }
+  if (shape === 'TRIANGLE') {
+    return (
+      <span className="student-shape-badge" aria-label="Triángulo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="12,3 22,21 2,21" fill="#3b82f6" stroke="#000" strokeWidth="0.8" strokeLinejoin="round"/>
+        </svg>
+      </span>
+    );
+  }
+  if (shape === 'SQUARE') {
+    return (
+      <span className="student-shape-badge" aria-label="Cuadrado">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="18" height="18" rx="2" fill="#22c55e" stroke="#000" strokeWidth="0.8"/>
+        </svg>
+      </span>
+    );
+  }
+  return null;
 }
 
 interface ClassBadgeProps {
@@ -292,6 +327,7 @@ export function StudentsTab({
               return (
                 <div key={student.id} className={`student-list-item ${hasBirthday ? 'birthday' : ''}`}>
                   {/* ...existing student item code... */}
+                  {renderShapeBadge(student.shape)}
               <div className="student-list-left">
                 <StudentPhoto
                   studentId={student.id}
@@ -486,6 +522,7 @@ export function StudentsTab({
               const hasBirthday = isBirthday(student.dateOfBirth);
               return (
               <div key={student.id} className={`student-list-item ${hasBirthday ? 'birthday' : ''}`}>
+                {renderShapeBadge(student.shape)}
                 <div className="student-list-left">
                   <StudentPhoto
                     studentId={student.id}

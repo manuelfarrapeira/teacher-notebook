@@ -289,6 +289,10 @@ interface Translations {
       genderMale: string;
       genderFemale: string;
       genderPlaceholder: string;
+      shape: string;
+      shapeSquare: string;
+      shapeCircle: string;
+      shapeTriangle: string;
       photo: string;
       uploadPhoto: string;
       deletePhoto: string;
@@ -841,6 +845,10 @@ export const translations: Record<Locale, Translations> = {
         genderMale: 'Masculino',
         genderFemale: 'Femenino',
         genderPlaceholder: 'Seleccionar género',
+        shape: 'Figura',
+        shapeSquare: 'Cuadrado',
+        shapeCircle: 'Círculo',
+        shapeTriangle: 'Triángulo',
         photo: 'Foto',
         uploadPhoto: 'Subir Foto',
         deletePhoto: 'Eliminar Foto',
@@ -1394,6 +1402,10 @@ export const translations: Record<Locale, Translations> = {
         genderMale: 'Male',
         genderFemale: 'Female',
         genderPlaceholder: 'Select gender',
+        shape: 'Shape',
+        shapeSquare: 'Square',
+        shapeCircle: 'Circle',
+        shapeTriangle: 'Triangle',
         photo: 'Photo',
         uploadPhoto: 'Upload Photo',
         deletePhoto: 'Delete Photo',
