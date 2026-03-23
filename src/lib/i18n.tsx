@@ -498,6 +498,37 @@ interface Translations {
       byMonth: string;
       viewAbsences: string;
     };
+    cooperative: {
+      title: string;
+      generateGroups: string;
+      saveGroups: string;
+      updateGroups: string;
+      deleteAllGroups: string;
+      deleteAllTitle: string;
+      deleteAllConfirm: string;
+      allGroupsLabel: string;
+      choosePriority: string;
+      priorityDescription: string;
+      prioritizeShape: string;
+      prioritizeGender: string;
+      groupName: string;
+      groupNamePlaceholder: string;
+      noGroups: string;
+      noGroupsHint: string;
+      noClassSelected: string;
+      dragHint: string;
+      unassignedStudents: string;
+      unassignedCount: string;
+      allStudentsMustBeAssigned: string;
+      saveSuccess: string;
+      saveError: string;
+      deleteSuccess: string;
+      deleteError: string;
+      loadError: string;
+      generateError: string;
+      generateDisabledHint: string;
+      groupSizeError: string;
+    };
     calendar: {
       title: string;
       newAlert: string;
@@ -1053,6 +1084,37 @@ export const translations: Record<Locale, Translations> = {
         bySubject: 'Por asignatura',
         byMonth: 'Por mes',
         viewAbsences: 'Ver faltas',
+      },
+      cooperative: {
+        title: 'Cooperativo',
+        generateGroups: 'Generar grupos',
+        saveGroups: 'Guardar grupos',
+        updateGroups: 'Actualizar grupos',
+        deleteAllGroups: 'Eliminar todos',
+        deleteAllTitle: 'Eliminar todos los grupos',
+        deleteAllConfirm: '¿Está seguro que desea eliminar todos los grupos de esta clase? Esta acción no se puede deshacer.',
+        allGroupsLabel: 'todos los grupos',
+        choosePriority: 'Elegir prioridad',
+        priorityDescription: '¿Qué criterio deseas priorizar para formar los grupos?',
+        prioritizeShape: 'Priorizar figura',
+        prioritizeGender: 'Priorizar género',
+        groupName: 'Grupo',
+        groupNamePlaceholder: 'Nombre del grupo',
+        noGroups: 'No hay grupos creados',
+        noGroupsHint: 'Pulsa "Generar grupos" para crear grupos automáticamente',
+        noClassSelected: 'Selecciona una clase para gestionar los grupos',
+        dragHint: 'Arrastra alumnos aquí',
+        unassignedStudents: 'Alumnos sin asignar',
+        unassignedCount: '{count} alumnos sin asignar a ningún grupo',
+        allStudentsMustBeAssigned: 'Todos los alumnos deben estar asignados a un grupo para poder guardar',
+        saveSuccess: 'Grupos guardados correctamente',
+        saveError: 'Error al guardar los grupos',
+        deleteSuccess: 'Grupos eliminados correctamente',
+        deleteError: 'Error al eliminar los grupos',
+        loadError: 'Error al cargar los grupos',
+        generateError: 'Error al generar los grupos',
+        generateDisabledHint: 'Elimina los grupos guardados antes de generar nuevos',
+        groupSizeError: 'Cada grupo debe tener entre 3 y 4 miembros',
       },
       calendar: {
         title: 'Calendario',
@@ -1610,6 +1672,37 @@ export const translations: Record<Locale, Translations> = {
         bySubject: 'By subject',
         byMonth: 'By month',
         viewAbsences: 'View absences',
+      },
+      cooperative: {
+        title: 'Cooperative',
+        generateGroups: 'Generate groups',
+        saveGroups: 'Save groups',
+        updateGroups: 'Update groups',
+        deleteAllGroups: 'Delete all',
+        deleteAllTitle: 'Delete all groups',
+        deleteAllConfirm: 'Are you sure you want to delete all groups for this class? This action cannot be undone.',
+        allGroupsLabel: 'all groups',
+        choosePriority: 'Choose priority',
+        priorityDescription: 'Which criterion do you want to prioritize when forming groups?',
+        prioritizeShape: 'Prioritize shape',
+        prioritizeGender: 'Prioritize gender',
+        groupName: 'Group',
+        groupNamePlaceholder: 'Group name',
+        noGroups: 'No groups created',
+        noGroupsHint: 'Click "Generate groups" to create groups automatically',
+        noClassSelected: 'Select a class to manage groups',
+        dragHint: 'Drag students here',
+        unassignedStudents: 'Unassigned students',
+        unassignedCount: '{count} students not assigned to any group',
+        allStudentsMustBeAssigned: 'All students must be assigned to a group before saving',
+        saveSuccess: 'Groups saved successfully',
+        saveError: 'Error saving groups',
+        deleteSuccess: 'Groups deleted successfully',
+        deleteError: 'Error deleting groups',
+        loadError: 'Error loading groups',
+        generateError: 'Error generating groups',
+        generateDisabledHint: 'Delete saved groups before generating new ones',
+        groupSizeError: 'Each group must have between 3 and 4 members',
       },
       calendar: {
         title: 'Calendar',

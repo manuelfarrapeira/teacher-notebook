@@ -16,6 +16,7 @@ import { StudentRubricCriteriaModal } from '../modals/StudentRubricCriteriaModal
 import { EvalCriteriaTab } from './EvalCriteriaTab';
 import { ClassRubricsTab } from './ClassRubricsTab';
 import { AttendanceTab } from './AttendanceTab';
+import { CooperativeTab } from './CooperativeTab';
 
 interface StudentsTabProps {
   selectedSchool: number | null;
@@ -86,7 +87,7 @@ export function StudentsTab({
 }: Readonly<StudentsTabProps>) {
   const { t } = useI18n();
   const isMobile = useIsMobile();
-  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'evalCriteria' | 'classRubrics' | 'attendance'>('class');
+  const [activeSubTab, setActiveSubTab] = useState<'all' | 'class' | 'evalCriteria' | 'classRubrics' | 'attendance' | 'cooperative'>('class');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
     const saved = localStorage.getItem('studentsViewMode');
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
@@ -614,6 +615,7 @@ export function StudentsTab({
               {activeSubTab === 'evalCriteria' && t('dashboard.rubrics.title')}
               {activeSubTab === 'classRubrics' && t('dashboard.classRubrics.title')}
               {activeSubTab === 'attendance' && t('dashboard.attendance.title')}
+              {activeSubTab === 'cooperative' && t('dashboard.cooperative.title')}
               {activeSubTab === 'all' && t('dashboard.students.allStudents')}
             </span>
             <ChevronDown size={16} className={`chevron-icon ${isSubTabDropdownOpen ? 'open' : ''}`} />
@@ -637,6 +639,12 @@ export function StudentsTab({
                 onClick={() => { setActiveSubTab('classRubrics'); setIsSubTabDropdownOpen(false); }}
               >
                 {t('dashboard.classRubrics.title')}
+              </button>
+              <button
+                className={`student-tabs-dropdown-option ${activeSubTab === 'cooperative' ? 'active' : ''}`}
+                onClick={() => { setActiveSubTab('cooperative'); setIsSubTabDropdownOpen(false); }}
+              >
+                {t('dashboard.cooperative.title')}
               </button>
               <button
                 className={`student-tabs-dropdown-option ${activeSubTab === 'attendance' ? 'active' : ''}`}
@@ -674,6 +682,12 @@ export function StudentsTab({
             {t('dashboard.classRubrics.title')}
           </button>
           <button
+            className={activeSubTab === 'cooperative' ? 'active' : ''}
+            onClick={() => setActiveSubTab('cooperative')}
+          >
+            {t('dashboard.cooperative.title')}
+          </button>
+          <button
             className={activeSubTab === 'attendance' ? 'active' : ''}
             onClick={() => setActiveSubTab('attendance')}
           >
@@ -693,6 +707,7 @@ export function StudentsTab({
       {activeSubTab === 'all' && renderAllStudents()}
       {activeSubTab === 'evalCriteria' && <EvalCriteriaTab selectedClass={selectedClass} />}
       {activeSubTab === 'classRubrics' && <ClassRubricsTab selectedClass={selectedClass} />}
+      {activeSubTab === 'cooperative' && <CooperativeTab selectedClass={selectedClass} />}
       {activeSubTab === 'attendance' && <AttendanceTab selectedClass={selectedClass} schools={schools} />}
 
       {/* Modals */}

@@ -107,6 +107,19 @@
 - Columna sticky de alumnos con zebra striping y resaltado de fila al pasar el ratón
 - Eliminación de criterios asignados con confirmación
 
+### 🤝 Trabajo Cooperativo (Grupos)
+- **Generación automática de grupos** equilibrados de 3-4 alumnos por clase
+- Opción de **priorizar diversidad por figura** (shape) o por **género** al generar grupos
+- **Drag & drop nativo** (HTML5) para mover alumnos entre grupos manualmente
+- **Edición de nombres** de grupo mediante input inline
+- **Persistencia** de grupos: guardar, actualizar y eliminar grupos en el servidor
+- **Validación de tamaño de grupo**: cada grupo debe tener entre 3 y 4 miembros; el badge de conteo se muestra en rojo si no se cumple
+- **Validación de asignación completa**: el botón de guardar se deshabilita hasta que todos los alumnos estén asignados a un grupo y todos los grupos tengan tamaño válido
+- Aviso visual cuando quedan alumnos sin asignar con zona de drop dedicada
+- Botón de eliminación masiva de todos los grupos con confirmación
+- Indicador visual del número de alumnos por grupo con **figura geométrica** (shape) visible
+- Foto de perfil y nombre del alumno visibles en cada tarjeta de grupo
+
 ### 📅 Calendario Académico
 - Calendario mensual interactivo con navegación por mes
 - Creación, edición y eliminación de **alertas/eventos** del calendario
@@ -236,6 +249,7 @@ teacher-notebook/
 │   │   │   ├── EvalCriteriaTab.tsx   # Criterios de evaluación y calificaciones
 │   │   │   ├── ClassRubricsTab.tsx   # Rúbricas de clase por competencia
 │   │   │   ├── AttendanceTab.tsx     # Gestión de asistencia
+│   │   │   ├── CooperativeTab.tsx    # Trabajo cooperativo (grupos)
 │   │   │   ├── ScheduleTab.tsx       # Calendario académico
 │   │   │   ├── TimetableTab.tsx      # Horario semanal
 │   │   │   └── SettingsTab.tsx       # Configuración
@@ -276,6 +290,7 @@ teacher-notebook/
 │   │   ├── SkillRubricService.ts   # Rúbricas y criterios de competencias
 │   │   ├── ClassRubricService.ts  # Rúbricas de clase y criterios de alumnos
 │   │   ├── ExerciseService.ts       # Ejercicios, calificaciones y documentos
+│   │   ├── StudentGroupService.ts   # Grupos cooperativos de alumnos
 │   │   ├── CalendarAlertService.ts  # Alertas del calendario
 │   │   └── ScheduleService.ts       # Horarios semanales
 │   │
@@ -328,6 +343,7 @@ BaseService (abstracta)
 ├── SkillRubricService → Rúbricas y criterios de competencias
 ├── ClassRubricService → Rúbricas de clase y criterios de alumnos
 ├── ExerciseService    → Ejercicios, calificaciones y documentos
+├── StudentGroupService → Grupos cooperativos de alumnos
 ├── CalendarAlertService → Alertas del calendario
 └── ScheduleService    → Horarios semanales
 ```
