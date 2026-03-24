@@ -528,6 +528,7 @@ interface Translations {
       generateError: string;
       generateDisabledHint: string;
       groupSizeError: string;
+      reloadGroups: string;
     };
     calendar: {
       title: string;
@@ -1115,6 +1116,7 @@ export const translations: Record<Locale, Translations> = {
         generateError: 'Error al generar los grupos',
         generateDisabledHint: 'Elimina los grupos guardados antes de generar nuevos',
         groupSizeError: 'Cada grupo debe tener entre 3 y 4 miembros',
+        reloadGroups: 'Recargar grupos',
       },
       calendar: {
         title: 'Calendario',
@@ -1703,6 +1705,7 @@ export const translations: Record<Locale, Translations> = {
         generateError: 'Error generating groups',
         generateDisabledHint: 'Delete saved groups before generating new ones',
         groupSizeError: 'Each group must have between 3 and 4 members',
+        reloadGroups: 'Reload groups',
       },
       calendar: {
         title: 'Calendar',

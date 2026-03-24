@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Loader2, Users, Shuffle, Save, Trash2, GripVertical, X } from 'lucide-react';
+import { Loader2, Users, Shuffle, Save, Trash2, GripVertical, X, RefreshCw } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { StudentService, Student, Shape } from '../../services/StudentService';
 import { StudentGroupService, SavedGroupRequest } from '../../services/StudentGroupService';
@@ -371,6 +371,19 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
             >
               <Trash2 size={16} className="icon-margin-right" />
               {t('dashboard.cooperative.deleteAllGroups')}
+            </button>
+          )}
+
+          {/* Reload saved groups (discard local changes) */}
+          {isSaved && groups.length > 0 && (
+            <button
+              className="dashboard-add-btn"
+              onClick={fetchData}
+              disabled={saving || loading}
+              title={t('dashboard.cooperative.reloadGroups')}
+              style={{ padding: '0.5rem' }}
+            >
+              <RefreshCw size={16} />
             </button>
           )}
         </div>
