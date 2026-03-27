@@ -420,6 +420,17 @@ interface Translations {
       noGradesForStudent: string;
       gradeDocuments: string;
       gradeDocumentsTitle: string;
+      chart: {
+        title: string;
+        failing: string;
+        sufficient: string;
+        good: string;
+        remarkable: string;
+        outstanding: string;
+        noGrade: string;
+        studentsCount: string;
+        noDataForChart: string;
+      };
       validation: {
         titleRequired: string;
         titleMaxLength: string;
@@ -1008,6 +1019,17 @@ export const translations: Record<Locale, Translations> = {
         noGradesForStudent: 'No hay notas registradas para este alumno',
         gradeDocuments: 'Documentos de la nota',
         gradeDocumentsTitle: 'Documentos: {student} - {exercise}',
+        chart: {
+          title: 'Distribución de notas',
+          failing: 'Suspenso',
+          sufficient: 'Suficiente',
+          good: 'Bien',
+          remarkable: 'Notable',
+          outstanding: 'Sobresaliente',
+          noGrade: 'Sin nota',
+          studentsCount: 'Alumnos',
+          noDataForChart: 'No hay datos para mostrar la gráfica',
+        },
         validation: {
           titleRequired: 'El título es obligatorio',
           titleMaxLength: 'El título no puede superar los 60 caracteres',
@@ -1597,6 +1619,17 @@ export const translations: Record<Locale, Translations> = {
         noGradesForStudent: 'No grades recorded for this student',
         gradeDocuments: 'Grade documents',
         gradeDocumentsTitle: 'Documents: {student} - {exercise}',
+        chart: {
+          title: 'Grade distribution',
+          failing: 'Failing',
+          sufficient: 'Sufficient',
+          good: 'Good',
+          remarkable: 'Remarkable',
+          outstanding: 'Outstanding',
+          noGrade: 'No grade',
+          studentsCount: 'Students',
+          noDataForChart: 'No data available for chart',
+        },
         validation: {
           titleRequired: 'Title is required',
           titleMaxLength: 'Title cannot exceed 60 characters',

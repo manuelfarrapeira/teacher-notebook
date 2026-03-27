@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, Frown, Smile, Download } from 'lucide-react';
+import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, Frown, Smile, Download, PieChart } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SubjectService, ClassSubject } from '../../services/SubjectService';
 import { StudentService, Student } from '../../services/StudentService';
@@ -20,6 +20,7 @@ import { GradeDocumentsModal } from '../modals/GradeDocumentsModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
+import { GradeDistributionChartModal } from '../modals/GradeDistributionChartModal';
 import { StudentPhoto } from '../students/StudentPhoto';
 import { PortalTooltip } from '../ui/PortalTooltip';
 
@@ -78,6 +79,11 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+
+  const [chartModal, setChartModal] = useState<{
+    title: string;
+    grades: Array<{ studentName: string; value: number | null; maxValue: number }>;
+  } | null>(null);
 
 
   const fetchSubjects = useCallback(async () => {
@@ -288,6 +294,32 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
     void fetchGrades();
   };
 
+  /** Open chart modal for a single exercise */
+  const openChartForExercise = (ex: Exercise) => {
+    const grades = classStudents.map(student => {
+      const gradeData = getStudentGrade(student.id, ex.id);
+      return {
+        studentName: `${student.surnames}, ${student.name}`,
+        value: gradeData ? gradeData.grade : null,
+        maxValue: ex.maxGrade,
+      };
+    });
+    setChartModal({ title: ex.title, grades });
+  };
+
+  /** Open chart modal for the total (final grade over 10) */
+  const openChartForTotal = () => {
+    const grades = classStudents.map(student => {
+      const finalGrade = calculateFinalGrade(student.id);
+      return {
+        studentName: `${student.surnames}, ${student.name}`,
+        value: finalGrade,
+        maxValue: 10,
+      };
+    });
+    setChartModal({ title: t('dashboard.rubrics.total'), grades });
+  };
+
   /** Export grades as Excel */
   const handleExportGrades = async () => {
     if (!selectedClass) return;
@@ -459,6 +491,15 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                               )}
                             </button>
                           </EvalCriteriaTooltip>
+                          <EvalCriteriaTooltip text={t('dashboard.rubrics.chart.title')} as="span">
+                            <button
+                              className="eval-criteria-exercise-btn"
+                              onClick={() => openChartForExercise(ex)}
+                              aria-label={t('dashboard.rubrics.chart.title')}
+                            >
+                              <PieChart size={14} />
+                            </button>
+                          </EvalCriteriaTooltip>
                           <EvalCriteriaTooltip text={t('common.edit')} as="span">
                             <button
                               className="eval-criteria-exercise-btn"
@@ -488,6 +529,17 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                         <span style={{ fontSize: '0.7rem', color: totalPercentage > 100 ? '#dc2626' : '#9ca3af' }}>
                           {totalPercentage}% / 100%
                         </span>
+                        <div className="eval-criteria-exercise-actions">
+                          <EvalCriteriaTooltip text={t('dashboard.rubrics.chart.title')} as="span">
+                            <button
+                              className="eval-criteria-exercise-btn"
+                              onClick={() => openChartForTotal()}
+                              aria-label={t('dashboard.rubrics.chart.title')}
+                            >
+                              <PieChart size={14} />
+                            </button>
+                          </EvalCriteriaTooltip>
+                        </div>
                       </div>
                     </th>
                   )}
@@ -708,6 +760,16 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
           onConfirm={handleDeleteGrade}
           onCancel={() => setGradeToDelete(null)}
           isDeleting={deleting}
+        />
+      )}
+
+      {/* Grade Distribution Chart Modal */}
+      {chartModal && (
+        <GradeDistributionChartModal
+          isOpen={Boolean(chartModal)}
+          onClose={() => setChartModal(null)}
+          title={chartModal.title}
+          grades={chartModal.grades}
         />
       )}
 

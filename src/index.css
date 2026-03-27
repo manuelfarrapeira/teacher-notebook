@@ -6076,3 +6076,29 @@ td.attendance-weekend-cell {
   }
 }
 
+/* ==============================
+   Grade Distribution Chart Modal
+   ============================== */
+.grade-distribution-modal {
+  max-width: 600px;
+  width: 90vw;
+}
+
+.grade-distribution-chart-container {
+  width: 100%;
+  min-height: 300px;
+  padding: 1rem 0;
+}
+
+/* Hover effect: sector "pops out" with scale + drop-shadow */
+.grade-distribution-sector {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  transform-origin: center;
+  cursor: pointer;
+}
+
+.grade-distribution-sector:hover {
+  transform: scale(1.06);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) brightness(1.08);
+}
+
