@@ -170,14 +170,14 @@ export function GradeDistributionChartModal({
       onClose={onClose}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-        <div className="modal-content grade-distribution-modal">
+        <div className="modal-content grade-distribution-modal" style={{ maxWidth: '850px', width: '90vw' }}>
           <h3 className="modal-title">
             📊 {t('dashboard.rubrics.chart.title')}: {title}
           </h3>
           <div className="modal-body">
             {hasData ? (
-              <div className="grade-distribution-chart-container">
-                <ResponsiveContainer width="100%" height={400}>
+              <div className="grade-distribution-chart-container" style={{ minHeight: '520px' }}>
+                <ResponsiveContainer width="100%" height={520}>
                   <PieChart>
                     <Pie
                       data={pieData}
@@ -185,7 +185,7 @@ export function GradeDistributionChartModal({
                       nameKey="name"
                       cx="50%"
                       cy="50%"
-                      outerRadius={110}
+                      outerRadius={140}
                       label={renderOuterLabel}
                       labelLine={false}
                     >

@@ -182,16 +182,17 @@ export function StudentRadarChartModal({
       onClose={onClose}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-        <div className="modal-content grade-distribution-modal" style={{ maxWidth: '700px' }}>
+        <div className="modal-content grade-distribution-modal" style={{ maxWidth: '850px', width: '90vw' }}>
           <h3 className="modal-title">
             📊 {title}
           </h3>
           <div className="modal-body">
             {hasData ? (
-              <div className="grade-distribution-chart-container" style={{ minHeight: '420px' }}>
-                <ResponsiveContainer width="100%" height={420}>
+              <div className="grade-distribution-chart-container" style={{ minHeight: '520px' }}>
+                <ResponsiveContainer width="100%" height={520}>
                   <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="70%">
                     <PolarGrid stroke="#e5e7eb" />
+                    {/* @ts-expect-error recharts PolarAngleAxis typing incompatibility with React 18 */}
                     <PolarAngleAxis
                       dataKey="subject"
                       tick={{ fontSize: 11, fill: '#374151', fontWeight: 500 }}
