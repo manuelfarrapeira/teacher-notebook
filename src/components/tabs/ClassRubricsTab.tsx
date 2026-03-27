@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { Loader2, Plus, Trash2, Info, Settings, X } from 'lucide-react';
+import { Loader2, Plus, Trash2, Info, Settings, X, PieChart } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { SkillService, Skill } from '../../services/SkillService';
 import { SkillRubricService, SkillRubric } from '../../services/SkillRubricService';
@@ -16,6 +16,7 @@ import { ApiErrorException } from '../../services/BaseService';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
+import { RubricDistributionChartModal } from '../modals/RubricDistributionChartModal';
 import { StudentPhoto } from '../students/StudentPhoto';
 
 // ========================
@@ -156,6 +157,12 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
+  // ---- Chart modal ----
+  const [rubricChartModal, setRubricChartModal] = useState<{
+    title: string;
+    entries: Array<{ studentName: string; criterion: { description: string; gradeStart: number; gradeEnd: number } | null }>;
+  } | null>(null);
+
   // ========================
   // Data fetching
   // ========================
@@ -247,6 +254,24 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
     const group = studentCriteria.find(g => g.student.id === studentId);
     if (!group) return undefined;
     return group.rubricCriteria.find(rc => rc.classRubricId === classRubricId);
+  };
+
+  /** Open chart modal for a specific rubric column */
+  const openChartForRubric = (rubric: ClassRubric) => {
+    const entries = classStudents.map(student => {
+      const assignment = getStudentCriterion(student.id, rubric.id);
+      return {
+        studentName: `${student.surnames}, ${student.name}`,
+        criterion: assignment
+          ? {
+              description: assignment.criterion.description,
+              gradeStart: assignment.criterion.gradeStart,
+              gradeEnd: assignment.criterion.gradeEnd,
+            }
+          : null,
+      };
+    });
+    setRubricChartModal({ title: rubric.rubricTitle, entries });
   };
 
   // ========================
@@ -403,6 +428,17 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
                       <span style={{ fontSize: '0.7rem', color: '#9ca3af' }}>
                         {rubric.criteria.length} {t('dashboard.skills.rubrics.criteria')}
                       </span>
+                      <div className="class-rubrics-rubric-actions">
+                        <ClassRubricsTooltip text={t('dashboard.classRubrics.chart.title')} as="span">
+                          <button
+                            className="class-rubrics-criterion-btn"
+                            onClick={() => openChartForRubric(rubric)}
+                            aria-label={t('dashboard.classRubrics.chart.title')}
+                          >
+                            <PieChart size={14} />
+                          </button>
+                        </ClassRubricsTooltip>
+                      </div>
                     </div>
                   </th>
                 ))}
@@ -723,6 +759,16 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
             setDeleteTarget(null);
           }}
           isDeleting={deleting}
+        />
+      )}
+
+      {/* Rubric Distribution Chart Modal */}
+      {rubricChartModal && (
+        <RubricDistributionChartModal
+          isOpen={Boolean(rubricChartModal)}
+          onClose={() => setRubricChartModal(null)}
+          title={rubricChartModal.title}
+          entries={rubricChartModal.entries}
         />
       )}
 

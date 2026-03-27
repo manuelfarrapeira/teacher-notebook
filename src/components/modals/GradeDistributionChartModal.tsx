@@ -69,6 +69,7 @@ function renderOuterLabel(props: PieLabelRenderProps) {
   const percent = Number(props.percent ?? 0);
   const rawFill = (props as unknown as Record<string, unknown>).fill;
   const fill = typeof rawFill === 'string' ? rawFill : '#374151';
+  const name = String((props as unknown as Record<string, unknown>).name ?? '');
 
   if (value === 0) return null;
 
@@ -93,7 +94,7 @@ function renderOuterLabel(props: PieLabelRenderProps) {
       <circle cx={sx} cy={sy} r={3} fill={fill} />
       {/* Label text */}
       <text x={ex + (cos >= 0 ? 4 : -4)} y={ey} textAnchor={textAnchor} fill="#374151" fontSize={12} fontWeight={600} dominantBaseline="central">
-        {value} ({(percent * 100).toFixed(0)}%)
+        {name} ({(percent * 100).toFixed(0)}%)
       </text>
     </g>
   );

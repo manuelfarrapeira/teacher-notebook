@@ -107,6 +107,7 @@
 - **Visualización** de rango de notas y descripción del criterio en tooltip
 - Columna sticky de alumnos con zebra striping y resaltado de fila al pasar el ratón
 - Eliminación de criterios asignados con confirmación
+- **Gráfica de distribución de criterios**: botón en cada columna de rúbrica que abre un modal con gráfico tipo pie chart mostrando la distribución de alumnos por criterio asignado (rango de notas), con descripción del criterio al pasar el ratón
 
 ### 🤝 Trabajo Cooperativo (Grupos)
 - **Generación automática de grupos** equilibrados de 3-4 alumnos por clase
@@ -267,6 +268,7 @@ teacher-notebook/
 │   │   │   ├── ExerciseFormModal.tsx     # Formulario de ejercicio
 │   │   │   ├── GradeFormModal.tsx        # Formulario de calificación
 │   │   │   ├── GradeDistributionChartModal.tsx # Gráfica distribución de notas
+│   │   │   ├── RubricDistributionChartModal.tsx # Gráfica distribución de criterios
 │   │   │   ├── DocumentsModal.tsx        # Gestión de documentos
 │   │   │   ├── CalendarAlertFormModal.tsx # Formulario de alerta
 │   │   │   ├── ClassSubjectsModal.tsx    # Asignaturas de clase

@@ -5828,6 +5828,12 @@ td.attendance-weekend-cell {
   color: #374151;
 }
 
+.class-rubrics-rubric-actions {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .class-rubrics-toolbar {

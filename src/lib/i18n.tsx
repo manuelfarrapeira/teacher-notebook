@@ -482,6 +482,10 @@ interface Translations {
       studentCriteriaSummary: string;
       noCriteriaForStudent: string;
       skill: string;
+      chart: {
+        title: string;
+        noDataForChart: string;
+      };
     };
     attendance: {
       title: string;
@@ -1081,6 +1085,10 @@ export const translations: Record<Locale, Translations> = {
         studentCriteriaSummary: 'Resumen de rúbricas',
         noCriteriaForStudent: 'Este alumno no tiene criterios asignados',
         skill: 'Competencia',
+        chart: {
+          title: 'Distribución de criterios',
+          noDataForChart: 'No hay datos para mostrar la gráfica',
+        },
       },
       attendance: {
         title: 'Asistencia',
@@ -1681,6 +1689,10 @@ export const translations: Record<Locale, Translations> = {
         studentCriteriaSummary: 'Rubrics summary',
         noCriteriaForStudent: 'This student has no criteria assigned',
         skill: 'Skill',
+        chart: {
+          title: 'Criteria distribution',
+          noDataForChart: 'No data available for chart',
+        },
       },
       attendance: {
         title: 'Attendance',
