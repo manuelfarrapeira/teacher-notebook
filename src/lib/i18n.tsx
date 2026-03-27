@@ -431,6 +431,14 @@ interface Translations {
         studentsCount: string;
         noDataForChart: string;
       };
+      radarChart: {
+        title: string;
+        noDataForChart: string;
+        quarter1: string;
+        quarter2: string;
+        quarter3: string;
+        finalGrade: string;
+      };
       validation: {
         titleRequired: string;
         titleMaxLength: string;
@@ -1033,6 +1041,14 @@ export const translations: Record<Locale, Translations> = {
           noGrade: 'Sin nota',
           studentsCount: 'Alumnos',
           noDataForChart: 'No hay datos para mostrar la gráfica',
+        },
+        radarChart: {
+          title: 'Gráfica de rendimiento',
+          noDataForChart: 'No hay asignaturas para mostrar la gráfica',
+          quarter1: 'T1',
+          quarter2: 'T2',
+          quarter3: 'T3',
+          finalGrade: 'Final',
         },
         validation: {
           titleRequired: 'El título es obligatorio',
@@ -1637,6 +1653,14 @@ export const translations: Record<Locale, Translations> = {
           noGrade: 'No grade',
           studentsCount: 'Students',
           noDataForChart: 'No data available for chart',
+        },
+        radarChart: {
+          title: 'Performance chart',
+          noDataForChart: 'No subjects available for chart',
+          quarter1: 'Q1',
+          quarter2: 'Q2',
+          quarter3: 'Q3',
+          finalGrade: 'Final',
         },
         validation: {
           titleRequired: 'Title is required',

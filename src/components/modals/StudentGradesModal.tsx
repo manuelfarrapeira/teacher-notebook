@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Loader2, X, Frown, Smile, ChevronDown, FileText, Download } from 'lucide-react';
+import { Loader2, X, Frown, Smile, ChevronDown, FileText, Download, Radar } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { ExerciseService, StudentQuarter, GradeExercise } from '../../services/ExerciseService';
+import { SubjectService, ClassSubject } from '../../services/SubjectService';
 import { PortalTooltip } from '../ui/PortalTooltip';
+import { StudentRadarChartModal } from './StudentRadarChartModal';
 
 /**
  * Props for StudentGradesModal
@@ -60,6 +62,8 @@ export function StudentGradesModal({
   const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(new Set());
   const [expandedDocs, setExpandedDocs] = useState<Set<number>>(new Set());
   const [downloading, setDownloading] = useState<number | null>(null);
+  const [classSubjects, setClassSubjects] = useState<ClassSubject[]>([]);
+  const [radarChartOpen, setRadarChartOpen] = useState(false);
 
   /** Toggle the document list for a grade row */
   const toggleDocs = (gradeId: number) => {
@@ -107,11 +111,15 @@ export function StudentGradesModal({
       setLoading(true);
       setError('');
       setActiveTab(1);
-      ExerciseService.getStudentGrades(classId, studentId)
-        .then(data => {
-          const sorted = [...data].sort((a, b) => a.quarter - b.quarter);
+      setRadarChartOpen(false);
+      Promise.all([
+        ExerciseService.getStudentGrades(classId, studentId),
+        SubjectService.getClassSubjects(classId),
+      ])
+        .then(([gradesData, subjectsData]) => {
+          const sorted = [...gradesData].sort((a, b) => a.quarter - b.quarter);
           setQuarters(sorted);
-          // Default to first available quarter
+          setClassSubjects(subjectsData);
           if (sorted.length > 0) {
             setActiveTab(sorted[0].quarter);
           }
@@ -363,79 +371,112 @@ export function StudentGradesModal({
   );
 
   return (
-    <dialog className="modal-overlay" open={isOpen} aria-label={title}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+    <>
+      <dialog className="modal-overlay" open={isOpen} aria-label={title}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <div className="modal-content" style={{ maxWidth: '850px', width: '95vw', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}>
-          {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3 className="modal-title" style={{ marginBottom: 0 }}>{title}</h3>
-            <button
-              onClick={onClose}
-              className="modal-button cancel"
-              style={{ padding: '0.5rem', minWidth: 'auto' }}
-              aria-label={t('common.close')}
-            >
-              <X size={18} />
-            </button>
-          </div>
-
-          {/* Quarter Tabs */}
-          {!loading && !error && quarters.length > 0 && (
-            <div className="eval-criteria-quarter-tabs" style={{ marginBottom: '1rem', marginLeft: 0 }}>
-              {[1, 2, 3].map(q => (
-                <button
-                  key={q}
-                  className={`eval-criteria-quarter-tab ${activeTab === q ? 'active' : ''}`}
-                  onClick={() => setActiveTab(q)}
-                >
-                  {t(`dashboard.rubrics.quarter${q}`)}
-                </button>
-              ))}
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h3 className="modal-title" style={{ marginBottom: 0 }}>{title}</h3>
               <button
-                className={`eval-criteria-quarter-tab ${activeTab === 'final' ? 'active' : ''}`}
-                onClick={() => setActiveTab('final')}
+                onClick={onClose}
+                className="modal-button cancel"
+                style={{ padding: '0.5rem', minWidth: 'auto' }}
+                aria-label={t('common.close')}
               >
-                {t('dashboard.rubrics.finalGrade')}
+                <X size={18} />
               </button>
             </div>
-          )}
 
-          {/* Body */}
-          <div style={{ overflowY: 'auto', flex: 1 }}>
-            {loading && (
-              <div className="loading-center" style={{ padding: '2rem' }}>
-                <Loader2 className="icon-spin" size={28} />
+            {/* Quarter Tabs */}
+            {!loading && !error && quarters.length > 0 && (
+              <div className="eval-criteria-quarter-tabs" style={{ marginBottom: '1rem', marginLeft: 0 }}>
+                {[1, 2, 3].map(q => (
+                  <button
+                    key={q}
+                    className={`eval-criteria-quarter-tab ${activeTab === q ? 'active' : ''}`}
+                    onClick={() => setActiveTab(q)}
+                  >
+                    {t(`dashboard.rubrics.quarter${q}`)}
+                  </button>
+                ))}
+                <button
+                  className={`eval-criteria-quarter-tab ${activeTab === 'final' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('final')}
+                >
+                  {t('dashboard.rubrics.finalGrade')}
+                </button>
+                {classSubjects.length > 0 && (
+                  <PortalTooltip text={t('dashboard.rubrics.radarChart.title')} as="span">
+                    <button
+                      className="eval-criteria-exercise-btn"
+                      onClick={() => setRadarChartOpen(true)}
+                      aria-label={t('dashboard.rubrics.radarChart.title')}
+                      style={{ padding: '0.4rem' }}
+                    >
+                      <Radar size={18} />
+                    </button>
+                  </PortalTooltip>
+                )}
               </div>
             )}
 
-            {error && (
-              <div style={{ color: '#dc2626', fontSize: '0.875rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', marginBottom: '1rem' }}>
-                {error}
-              </div>
-            )}
+            {/* Body */}
+            <div style={{ overflowY: 'auto', flex: 1 }}>
+              {loading && (
+                <div className="loading-center" style={{ padding: '2rem' }}>
+                  <Loader2 className="icon-spin" size={28} />
+                </div>
+              )}
 
-            {!loading && !error && quarters.length === 0 && (
-              <div className="dashboard-empty" style={{ padding: '2rem' }}>
-                <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
-              </div>
-            )}
+              {error && (
+                <div style={{ color: '#dc2626', fontSize: '0.875rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', marginBottom: '1rem' }}>
+                  {error}
+                </div>
+              )}
 
-            {!loading && !error && quarters.length > 0 && activeTab !== 'final' && activeQuarterData && (
-              renderQuarterContent(activeQuarterData)
-            )}
+              {!loading && !error && quarters.length === 0 && (
+                <div className="dashboard-empty" style={{ padding: '2rem' }}>
+                  <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
+                </div>
+              )}
 
-            {!loading && !error && quarters.length > 0 && activeTab !== 'final' && !activeQuarterData && (
-              <div className="dashboard-empty" style={{ padding: '1.5rem' }}>
-                <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
-              </div>
-            )}
+              {!loading && !error && quarters.length > 0 && activeTab !== 'final' && activeQuarterData && (
+                renderQuarterContent(activeQuarterData)
+              )}
 
-            {!loading && !error && quarters.length > 0 && activeTab === 'final' && (
-              renderFinalGrade()
-            )}
+              {!loading && !error && quarters.length > 0 && activeTab !== 'final' && !activeQuarterData && (
+                <div className="dashboard-empty" style={{ padding: '1.5rem' }}>
+                  <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
+                </div>
+              )}
+
+              {!loading && !error && quarters.length > 0 && activeTab === 'final' && (
+                renderFinalGrade()
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </dialog>
+      </dialog>
+
+      {radarChartOpen && (
+        <StudentRadarChartModal
+          isOpen={radarChartOpen}
+          onClose={() => setRadarChartOpen(false)}
+          studentName={studentName}
+          classSubjects={classSubjects.map(cs => ({ subjectId: cs.subjectId, subjectName: cs.subjectName }))}
+          subjectGrades={finalGrades.map(fg => ({
+            subjectId: fg.subjectId,
+            subjectName: fg.subjectName,
+            quarterAverages: [
+              fg.quarterAverages[0] ?? null,
+              fg.quarterAverages[1] ?? null,
+              fg.quarterAverages[2] ?? null,
+            ],
+            finalAverage: fg.finalAverage,
+          }))}
+        />
+      )}
+    </>
   );
 }

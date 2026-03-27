@@ -89,6 +89,7 @@
 - Vista completa de calificaciones por estudiante con desglose por asignatura y **descarga de documentos adjuntos** a cada nota
 - **Exportación** de datos de calificaciones
 - **Gráfica de distribución de notas**: botón en cada columna de ejercicio y en la columna Total que abre un modal con gráfico tipo pie chart mostrando la distribución de alumnos por rangos (Sin nota, Suspenso, Suficiente, Bien, Notable, Sobresaliente)
+- **Gráfica radar de rendimiento**: en la ficha de calificaciones del alumno, gráfica tipo radar/araña que muestra las notas por asignatura (todas las de la clase) con áreas para cada trimestre y nota final
 
 ### 📋 Gestión de Asistencia
 - **Tabla spreadsheet** con todos los días del curso escolar (sept → jun) parametrizado por año escolar
@@ -269,6 +270,7 @@ teacher-notebook/
 │   │   │   ├── GradeFormModal.tsx        # Formulario de calificación
 │   │   │   ├── GradeDistributionChartModal.tsx # Gráfica distribución de notas
 │   │   │   ├── RubricDistributionChartModal.tsx # Gráfica distribución de criterios
+│   │   │   ├── StudentRadarChartModal.tsx  # Gráfica radar de rendimiento del alumno
 │   │   │   ├── DocumentsModal.tsx        # Gestión de documentos
 │   │   │   ├── CalendarAlertFormModal.tsx # Formulario de alerta
 │   │   │   ├── ClassSubjectsModal.tsx    # Asignaturas de clase
