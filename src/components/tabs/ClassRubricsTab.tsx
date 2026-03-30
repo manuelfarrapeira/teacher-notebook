@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import ReactDOM from 'react-dom';
 import { Loader2, Plus, Trash2, Info, Settings, X, PieChart } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import { SkillService, Skill } from '../../services/SkillService';
 import { SkillRubricService, SkillRubric } from '../../services/SkillRubricService';
 import { StudentService, Student } from '../../services/StudentService';
@@ -278,8 +279,8 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
   // Handlers
   // ========================
 
-  const handleSkillChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSkillId(Number(e.target.value));
+  const handleSkillChange = (value: string) => {
+    setSelectedSkillId(Number(value));
   };
 
   // ---- Manage rubrics modal ----
@@ -610,17 +611,18 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       {/* Toolbar: skill selector + manage button */}
       <div className="class-rubrics-toolbar">
-        <select
-          className="class-rubrics-skill-select"
-          value={selectedSkillId}
-          onChange={handleSkillChange}
-        >
-          {skills.map(skill => (
-            <option key={skill.id} value={skill.id}>
-              {skill.title}
-            </option>
-          ))}
-        </select>
+        <Select value={selectedSkillId ? String(selectedSkillId) : ''} onValueChange={handleSkillChange}>
+          <SelectTrigger className="class-rubrics-skill-select">
+            <SelectValue placeholder={t('dashboard.classRubrics.selectSkill')} />
+          </SelectTrigger>
+          <SelectContent>
+            {skills.map(skill => (
+              <SelectItem key={skill.id} value={String(skill.id)}>
+                {skill.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <button
           className="dashboard-add-btn"

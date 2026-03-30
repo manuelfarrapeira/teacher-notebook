@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, Frown, Smile, Download, PieChart } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import { SubjectService, ClassSubject } from '../../services/SubjectService';
 import { StudentService, Student } from '../../services/StudentService';
 import {
@@ -214,8 +215,8 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   };
 
 
-  const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const scId = Number(e.target.value);
+  const handleSubjectChange = (value: string) => {
+    const scId = Number(value);
     setSelectedSubjectClassId(scId);
     const cs = classSubjects.find(c => c.subjectClassId === scId);
     if (cs) setSelectedSubjectId(cs.subjectId);
@@ -400,17 +401,18 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       {/* Toolbar: subject selector + create btn + quarter tabs */}
       <div className="eval-criteria-toolbar">
-        <select
-          className="eval-criteria-subject-select"
-          value={selectedSubjectClassId}
-          onChange={handleSubjectChange}
-        >
-          {classSubjects.map(cs => (
-            <option key={cs.subjectClassId} value={cs.subjectClassId}>
-              {cs.subjectName}
-            </option>
-          ))}
-        </select>
+        <Select value={selectedSubjectClassId ? String(selectedSubjectClassId) : ''} onValueChange={handleSubjectChange}>
+          <SelectTrigger className="eval-criteria-subject-select">
+            <SelectValue placeholder={t('dashboard.rubrics.selectSubjectFirst')} />
+          </SelectTrigger>
+          <SelectContent>
+            {classSubjects.map(cs => (
+              <SelectItem key={cs.subjectClassId} value={String(cs.subjectClassId)}>
+                {cs.subjectName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <button
           className="dashboard-add-btn"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Loader2, CalendarDays, Check, UserX } from 'lucide-react';
 import { useI18n, translations } from '../../lib/i18n';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import { SubjectService, ClassSubject } from '../../services/SubjectService';
 import { StudentService, Student } from '../../services/StudentService';
 import { AbsenceService, Absence } from '../../services/AbsenceService';
@@ -342,8 +343,8 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
     }
   };
 
-  const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSubjectId(Number(e.target.value));
+  const handleSubjectChange = (value: string) => {
+    setSelectedSubjectId(Number(value));
   };
 
   const handleFullDaySubmit = async () => {
@@ -428,17 +429,18 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       {/* Toolbar */}
       <div className="attendance-toolbar">
-        <select
-          className="attendance-subject-select"
-          value={selectedSubjectId}
-          onChange={handleSubjectChange}
-        >
-          {classSubjects.map(cs => (
-            <option key={cs.subjectId} value={cs.subjectId}>
-              {cs.subjectName}
-            </option>
-          ))}
-        </select>
+        <Select value={selectedSubjectId ? String(selectedSubjectId) : ''} onValueChange={handleSubjectChange}>
+          <SelectTrigger className="attendance-subject-select">
+            <SelectValue placeholder={t('dashboard.attendance.subject')} />
+          </SelectTrigger>
+          <SelectContent>
+            {classSubjects.map(cs => (
+              <SelectItem key={cs.subjectId} value={String(cs.subjectId)}>
+                {cs.subjectName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <button
           className="attendance-full-day-btn"
@@ -578,18 +580,18 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                   <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.875rem' }}>
                     {t('dashboard.attendance.selectStudent')} <span className="form-required-asterisk">*</span>
                   </label>
-                  <select
-                    className="modal-input"
-                    value={fullDayStudentId}
-                    onChange={(e) => setFullDayStudentId(Number(e.target.value))}
-                    autoFocus
-                  >
-                    {classStudents.map(s => (
-                      <option key={s.id} value={s.id}>
-                        {s.surnames}, {s.name}
-                      </option>
-                    ))}
-                  </select>
+                  <Select value={fullDayStudentId ? String(fullDayStudentId) : ''} onValueChange={(v) => setFullDayStudentId(Number(v))}>
+                    <SelectTrigger className="modal-input">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {classStudents.map(s => (
+                        <SelectItem key={s.id} value={String(s.id)}>
+                          {s.surnames}, {s.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {/* Date picker */}

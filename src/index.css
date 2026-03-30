@@ -4,6 +4,63 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+/* ==============================
+   Theme tokens for Radix UI / shadcn
+   Tailwind v4 CSS-first config
+   ============================== */
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #1e293b;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1e293b;
+  --color-accent: #f3f4f6;
+  --color-accent-foreground: #1e293b;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #624db6;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --radius: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+  --radius-lg: 0.5rem;
+}
+
+/* ==============================
+   Radix Select popup — match TopBar dropdown
+   ============================== */
+[data-slot="select-content"] {
+  background-color: #ffffff !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+  border: none !important;
+  overflow: hidden;
+  padding: 0 !important;
+  margin-top: 0.35rem !important;
+}
+
+[data-slot="select-item"] {
+  padding: 0.75rem 1rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+
+/* Hide the check-mark indicator — TopBar dropdowns don't use it */
+[data-slot="select-item"] > span:first-child {
+  display: none !important;
+}
+
+[data-slot="select-item"]:hover,
+[data-slot="select-item"][data-highlighted] {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -3686,20 +3743,23 @@ dialog.modal-overlay::backdrop {
 }
 
 .eval-criteria-subject-select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  background: #ffffff;
+  padding: 0.5rem 0.75rem !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.5rem !important;
+  background: #ffffff !important;
   min-width: 200px;
   font-size: 0.875rem;
   color: #374151;
+  height: auto !important;
+  box-shadow: none !important;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.eval-criteria-subject-select:focus {
+.eval-criteria-subject-select:focus,
+.eval-criteria-subject-select:focus-visible {
   outline: none;
-  border-color: #624db6;
-  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1);
+  border-color: #624db6 !important;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1) !important;
 }
 
 /* Quarter tabs */
@@ -4947,20 +5007,23 @@ dialog.calendar-day-popup {
 }
 
 .attendance-subject-select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  background: #ffffff;
+  padding: 0.5rem 0.75rem !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.5rem !important;
+  background: #ffffff !important;
   min-width: 200px;
   font-size: 0.875rem;
   color: #374151;
+  height: auto !important;
+  box-shadow: none !important;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.attendance-subject-select:focus {
+.attendance-subject-select:focus,
+.attendance-subject-select:focus-visible {
   outline: none;
-  border-color: #624db6;
-  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1);
+  border-color: #624db6 !important;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1) !important;
 }
 
 .attendance-full-day-btn {
@@ -5637,20 +5700,23 @@ td.attendance-weekend-cell {
 }
 
 .class-rubrics-skill-select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  background: #ffffff;
+  padding: 0.5rem 0.75rem !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.5rem !important;
+  background: #ffffff !important;
   min-width: 200px;
   font-size: 0.875rem;
   color: #374151;
+  height: auto !important;
+  box-shadow: none !important;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.class-rubrics-skill-select:focus {
+.class-rubrics-skill-select:focus,
+.class-rubrics-skill-select:focus-visible {
   outline: none;
-  border-color: #624db6;
-  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1);
+  border-color: #624db6 !important;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1) !important;
 }
 
 /* Table container with scroll */
