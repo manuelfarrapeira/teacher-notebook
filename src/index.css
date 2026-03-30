@@ -2,18 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  border-radius: 0 !important;
+}
+
+::selection {
+  background: rgba(98, 77, 182, 0.2);
+  color: #1e293b;
+}
+
+/* Custom scrollbar for modern look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
-  background-color: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.011em;
 }
 
 #root {
@@ -71,16 +98,16 @@ body {
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 1.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(20px);
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
   padding: 2.5rem;
   width: 100%;
   max-width: 28rem;
   position: relative;
   z-index: 10;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .login-header {
@@ -171,8 +198,15 @@ body {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
+  border-radius: 0.625rem;
   font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #624db6;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.12);
 }
 
 .login-button {
@@ -411,7 +445,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #ffffff;
+  background: #f1f5f9;
   overflow: hidden;
   border-top: 3px solid #624db6;
 }
@@ -453,6 +487,7 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  background: #f1f5f9;
 }
 
 .dashboard-header {
@@ -471,9 +506,9 @@ body {
   align-items: center;
   width: 100%;
   padding: 0 1rem;
-  background: #fff;
-  border-bottom: 2px solid #e2e8f0;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 4px 12px 0 rgba(0, 0, 0, 0.03);
   min-height: 52px;
   z-index: 50;
   gap: 0.5rem;
@@ -517,8 +552,8 @@ body {
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 500;
-  border-radius: 0.375rem;
-  transition: all 0.2s;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
   white-space: nowrap;
   position: relative;
 }
@@ -533,7 +568,7 @@ body {
   height: 3px;
   background: #624db6;
   border-radius: 3px 3px 0 0;
-  transition: width 0.2s;
+  transition: width 0.25s ease;
 }
 
 .topbar-tab:hover {
@@ -544,6 +579,7 @@ body {
 .topbar-tab.active {
   color: #624db6;
   font-weight: 600;
+  background: #f5f3ff;
 }
 
 .topbar-tab.active::after {
@@ -567,11 +603,11 @@ body {
   left: 0;
   right: 0;
   background: white;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   z-index: 100;
   display: flex;
   flex-direction: column;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .topbar-dropdown-tab {
@@ -624,12 +660,13 @@ body {
 }
 
 .course-select {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   padding: 0.75rem 1rem;
   font-weight: 500;
   font-size: 1rem;
   color: #374151;
   border: 1px solid #d4d4d8;
+  border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   -webkit-appearance: none;
   appearance: none;
@@ -663,8 +700,9 @@ body {
 }
 
 .refresh-button {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border: 1px solid #d4d4d8;
+  border-radius: 0.5rem;
   color: #624db6;
   width: 36px;
   height: 36px;
@@ -697,8 +735,9 @@ body {
 }
 
 .language-button {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border: 1px solid #d4d4d8;
+  border-radius: 0.5rem;
   color: #374151;
   height: 36px;
   display: flex;
@@ -734,8 +773,8 @@ body {
   top: calc(100% + 0.5rem);
   right: 0;
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
   z-index: 1001;
   overflow: hidden;
   display: flex;
@@ -766,8 +805,9 @@ body {
 }
 
 .selector-button {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border: 1px solid #d4d4d8;
+  border-radius: 0.5rem;
   color: #374151;
   height: 36px;
   display: flex;
@@ -805,8 +845,8 @@ body {
   top: calc(100% + 0.5rem);
   left: 0;
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
   z-index: 50;
   overflow: hidden;
   display: flex;
@@ -892,18 +932,19 @@ dialog.modal-overlay::backdrop {
 
 .modal-content {
   background: white;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   padding: 1.5rem;
   width: 100%;
   max-width: 29rem;
   min-width: 29rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
 .modal-title {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1rem;
+  color: #1e293b;
 }
 
 .modal-body {
@@ -928,7 +969,9 @@ dialog.modal-overlay::backdrop {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #d1d5db;
-  background: #f8f9fa;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .modal-input:focus {
@@ -940,6 +983,7 @@ dialog.modal-overlay::backdrop {
 
 .modal-input.input-error {
   border: 2px solid #ef4444;
+  border-radius: 0.5rem;
   outline: none;
 }
 
@@ -955,23 +999,36 @@ dialog.modal-overlay::backdrop {
 }
 
 .modal-button {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.25rem;
   cursor: pointer;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
 }
 
 .modal-button.cancel {
   border: 1px solid #d5d5db;
   background: white;
+  color: #374151;
+}
+
+.modal-button.cancel:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
 }
 
 .modal-button.save {
   background: #624db6;
   color: white;
   border: none;
+  box-shadow: 0 1px 3px rgba(98, 77, 182, 0.3);
 }
 
 .modal-button.save:hover {
   background: #503ea0;
+  box-shadow: 0 4px 12px rgba(98, 77, 182, 0.35);
+  transform: translateY(-1px);
 }
 
 /* Espaciado extra para el footer del modal de confirmaciÃƒÆ’Ã‚Â³n de borrado */
@@ -989,16 +1046,20 @@ dialog.modal-overlay::backdrop {
   color: white;
   padding: 0.625rem 1rem;
   border: none;
+  border-radius: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   font-size: 0.875rem;
   font-weight: 500;
+  box-shadow: 0 1px 3px rgba(98, 77, 182, 0.3);
 }
 
 .dashboard-add-btn:hover {
   background: #503ea0;
+  box-shadow: 0 4px 12px rgba(98, 77, 182, 0.35);
+  transform: translateY(-1px);
 }
 
 .dashboard-add-btn:disabled {
@@ -1018,7 +1079,16 @@ dialog.modal-overlay::backdrop {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #d5d5db;
-  background: #f8f9fa;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-search:focus {
+  outline: none;
+  border-color: #624db6;
+  box-shadow: 0 0 0 3px rgba(98, 77, 182, 0.1);
+  background: #ffffff;
 }
 
 /* Advanced Filter Styles */
@@ -1041,10 +1111,12 @@ dialog.modal-overlay::backdrop {
   background-color: #624db6;
   color: white;
   border: none;
+  border-radius: 0.5rem;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(98, 77, 182, 0.3);
 }
 
 .filter-toggle-btn:hover {
@@ -1059,10 +1131,12 @@ dialog.modal-overlay::backdrop {
   background-color: #ef4444;
   color: white;
   border: none;
+  border-radius: 0.5rem;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3);
 }
 
 .filter-reset-btn:hover {
@@ -1072,11 +1146,13 @@ dialog.modal-overlay::backdrop {
 .filter-container {
   margin-top: 1rem;
   padding: 1.25rem;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .filter-row {
@@ -1112,8 +1188,9 @@ dialog.modal-overlay::backdrop {
 }
 
 .filter-select {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border: 1px solid #d4d4d8;
+  border-radius: 0.5rem;
   color: #374151;
   height: 40px;
   padding: 0 0.75rem;
@@ -1161,9 +1238,9 @@ dialog.modal-overlay::backdrop {
   padding: 0.75rem;
   padding-right: 2.5rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   font-size: 0.875rem;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .filter-input:focus {
@@ -1205,7 +1282,15 @@ dialog.modal-overlay::backdrop {
   justify-content: space-between;
   padding: 1rem;
   border: 1px solid #e5e7eb;
-  background-color: #f8f9fa;
+  border-radius: 0.625rem;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.dashboard-student:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #c4b5fd;
 }
 
 .dashboard-student-info {
@@ -1235,12 +1320,13 @@ dialog.modal-overlay::backdrop {
 }
 
 .dashboard-badge {
-  background: #f8f9fa;
+  background: #f1f5f9;
   color: #374151;
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 500;
   border: 1px solid #e5e7eb;
+  border-radius: 9999px;
 }
 
 .dashboard-empty {
@@ -1273,8 +1359,8 @@ dialog.modal-overlay::backdrop {
 .loading-modal-content {
   background: white;
   padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -1301,9 +1387,9 @@ dialog.modal-overlay::backdrop {
   background-color: #fee2e2;
   color: #b91c1c;
   padding: 1rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   border: 1px solid #fca5a5;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -1352,7 +1438,7 @@ dialog.modal-overlay::backdrop {
 
 .menu-button:hover {
   background-color: #f5f3ff;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
 }
 
 .mobile-menu-overlay {
@@ -1500,16 +1586,18 @@ dialog.modal-overlay::backdrop {
 
 .school-card {
   border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
   padding: 1rem;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   position: relative;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .school-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  background-color: #f0f1f3;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-color: #c4b5fd;
 }
 
 .school-card-header {
@@ -1575,11 +1663,11 @@ dialog.modal-overlay::backdrop {
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
-  background-color: #000;
+  background-color: #1e293b;
   color: white;
   padding: 0.5rem 0.75rem;
-  border-radius: 0;
-  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
   font-weight: 500;
   white-space: nowrap;
   opacity: 0;
@@ -1596,7 +1684,7 @@ dialog.modal-overlay::backdrop {
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
   border: 6px solid transparent;
-  border-top-color: #000;
+  border-top-color: #1e293b;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -1638,11 +1726,11 @@ dialog.modal-overlay::backdrop {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   border-radius: 0.75rem;
   border: 1px solid #e5e7eb;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
 }
 
 .school-section-header {
@@ -1679,12 +1767,13 @@ dialog.modal-overlay::backdrop {
 
 .class-card {
   transition: all 0.2s ease;
-  background-color: #f8f9fa;
+  background-color: #f8fafc;
+  border-radius: 0.5rem;
 }
 
 .class-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   background-color: #f0f1f3;
 }
 
@@ -1712,7 +1801,7 @@ dialog.modal-overlay::backdrop {
 .school-section-empty {
   padding: 2rem;
   text-align: center;
-  background-color: #f9fafb;
+  background-color: #f8fafc;
   border-radius: 0.5rem;
   border: 1px dashed #d1d5db;
 }
@@ -1758,8 +1847,9 @@ dialog.modal-overlay::backdrop {
 }
 
 .user-menu-button {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border: 1px solid #d4d4d8;
+  border-radius: 0.5rem;
   color: #624db6;
   width: 36px;
   height: 36px;
@@ -1783,7 +1873,7 @@ dialog.modal-overlay::backdrop {
   right: 0;
   background-color: white;
   border-radius: 0.75rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
   z-index: 1000;
   overflow: visible;
   min-width: 200px;
@@ -1924,8 +2014,9 @@ dialog.modal-overlay::backdrop {
   justify-content: space-between;
   width: 100%;
   padding: 0.75rem 1rem;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border: 1px solid #d4d4d8;
+  border-radius: 0.5rem;
   cursor: pointer;
   font-weight: 500;
   font-size: 0.95rem;
@@ -1944,8 +2035,8 @@ dialog.modal-overlay::backdrop {
   left: 0;
   right: 0;
   background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
   z-index: 50;
   overflow: hidden;
   display: flex;
@@ -1979,10 +2070,12 @@ dialog.modal-overlay::backdrop {
 
 /* Class Info Header */
 .student-class-info-header {
-  background: #f8f9fa;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
   padding: 1rem 1.5rem;
   margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .student-class-info-content {
@@ -2014,17 +2107,20 @@ dialog.modal-overlay::backdrop {
 }
 
 .student-card {
-  background: #f8f9fa;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: box-shadow 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .student-card:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-color: #c4b5fd;
 }
 
 .student-card-header {
@@ -2042,7 +2138,8 @@ dialog.modal-overlay::backdrop {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 1px solid #d4d4d8;
+  border: 2px solid #4b5563;
+  border-radius: 0.5rem;
   aspect-ratio: 3 / 4;
 }
 
@@ -2146,6 +2243,7 @@ dialog.modal-overlay::backdrop {
   background: #f5f3ff;
   color: #624db6;
   padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
   border: 1px solid #c4b5fd;
@@ -2179,11 +2277,12 @@ dialog.modal-overlay::backdrop {
   flex: 1;
   padding: 0.5rem;
   border: 1px solid #d1d5db;
-  background: #f8f9fa;
+  border-radius: 0.5rem;
+  background: #ffffff;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2227,9 +2326,11 @@ dialog.modal-overlay::backdrop {
   padding: 0.875rem 1.25rem;
   padding-left: 3rem;
   border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
   font-size: 0.9375rem;
   transition: all 0.2s ease;
-  background: #f8f9fa;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .student-search-input:hover {
@@ -2271,9 +2372,9 @@ dialog.modal-overlay::backdrop {
 .view-toggle-group {
   display: flex;
   gap: 0.5rem;
-  background: #f3f4f6;
+  background: #f1f5f9;
   padding: 0.25rem;
-  border-radius: 0.5rem;
+  border-radius: 0.625rem;
   align-items: stretch;
 }
 
@@ -2284,7 +2385,7 @@ dialog.modal-overlay::backdrop {
   padding: 0.5rem 0.75rem;
   border: none;
   background: transparent;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   color: #6b7280;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -2319,16 +2420,18 @@ dialog.modal-overlay::backdrop {
   align-items: center;
   padding: 1.5rem 1rem;
   border: 1px solid #e5e7eb;
-  background: #f8f9fa;
-  transition: all 0.2s;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  transition: all 0.2s ease;
   text-align: center;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .students-grid .student-list-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
-  border-color: #624db6;
+  border-color: #c4b5fd;
 }
 
 .students-grid .student-list-left {
@@ -2361,14 +2464,17 @@ dialog.modal-overlay::backdrop {
   justify-content: space-between;
   padding: 1rem;
   border: 1px solid #e5e7eb;
-  background: #f8f9fa;
-  transition: box-shadow 0.2s;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  transition: all 0.2s ease;
   text-align: left;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .students-list .student-list-item:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #c4b5fd;
 }
 
 .students-list .student-list-left {
@@ -2393,6 +2499,7 @@ dialog.modal-overlay::backdrop {
 /* Birthday Styles */
 .student-list-item.birthday {
   border: 2px solid #ef4444;
+  border-radius: 0.75rem;
   background: linear-gradient(135deg, #fff5f5 0%, #fef2f2 50%, #fff1f2 100%);
   position: relative;
 }
@@ -2418,6 +2525,7 @@ dialog.modal-overlay::backdrop {
   font-weight: 600;
   padding: 0.125rem 0.5rem;
   border: 1px solid #fecaca;
+  border-radius: 9999px;
   white-space: nowrap;
 }
 
@@ -2658,11 +2766,12 @@ dialog.modal-overlay::backdrop {
 .photo-upload-btn {
   padding: 0.5rem 1rem;
   border: 1px solid #d1d5db;
-  background: #f8f9fa;
+  border-radius: 0.5rem;
+  background: #ffffff;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
@@ -2702,14 +2811,16 @@ dialog.modal-overlay::backdrop {
   align-items: flex-start;
   padding: 1.5rem;
   border: 1px solid #e5e7eb;
-  background: #f8f9fa;
+  border-radius: 0.75rem;
+  background: #ffffff;
   transition: all 0.2s ease;
   height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .subjects-grid .dashboard-student:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-color: #624db6;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-color: #c4b5fd;
 }
 
 .subjects-grid .dashboard-student-info {
@@ -2750,12 +2861,15 @@ dialog.modal-overlay::backdrop {
   justify-content: space-between;
   padding: 1rem;
   border: 1px solid #e5e7eb;
-  background: #f8f9fa;
-  transition: box-shadow 0.2s;
+  border-radius: 0.625rem;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .subjects-list .dashboard-student:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #c4b5fd;
 }
 
 .subjects-list .dashboard-student-info {
@@ -2794,14 +2908,16 @@ dialog.modal-overlay::backdrop {
   align-items: flex-start;
   padding: 1.5rem;
   border: 1px solid #e5e7eb;
-  background: #f8f9fa;
+  border-radius: 0.75rem;
+  background: #ffffff;
   transition: all 0.2s ease;
   height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .skills-grid .dashboard-student:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-color: #624db6;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-color: #c4b5fd;
 }
 
 .skills-grid .dashboard-student-info {
@@ -2847,12 +2963,15 @@ dialog.modal-overlay::backdrop {
   justify-content: space-between;
   padding: 1rem;
   border: 1px solid #e5e7eb;
-  background: #f8f9fa;
-  transition: box-shadow 0.2s;
+  border-radius: 0.625rem;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .skills-list .dashboard-student:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #c4b5fd;
 }
 
 .skills-list .dashboard-student-info {
@@ -2872,7 +2991,7 @@ dialog.modal-overlay::backdrop {
 /* Skills with rubrics highlight */
 .skills-has-rubrics {
   border-left: 4px solid #22c55e !important;
-  background: linear-gradient(90deg, #f0fdf4 0%, #f8f9fa 100%) !important;
+  background: linear-gradient(90deg, #f0fdf4 0%, #ffffff 100%) !important;
 }
 
 .skills-has-rubrics:hover {
@@ -2892,9 +3011,9 @@ dialog.modal-overlay::backdrop {
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  background-color: #f9fafb;
+  background-color: #ffffff;
   border: 2px dashed #d1d5db;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   text-align: center;
 }
 
@@ -2924,10 +3043,11 @@ dialog.modal-overlay::backdrop {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   background-color: white;
   cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .schedule-form-select:focus {
@@ -2943,19 +3063,21 @@ dialog.modal-overlay::backdrop {
 /* Schedule Table Styles */
 .schedule-table-container {
   overflow-x: hidden;
-  border: 1px solid #6b7280;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
-  background: #f8f9fa;
+  background: #ffffff;
   table-layout: fixed;
 }
 
 .schedule-table th,
 .schedule-table td {
-  border: 1px solid #6b7280;
+  border: 1px solid #e5e7eb;
   text-align: center;
   vertical-align: middle;
 }
@@ -2991,7 +3113,7 @@ dialog.modal-overlay::backdrop {
   font-size: 1.1rem;
   padding: 1.5rem 1rem;
   white-space: nowrap;
-  border-right: 2px solid #6b7280;
+  border-right: 2px solid #e5e7eb;
 }
 
 .schedule-cell {
@@ -3430,6 +3552,7 @@ dialog.modal-overlay::backdrop {
   padding: 0.375rem 0.75rem;
   background: #f5f3ff;
   border: 1px solid #624db6;
+  border-radius: 9999px;
   font-size: 0.875rem;
   color: #624db6;
 }
@@ -3460,9 +3583,11 @@ dialog.modal-overlay::backdrop {
   width: 100%;
   padding: 0.625rem 0.875rem;
   border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
   margin-bottom: 0.75rem;
   font-size: 0.875rem;
-  background: #f8f9fa;
+  background: #f8fafc;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .class-subjects-search:focus {
@@ -3475,6 +3600,7 @@ dialog.modal-overlay::backdrop {
 .subject-checkbox-list {
   overflow-y: auto;
   border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
   max-height: 200px;
 }
 
@@ -3541,7 +3667,7 @@ dialog.modal-overlay::backdrop {
   font-size: 0.75rem;
   background: #f3f4f6;
   border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
+  border-radius: 0.375rem;
   cursor: pointer;
   color: #4b5563;
   transition: background-color 0.2s;
@@ -3562,10 +3688,12 @@ dialog.modal-overlay::backdrop {
 .eval-criteria-subject-select {
   padding: 0.5rem 0.75rem;
   border: 1px solid #d1d5db;
-  background: #f8f9fa;
+  border-radius: 0.5rem;
+  background: #ffffff;
   min-width: 200px;
   font-size: 0.875rem;
   color: #374151;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .eval-criteria-subject-select:focus {
@@ -3584,6 +3712,7 @@ dialog.modal-overlay::backdrop {
 .eval-criteria-quarter-tab {
   padding: 0.5rem 1rem;
   border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
   background: white;
   cursor: pointer;
   font-size: 0.8rem;
@@ -3600,10 +3729,12 @@ dialog.modal-overlay::backdrop {
   background: #624db6;
   color: white;
   border: 1px solid #624db6;
+  border-radius: 0.375rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(98, 77, 182, 0.3);
 }
 
 .eval-criteria-export-btn:hover {
@@ -3625,6 +3756,7 @@ dialog.modal-overlay::backdrop {
   background: #624db6;
   color: white;
   border-color: #624db6;
+  box-shadow: 0 1px 3px rgba(98, 77, 182, 0.3);
 }
 
 /* Table container with scroll */
@@ -3641,6 +3773,9 @@ dialog.modal-overlay::backdrop {
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .eval-criteria-table {
@@ -3803,14 +3938,14 @@ dialog.modal-overlay::backdrop {
 /* Tooltip popup (rendered via portal) */
 .eval-criteria-tooltip-popup {
   position: fixed;
-  background: #000;
+  background: #1e293b;
   color: #f9fafb;
   font-size: 0.82rem;
   font-weight: 400;
   line-height: 1.5;
   padding: 0.6rem 0.85rem;
-  border-radius: 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   white-space: pre-wrap;
   max-width: 280px;
   min-width: 120px;
@@ -3893,6 +4028,7 @@ dialog.modal-overlay::backdrop {
   padding: 0.25rem 0.5rem;
   background: #f3f4f6;
   border: 1px dashed #d1d5db;
+  border-radius: 0.25rem;
   cursor: pointer;
   color: #9ca3af;
   font-size: 0.8rem;
@@ -3924,6 +4060,7 @@ dialog.modal-overlay::backdrop {
   padding: 0.75rem;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
 }
 
 .eval-criteria-doc-info {
@@ -4030,6 +4167,7 @@ dialog.modal-overlay::backdrop {
   padding: 0.5rem 0.75rem;
   background: #f3f4f6;
   border-left: 3px solid #624db6;
+  border-radius: 0 0.375rem 0.375rem 0;
   margin-bottom: 0.75rem;
 }
 
@@ -4098,7 +4236,7 @@ dialog.modal-overlay::backdrop {
   padding: 0.5rem 0.75rem;
   background: #eff6ff;
   border: 1px solid #bfdbfe;
-  border-radius: 4px;
+  border-radius: 0.5rem;
 }
 
 /* ========================================
@@ -4134,6 +4272,7 @@ dialog.modal-overlay::backdrop {
 .calendar-nav-btn {
   background: none;
   border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
   cursor: pointer;
   padding: 0.375rem 0.625rem;
   color: #374151;
@@ -4150,6 +4289,7 @@ dialog.modal-overlay::backdrop {
 .calendar-today-btn {
   background: none;
   border: 1px solid #624db6;
+  border-radius: 0.375rem;
   color: #624db6;
   cursor: pointer;
   padding: 0.375rem 0.875rem;
@@ -4178,6 +4318,7 @@ dialog.modal-overlay::backdrop {
 .calendar-month-select,
 .calendar-year-select {
   border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
   background: white;
   color: #1f2937;
   font-size: 1rem;
@@ -4330,6 +4471,7 @@ dialog.modal-overlay::backdrop {
 .calendar-event-badge {
   font-size: 0.7rem;
   padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
   background-color: #624db6;
   color: white;
   cursor: pointer;
@@ -4409,9 +4551,11 @@ dialog.calendar-day-popup {
 .calendar-day-popup {
   background: white;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   min-width: 220px;
   max-width: 280px;
+  overflow: hidden;
 }
 
 
@@ -4594,6 +4738,7 @@ dialog.calendar-day-popup {
   padding: 0.625rem 0.75rem;
   background: #f0fdf4;
   border-left: 3px solid #16a34a;
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 .today-alerts-item-dot {
@@ -4645,6 +4790,7 @@ dialog.calendar-day-popup {
   padding: 0.75rem 1rem;
   background: #f0edf8;
   border-left: 3px solid #624db6;
+  border-radius: 0 0.5rem 0.5rem 0;
   margin-bottom: 1rem;
 }
 
@@ -4684,8 +4830,9 @@ dialog.calendar-day-popup {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  background: #f8f9fa;
+  background: #f8fafc;
   border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
 }
 
 .absence-summary-row:nth-child(even) {
@@ -4802,10 +4949,12 @@ dialog.calendar-day-popup {
 .attendance-subject-select {
   padding: 0.5rem 0.75rem;
   border: 1px solid #d1d5db;
-  background: #f8f9fa;
+  border-radius: 0.5rem;
+  background: #ffffff;
   min-width: 200px;
   font-size: 0.875rem;
   color: #374151;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .attendance-subject-select:focus {
@@ -4821,12 +4970,14 @@ dialog.calendar-day-popup {
   background: #624db6;
   color: white;
   border: 1px solid #624db6;
+  border-radius: 0.375rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.25rem;
   transition: all 0.2s;
   margin-left: auto;
+  box-shadow: 0 1px 3px rgba(98, 77, 182, 0.3);
 }
 
 .attendance-full-day-btn:hover {
@@ -4853,6 +5004,9 @@ dialog.calendar-day-popup {
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .attendance-table {
@@ -5039,9 +5193,9 @@ td.attendance-cell-today {
   width: 18px;
   height: 18px;
   border: 2px solid #d1d5db;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -5178,15 +5332,15 @@ td.attendance-weekend-cell {
 
 /* Portal tooltip ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ rendered at document.body, never clipped */
 .skill-rubrics-portal-tooltip {
-  background-color: #000;
+  background-color: #1e293b;
   color: #fff;
   padding: 0.45rem 0.75rem;
-  border-radius: 0;
+  border-radius: 0.5rem;
   font-size: 0.85rem;
   font-weight: 500;
   white-space: nowrap;
   pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
@@ -5485,10 +5639,12 @@ td.attendance-weekend-cell {
 .class-rubrics-skill-select {
   padding: 0.5rem 0.75rem;
   border: 1px solid #d1d5db;
-  background: #f8f9fa;
+  border-radius: 0.5rem;
+  background: #ffffff;
   min-width: 200px;
   font-size: 0.875rem;
   color: #374151;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .class-rubrics-skill-select:focus {
@@ -5511,6 +5667,9 @@ td.attendance-weekend-cell {
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .class-rubrics-table {
@@ -5667,6 +5826,7 @@ td.attendance-weekend-cell {
   padding: 0.25rem 0.5rem;
   background: #f3f4f6;
   border: 1px dashed #d1d5db;
+  border-radius: 0.25rem;
   cursor: pointer;
   color: #9ca3af;
   font-size: 0.8rem;
@@ -5698,14 +5858,14 @@ td.attendance-weekend-cell {
 /* Tooltip popup (rendered via portal) */
 .class-rubrics-tooltip-popup {
   position: fixed;
-  background: #000;
+  background: #1e293b;
   color: #f9fafb;
   font-size: 0.82rem;
   font-weight: 400;
   line-height: 1.5;
   padding: 0.6rem 0.85rem;
-  border-radius: 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   white-space: pre-wrap;
   max-width: 280px;
   min-width: 120px;
@@ -5857,10 +6017,12 @@ td.attendance-weekend-cell {
 
 .cooperative-delete-btn {
   background: #dc2626 !important;
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.3);
 }
 
 .cooperative-delete-btn:hover {
   background: #b91c1c !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
 }
 
 /* Groups grid */
@@ -5878,6 +6040,7 @@ td.attendance-weekend-cell {
   padding: 0.75rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   min-height: 120px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .cooperative-group-card.drag-over {
@@ -5902,8 +6065,9 @@ td.attendance-weekend-cell {
   font-size: 0.875rem;
   font-weight: 600;
   color: #374151;
-  background: #f9fafb;
+  background: #ffffff;
   border-radius: 0.375rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .cooperative-group-name-input:focus {
@@ -5942,11 +6106,11 @@ td.attendance-weekend-cell {
   align-items: center;
   gap: 0.5rem;
   padding: 0.4rem 0.5rem;
-  background: #f9fafb;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   cursor: grab;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
   user-select: none;
 }
 
@@ -6011,7 +6175,7 @@ td.attendance-weekend-cell {
   border-left: 4px solid #f59e0b;
   padding: 0.75rem 1rem;
   margin-top: 0.75rem;
-  border-radius: 0.375rem;
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 .cooperative-warning p {
@@ -6088,6 +6252,7 @@ td.attendance-weekend-cell {
 .grade-distribution-modal {
   max-width: 600px;
   width: 90vw;
+  border-radius: 1rem;
 }
 
 .grade-distribution-chart-container {
@@ -6098,7 +6263,7 @@ td.attendance-weekend-cell {
 
 /* Hover effect: sector "pops out" with scale + drop-shadow */
 .grade-distribution-sector {
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: transform 0.25s ease, filter 0.25s ease;
   transform-origin: center;
   cursor: pointer;
 }
