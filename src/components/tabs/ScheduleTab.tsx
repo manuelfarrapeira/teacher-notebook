@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import ReactDOM from 'react-dom';
 import { ChevronLeft, ChevronRight, Loader2, X, Bell } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import { CalendarAlertService, CalendarAlert } from '../../services/CalendarAlertService';
 import { ApiErrorException } from '../../services/BaseService';
 import { CalendarAlertFormModal } from '../modals/CalendarAlertFormModal';
@@ -380,29 +381,29 @@ export function ScheduleTab() {
           </div>
 
           <div className="calendar-header-selectors">
-            <select
-              className="calendar-month-select"
-              value={currentMonth}
-              onChange={e => setCurrentMonth(Number(e.target.value))}
-              aria-label="Seleccionar mes"
-            >
-              {Array.from({ length: 12 }, (_, i) => (
-                <option key={i} value={i}>
-                  {new Intl.DateTimeFormat(intlLocale, { month: 'long' }).format(new Date(2024, i, 1))}
-                </option>
-              ))}
-            </select>
-            <select
-              className="calendar-year-select"
-              value={currentYear}
-              onChange={e => setCurrentYear(Number(e.target.value))}
-              aria-label="Seleccionar año"
-            >
-              {Array.from({ length: 21 }, (_, i) => {
-                const y = today.getFullYear() - 10 + i;
-                return <option key={y} value={y}>{y}</option>;
-              })}
-            </select>
+            <Select value={String(currentMonth)} onValueChange={v => setCurrentMonth(Number(v))}>
+              <SelectTrigger className="calendar-month-select" aria-label="Seleccionar mes">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <SelectItem key={i} value={String(i)}>
+                    {new Intl.DateTimeFormat(intlLocale, { month: 'long' }).format(new Date(2024, i, 1))}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={String(currentYear)} onValueChange={v => setCurrentYear(Number(v))}>
+              <SelectTrigger className="calendar-year-select" aria-label="Seleccionar año">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 13 }, (_, i) => {
+                  const y = today.getFullYear() - 2 + i;
+                  return <SelectItem key={y} value={String(y)}>{y}</SelectItem>;
+                })}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="calendar-header-actions">
