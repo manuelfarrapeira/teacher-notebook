@@ -86,8 +86,8 @@ export function StudentAbsencesModal({
 
   return (
     <dialog className="modal-overlay" open>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-        <div className="modal-content" style={{ maxWidth: '550px', width: '100%', maxHeight: '80vh', display: 'flex', flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+        <div className="modal-content" style={{ maxWidth: '550px', width: '100%', maxHeight: '80vh', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 className="modal-title" style={{ margin: 0 }}>

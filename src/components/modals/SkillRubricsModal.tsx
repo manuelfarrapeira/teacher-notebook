@@ -703,8 +703,8 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
   return (
     <>
       <dialog className="modal-overlay" open={isOpen} aria-label={t('dashboard.skills.rubrics.modalTitle')}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-          <div className="modal-content skill-rubrics-modal-content" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+          <div className="modal-content skill-rubrics-modal-content" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
             {/* Header */}
             <div className="skill-rubrics-modal-header">
               <h3 className="modal-title">

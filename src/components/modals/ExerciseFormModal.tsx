@@ -196,8 +196,8 @@ export function ExerciseFormModal({
 
   return (
     <dialog className="modal-overlay" open={isOpen} aria-label={modalTitle}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-        <div className="modal-content" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+        <div className="modal-content" style={{ maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
           <h3 className="modal-title">{modalTitle}</h3>
 
           {errorMessage && (
@@ -278,42 +278,43 @@ export function ExerciseFormModal({
               {formErrors.quarter && <p className="form-error-text">{formErrors.quarter}</p>}
             </div>
 
-            {/* Percentage Grade */}
-            <div>
-              <label className="filter-label">
-                {t('dashboard.rubrics.percentageGrade')} (1-{100 - usedPercentage}) <span className="form-required-asterisk">*</span>
-              </label>
-              <input
-                ref={percentageRef}
-                type="text"
-                inputMode="numeric"
-                className={`modal-input ${formErrors.percentageGrade ? 'input-error' : ''}`}
-                placeholder={`1 - ${100 - usedPercentage}`}
-                value={percentageGrade}
-                onChange={(e) => handleNumericInput(e.target.value, setPercentageGrade)}
-                maxLength={3}
-                disabled={submitting}
-              />
-              {formErrors.percentageGrade && <p className="form-error-text">{formErrors.percentageGrade}</p>}
-            </div>
+            {/* Percentage Grade + Max Grade (same row) */}
+            <div className="modal-fields-row">
+              <div className="modal-field" style={{ flex: 1 }}>
+                <label className="filter-label">
+                  {t('dashboard.rubrics.percentageGrade')} (1-{100 - usedPercentage}) <span className="form-required-asterisk">*</span>
+                </label>
+                <input
+                  ref={percentageRef}
+                  type="text"
+                  inputMode="numeric"
+                  className={`modal-input ${formErrors.percentageGrade ? 'input-error' : ''}`}
+                  placeholder={`1 - ${100 - usedPercentage}`}
+                  value={percentageGrade}
+                  onChange={(e) => handleNumericInput(e.target.value, setPercentageGrade)}
+                  maxLength={3}
+                  disabled={submitting}
+                />
+                {formErrors.percentageGrade && <p className="form-error-text">{formErrors.percentageGrade}</p>}
+              </div>
 
-            {/* Max Grade */}
-            <div>
-              <label className="filter-label">
-                {t('dashboard.rubrics.maxGrade')} (1-20) <span className="form-required-asterisk">*</span>
-              </label>
-              <input
-                ref={maxGradeRef}
-                type="text"
-                inputMode="numeric"
-                className={`modal-input ${formErrors.maxGrade ? 'input-error' : ''}`}
-                placeholder="1 - 20"
-                value={maxGrade}
-                onChange={(e) => handleNumericInput(e.target.value, setMaxGrade)}
-                maxLength={2}
-                disabled={submitting}
-              />
-              {formErrors.maxGrade && <p className="form-error-text">{formErrors.maxGrade}</p>}
+              <div className="modal-field" style={{ flex: 1 }}>
+                <label className="filter-label">
+                  {t('dashboard.rubrics.maxGrade')} (1-20) <span className="form-required-asterisk">*</span>
+                </label>
+                <input
+                  ref={maxGradeRef}
+                  type="text"
+                  inputMode="numeric"
+                  className={`modal-input ${formErrors.maxGrade ? 'input-error' : ''}`}
+                  placeholder="1 - 20"
+                  value={maxGrade}
+                  onChange={(e) => handleNumericInput(e.target.value, setMaxGrade)}
+                  maxLength={2}
+                  disabled={submitting}
+                />
+                {formErrors.maxGrade && <p className="form-error-text">{formErrors.maxGrade}</p>}
+              </div>
             </div>
           </div>
 

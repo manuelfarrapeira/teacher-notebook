@@ -37,8 +37,8 @@ export function ConfirmDeleteModal({
       aria-label={title}
       onClose={onCancel}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-        <div className="modal-content" ref={modalRef} style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+        <div className="modal-content" ref={modalRef} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
           <h3 className="modal-title" style={{ color: '#dc2626' }}>
             {title}
           </h3>

@@ -225,8 +225,8 @@ export function RubricDistributionChartModal({
       aria-label={t('dashboard.classRubrics.chart.title')}
       onClose={onClose}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-        <div className="modal-content grade-distribution-modal" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+        <div className="modal-content grade-distribution-modal" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
           <h3 className="modal-title">
             📊 {t('dashboard.classRubrics.chart.title')}: {title}
           </h3>

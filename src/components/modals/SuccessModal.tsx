@@ -24,8 +24,8 @@ export function SuccessModal({ isOpen, message, onClose }: SuccessModalProps) {
       aria-label={t('common.success')}
       onClose={onClose}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-        <div className="modal-content" ref={modalRef} style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+        <div className="modal-content" ref={modalRef} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
           <h3 className="modal-title" style={{ color: '#16a34a' }}>
             ✅ {t('common.success')}
           </h3>

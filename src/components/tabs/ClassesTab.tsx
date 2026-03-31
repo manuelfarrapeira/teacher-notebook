@@ -557,8 +557,8 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
             {/* Form Modal */}
             {showForm && (
                 <dialog className="modal-overlay" open={showForm}>
-                    <div style={{display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto'}}>
-                        <div className="modal-content" style={{marginTop: 'auto', marginBottom: 'auto'}}>
+                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem'}}>
+                        <div className="modal-content" style={{maxHeight: '90vh', overflowY: 'auto'}}>
                             <h3 className="modal-title">
                                 {editingClass ? t('dashboard.classes.editTitle') : t('dashboard.classes.createTitle')}
                             </h3>

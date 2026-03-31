@@ -571,8 +571,8 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
       {/* Full Day Absence Modal */}
       {showFullDayModal && (
         <dialog className="modal-overlay" open={true}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-            <div className="modal-content" style={{ maxWidth: '450px', width: '100%', marginTop: 'auto', marginBottom: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+            <div className="modal-content" style={{ maxWidth: '450px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
               <h3 className="modal-title">{t('dashboard.attendance.fullDayAbsence')}</h3>
               <div className="modal-body">
                 {/* Student selector */}

@@ -157,8 +157,8 @@ export function GradeFormModal({
 
   return (
     <dialog className="modal-overlay" open={isOpen} aria-label={modalTitle}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-        <div className="modal-content" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+        <div className="modal-content" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
           <h3 className="modal-title">{modalTitle}</h3>
 
           <div style={{ marginBottom: '1rem', padding: '0.5rem 0.75rem', background: '#eff6ff', border: '1px solid #bfdbfe', fontSize: '0.875rem', color: '#1e40af' }}>

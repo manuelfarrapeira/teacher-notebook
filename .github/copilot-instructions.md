@@ -279,15 +279,45 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia de una tab con formular
 - Los modales deben usar el elemento `<dialog>` con clase `modal-overlay`
 - El contenido del modal debe estar en un `<div>` con clase `modal-content`
 - Los modales deben centrarse usando flexbox en el overlay
+- **Scroll interior obligatorio**: El scroll debe ser interno al `modal-content` (con `maxHeight: '90vh'` y `overflowY: 'auto'`), NO en el wrapper externo. El wrapper solo centra el modal.
+- **No usar `<select>` nativos**: Todos los dropdowns dentro de modales deben ser personalizados usando las clases `shape-dropdown`, `shape-dropdown-trigger`, `selector-dropdown` y `selector-option`, con manejo de click outside y estado para abrir/cerrar. No usar el elemento `<select>` de HTML nativo.
 
 ```tsx
+{/* ✅ CORRECTO - Scroll interior en modal-content */}
 <dialog className="modal-overlay" open={isOpen}>
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-    <div className="modal-content">
-      {/* Contenido del modal */}
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+    <div className="modal-content" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+      {/* Contenido del modal — hace scroll dentro */}
     </div>
   </div>
 </dialog>
+
+{/* ❌ INCORRECTO - Scroll exterior en el wrapper */}
+<dialog className="modal-overlay" open={isOpen}>
+  <div style={{ alignItems: 'flex-start', minHeight: '100%', overflowY: 'auto' }}>
+    <div className="modal-content">
+      {/* Todo el modal se mueve con el scroll */}
+    </div>
+  </div>
+</dialog>
+
+{/* ❌ INCORRECTO - Select nativo */}
+<select className="modal-input">
+  <option value="1">Opción 1</option>
+</select>
+
+{/* ✅ CORRECTO - Dropdown personalizado */}
+<div className="shape-dropdown" ref={dropdownRef}>
+  <button className="shape-dropdown-trigger modal-input" onClick={toggle}>
+    <span className="shape-dropdown-selected">{selectedLabel}</span>
+    <ChevronDown size={16} className={`shape-dropdown-chevron ${open ? 'open' : ''}`} />
+  </button>
+  {open && (
+    <div className="selector-dropdown" style={{ minWidth: '100%', top: 'calc(100% + 4px)' }}>
+      <button className="selector-option" onClick={selectOption}>Opción</button>
+    </div>
+  )}
+</div>
 ```
 
 ### Patrones de Formulario
@@ -319,4 +349,4 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia completa de:
 
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
-Última actualización: 2026-03-30
+Última actualización: 2026-03-31

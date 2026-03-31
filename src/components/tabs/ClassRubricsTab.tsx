@@ -642,8 +642,8 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
           ============================ */}
       {criterionModal && (
         <dialog className="modal-overlay" open={true} aria-label={t('dashboard.classRubrics.selectCriterion')}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-            <div className="modal-content" style={{ maxWidth: '500px', width: '100%', marginTop: 'auto', marginBottom: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+            <div className="modal-content" style={{ maxWidth: '500px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h3 className="modal-title">{t('dashboard.classRubrics.selectCriterion')}</h3>
                 <button
@@ -707,8 +707,8 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
           ============================ */}
       {showManageModal && (
         <dialog className="modal-overlay" open={true} aria-label={t('dashboard.classRubrics.manageClassRubrics')}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-            <div className="modal-content" style={{ maxWidth: '550px', width: '100%', marginTop: 'auto', marginBottom: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+            <div className="modal-content" style={{ maxWidth: '550px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h3 className="modal-title">
                   {t('dashboard.classRubrics.availableRubrics')}

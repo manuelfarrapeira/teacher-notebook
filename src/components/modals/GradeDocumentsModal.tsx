@@ -140,8 +140,8 @@ export function GradeDocumentsModal({
   return (
     <>
       <dialog className="modal-overlay" open={isOpen} aria-label={t('dashboard.rubrics.gradeDocuments')}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-          <div className="modal-content" style={{ maxWidth: '36rem', minWidth: '36rem', marginTop: 'auto', marginBottom: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+          <div className="modal-content" style={{ maxWidth: '36rem', minWidth: '36rem', maxHeight: '90vh', overflowY: 'auto' }}>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 className="modal-title" style={{ marginBottom: 0 }}>

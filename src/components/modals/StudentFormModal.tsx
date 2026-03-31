@@ -54,6 +54,8 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [shapeDropdownOpen, setShapeDropdownOpen] = useState(false);
   const shapeDropdownRef = useRef<HTMLDivElement>(null);
+  const shapeTriggerRef = useRef<HTMLButtonElement>(null);
+  const [shapeMenuPos, setShapeMenuPos] = useState<{ top: number; right: number } | null>(null);
   const [genderDropdownOpen, setGenderDropdownOpen] = useState(false);
   const genderDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -102,6 +104,16 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
     };
     if (shapeDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      // Calculate fixed position from trigger button
+      if (shapeTriggerRef.current) {
+        const rect = shapeTriggerRef.current.getBoundingClientRect();
+        setShapeMenuPos({
+          top: rect.bottom + 4,
+          right: window.innerWidth - rect.right,
+        });
+      }
+    } else {
+      setShapeMenuPos(null);
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [shapeDropdownOpen]);
@@ -279,8 +291,8 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
     <>
       <dialog className="modal-overlay" open={isOpen}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
-          <div className="modal-content" style={{ maxWidth: '500px', width: '100%', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexShrink: 0 }}>
+          <div className="modal-content" style={{ maxWidth: '700px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h3 className="modal-title">
                 {student ? t('dashboard.students.editStudent') : t('dashboard.students.addStudent')}
               </h3>
@@ -294,59 +306,59 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
               </button>
             </div>
 
-            <div className="modal-body" style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
-              {/* Name Field */}
-              <div className="modal-field">
-                <label className="modal-label">
-                  {t('dashboard.students.name')} <span className="form-required-asterisk">*</span>
-                </label>
-                <input
-                  ref={nameInputRef}
-                  type="text"
-                  className={`modal-input ${formErrors.name ? 'input-error' : ''}`}
-                  placeholder={t('dashboard.students.namePlaceholder')}
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  disabled={submitting}
-                />
-                {formErrors.name && <p className="form-error-text">{formErrors.name}</p>}
-              </div>
-
-              {/* Surnames Field */}
-              <div className="modal-field">
-                <label className="modal-label">
-                  {t('dashboard.students.surnames')} <span className="form-required-asterisk">*</span>
-                </label>
-                <input
-                  ref={surnamesInputRef}
-                  type="text"
-                  className={`modal-input ${formErrors.surnames ? 'input-error' : ''}`}
-                  placeholder={t('dashboard.students.surnamesPlaceholder')}
-                  value={formData.surnames}
-                  onChange={(e) => handleInputChange('surnames', e.target.value)}
-                  disabled={submitting}
-                />
-                {formErrors.surnames && <p className="form-error-text">{formErrors.surnames}</p>}
-              </div>
-
-              {/* Date of Birth Field */}
-              <div className="modal-field">
-                <label className="modal-label">
-                  {t('dashboard.students.dateOfBirth')} <span className="form-required-asterisk">*</span>
-                </label>
-                <input
-                  ref={dateInputRef}
-                  type="date"
-                  className={`modal-input ${formErrors.dateOfBirth ? 'input-error' : ''}`}
-                  value={formData.dateOfBirth}
-                  onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                  disabled={submitting}
-                />
-                {formErrors.dateOfBirth && <p className="form-error-text">{formErrors.dateOfBirth}</p>}
-              </div>
-
-              {/* Gender + Shape Fields (same row) */}
+            <div className="modal-body">
+              {/* Row 1: Name + Surnames */}
               <div className="modal-fields-row">
+                <div className="modal-field" style={{ flex: 1 }}>
+                  <label className="modal-label">
+                    {t('dashboard.students.name')} <span className="form-required-asterisk">*</span>
+                  </label>
+                  <input
+                    ref={nameInputRef}
+                    type="text"
+                    className={`modal-input ${formErrors.name ? 'input-error' : ''}`}
+                    placeholder={t('dashboard.students.namePlaceholder')}
+                    value={formData.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    disabled={submitting}
+                  />
+                  {formErrors.name && <p className="form-error-text">{formErrors.name}</p>}
+                </div>
+
+                <div className="modal-field" style={{ flex: 1 }}>
+                  <label className="modal-label">
+                    {t('dashboard.students.surnames')} <span className="form-required-asterisk">*</span>
+                  </label>
+                  <input
+                    ref={surnamesInputRef}
+                    type="text"
+                    className={`modal-input ${formErrors.surnames ? 'input-error' : ''}`}
+                    placeholder={t('dashboard.students.surnamesPlaceholder')}
+                    value={formData.surnames}
+                    onChange={(e) => handleInputChange('surnames', e.target.value)}
+                    disabled={submitting}
+                  />
+                  {formErrors.surnames && <p className="form-error-text">{formErrors.surnames}</p>}
+                </div>
+              </div>
+
+              {/* Row 2: Date of Birth + Gender + Shape */}
+              <div className="modal-fields-row">
+                <div className="modal-field" style={{ flex: 1 }}>
+                  <label className="modal-label">
+                    {t('dashboard.students.dateOfBirth')} <span className="form-required-asterisk">*</span>
+                  </label>
+                  <input
+                    ref={dateInputRef}
+                    type="date"
+                    className={`modal-input ${formErrors.dateOfBirth ? 'input-error' : ''}`}
+                    value={formData.dateOfBirth}
+                    onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                    disabled={submitting}
+                  />
+                  {formErrors.dateOfBirth && <p className="form-error-text">{formErrors.dateOfBirth}</p>}
+                </div>
+
                 {/* Gender Field */}
                 <div className="modal-field" style={{ flex: 1 }}>
                   <label className="modal-label">
@@ -400,12 +412,13 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                 </div>
 
                 {/* Shape Field */}
-                <div className="modal-field" style={{ flex: 1 }}>
+                <div className="modal-field" style={{ flex: 0, minWidth: '80px' }}>
                   <label className="modal-label">
                     {t('dashboard.students.shape')}
                   </label>
                   <div className="shape-dropdown" ref={shapeDropdownRef}>
                   <button
+                    ref={shapeTriggerRef}
                     type="button"
                     className="shape-dropdown-trigger modal-input"
                     onClick={() => setShapeDropdownOpen(prev => !prev)}
@@ -434,13 +447,14 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                     <ChevronDown size={16} className={`shape-dropdown-chevron ${shapeDropdownOpen ? 'open' : ''}`} />
                   </button>
 
-                  {shapeDropdownOpen && (
-                    <div className="shape-dropdown-menu" role="listbox">
+                  {shapeDropdownOpen && shapeMenuPos && (
+                    <div
+                      className="shape-dropdown-menu"
+                      style={{ position: 'fixed', top: shapeMenuPos.top, right: shapeMenuPos.right, left: 'auto', zIndex: 100 }}
+                    >
                       {/* None */}
                       <button
                         type="button"
-                        role="option"
-                        aria-selected={Boolean(!formData.shape)}
                         className={`shape-dropdown-item ${!formData.shape ? 'selected' : ''}`}
                         onClick={() => { handleInputChange('shape', ''); setShapeDropdownOpen(false); }}
                       >
@@ -449,8 +463,6 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                       {/* Circle */}
                       <button
                         type="button"
-                        role="option"
-                        aria-selected={formData.shape === 'CIRCLE'}
                         aria-label={t('dashboard.students.shapeCircle')}
                         className={`shape-dropdown-item ${formData.shape === 'CIRCLE' ? 'selected' : ''}`}
                         onClick={() => { handleInputChange('shape', 'CIRCLE'); setShapeDropdownOpen(false); }}
@@ -462,8 +474,6 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                       {/* Triangle */}
                       <button
                         type="button"
-                        role="option"
-                        aria-selected={formData.shape === 'TRIANGLE'}
                         aria-label={t('dashboard.students.shapeTriangle')}
                         className={`shape-dropdown-item ${formData.shape === 'TRIANGLE' ? 'selected' : ''}`}
                         onClick={() => { handleInputChange('shape', 'TRIANGLE'); setShapeDropdownOpen(false); }}
@@ -475,8 +485,6 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                       {/* Square */}
                       <button
                         type="button"
-                        role="option"
-                        aria-selected={formData.shape === 'SQUARE'}
                         aria-label={t('dashboard.students.shapeSquare')}
                         className={`shape-dropdown-item ${formData.shape === 'SQUARE' ? 'selected' : ''}`}
                         onClick={() => { handleInputChange('shape', 'SQUARE'); setShapeDropdownOpen(false); }}
@@ -491,7 +499,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                 </div>
               </div>
 
-              {/* Additional Info Field */}
+              {/* Row 3: Additional Info */}
               <div className="modal-field">
                 <label className="modal-label">
                   {t('dashboard.students.additionalInfo')}
@@ -554,7 +562,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
               )}
             </div>
 
-            <div className="modal-footer" style={{ flexShrink: 0, marginTop: '1rem' }}>
+            <div className="modal-footer" style={{ marginTop: '1rem' }}>
               <button
                 onClick={handleCancel}
                 className="modal-button cancel"

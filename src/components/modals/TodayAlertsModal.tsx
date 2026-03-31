@@ -27,8 +27,8 @@ export function TodayAlertsModal({ isOpen, alerts, onClose, onGoToCalendar }: Re
       aria-label={t('dashboard.calendar.todayAlerts')}
       onClose={onClose}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-        <div className="modal-content today-alerts-modal" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+        <div className="modal-content today-alerts-modal" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
           <div className="today-alerts-header">
             <div className="today-alerts-title-row">
               <Bell size={18} className="today-alerts-bell-icon" />

@@ -373,8 +373,8 @@ export function StudentGradesModal({
   return (
     <>
       <dialog className="modal-overlay" open={isOpen} aria-label={title}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-          <div className="modal-content" style={{ maxWidth: '850px', width: '95vw', maxHeight: '85vh', display: 'flex', flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+          <div className="modal-content" style={{ maxWidth: '850px', width: '95vw', maxHeight: '85vh', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 className="modal-title" style={{ marginBottom: 0 }}>{title}</h3>

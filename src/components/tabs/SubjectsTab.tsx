@@ -245,8 +245,8 @@ export function SubjectsTab() {
       {/* Form Modal */}
       {showForm && (
         <dialog className="modal-overlay" open={showForm} aria-label={editingSubject ? t('dashboard.subjects.editTitle') : t('dashboard.subjects.createTitle')}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
-            <div className="modal-content" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+            <div className="modal-content" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
               <h3 className="modal-title">
                 {editingSubject ? t('dashboard.subjects.editTitle') : t('dashboard.subjects.createTitle')}
               </h3>
