@@ -174,8 +174,8 @@ export function ClassSubjectsModal({
   return (
     <>
       <dialog className="modal-overlay" open={isOpen} aria-label={t('dashboard.classSubjects.title')}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <div className="modal-content class-subjects-modal-content">
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
+          <div className="modal-content class-subjects-modal-content" style={{ marginTop: 'auto', marginBottom: 'auto' }}>
             {/* Header */}
             <h3 className="modal-title">
               {t('dashboard.classSubjects.title')}{className ? `: ${className}` : ''}

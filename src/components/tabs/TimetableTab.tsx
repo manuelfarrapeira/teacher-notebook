@@ -637,8 +637,8 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
           open={showForm}
           aria-label={editingSchedule ? t('dashboard.schedule.editEntry') : t('dashboard.schedule.addEntry')}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '2rem 0' }}>
-            <div className="modal-content" style={{ maxWidth: '32rem', minWidth: '32rem', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
+            <div className="modal-content" style={{ maxWidth: '32rem', minWidth: '32rem', maxHeight: '90vh', display: 'flex', flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
               <h3 className="modal-title">
                 {editingSchedule ? t('dashboard.schedule.editEntry') : t('dashboard.schedule.addEntry')}
               </h3>

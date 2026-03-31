@@ -999,6 +999,7 @@ dialog.modal-overlay {
   max-height: none;
   width: 100vw;
   height: 100vh;
+  overflow-y: auto;
 }
 
 dialog.modal-overlay::backdrop {

@@ -278,9 +278,9 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
   return (
     <>
       <dialog className="modal-overlay" open={isOpen}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '1rem' }}>
-          <div className="modal-content" style={{ maxWidth: '500px', width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
+          <div className="modal-content" style={{ maxWidth: '500px', width: '100%', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexShrink: 0 }}>
               <h3 className="modal-title">
                 {student ? t('dashboard.students.editStudent') : t('dashboard.students.addStudent')}
               </h3>
@@ -294,7 +294,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
               </button>
             </div>
 
-            <div className="modal-body">
+            <div className="modal-body" style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
               {/* Name Field */}
               <div className="modal-field">
                 <label className="modal-label">
@@ -554,7 +554,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
               )}
             </div>
 
-            <div className="modal-footer">
+            <div className="modal-footer" style={{ flexShrink: 0, marginTop: '1rem' }}>
               <button
                 onClick={handleCancel}
                 className="modal-button cancel"

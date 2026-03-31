@@ -175,8 +175,8 @@ export function StudentRubricCriteriaModal({
 
   return (
     <dialog className="modal-overlay" open>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '1rem' }}>
-        <div className="modal-content" style={{ maxWidth: '950px', width: '100%', maxHeight: '80vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
+        <div className="modal-content" style={{ maxWidth: '950px', width: '100%', maxHeight: '80vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', marginTop: 'auto', marginBottom: 'auto' }}>
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 className="modal-title" style={{ margin: 0 }}>

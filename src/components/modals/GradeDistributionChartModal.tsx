@@ -169,8 +169,8 @@ export function GradeDistributionChartModal({
       aria-label={t('dashboard.rubrics.chart.title')}
       onClose={onClose}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-        <div className="modal-content grade-distribution-modal" style={{ maxWidth: '850px', width: '90vw' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
+        <div className="modal-content grade-distribution-modal" style={{ maxWidth: '850px', width: '90vw', marginTop: 'auto', marginBottom: 'auto' }}>
           <h3 className="modal-title">
             📊 {t('dashboard.rubrics.chart.title')}: {title}
           </h3>

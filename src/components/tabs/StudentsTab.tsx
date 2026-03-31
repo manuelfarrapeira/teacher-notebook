@@ -770,8 +770,8 @@ export function StudentsTab({
       {/* Additional Info Popup */}
       {infoPopupStudent && (
         <dialog className="modal-overlay" open={true}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '1rem' }}>
-            <div className="modal-content" style={{ maxWidth: '500px', width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
+            <div className="modal-content" style={{ maxWidth: '500px', width: '100%', marginTop: 'auto', marginBottom: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h3 className="modal-title">{t('dashboard.students.additionalInfo')}</h3>
                 <button
@@ -799,8 +799,8 @@ export function StudentsTab({
       {/* Quick Assign Confirmation Modal */}
       {confirmQuickAssign !== null && selectedClass !== null && (
         <dialog className="modal-overlay" open={true}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '1rem' }}>
-            <div className="modal-content" style={{ maxWidth: '450px', width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
+            <div className="modal-content" style={{ maxWidth: '450px', width: '100%', marginTop: 'auto', marginBottom: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h3 className="modal-title">{t('dashboard.students.confirmAssignTitle')}</h3>
                 <button
@@ -875,8 +875,8 @@ export function StudentsTab({
 
         return (
           <dialog className="modal-overlay" open={true}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '1rem' }}>
-              <div className="modal-content" style={{ maxWidth: '450px', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', minHeight: '100%', padding: '1rem', overflowY: 'auto' }}>
+              <div className="modal-content" style={{ maxWidth: '450px', width: '100%', marginTop: 'auto', marginBottom: 'auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                   <h3 className="modal-title">{t('dashboard.students.removeFromClassTitle')}</h3>
                   <button
