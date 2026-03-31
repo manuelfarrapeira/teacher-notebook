@@ -491,7 +491,7 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
       {/* Header */}
       <div className="dashboard-section-header">
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <div className="tooltip-container" data-tooltip={t('dashboard.classSubjects.manageSubjects')}>
+          <div className="tooltip-container tooltip-bottom" data-tooltip={t('dashboard.classSubjects.manageSubjects')}>
             <button
               className="dashboard-add-btn"
               onClick={() => setShowSubjectsModal(true)}
@@ -500,7 +500,7 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
               <BookType size={16} />
             </button>
           </div>
-          <div className="tooltip-container" data-tooltip={t('common.print')}>
+          <div className="tooltip-container tooltip-bottom" data-tooltip={t('common.print')}>
             <button
               className="dashboard-add-btn"
               onClick={handlePrint}

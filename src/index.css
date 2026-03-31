@@ -1782,6 +1782,26 @@ dialog.modal-overlay::backdrop {
   display: none;
 }
 
+/* Tooltip that shows below the element */
+.tooltip-container.tooltip-bottom::before {
+  bottom: auto;
+  top: calc(100% + 8px);
+  transform: translateX(-50%) translateY(4px);
+}
+
+.tooltip-container.tooltip-bottom::after {
+  bottom: auto;
+  top: calc(100% + 2px);
+  transform: translateX(-50%) translateY(4px);
+  border-top-color: transparent;
+  border-bottom-color: #2d3436;
+}
+
+.tooltip-container.tooltip-bottom:hover::before,
+.tooltip-container.tooltip-bottom:hover::after {
+  transform: translateX(-50%) translateY(0);
+}
+
 .school-card-details {
   font-size: 0.875rem;
   color: #7a8078;
