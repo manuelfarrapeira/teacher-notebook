@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Loader2, Download, Trash2, Edit, X, Upload } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Loader2, Download, Trash2, Edit, X, Upload, CheckCircle } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { ExerciseService, ExerciseDocument } from '../../services/ExerciseService';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
@@ -47,8 +47,17 @@ export function DocumentsModal({
   const [errorMessage, setErrorMessage] = useState('');
   const [uploadDescription, setUploadDescription] = useState('');
   const [confirmDeleteDoc, setConfirmDeleteDoc] = useState<ExerciseDocument | null>(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /** Auto-hide success message after 3 seconds */
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
 
   const handleUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
@@ -64,15 +73,19 @@ export function DocumentsModal({
 
     setUploading(true);
     setErrorMessage('');
+    setSuccessMessage('');
     try {
       await ExerciseService.uploadDocument(exerciseId, file, uploadDescription.trim());
       setUploadDescription('');
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+      setSuccessMessage(t('dashboard.rubrics.uploadDocumentSuccess'));
       onDocumentsChanged();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.uploadDocumentError'));
+      const msg = error instanceof Error ? error.message : '';
+      const isFileSizeError = msg.toLowerCase().includes('maximum upload size') || msg.toLowerCase().includes('size exceed');
+      setErrorMessage(isFileSizeError ? t('dashboard.rubrics.validation.fileTooLarge') : (msg || t('dashboard.rubrics.uploadDocumentError')));
     } finally {
       setUploading(false);
     }
@@ -158,8 +171,15 @@ export function DocumentsModal({
                   onClick={() => setErrorMessage('')}
                   style={{ marginLeft: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626', fontWeight: 600 }}
                 >
-                  âœ•
+                  ✕
                 </button>
+              </div>
+            )}
+
+            {successMessage && (
+              <div style={{ color: '#16a34a', fontSize: '0.875rem', marginBottom: '0.75rem', padding: '0.5rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '0.375rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <CheckCircle size={16} />
+                {successMessage}
               </div>
             )}
 
