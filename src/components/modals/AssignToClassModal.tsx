@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Loader2, X } from 'lucide-react';
+import { Loader2, X, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Student, StudentService } from '../../services/StudentService';
 import { School } from '../../services/SchoolService';
@@ -28,15 +28,55 @@ export function AssignToClassModal({
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
-  const schoolSelectRef = useRef<HTMLSelectElement>(null);
+
+  const [schoolDropdownOpen, setSchoolDropdownOpen] = useState(false);
+  const [classDropdownOpen, setClassDropdownOpen] = useState(false);
+  const schoolDropdownRef = useRef<HTMLDivElement>(null);
+  const classDropdownRef = useRef<HTMLDivElement>(null);
+  const schoolButtonRef = useRef<HTMLButtonElement>(null);
 
   const currentSchool = schools.find(s => s.id === selectedSchoolId);
+  const selectedClass = currentSchool?.classes.find(c => c.id === selectedClassId);
 
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => schoolSelectRef.current?.focus(), 50);
+      setTimeout(() => schoolButtonRef.current?.focus(), 50);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedSchoolId(null);
+      setSelectedClassId(null);
+      setSchoolDropdownOpen(false);
+      setClassDropdownOpen(false);
+    }
+  }, [isOpen]);
+
+  // Click outside handlers
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (schoolDropdownRef.current && !schoolDropdownRef.current.contains(e.target as Node)) {
+        setSchoolDropdownOpen(false);
+      }
+    };
+    if (schoolDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [schoolDropdownOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (classDropdownRef.current && !classDropdownRef.current.contains(e.target as Node)) {
+        setClassDropdownOpen(false);
+      }
+    };
+    if (classDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [classDropdownOpen]);
 
   const handleAssign = async () => {
     if (!selectedSchoolId || !selectedClassId) return;
@@ -95,23 +135,44 @@ export function AssignToClassModal({
                 <label className="modal-label">
                   {t('dashboard.students.selectSchool')} <span className="form-required-asterisk">*</span>
                 </label>
-                <select
-                  ref={schoolSelectRef}
-                  className="modal-input"
-                  value={selectedSchoolId || ''}
-                  onChange={(e) => {
-                    setSelectedSchoolId(Number(e.target.value));
-                    setSelectedClassId(null);
-                  }}
-                  disabled={submitting}
-                >
-                  <option value="">{t('dashboard.students.selectSchool')}</option>
-                  {schools.map(school => (
-                    <option key={school.id} value={school.id}>
-                      {school.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="shape-dropdown" ref={schoolDropdownRef}>
+                  <button
+                    ref={schoolButtonRef}
+                    type="button"
+                    className="shape-dropdown-trigger modal-input"
+                    onClick={() => { setSchoolDropdownOpen(prev => !prev); setClassDropdownOpen(false); }}
+                    disabled={submitting}
+                    aria-haspopup="listbox"
+                    aria-expanded={schoolDropdownOpen}
+                  >
+                    <span className="shape-dropdown-selected">
+                      {selectedSchoolId
+                        ? <span>{currentSchool?.name}</span>
+                        : <span className="shape-dropdown-placeholder">{t('dashboard.students.selectSchool')}</span>
+                      }
+                    </span>
+                    <ChevronDown size={16} className={`shape-dropdown-chevron ${schoolDropdownOpen ? 'open' : ''}`} />
+                  </button>
+
+                  {schoolDropdownOpen && (
+                    <div className="selector-dropdown" style={{ minWidth: '100%', top: 'calc(100% + 4px)', maxHeight: '200px', overflowY: 'auto' }}>
+                      {schools.map(school => (
+                        <button
+                          key={school.id}
+                          type="button"
+                          className="selector-option"
+                          onClick={() => {
+                            setSelectedSchoolId(school.id);
+                            setSelectedClassId(null);
+                            setSchoolDropdownOpen(false);
+                          }}
+                        >
+                          {school.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Class Selector */}
@@ -119,23 +180,46 @@ export function AssignToClassModal({
                 <label className="modal-label">
                   {t('dashboard.students.selectClass')} <span className="form-required-asterisk">*</span>
                 </label>
-                <select
-                  className="modal-input"
-                  value={selectedClassId || ''}
-                  onChange={(e) => setSelectedClassId(Number(e.target.value))}
-                  disabled={!selectedSchoolId || submitting}
-                >
-                  <option value="">{t('dashboard.students.selectClass')}</option>
-                  {currentSchool?.classes.map(cls => (
-                    <option key={cls.id} value={cls.id}>
-                      {cls.name} - {cls.schoolYear}
-                    </option>
-                  ))}
-                </select>
+                <div className="shape-dropdown" ref={classDropdownRef}>
+                  <button
+                    type="button"
+                    className="shape-dropdown-trigger modal-input"
+                    onClick={() => { setClassDropdownOpen(prev => !prev); setSchoolDropdownOpen(false); }}
+                    disabled={!selectedSchoolId || submitting}
+                    aria-haspopup="listbox"
+                    aria-expanded={classDropdownOpen}
+                  >
+                    <span className="shape-dropdown-selected">
+                      {selectedClassId && selectedClass
+                        ? <span>{selectedClass.name} - {selectedClass.schoolYear}</span>
+                        : <span className="shape-dropdown-placeholder">{t('dashboard.students.selectClass')}</span>
+                      }
+                    </span>
+                    <ChevronDown size={16} className={`shape-dropdown-chevron ${classDropdownOpen ? 'open' : ''}`} />
+                  </button>
+
+                  {classDropdownOpen && currentSchool && (
+                    <div className="selector-dropdown" style={{ minWidth: '100%', top: 'calc(100% + 4px)', maxHeight: '200px', overflowY: 'auto' }}>
+                      {currentSchool.classes.map(cls => (
+                        <button
+                          key={cls.id}
+                          type="button"
+                          className="selector-option"
+                          onClick={() => {
+                            setSelectedClassId(cls.id);
+                            setClassDropdownOpen(false);
+                          }}
+                        >
+                          {cls.name} - {cls.schoolYear}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="modal-footer">
+            <div className="modal-footer" style={{ marginTop: '1.5rem', gap: '0.75rem' }}>
               <button
                 onClick={handleClose}
                 className="modal-button cancel"

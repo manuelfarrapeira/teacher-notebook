@@ -310,7 +310,7 @@ export function SubjectsTab() {
           {filteredSubjects.map((subject) => (
             <div key={subject.id} className="dashboard-student">
               <div className="dashboard-student-info">
-                <BookType size={20} style={{ color: '#624db6', marginRight: '0.75rem' }} />
+                <BookType size={20} style={{ color: '#2c5f4a', marginRight: '0.75rem' }} />
                 <span className="dashboard-student-name">{subject.name}</span>
               </div>
               <div className="school-card-actions">

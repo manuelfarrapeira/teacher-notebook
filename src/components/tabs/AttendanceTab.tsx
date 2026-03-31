@@ -545,7 +545,7 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                         return (
                           <td key={day.dateStr} className={cellClasses}>
                             {isCellLoading ? (
-                              <Loader2 className="animate-spin" size={14} style={{ color: '#624db6', margin: '0 auto' }} />
+                              <Loader2 className="animate-spin" size={14} style={{ color: '#2c5f4a', margin: '0 auto' }} />
                             ) : (
                               <button
                                 className={`attendance-checkbox ${isChecked ? 'checked' : ''}`}
@@ -609,7 +609,7 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
 
                 {/* Confirmation text */}
                 {fullDayStudentId > 0 && (
-                  <p style={{ fontSize: '0.875rem', color: '#374151', lineHeight: '1.5', background: '#fef2f2', border: '1px solid #fecaca', padding: '0.75rem', marginTop: '0.5rem' }}>
+                  <p style={{ fontSize: '0.875rem', color: '#3d4440', lineHeight: '1.5', background: '#fef2f2', border: '1px solid #fecaca', padding: '0.75rem', marginTop: '0.5rem' }}>
                     {confirmMessage}
                   </p>
                 )}

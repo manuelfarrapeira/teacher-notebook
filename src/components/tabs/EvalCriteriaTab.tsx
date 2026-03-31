@@ -458,7 +458,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
       ) : (
         <>
           {filteredExercises.length === 0 && (
-            <div style={{ color: '#6b7280', fontSize: '0.85rem', marginBottom: '0.75rem', textAlign: 'center' }}>
+            <div style={{ color: '#7a8078', fontSize: '0.85rem', marginBottom: '0.75rem', textAlign: 'center' }}>
               {t('dashboard.rubrics.noExercises')}
             </div>
           )}

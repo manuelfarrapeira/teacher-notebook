@@ -309,6 +309,14 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia completa de:
 
 ---
 
+## 🎨 Skill de Diseño Frontend
+
+- Cuando se trabaje en componentes de UI, páginas, estilos o cualquier aspecto visual de la aplicación, se debe seguir la skill de diseño definida en `.agents/skills/frontend-design/SKILL.md`.
+- Esta skill guía la creación de interfaces distintivas y de alta calidad visual, evitando estéticas genéricas.
+- Se debe aplicar en toda tarea relacionada con diseño, maquetación, estilos CSS, componentes React o mejoras visuales.
+
+---
+
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
-Última actualización: 2026-03-05
+Última actualización: 2026-03-30

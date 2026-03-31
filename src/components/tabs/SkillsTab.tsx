@@ -324,7 +324,7 @@ export function SkillsTab() {
           <div key={skill.id} className={`dashboard-student ${skillsWithRubrics.has(skill.id) ? 'skills-has-rubrics' : ''}`}>
             <div className="dashboard-student-info" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <GraduationCap size={20} style={{ color: '#624db6', flexShrink: 0 }} />
+                <GraduationCap size={20} style={{ color: '#2c5f4a', flexShrink: 0 }} />
                 <span className="dashboard-student-name">{skill.title}</span>
               </div>
               {skill.description && (

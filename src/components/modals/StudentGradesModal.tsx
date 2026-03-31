@@ -242,7 +242,7 @@ export function StudentGradesModal({
                                   className="eval-criteria-exercise-btn"
                                   onClick={() => toggleDocs(ex.gradeId)}
                                   aria-label={t('dashboard.rubrics.gradeDocuments')}
-                                  style={{ color: docsExpanded ? '#624db6' : undefined }}
+                                  style={{ color: docsExpanded ? '#2c5f4a' : undefined }}
                                 >
                                   <FileText size={14} />
                                   <span style={{ fontSize: '0.7rem', marginLeft: '2px' }}>{ex.documents.length}</span>
@@ -278,7 +278,7 @@ export function StudentGradesModal({
                                         </PortalTooltip>
                                       </td>
                                       <td
-                                        style={{ verticalAlign: 'middle', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#374151', padding: '0.1rem 0.4rem 0.1rem 0' }}
+                                        style={{ verticalAlign: 'middle', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#3d4440', padding: '0.1rem 0.4rem 0.1rem 0' }}
                                         title={doc.document}
                                       >
                                         {doc.document}

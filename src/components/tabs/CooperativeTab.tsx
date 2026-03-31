@@ -545,7 +545,7 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
                 </button>
               </div>
               <div className="modal-body">
-                <p style={{ fontSize: '0.95rem', color: '#374151', lineHeight: '1.6', marginBottom: '1rem' }}>
+                <p style={{ fontSize: '0.95rem', color: '#3d4440', lineHeight: '1.6', marginBottom: '1rem' }}>
                   {t('dashboard.cooperative.priorityDescription')}
                 </p>
                 <div className="cooperative-priority-options">

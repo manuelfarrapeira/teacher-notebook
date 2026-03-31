@@ -412,7 +412,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
     return (
       <>
       {filteredRubrics.length === 0 && (
-        <div style={{ color: '#6b7280', fontSize: '0.85rem', marginBottom: '0.75rem', textAlign: 'center' }}>
+        <div style={{ color: '#7a8078', fontSize: '0.85rem', marginBottom: '0.75rem', textAlign: 'center' }}>
           {t('dashboard.classRubrics.noRubricsForSkill')}
         </div>
       )}
@@ -658,7 +658,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
               </div>
 
               <div style={{ marginBottom: '0.75rem' }}>
-                <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: 0 }}>
+                <p style={{ fontSize: '0.85rem', color: '#7a8078', margin: 0 }}>
                   <strong>{criterionModal.studentName}</strong> — {criterionModal.rubricTitle}
                 </p>
               </div>

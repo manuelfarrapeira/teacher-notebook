@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {BookOpen, Loader2, Building2, Plus, Edit, Trash2, Search, X, ChevronDown, BookType} from 'lucide-react';
 import {useI18n} from '../../lib/i18n';
+import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from '../ui/select';
 import {SchoolService, School, SchoolClass} from '../../services/SchoolService';
 import {ClassService, ClassRequestDTO} from '../../services/ClassService';
 import {ApiErrorException} from '../../services/BaseService';
@@ -59,7 +60,7 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
 
     const nameInputRef = useRef<HTMLInputElement>(null);
     const schoolYearInputRef = useRef<HTMLInputElement>(null);
-    const schoolSelectRef = useRef<HTMLSelectElement>(null);
+    const schoolSelectRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         fetchSchools();
@@ -231,7 +232,7 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
             if (editingClass) {
                 await ClassService.updateClass(editingClass.id, classData);
                 setSuccessMessage(t('dashboard.classes.updateSuccess'));
-            } else {
+            } else if (selectedSchoolId !== null) {
                 await ClassService.createClass(selectedSchoolId, classData);
                 setSuccessMessage(t('dashboard.classes.createSuccess'));
             }
@@ -568,25 +569,30 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
                                         <label className="login-label">
                                             {t('dashboard.students.school')} <span className="form-required-asterisk">*</span>
                                         </label>
-                                        <select
-                                            ref={schoolSelectRef}
-                                            className={`modal-input ${formErrors.school ? 'input-error' : ''}`}
-                                            value={selectedSchoolId || ''}
-                                            onChange={(e) => {
-                                                setSelectedSchoolId(Number(e.target.value) || null);
+                                        <Select
+                                            value={selectedSchoolId ? String(selectedSchoolId) : ''}
+                                            onValueChange={(v) => {
+                                                setSelectedSchoolId(Number(v) || null);
                                                 if (formErrors.school) {
                                                     setFormErrors(prev => ({...prev, school: undefined}));
                                                 }
                                             }}
                                             disabled={submitting}
                                         >
-                                            <option value="">{t('dashboard.students.selectSchool')}</option>
-                                            {schools.map((school) => (
-                                                <option key={school.id} value={school.id}>
-                                                    {school.name} {school.town ? `(${school.town})` : ''}
-                                                </option>
-                                            ))}
-                                        </select>
+                                            <SelectTrigger
+                                                ref={schoolSelectRef}
+                                                className={`modal-input ${formErrors.school ? 'input-error' : ''}`}
+                                            >
+                                                <SelectValue placeholder={t('dashboard.students.selectSchool')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {schools.map((school) => (
+                                                    <SelectItem key={school.id} value={String(school.id)}>
+                                                        {school.name} {school.town ? `(${school.town})` : ''}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                         {formErrors.school && (
                                             <p className="form-error-text">{formErrors.school}</p>
                                         )}

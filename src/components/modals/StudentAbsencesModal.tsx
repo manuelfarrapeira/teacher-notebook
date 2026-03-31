@@ -95,7 +95,7 @@ export function StudentAbsencesModal({
             </h3>
             <button
               onClick={onClose}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', display: 'flex', alignItems: 'center' }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7a8078', display: 'flex', alignItems: 'center' }}
               aria-label={t('common.close')}
             >
               <X size={20} />
@@ -103,7 +103,7 @@ export function StudentAbsencesModal({
           </div>
 
           {/* Student name */}
-          <p style={{ fontWeight: 600, fontSize: '1rem', color: '#624db6', marginBottom: '1rem' }}>
+          <p style={{ fontWeight: 600, fontSize: '1rem', color: '#2c5f4a', marginBottom: '1rem' }}>
             {studentName}
           </p>
 

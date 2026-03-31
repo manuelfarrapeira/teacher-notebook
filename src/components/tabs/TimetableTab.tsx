@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Clock, Loader2, Plus, Edit, Trash2, X, Printer, BookType } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import { ScheduleService, ScheduleItem, ScheduleItemRequest } from '../../services/ScheduleService';
 import { SubjectService, Subject } from '../../services/SubjectService';
 import { ApiErrorException } from '../../services/BaseService';
@@ -81,8 +82,8 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
   const [deleting, setDeleting] = useState(false);
   const [showSubjectsModal, setShowSubjectsModal] = useState(false);
 
-  const daySelectRef = useRef<HTMLSelectElement>(null);
-  const subjectSelectRef = useRef<HTMLSelectElement>(null);
+  const daySelectRef = useRef<HTMLButtonElement>(null);
+  const subjectSelectRef = useRef<HTMLButtonElement>(null);
   const startInputRef = useRef<HTMLInputElement>(null);
   const endInputRef = useRef<HTMLInputElement>(null);
 
@@ -200,10 +201,10 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     { bg: 'linear-gradient(135deg, #ecfccb 0%, #d9f99d 100%)', border: '#84cc16', text: '#3f6212' },
     { bg: 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)', border: '#10b981', text: '#064e3b' },
     { bg: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', border: '#0ea5e9', text: '#075985' },
-    { bg: 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)', border: '#8b5cf6', text: '#5b21b6' },
+    { bg: 'linear-gradient(135deg, #e8f0ec 0%, #d0ddd3 100%)', border: '#3d7a5e', text: '#1e4a38' },
     { bg: 'linear-gradient(135deg, #fae8ff 0%, #f5d0fe 100%)', border: '#d946ef', text: '#86198f' },
     { bg: 'linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%)', border: '#f43f5e', text: '#9f1239' },
-    { bg: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)', border: '#64748b', text: '#334155' },
+    { bg: 'linear-gradient(135deg, #f5f0e8 0%, #e0d8cf 100%)', border: '#7a8078', text: '#334155' },
     { bg: 'linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%)', border: '#78716c', text: '#44403c' },
   ];
 
@@ -494,7 +495,7 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
             <button
               className="dashboard-add-btn"
               onClick={() => setShowSubjectsModal(true)}
-              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #d1d5db' }}
+              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #ccc4b8' }}
             >
               <BookType size={16} />
             </button>
@@ -503,7 +504,7 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
             <button
               className="dashboard-add-btn"
               onClick={handlePrint}
-              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #d1d5db' }}
+              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #ccc4b8' }}
             >
               <Printer size={16} />
             </button>
@@ -647,20 +648,25 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
                   <label className="filter-label">
                     {t('dashboard.schedule.day')} <span className="form-required-asterisk">*</span>
                   </label>
-                  <select
-                    ref={daySelectRef}
-                    className={`schedule-form-select ${formErrors.day ? 'input-error' : ''}`}
-                    value={formData.day}
-                    onChange={(e) => handleDayChange(Number(e.target.value))}
+                  <Select
+                    value={formData.day ? String(formData.day) : ''}
+                    onValueChange={(v) => handleDayChange(Number(v))}
                     disabled={submitting}
                   >
-                    <option value={0}>{t('dashboard.schedule.selectDay')}</option>
-                    {dayNames.map(day => (
-                      <option key={day.id} value={day.id}>
-                        {day.name}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger
+                      ref={daySelectRef}
+                      className={`schedule-form-select ${formErrors.day ? 'input-error' : ''}`}
+                    >
+                      <SelectValue placeholder={t('dashboard.schedule.selectDay')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dayNames.map(day => (
+                        <SelectItem key={day.id} value={String(day.id)}>
+                          {day.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {formErrors.day && <p className="form-error-text">{formErrors.day}</p>}
                 </div>
 
@@ -698,20 +704,25 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
                             <label className="filter-label">
                               {t('dashboard.schedule.subject')} <span className="form-required-asterisk">*</span>
                             </label>
-                            <select
-                              ref={index === 0 ? subjectSelectRef : undefined}
-                              className={`schedule-form-select ${itemErrors?.subjectId ? 'input-error' : ''}`}
-                              value={item.subjectId}
-                              onChange={(e) => handleItemChange(item.id, 'subjectId', Number(e.target.value))}
+                            <Select
+                              value={item.subjectId ? String(item.subjectId) : ''}
+                              onValueChange={(v) => handleItemChange(item.id, 'subjectId', Number(v))}
                               disabled={submitting || (Boolean(editingSchedule) && index === 0)}
                             >
-                              <option value={0}>{t('dashboard.schedule.selectSubject')}</option>
-                              {subjects.map(subject => (
-                                <option key={subject.id} value={subject.id}>
-                                  {subject.name}
-                                </option>
-                              ))}
-                            </select>
+                              <SelectTrigger
+                                ref={index === 0 ? subjectSelectRef : undefined}
+                                className={`schedule-form-select ${itemErrors?.subjectId ? 'input-error' : ''}`}
+                              >
+                                <SelectValue placeholder={t('dashboard.schedule.selectSubject')} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {subjects.map(subject => (
+                                  <SelectItem key={subject.id} value={String(subject.id)}>
+                                    {subject.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                             {itemErrors?.subjectId && (
                               <p className="form-error-text">{itemErrors.subjectId}</p>
                             )}

@@ -53,10 +53,10 @@ interface StudentRadarChartModalProps {
 
 /** Colors for each data series */
 const SERIES_COLORS: Record<SeriesKey, string> = {
-  q1: '#3b82f6',
-  q2: '#f97316',
-  q3: '#22c55e',
-  final: '#8b5cf6',
+  q1: '#2c5f4a',
+  q2: '#c4833c',
+  q3: '#5a9e82',
+  final: '#8b6914',
 };
 
 /** All series keys in display order */
@@ -102,7 +102,7 @@ function RadarInteractiveLegend({ series, hiddenKeys, onToggle }: {
               backgroundColor: s.color,
               display: 'inline-block',
             }} />
-            <span style={{ color: '#374151' }}>{s.label}</span>
+            <span style={{ color: '#3d4440' }}>{s.label}</span>
           </button>
         );
       })}
@@ -195,7 +195,7 @@ export function StudentRadarChartModal({
                     {/* @ts-expect-error recharts PolarAngleAxis typing incompatibility with React 18 */}
                     <PolarAngleAxis
                       dataKey="subject"
-                      tick={{ fontSize: 11, fill: '#374151', fontWeight: 500 }}
+                      tick={{ fontSize: 11, fill: '#3d4440', fontWeight: 500 }}
                     />
                     <PolarRadiusAxis
                       angle={90}
@@ -256,7 +256,7 @@ export function StudentRadarChartModal({
                 </ResponsiveContainer>
               </div>
             ) : (
-              <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem 0' }}>
+              <p style={{ textAlign: 'center', color: '#7a8078', padding: '2rem 0' }}>
                 {t('dashboard.rubrics.radarChart.noDataForChart')}
               </p>
             )}

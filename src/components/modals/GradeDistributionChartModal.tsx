@@ -31,12 +31,12 @@ interface GradeDistributionChartModalProps {
 
 /** Color palette for each grade category */
 const CATEGORY_COLORS: Record<string, string> = {
-  noGrade: '#9ca3af',
-  failing: '#ef4444',
-  sufficient: '#f97316',
-  good: '#eab308',
-  remarkable: '#3b82f6',
-  outstanding: '#22c55e',
+  noGrade: '#a09890',
+  failing: '#c0392b',
+  sufficient: '#c4833c',
+  good: '#d4a056',
+  remarkable: '#5a9e82',
+  outstanding: '#2c5f4a',
 };
 
 /** Order of categories for display */
@@ -68,7 +68,7 @@ function renderOuterLabel(props: PieLabelRenderProps) {
   const value = Number(props.value ?? 0);
   const percent = Number(props.percent ?? 0);
   const rawFill = (props as unknown as Record<string, unknown>).fill;
-  const fill = typeof rawFill === 'string' ? rawFill : '#374151';
+  const fill = typeof rawFill === 'string' ? rawFill : '#3d4440';
   const name = String((props as unknown as Record<string, unknown>).name ?? '');
 
   if (value === 0) return null;
@@ -93,7 +93,7 @@ function renderOuterLabel(props: PieLabelRenderProps) {
       {/* Small dot at pie edge */}
       <circle cx={sx} cy={sy} r={3} fill={fill} />
       {/* Label text */}
-      <text x={ex + (cos >= 0 ? 4 : -4)} y={ey} textAnchor={textAnchor} fill="#374151" fontSize={12} fontWeight={600} dominantBaseline="central">
+      <text x={ex + (cos >= 0 ? 4 : -4)} y={ey} textAnchor={textAnchor} fill="#3d4440" fontSize={12} fontWeight={600} dominantBaseline="central">
         {name} ({(percent * 100).toFixed(0)}%)
       </text>
     </g>
@@ -212,7 +212,7 @@ export function GradeDistributionChartModal({
                 </ResponsiveContainer>
               </div>
             ) : (
-              <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem 0' }}>
+              <p style={{ textAlign: 'center', color: '#7a8078', padding: '2rem 0' }}>
                 {t('dashboard.rubrics.chart.noDataForChart')}
               </p>
             )}

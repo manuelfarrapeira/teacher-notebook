@@ -252,7 +252,7 @@ export function CalendarAlertFormModal({
 
             <div className="modal-body">
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
+                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#3d4440', display: 'block', marginBottom: '0.25rem' }}>
                   {t('dashboard.calendar.alertDate')} <span className="form-required-asterisk">*</span>
                 </label>
                 <input
@@ -262,7 +262,7 @@ export function CalendarAlertFormModal({
                   value={formData.date}
                   onChange={e => handleFieldChange('date', e.target.value)}
                   readOnly={isEditMode}
-                  style={isEditMode ? { backgroundColor: '#f3f4f6', cursor: 'default' } : undefined}
+                  style={isEditMode ? { backgroundColor: '#f0ece5', cursor: 'default' } : undefined}
                   disabled={submitting}
                 />
                 {formErrors.date && (
@@ -271,7 +271,7 @@ export function CalendarAlertFormModal({
               </div>
 
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
+                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#3d4440', display: 'block', marginBottom: '0.25rem' }}>
                   {t('dashboard.calendar.alertTitle')} <span className="form-required-asterisk">*</span>
                 </label>
                 <input
@@ -290,7 +290,7 @@ export function CalendarAlertFormModal({
               </div>
 
               <div>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
+                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#3d4440', display: 'block', marginBottom: '0.25rem' }}>
                   {t('dashboard.calendar.alertDescription')}
                 </label>
                 <textarea
@@ -306,7 +306,7 @@ export function CalendarAlertFormModal({
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#3d4440', display: 'block', marginBottom: '0.25rem' }}>
                     {t('dashboard.calendar.alertStartTime')}
                   </label>
                   <input
@@ -318,7 +318,7 @@ export function CalendarAlertFormModal({
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', display: 'block', marginBottom: '0.25rem' }}>
+                  <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#3d4440', display: 'block', marginBottom: '0.25rem' }}>
                     {t('dashboard.calendar.alertEndTime')}
                   </label>
                   <input

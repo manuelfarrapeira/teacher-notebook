@@ -34,7 +34,7 @@ interface RubricDistributionChartModalProps {
 /** Predefined colour palette for criterion groups */
 const CRITERION_PALETTE = [
   '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6',
-  '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#6366f1',
+  '#3d7a5e', '#ec4899', '#14b8a6', '#f43f5e', '#6366f1',
 ];
 
 /** Colour for "no criterion" group */
@@ -51,7 +51,7 @@ function renderOuterLabel(props: PieLabelRenderProps) {
   const value = Number(props.value ?? 0);
   const percent = Number(props.percent ?? 0);
   const rawFill = (props as unknown as Record<string, unknown>).fill;
-  const fill = typeof rawFill === 'string' ? rawFill : '#374151';
+  const fill = typeof rawFill === 'string' ? rawFill : '#3d4440';
   const name = String((props as unknown as Record<string, unknown>).name ?? '');
 
   if (value === 0) return null;
@@ -72,7 +72,7 @@ function renderOuterLabel(props: PieLabelRenderProps) {
     <g>
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" strokeWidth={1.5} />
       <circle cx={sx} cy={sy} r={3} fill={fill} />
-      <text x={ex + (cos >= 0 ? 4 : -4)} y={ey} textAnchor={textAnchor} fill="#374151" fontSize={12} fontWeight={600} dominantBaseline="central">
+      <text x={ex + (cos >= 0 ? 4 : -4)} y={ey} textAnchor={textAnchor} fill="#3d4440" fontSize={12} fontWeight={600} dominantBaseline="central">
         {name} ({(percent * 100).toFixed(0)}%)
       </text>
     </g>
@@ -122,11 +122,11 @@ function RubricChartTooltip({ active, payload }: {
       boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
       maxWidth: '280px',
     }}>
-      <p style={{ margin: 0, fontWeight: 600, fontSize: '0.85rem', color: '#374151' }}>
+      <p style={{ margin: 0, fontWeight: 600, fontSize: '0.85rem', color: '#3d4440' }}>
         {data.label}
       </p>
       {data.description && (
-        <p style={{ margin: '0.3rem 0 0', fontSize: '0.8rem', color: '#6b7280', whiteSpace: 'pre-wrap' }}>
+        <p style={{ margin: '0.3rem 0 0', fontSize: '0.8rem', color: '#7a8078', whiteSpace: 'pre-wrap' }}>
           {data.description}
         </p>
       )}
@@ -263,7 +263,7 @@ export function RubricDistributionChartModal({
                 </ResponsiveContainer>
               </div>
             ) : (
-              <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem 0' }}>
+              <p style={{ textAlign: 'center', color: '#7a8078', padding: '2rem 0' }}>
                 {t('dashboard.classRubrics.chart.noDataForChart')}
               </p>
             )}

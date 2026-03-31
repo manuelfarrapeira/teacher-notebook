@@ -54,11 +54,13 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [shapeDropdownOpen, setShapeDropdownOpen] = useState(false);
   const shapeDropdownRef = useRef<HTMLDivElement>(null);
+  const [genderDropdownOpen, setGenderDropdownOpen] = useState(false);
+  const genderDropdownRef = useRef<HTMLDivElement>(null);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const surnamesInputRef = useRef<HTMLInputElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
-  const genderInputRef = useRef<HTMLSelectElement>(null);
+  const genderInputRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -86,6 +88,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
     }
     setFormErrors({});
     setShapeDropdownOpen(false);
+    setGenderDropdownOpen(false);
     if (isOpen) {
       setTimeout(() => nameInputRef.current?.focus(), 50);
     }
@@ -102,6 +105,18 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [shapeDropdownOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (genderDropdownRef.current && !genderDropdownRef.current.contains(e.target as Node)) {
+        setGenderDropdownOpen(false);
+      }
+    };
+    if (genderDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [genderDropdownOpen]);
 
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
@@ -337,17 +352,50 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                   <label className="modal-label">
                     {t('dashboard.students.gender')} <span className="form-required-asterisk">*</span>
                   </label>
-                  <select
-                    ref={genderInputRef}
-                    className={`modal-input ${formErrors.gender ? 'input-error' : ''}`}
-                    value={formData.gender}
-                    onChange={(e) => handleInputChange('gender', e.target.value)}
-                    disabled={submitting}
-                  >
-                    <option value="">{t('dashboard.students.genderPlaceholder')}</option>
-                    <option value="M">{t('dashboard.students.genderMale')}</option>
-                    <option value="F">{t('dashboard.students.genderFemale')}</option>
-                  </select>
+                  <div className="shape-dropdown" ref={genderDropdownRef}>
+                    <button
+                      ref={genderInputRef}
+                      type="button"
+                      className={`shape-dropdown-trigger modal-input ${formErrors.gender ? 'input-error' : ''}`}
+                      onClick={() => setGenderDropdownOpen(prev => !prev)}
+                      disabled={submitting}
+                      aria-haspopup="listbox"
+                      aria-expanded={genderDropdownOpen}
+                    >
+                      <span className="shape-dropdown-selected">
+                        {!formData.gender && <span className="shape-dropdown-placeholder">{t('dashboard.students.genderPlaceholder')}</span>}
+                        {formData.gender === 'M' && <span>{t('dashboard.students.genderMale')}</span>}
+                        {formData.gender === 'F' && <span>{t('dashboard.students.genderFemale')}</span>}
+                      </span>
+                      <ChevronDown size={16} className={`shape-dropdown-chevron ${genderDropdownOpen ? 'open' : ''}`} />
+                    </button>
+
+                    {genderDropdownOpen && (
+                      <div className="selector-dropdown" style={{ minWidth: '100%', top: 'calc(100% + 4px)' }}>
+                        <button
+                          type="button"
+                          className="selector-option"
+                          onClick={() => { handleInputChange('gender', ''); setGenderDropdownOpen(false); }}
+                        >
+                          <span style={{ color: '#a09890' }}>—</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="selector-option"
+                          onClick={() => { handleInputChange('gender', 'M'); setGenderDropdownOpen(false); }}
+                        >
+                          {t('dashboard.students.genderMale')}
+                        </button>
+                        <button
+                          type="button"
+                          className="selector-option"
+                          onClick={() => { handleInputChange('gender', 'F'); setGenderDropdownOpen(false); }}
+                        >
+                          {t('dashboard.students.genderFemale')}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   {formErrors.gender && <p className="form-error-text">{formErrors.gender}</p>}
                 </div>
 

@@ -165,7 +165,7 @@ export function DocumentsModal({
 
             {/* Documents List */}
             {documents.length === 0 ? (
-              <p style={{ color: '#6b7280', fontSize: '0.875rem', textAlign: 'center', padding: '1.5rem 0' }}>
+              <p style={{ color: '#7a8078', fontSize: '0.875rem', textAlign: 'center', padding: '1.5rem 0' }}>
                 {t('dashboard.rubrics.noDocuments')}
               </p>
             ) : (

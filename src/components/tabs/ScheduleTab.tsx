@@ -407,7 +407,7 @@ export function ScheduleTab() {
           </div>
 
           <div className="calendar-header-actions">
-            {loading && <Loader2 size={18} className="icon-spin" style={{ color: '#624db6' }} />}
+            {loading && <Loader2 size={18} className="icon-spin" style={{ color: '#2c5f4a' }} />}
             <button className="dashboard-add-btn" onClick={handleNewAlert}>
               {t('dashboard.calendar.newAlert')}
             </button>

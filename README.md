@@ -179,6 +179,36 @@
 
 ---
 
+## 🎨 Sistema de Diseño — "Refined Academic"
+
+La aplicación sigue una identidad visual distintiva denominada **"Refined Academic"**: sofisticada, cálida y profesional, evocando papelería premium y herramientas educativas de alta gama.
+
+### Tipografía
+| Fuente | Uso | Peso |
+|---|---|---|
+| **Playfair Display** | Títulos, encabezados de modales y secciones | 600, 700, 800 |
+| **Source Sans 3** | Cuerpo de texto, inputs, botones, UI general | 300–700 |
+
+### Paleta de Colores
+| Token | Hex | Uso |
+|---|---|---|
+| **Primary (Sage)** | `#2c5f4a` | Botones, bordes activos, enlaces, indicadores |
+| **Primary Hover** | `#1e4a38` | Hover de botones y elementos primarios |
+| **Primary Light** | `#e8f0ec` | Fondos alternos de tablas, badges |
+| **Accent (Copper)** | `#c4833c` | Acentos decorativos, borde superior, indicadores |
+| **Background** | `#faf8f5` | Fondo general (tono papel cálido) |
+| **Card** | `#ffffff` | Fondo de tarjetas y modales |
+| **Border** | `#e0d8cf` | Bordes generales (gris cálido) |
+| **Text** | `#2d3436` | Texto principal |
+| **Text Muted** | `#7a8078` | Texto secundario, placeholders |
+
+### Animaciones
+- `modalSlideIn` — Entrada de modales con deslizamiento y escala
+- `fadeInUp` — Aparición con desplazamiento ascendente para tarjetas
+- `underlineGrow` — Animación del indicador de pestaña activa
+
+---
+
 ## 📦 Instalación
 
 ### Prerrequisitos

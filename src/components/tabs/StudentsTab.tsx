@@ -784,11 +784,11 @@ export function StudentsTab({
                 </button>
               </div>
               <div className="modal-body">
-                <p style={{ fontSize: '0.95rem', color: '#374151', lineHeight: '1.6', margin: 0 }}>
+                <p style={{ fontSize: '0.95rem', color: '#3d4440', lineHeight: '1.6', margin: 0 }}>
                   {infoPopupStudent.additionalInfo}
                 </p>
               </div>
-              <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#6b7280' }}>
+              <div style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#7a8078' }}>
                 <strong>{infoPopupStudent.name} {infoPopupStudent.surnames}</strong>
               </div>
             </div>
@@ -815,7 +815,7 @@ export function StudentsTab({
               </div>
 
               <div className="modal-body">
-                <p style={{ fontSize: '0.95rem', color: '#374151', lineHeight: '1.6', marginBottom: '1rem' }}>
+                <p style={{ fontSize: '0.95rem', color: '#3d4440', lineHeight: '1.6', marginBottom: '1rem' }}>
                   {t('dashboard.students.confirmAssignMessage')}
                 </p>
                 <div style={{
@@ -891,7 +891,7 @@ export function StudentsTab({
                 </div>
 
                 <div className="modal-body">
-                  <p style={{ fontSize: '0.95rem', color: '#374151', lineHeight: '1.6', marginBottom: '1rem' }}>
+                  <p style={{ fontSize: '0.95rem', color: '#3d4440', lineHeight: '1.6', marginBottom: '1rem' }}>
                     {message}
                   </p>
                   <div style={{

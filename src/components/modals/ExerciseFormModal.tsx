@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { ExerciseService, ExerciseRequest, Exercise } from '../../services/ExerciseService';
 
@@ -53,9 +53,11 @@ export function ExerciseFormModal({
   const [submitting, setSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [errorMessage, setErrorMessage] = useState('');
+  const [quarterDropdownOpen, setQuarterDropdownOpen] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
-  const quarterRef = useRef<HTMLSelectElement>(null);
+  const quarterRef = useRef<HTMLButtonElement>(null);
+  const quarterDropdownRef = useRef<HTMLDivElement>(null);
   const percentageRef = useRef<HTMLInputElement>(null);
   const maxGradeRef = useRef<HTMLInputElement>(null);
 
@@ -76,10 +78,23 @@ export function ExerciseFormModal({
     }
     setFormErrors({});
     setErrorMessage('');
+    setQuarterDropdownOpen(false);
     if (isOpen) {
       setTimeout(() => titleRef.current?.focus(), 50);
     }
   }, [isOpen, exercise]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (quarterDropdownRef.current && !quarterDropdownRef.current.contains(e.target as Node)) {
+        setQuarterDropdownOpen(false);
+      }
+    };
+    if (quarterDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [quarterDropdownOpen]);
 
   const handleClose = () => {
     setFormErrors({});
@@ -229,17 +244,37 @@ export function ExerciseFormModal({
               <label className="filter-label">
                 {t('dashboard.rubrics.quarter')} <span className="form-required-asterisk">*</span>
               </label>
-              <select
-                ref={quarterRef}
-                className={`modal-input ${formErrors.quarter ? 'input-error' : ''}`}
-                value={quarter}
-                onChange={(e) => setQuarter(Number(e.target.value))}
-                disabled={submitting}
-              >
-                <option value={1}>{t('dashboard.rubrics.quarter1')}</option>
-                <option value={2}>{t('dashboard.rubrics.quarter2')}</option>
-                <option value={3}>{t('dashboard.rubrics.quarter3')}</option>
-              </select>
+              <div className="shape-dropdown" ref={quarterDropdownRef}>
+                <button
+                  ref={quarterRef}
+                  type="button"
+                  className={`shape-dropdown-trigger modal-input ${formErrors.quarter ? 'input-error' : ''}`}
+                  onClick={() => setQuarterDropdownOpen(prev => !prev)}
+                  disabled={submitting}
+                  aria-haspopup="listbox"
+                  aria-expanded={quarterDropdownOpen}
+                >
+                  <span className="shape-dropdown-selected">
+                    <span>{t(`dashboard.rubrics.quarter${quarter}`)}</span>
+                  </span>
+                  <ChevronDown size={16} className={`shape-dropdown-chevron ${quarterDropdownOpen ? 'open' : ''}`} />
+                </button>
+
+                {quarterDropdownOpen && (
+                  <div className="selector-dropdown" style={{ minWidth: '100%', top: 'calc(100% + 4px)' }}>
+                    {[1, 2, 3].map(q => (
+                      <button
+                        key={q}
+                        type="button"
+                        className="selector-option"
+                        onClick={() => { setQuarter(q); setQuarterDropdownOpen(false); }}
+                      >
+                        {t(`dashboard.rubrics.quarter${q}`)}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               {formErrors.quarter && <p className="form-error-text">{formErrors.quarter}</p>}
             </div>
 
