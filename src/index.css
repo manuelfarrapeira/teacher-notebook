@@ -3789,6 +3789,28 @@ dialog.modal-overlay::backdrop {
   flex-wrap: wrap;
 }
 
+.eval-criteria-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.eval-criteria-search-icon {
+  position: absolute;
+  left: 0.6rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.eval-criteria-search-input {
+  padding-left: 2rem !important;
+  max-width: 220px;
+  font-size: 0.85rem;
+  height: 2.25rem;
+  margin-bottom: 0;
+}
+
 .eval-criteria-subject-select {
   padding: 0.5rem 0.75rem !important;
   border: 1px solid #ccc4b8 !important;
@@ -4260,6 +4282,15 @@ dialog.modal-overlay::backdrop {
 
   .eval-criteria-subject-select {
     min-width: 100%;
+  }
+
+  .eval-criteria-search-container {
+    margin-left: 0;
+  }
+
+  .eval-criteria-search-input {
+    max-width: 100%;
+    width: 100%;
   }
 }
 

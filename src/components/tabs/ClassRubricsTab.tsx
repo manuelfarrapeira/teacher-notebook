@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { Loader2, Plus, Trash2, Info, Settings, X, PieChart } from 'lucide-react';
+import { Loader2, Plus, Trash2, Info, Settings, X, PieChart, Search } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import { SkillService, Skill } from '../../services/SkillService';
@@ -164,6 +164,19 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
     entries: Array<{ studentName: string; criterion: { description: string; gradeStart: number; gradeEnd: number } | null }>;
   } | null>(null);
 
+  // ---- Student search filter ----
+  const [studentSearch, setStudentSearch] = useState('');
+
+  /** Students filtered by search query */
+  const displayedStudents = useMemo(() => {
+    if (!studentSearch.trim()) return classStudents;
+    const query = studentSearch.trim().toLowerCase();
+    return classStudents.filter(s =>
+      `${s.name} ${s.surnames}`.toLowerCase().includes(query) ||
+      `${s.surnames}, ${s.name}`.toLowerCase().includes(query)
+    );
+  }, [classStudents, studentSearch]);
+
   // ========================
   // Data fetching
   // ========================
@@ -224,6 +237,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
   useEffect(() => {
     if (selectedClass) {
       setSelectedSkillId(0);
+      setStudentSearch('');
       loadAll();
     } else {
       setSkills([]);
@@ -446,7 +460,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
               </tr>
             </thead>
             <tbody>
-              {classStudents.map((student, index) => (
+              {displayedStudents.map((student, index) => (
                 <tr key={student.id}>
                   <td className="class-rubrics-student-col">
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
@@ -632,6 +646,17 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
           <Settings size={16} style={{ marginRight: '0.25rem' }} />
           {t('dashboard.classRubrics.manageClassRubrics')}
         </button>
+
+        <div className="eval-criteria-search-container">
+          <Search size={16} className="eval-criteria-search-icon" />
+          <input
+            type="text"
+            className="dashboard-search eval-criteria-search-input"
+            placeholder={t('dashboard.students.searchStudents')}
+            value={studentSearch}
+            onChange={e => setStudentSearch(e.target.value)}
+          />
+        </div>
       </div>
 
       {/* Table */}
