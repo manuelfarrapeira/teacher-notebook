@@ -350,7 +350,7 @@ interface Translations {
       };
     };
     loadingData: string;
-    rubrics: {
+    evalCriteria: {
       title: string;
       selectSubject: string;
       quarter: string;
@@ -961,7 +961,7 @@ export const translations: Record<Locale, Translations> = {
         },
       },
       loadingData: 'Cargando datos...',
-      rubrics: {
+      evalCriteria: {
         title: 'Criterios de evaluación',
         selectSubject: 'Seleccionar asignatura',
         quarter: 'Trimestre',
@@ -1573,7 +1573,7 @@ export const translations: Record<Locale, Translations> = {
         },
       },
       loadingData: 'Loading data...',
-      rubrics: {
+      evalCriteria: {
         title: 'Evaluation Criteria',
         selectSubject: 'Select subject',
         quarter: 'Quarter',

@@ -125,7 +125,7 @@ export function StudentGradesModal({
           }
         })
         .catch(err => {
-          setError(err instanceof Error ? err.message : t('dashboard.rubrics.loadError'));
+          setError(err instanceof Error ? err.message : t('dashboard.evalCriteria.loadError'));
         })
         .finally(() => setLoading(false));
     }
@@ -170,7 +170,7 @@ export function StudentGradesModal({
 
   if (!isOpen) return null;
 
-  const title = t('dashboard.rubrics.studentGradesTitle').replace('{name}', studentName);
+  const title = t('dashboard.evalCriteria.studentGradesTitle').replace('{name}', studentName);
 
   /** Render a quarter's subjects and exercises (accordion) */
   const renderQuarterContent = (quarterData: StudentQuarter) => (
@@ -197,7 +197,7 @@ export function StudentGradesModal({
                 {subject.subjectName}
               </span>
               <span className="student-grades-avg">
-                {t('dashboard.rubrics.subjectAverage')}: {formatGrade(subjectAvg)} / 10
+                {t('dashboard.evalCriteria.subjectAverage')}: {formatGrade(subjectAvg)} / 10
               </span>
             </button>
 
@@ -205,10 +205,10 @@ export function StudentGradesModal({
               <table className="student-grades-table">
                 <thead>
                   <tr>
-                    <th style={{ textAlign: 'left' }}>{t('dashboard.rubrics.exerciseTitle')}</th>
-                    <th>{t('dashboard.rubrics.grade')}</th>
+                    <th style={{ textAlign: 'left' }}>{t('dashboard.evalCriteria.exerciseTitle')}</th>
+                    <th>{t('dashboard.evalCriteria.grade')}</th>
                     <th>%</th>
-                    <th>{t('dashboard.rubrics.gradeDocuments')}</th>
+                    <th>{t('dashboard.evalCriteria.gradeDocuments')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -237,11 +237,11 @@ export function StudentGradesModal({
                           <td>{ex.percentageGrade}%</td>
                           <td>
                             {hasDocuments && (
-                              <PortalTooltip text={`${t('dashboard.rubrics.gradeDocuments')} (${ex.documents.length})`} as="span">
+                              <PortalTooltip text={`${t('dashboard.evalCriteria.gradeDocuments')} (${ex.documents.length})`} as="span">
                                 <button
                                   className="eval-criteria-exercise-btn"
                                   onClick={() => toggleDocs(ex.gradeId)}
-                                  aria-label={t('dashboard.rubrics.gradeDocuments')}
+                                  aria-label={t('dashboard.evalCriteria.gradeDocuments')}
                                   style={{ color: docsExpanded ? '#2c5f4a' : undefined }}
                                 >
                                   <FileText size={14} />
@@ -264,12 +264,12 @@ export function StudentGradesModal({
                                   {ex.documents.map(doc => (
                                     <tr key={doc.id}>
                                       <td style={{ verticalAlign: 'middle', textAlign: 'left', padding: '0.1rem 0.25rem 0.1rem 0' }}>
-                                        <PortalTooltip text={t('dashboard.rubrics.downloadDocument')} as="span">
+                                        <PortalTooltip text={t('dashboard.evalCriteria.downloadDocument')} as="span">
                                           <button
                                             className="eval-criteria-exercise-btn"
                                             onClick={() => handleDownload(ex.gradeId, doc.id, doc.document)}
                                             disabled={downloading === doc.id}
-                                            aria-label={t('dashboard.rubrics.downloadDocument')}
+                                            aria-label={t('dashboard.evalCriteria.downloadDocument')}
                                           >
                                             {downloading === doc.id
                                               ? <Loader2 size={13} className="icon-spin" />
@@ -304,7 +304,7 @@ export function StudentGradesModal({
       })}
       {quarterData.subjects.length === 0 && (
         <div className="dashboard-empty" style={{ padding: '1.5rem' }}>
-          <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
+          <p className="dashboard-empty-text">{t('dashboard.evalCriteria.noGradesForStudent')}</p>
         </div>
       )}
     </>
@@ -321,17 +321,17 @@ export function StudentGradesModal({
     <>
       {finalGrades.length === 0 ? (
         <div className="dashboard-empty" style={{ padding: '1.5rem' }}>
-          <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
+          <p className="dashboard-empty-text">{t('dashboard.evalCriteria.noGradesForStudent')}</p>
         </div>
       ) : (
         <table className="student-grades-table">
           <thead>
             <tr>
               <th style={{ textAlign: 'left', width: '1px', whiteSpace: 'nowrap' }}>{t('dashboard.schedule.subject')}</th>
-              <th>{t('dashboard.rubrics.quarter1')}</th>
-              <th>{t('dashboard.rubrics.quarter2')}</th>
-              <th>{t('dashboard.rubrics.quarter3')}</th>
-              <th>{t('dashboard.rubrics.finalGrade')}</th>
+              <th>{t('dashboard.evalCriteria.quarter1')}</th>
+              <th>{t('dashboard.evalCriteria.quarter2')}</th>
+              <th>{t('dashboard.evalCriteria.quarter3')}</th>
+              <th>{t('dashboard.evalCriteria.finalGrade')}</th>
             </tr>
           </thead>
           <tbody>
@@ -397,21 +397,21 @@ export function StudentGradesModal({
                     className={`eval-criteria-quarter-tab ${activeTab === q ? 'active' : ''}`}
                     onClick={() => setActiveTab(q)}
                   >
-                    {t(`dashboard.rubrics.quarter${q}`)}
+                    {t(`dashboard.evalCriteria.quarter${q}`)}
                   </button>
                 ))}
                 <button
                   className={`eval-criteria-quarter-tab ${activeTab === 'final' ? 'active' : ''}`}
                   onClick={() => setActiveTab('final')}
                 >
-                  {t('dashboard.rubrics.finalGrade')}
+                  {t('dashboard.evalCriteria.finalGrade')}
                 </button>
                 {classSubjects.length > 0 && (
-                  <PortalTooltip text={t('dashboard.rubrics.radarChart.title')} as="span">
+                  <PortalTooltip text={t('dashboard.evalCriteria.radarChart.title')} as="span">
                     <button
                       className="eval-criteria-exercise-btn"
                       onClick={() => setRadarChartOpen(true)}
-                      aria-label={t('dashboard.rubrics.radarChart.title')}
+                      aria-label={t('dashboard.evalCriteria.radarChart.title')}
                       style={{ padding: '0.4rem' }}
                     >
                       <Radar size={18} />
@@ -437,7 +437,7 @@ export function StudentGradesModal({
 
               {!loading && !error && quarters.length === 0 && (
                 <div className="dashboard-empty" style={{ padding: '2rem' }}>
-                  <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
+                  <p className="dashboard-empty-text">{t('dashboard.evalCriteria.noGradesForStudent')}</p>
                 </div>
               )}
 
@@ -447,7 +447,7 @@ export function StudentGradesModal({
 
               {!loading && !error && quarters.length > 0 && activeTab !== 'final' && !activeQuarterData && (
                 <div className="dashboard-empty" style={{ padding: '1.5rem' }}>
-                  <p className="dashboard-empty-text">{t('dashboard.rubrics.noGradesForStudent')}</p>
+                  <p className="dashboard-empty-text">{t('dashboard.evalCriteria.noGradesForStudent')}</p>
                 </div>
               )}
 

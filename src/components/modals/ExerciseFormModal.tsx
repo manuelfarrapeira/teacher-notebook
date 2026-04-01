@@ -106,31 +106,31 @@ export function ExerciseFormModal({
     const errors: FormErrors = {};
 
     if (!title.trim()) {
-      errors.title = t('dashboard.rubrics.validation.titleRequired');
+      errors.title = t('dashboard.evalCriteria.validation.titleRequired');
     } else if (title.trim().length > 60) {
-      errors.title = t('dashboard.rubrics.validation.titleMaxLength');
+      errors.title = t('dashboard.evalCriteria.validation.titleMaxLength');
     }
 
     if (!quarter) {
-      errors.quarter = t('dashboard.rubrics.validation.quarterRequired');
+      errors.quarter = t('dashboard.evalCriteria.validation.quarterRequired');
     }
 
     const pctNum = Number(percentageGrade);
     const availablePercentage = 100 - usedPercentage;
     if (!percentageGrade.trim()) {
-      errors.percentageGrade = t('dashboard.rubrics.validation.percentageRequired');
+      errors.percentageGrade = t('dashboard.evalCriteria.validation.percentageRequired');
     } else if (pctNum < 1 || pctNum > 100) {
-      errors.percentageGrade = t('dashboard.rubrics.validation.percentageRange');
+      errors.percentageGrade = t('dashboard.evalCriteria.validation.percentageRange');
     } else if (pctNum > availablePercentage) {
-      errors.percentageGrade = t('dashboard.rubrics.validation.percentageExceeds')
+      errors.percentageGrade = t('dashboard.evalCriteria.validation.percentageExceeds')
         .replace('{available}', String(availablePercentage));
     }
 
     const maxNum = Number(maxGrade);
     if (!maxGrade.trim()) {
-      errors.maxGrade = t('dashboard.rubrics.validation.maxGradeRequired');
+      errors.maxGrade = t('dashboard.evalCriteria.validation.maxGradeRequired');
     } else if (maxNum < 1 || maxNum > 20) {
-      errors.maxGrade = t('dashboard.rubrics.validation.maxGradeRange');
+      errors.maxGrade = t('dashboard.evalCriteria.validation.maxGradeRange');
     }
 
     setFormErrors(errors);
@@ -171,8 +171,8 @@ export function ExerciseFormModal({
       onClose();
     } catch (error) {
       const fallbackKey = isEditing
-        ? t('dashboard.rubrics.updateExerciseError')
-        : t('dashboard.rubrics.createExerciseError');
+        ? t('dashboard.evalCriteria.updateExerciseError')
+        : t('dashboard.evalCriteria.createExerciseError');
       setErrorMessage(
         error instanceof Error ? error.message : fallbackKey
       );
@@ -191,8 +191,8 @@ export function ExerciseFormModal({
   if (!isOpen) return null;
 
   const modalTitle = isEditing
-    ? t('dashboard.rubrics.editExercise')
-    : t('dashboard.rubrics.createExercise');
+    ? t('dashboard.evalCriteria.editExercise')
+    : t('dashboard.evalCriteria.createExercise');
 
   return (
     <dialog className="modal-overlay" open={isOpen} aria-label={modalTitle}>
@@ -210,13 +210,13 @@ export function ExerciseFormModal({
             {/* Title */}
             <div>
               <label className="filter-label">
-                {t('dashboard.rubrics.exerciseTitle')} <span className="form-required-asterisk">*</span>
+                {t('dashboard.evalCriteria.exerciseTitle')} <span className="form-required-asterisk">*</span>
               </label>
               <input
                 ref={titleRef}
                 type="text"
                 className={`modal-input ${formErrors.title ? 'input-error' : ''}`}
-                placeholder={t('dashboard.rubrics.exerciseTitlePlaceholder')}
+                placeholder={t('dashboard.evalCriteria.exerciseTitlePlaceholder')}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 maxLength={60}
@@ -227,10 +227,10 @@ export function ExerciseFormModal({
 
             {/* Description */}
             <div>
-              <label className="filter-label">{t('dashboard.rubrics.description')}</label>
+              <label className="filter-label">{t('dashboard.evalCriteria.description')}</label>
               <textarea
                 className="modal-input"
-                placeholder={t('dashboard.rubrics.descriptionPlaceholder')}
+                placeholder={t('dashboard.evalCriteria.descriptionPlaceholder')}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 disabled={submitting}
@@ -242,7 +242,7 @@ export function ExerciseFormModal({
             {/* Quarter */}
             <div>
               <label className="filter-label">
-                {t('dashboard.rubrics.quarter')} <span className="form-required-asterisk">*</span>
+                {t('dashboard.evalCriteria.quarter')} <span className="form-required-asterisk">*</span>
               </label>
               <div className="shape-dropdown" ref={quarterDropdownRef}>
                 <button
@@ -255,7 +255,7 @@ export function ExerciseFormModal({
                   aria-expanded={quarterDropdownOpen}
                 >
                   <span className="shape-dropdown-selected">
-                    <span>{t(`dashboard.rubrics.quarter${quarter}`)}</span>
+                    <span>{t(`dashboard.evalCriteria.quarter${quarter}`)}</span>
                   </span>
                   <ChevronDown size={16} className={`shape-dropdown-chevron ${quarterDropdownOpen ? 'open' : ''}`} />
                 </button>
@@ -269,7 +269,7 @@ export function ExerciseFormModal({
                         className="selector-option"
                         onClick={() => { setQuarter(q); setQuarterDropdownOpen(false); }}
                       >
-                        {t(`dashboard.rubrics.quarter${q}`)}
+                        {t(`dashboard.evalCriteria.quarter${q}`)}
                       </button>
                     ))}
                   </div>
@@ -282,7 +282,7 @@ export function ExerciseFormModal({
             <div className="modal-fields-row">
               <div className="modal-field" style={{ flex: 1 }}>
                 <label className="filter-label">
-                  {t('dashboard.rubrics.percentageGrade')} (1-{100 - usedPercentage}) <span className="form-required-asterisk">*</span>
+                  {t('dashboard.evalCriteria.percentageGrade')} (1-{100 - usedPercentage}) <span className="form-required-asterisk">*</span>
                 </label>
                 <input
                   ref={percentageRef}
@@ -300,7 +300,7 @@ export function ExerciseFormModal({
 
               <div className="modal-field" style={{ flex: 1 }}>
                 <label className="filter-label">
-                  {t('dashboard.rubrics.maxGrade')} (1-20) <span className="form-required-asterisk">*</span>
+                  {t('dashboard.evalCriteria.maxGrade')} (1-20) <span className="form-required-asterisk">*</span>
                 </label>
                 <input
                   ref={maxGradeRef}

@@ -62,12 +62,12 @@ export function DocumentsModal({
   const handleUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
     if (!file) {
-      setErrorMessage(t('dashboard.rubrics.validation.fileRequired'));
+      setErrorMessage(t('dashboard.evalCriteria.validation.fileRequired'));
       return;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      setErrorMessage(t('dashboard.rubrics.validation.fileTooLarge'));
+      setErrorMessage(t('dashboard.evalCriteria.validation.fileTooLarge'));
       return;
     }
 
@@ -80,12 +80,12 @@ export function DocumentsModal({
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-      setSuccessMessage(t('dashboard.rubrics.uploadDocumentSuccess'));
+      setSuccessMessage(t('dashboard.evalCriteria.uploadDocumentSuccess'));
       onDocumentsChanged();
     } catch (error) {
       const msg = error instanceof Error ? error.message : '';
       const isFileSizeError = msg.toLowerCase().includes('maximum upload size') || msg.toLowerCase().includes('size exceed');
-      setErrorMessage(isFileSizeError ? t('dashboard.rubrics.validation.fileTooLarge') : (msg || t('dashboard.rubrics.uploadDocumentError')));
+      setErrorMessage(isFileSizeError ? t('dashboard.evalCriteria.validation.fileTooLarge') : (msg || t('dashboard.evalCriteria.uploadDocumentError')));
     } finally {
       setUploading(false);
     }
@@ -104,7 +104,7 @@ export function DocumentsModal({
       link.remove();
       globalThis.URL.revokeObjectURL(url);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.downloadError'));
+      setErrorMessage(error instanceof Error ? error.message : t('dashboard.evalCriteria.downloadError'));
     } finally {
       setDownloading(null);
     }
@@ -117,7 +117,7 @@ export function DocumentsModal({
       await ExerciseService.deleteDocument(exerciseId, confirmDeleteDoc.id);
       onDocumentsChanged();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.deleteDocumentError'));
+      setErrorMessage(error instanceof Error ? error.message : t('dashboard.evalCriteria.deleteDocumentError'));
     } finally {
       setDeletingId(null);
       setConfirmDeleteDoc(null);
@@ -136,7 +136,7 @@ export function DocumentsModal({
       setEditingId(null);
       onDocumentsChanged();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : t('dashboard.rubrics.updateDescriptionError'));
+      setErrorMessage(error instanceof Error ? error.message : t('dashboard.evalCriteria.updateDescriptionError'));
     } finally {
       setSavingDescription(false);
     }
@@ -146,13 +146,13 @@ export function DocumentsModal({
 
   return (
     <>
-      <dialog className="modal-overlay" open={isOpen} aria-label={t('dashboard.rubrics.documents')}>
+      <dialog className="modal-overlay" open={isOpen} aria-label={t('dashboard.evalCriteria.documents')}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
           <div className="modal-content" style={{ maxWidth: '36rem', minWidth: '36rem', maxHeight: '90vh', overflowY: 'auto' }}>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 className="modal-title" style={{ marginBottom: 0 }}>
-                {t('dashboard.rubrics.documents')}: {exerciseTitle}
+                {t('dashboard.evalCriteria.documents')}: {exerciseTitle}
               </h3>
               <button
                 onClick={onClose}
@@ -186,7 +186,7 @@ export function DocumentsModal({
             {/* Documents List */}
             {documents.length === 0 ? (
               <p style={{ color: '#7a8078', fontSize: '0.875rem', textAlign: 'center', padding: '1.5rem 0' }}>
-                {t('dashboard.rubrics.noDocuments')}
+                {t('dashboard.evalCriteria.noDocuments')}
               </p>
             ) : (
               <div className="eval-criteria-doc-list">
@@ -226,22 +226,22 @@ export function DocumentsModal({
                       )}
                     </div>
                     <div className="eval-criteria-doc-actions">
-                      <PortalTooltip text={t('dashboard.rubrics.downloadDocument')} as="span">
+                      <PortalTooltip text={t('dashboard.evalCriteria.downloadDocument')} as="span">
                         <button
                           className="eval-criteria-exercise-btn"
                           onClick={() => handleDownload(doc)}
                           disabled={downloading === doc.id}
-                          aria-label={t('dashboard.rubrics.downloadDocument')}
+                          aria-label={t('dashboard.evalCriteria.downloadDocument')}
                         >
                           {downloading === doc.id ? <Loader2 size={16} className="icon-spin" /> : <Download size={16} />}
                         </button>
                       </PortalTooltip>
-                      <PortalTooltip text={t('dashboard.rubrics.editDescription')} as="span">
+                      <PortalTooltip text={t('dashboard.evalCriteria.editDescription')} as="span">
                         <button
                           className="eval-criteria-exercise-btn"
                           onClick={() => handleStartEdit(doc)}
                           disabled={Boolean(editingId)}
-                          aria-label={t('dashboard.rubrics.editDescription')}
+                          aria-label={t('dashboard.evalCriteria.editDescription')}
                         >
                           <Edit size={16} />
                         </button>
@@ -266,7 +266,7 @@ export function DocumentsModal({
             <div className="eval-criteria-upload-form">
               <label className="filter-label">
                 <Upload size={14} style={{ marginRight: '0.25rem', verticalAlign: 'middle' }} />
-                {t('dashboard.rubrics.uploadDocument')}
+                {t('dashboard.evalCriteria.uploadDocument')}
               </label>
               <input
                 ref={fileInputRef}
@@ -278,7 +278,7 @@ export function DocumentsModal({
               <input
                 type="text"
                 className="modal-input"
-                placeholder={t('dashboard.rubrics.documentDescriptionPlaceholder')}
+                placeholder={t('dashboard.evalCriteria.documentDescriptionPlaceholder')}
                 value={uploadDescription}
                 onChange={(e) => setUploadDescription(e.target.value)}
                 disabled={uploading}
@@ -290,7 +290,7 @@ export function DocumentsModal({
                 style={{ alignSelf: 'flex-end' }}
               >
                 {uploading && <Loader2 size={16} className="icon-spin" style={{ marginRight: '0.5rem' }} />}
-                {t('dashboard.rubrics.uploadDocument')}
+                {t('dashboard.evalCriteria.uploadDocument')}
               </button>
             </div>
           </div>
@@ -301,9 +301,9 @@ export function DocumentsModal({
       {confirmDeleteDoc && (
         <ConfirmDeleteModal
           isOpen={Boolean(confirmDeleteDoc)}
-          title={t('dashboard.rubrics.deleteDocumentTitle')}
+          title={t('dashboard.evalCriteria.deleteDocumentTitle')}
           itemName={confirmDeleteDoc.document}
-          confirmMessage={t('dashboard.rubrics.deleteDocumentConfirm')}
+          confirmMessage={t('dashboard.evalCriteria.deleteDocumentConfirm')}
           onConfirm={handleDeleteConfirm}
           onCancel={() => setConfirmDeleteDoc(null)}
           isDeleting={deletingId === confirmDeleteDoc.id}

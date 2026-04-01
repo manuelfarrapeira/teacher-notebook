@@ -164,7 +164,7 @@ export function StudentRadarChartModal({
   /** Series metadata for the legend */
   const seriesMeta = useMemo(() => ALL_SERIES.map(key => ({
     key,
-    label: t(`dashboard.rubrics.radarChart.${key === 'final' ? 'finalGrade' : key.replace('q', 'quarter')}`),
+    label: t(`dashboard.evalCriteria.radarChart.${key === 'final' ? 'finalGrade' : key.replace('q', 'quarter')}`),
     color: SERIES_COLORS[key],
     hasData: seriesHasData[key],
   })), [t, seriesHasData]);
@@ -172,7 +172,7 @@ export function StudentRadarChartModal({
   if (!isOpen) return null;
 
   const hasData = classSubjects.length > 0;
-  const title = `${t('dashboard.rubrics.radarChart.title')}: ${studentName}`;
+  const title = `${t('dashboard.evalCriteria.radarChart.title')}: ${studentName}`;
 
   return (
     <dialog
@@ -257,7 +257,7 @@ export function StudentRadarChartModal({
               </div>
             ) : (
               <p style={{ textAlign: 'center', color: '#7a8078', padding: '2rem 0' }}>
-                {t('dashboard.rubrics.radarChart.noDataForChart')}
+                {t('dashboard.evalCriteria.radarChart.noDataForChart')}
               </p>
             )}
           </div>

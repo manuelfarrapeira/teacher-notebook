@@ -479,7 +479,7 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                 {/* Day header row */}
                 <tr>
                   <th className="attendance-student-col">
-                    {t('dashboard.rubrics.student')}
+                    {t('dashboard.evalCriteria.student')}
                   </th>
                   <th className="attendance-count-col">
                     {t('dashboard.attendance.absenceCount')}

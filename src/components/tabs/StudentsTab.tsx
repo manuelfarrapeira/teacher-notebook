@@ -560,8 +560,8 @@ export function StudentsTab({
                   <button
                     onClick={() => setGradesStudent(student)}
                     className="school-action-btn edit tooltip-container"
-                    aria-label={t('dashboard.rubrics.viewStudentGrades')}
-                    data-tooltip={t('dashboard.rubrics.viewStudentGrades')}
+                    aria-label={t('dashboard.evalCriteria.viewStudentGrades')}
+                    data-tooltip={t('dashboard.evalCriteria.viewStudentGrades')}
                   >
                     <ClipboardList size={20} />
                   </button>
@@ -612,7 +612,7 @@ export function StudentsTab({
           >
             <span>
               {activeSubTab === 'class' && t('dashboard.students.classStudents')}
-              {activeSubTab === 'evalCriteria' && t('dashboard.rubrics.title')}
+              {activeSubTab === 'evalCriteria' && t('dashboard.evalCriteria.title')}
               {activeSubTab === 'classRubrics' && t('dashboard.classRubrics.title')}
               {activeSubTab === 'attendance' && t('dashboard.attendance.title')}
               {activeSubTab === 'cooperative' && t('dashboard.cooperative.title')}
@@ -632,7 +632,7 @@ export function StudentsTab({
                 className={`student-tabs-dropdown-option ${activeSubTab === 'evalCriteria' ? 'active' : ''}`}
                 onClick={() => { setActiveSubTab('evalCriteria'); setIsSubTabDropdownOpen(false); }}
               >
-                {t('dashboard.rubrics.title')}
+                {t('dashboard.evalCriteria.title')}
               </button>
               <button
                 className={`student-tabs-dropdown-option ${activeSubTab === 'classRubrics' ? 'active' : ''}`}
@@ -673,7 +673,7 @@ export function StudentsTab({
             className={activeSubTab === 'evalCriteria' ? 'active' : ''}
             onClick={() => setActiveSubTab('evalCriteria')}
           >
-            {t('dashboard.rubrics.title')}
+            {t('dashboard.evalCriteria.title')}
           </button>
           <button
             className={activeSubTab === 'classRubrics' ? 'active' : ''}

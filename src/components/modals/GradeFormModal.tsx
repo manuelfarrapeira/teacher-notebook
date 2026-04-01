@@ -90,9 +90,9 @@ export function GradeFormModal({
 
     const num = Number(grade);
     if (grade.trim() === '') {
-      errors.grade = t('dashboard.rubrics.validation.gradeRequired');
+      errors.grade = t('dashboard.evalCriteria.validation.gradeRequired');
     } else if (Number.isNaN(num) || num < 0 || num > maxGrade) {
-      errors.grade = t('dashboard.rubrics.validation.gradeRange').replace('{max}', String(maxGrade));
+      errors.grade = t('dashboard.evalCriteria.validation.gradeRange').replace('{max}', String(maxGrade));
     }
 
     setFormErrors(errors);
@@ -124,8 +124,8 @@ export function GradeFormModal({
       handleClose();
     } catch (error) {
       const fallback = isEditing
-        ? t('dashboard.rubrics.updateGradeError')
-        : t('dashboard.rubrics.createGradeError');
+        ? t('dashboard.evalCriteria.updateGradeError')
+        : t('dashboard.evalCriteria.createGradeError');
       setErrorMessage(error instanceof Error ? error.message : fallback);
     } finally {
       setSubmitting(false);
@@ -152,8 +152,8 @@ export function GradeFormModal({
   if (!isOpen) return null;
 
   const modalTitle = isEditing
-    ? t('dashboard.rubrics.editGrade')
-    : t('dashboard.rubrics.createGrade');
+    ? t('dashboard.evalCriteria.editGrade')
+    : t('dashboard.evalCriteria.createGrade');
 
   return (
     <dialog className="modal-overlay" open={isOpen} aria-label={modalTitle}>
@@ -175,7 +175,7 @@ export function GradeFormModal({
             {/* Grade */}
             <div>
               <label className="filter-label">
-                {t('dashboard.rubrics.grade')} (0 - {maxGrade}) <span className="form-required-asterisk">*</span>
+                {t('dashboard.evalCriteria.grade')} (0 - {maxGrade}) <span className="form-required-asterisk">*</span>
               </label>
               <input
                 ref={gradeRef}
@@ -192,10 +192,10 @@ export function GradeFormModal({
 
             {/* Description */}
             <div>
-              <label className="filter-label">{t('dashboard.rubrics.description')}</label>
+              <label className="filter-label">{t('dashboard.evalCriteria.description')}</label>
               <textarea
                 className="modal-input"
-                placeholder={t('dashboard.rubrics.descriptionPlaceholder')}
+                placeholder={t('dashboard.evalCriteria.descriptionPlaceholder')}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 disabled={submitting}

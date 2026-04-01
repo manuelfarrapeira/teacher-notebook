@@ -148,7 +148,7 @@ export function GradeDistributionChartModal({
     }
 
     return CATEGORY_KEYS.map(key => ({
-      name: t(`dashboard.rubrics.chart.${key}`),
+      name: t(`dashboard.evalCriteria.chart.${key}`),
       value: counts[key],
       color: CATEGORY_COLORS[key],
       key,
@@ -166,13 +166,13 @@ export function GradeDistributionChartModal({
     <dialog
       className="modal-overlay"
       open={isOpen}
-      aria-label={t('dashboard.rubrics.chart.title')}
+      aria-label={t('dashboard.evalCriteria.chart.title')}
       onClose={onClose}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
         <div className="modal-content grade-distribution-modal" style={{ maxWidth: '850px', width: '90vw', maxHeight: '90vh', overflowY: 'auto' }}>
           <h3 className="modal-title">
-            📊 {t('dashboard.rubrics.chart.title')}: {title}
+            📊 {t('dashboard.evalCriteria.chart.title')}: {title}
           </h3>
           <div className="modal-body">
             {hasData ? (
@@ -201,7 +201,7 @@ export function GradeDistributionChartModal({
                     </Pie>
                     <Tooltip
                       formatter={(value: number | undefined, name: string | undefined) => [
-                        `${value ?? 0} ${t('dashboard.rubrics.chart.studentsCount')}`,
+                        `${value ?? 0} ${t('dashboard.evalCriteria.chart.studentsCount')}`,
                         name ?? '',
                       ]}
                     />
@@ -213,7 +213,7 @@ export function GradeDistributionChartModal({
               </div>
             ) : (
               <p style={{ textAlign: 'center', color: '#7a8078', padding: '2rem 0' }}>
-                {t('dashboard.rubrics.chart.noDataForChart')}
+                {t('dashboard.evalCriteria.chart.noDataForChart')}
               </p>
             )}
           </div>

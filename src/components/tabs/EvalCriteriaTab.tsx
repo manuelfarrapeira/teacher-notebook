@@ -223,14 +223,14 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   };
 
   const handleExerciseCreated = () => {
-    setSuccessMessage(t('dashboard.rubrics.createExerciseSuccess'));
+    setSuccessMessage(t('dashboard.evalCriteria.createExerciseSuccess'));
     setSuccessDialogOpen(true);
     fetchExercises();
     fetchGrades();
   };
 
   const handleExerciseUpdated = () => {
-    setSuccessMessage(t('dashboard.rubrics.updateExerciseSuccess'));
+    setSuccessMessage(t('dashboard.evalCriteria.updateExerciseSuccess'));
     setSuccessDialogOpen(true);
     setExerciseToEdit(null);
     fetchExercises();
@@ -242,13 +242,13 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
     setDeleting(true);
     try {
       await ExerciseService.deleteExercise(exerciseToDelete.id);
-      setSuccessMessage(t('dashboard.rubrics.deleteExerciseSuccess'));
+      setSuccessMessage(t('dashboard.evalCriteria.deleteExerciseSuccess'));
       setSuccessDialogOpen(true);
       await Promise.all([fetchExercises(), fetchGrades()]);
     } catch (error) {
       const msg = error instanceof ApiErrorException
         ? (error.apiError.detail || error.apiError.description)
-        : (error instanceof Error ? error.message : t('dashboard.rubrics.deleteExerciseError'));
+        : (error instanceof Error ? error.message : t('dashboard.evalCriteria.deleteExerciseError'));
       setErrorMessage(msg);
       setErrorDialogOpen(true);
     } finally {
@@ -260,8 +260,8 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   const handleGradeSuccess = () => {
     setSuccessMessage(
       gradeModal?.existing
-        ? t('dashboard.rubrics.updateGradeSuccess')
-        : t('dashboard.rubrics.createGradeSuccess')
+        ? t('dashboard.evalCriteria.updateGradeSuccess')
+        : t('dashboard.evalCriteria.createGradeSuccess')
     );
     setSuccessDialogOpen(true);
     fetchGrades();
@@ -272,13 +272,13 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
     setDeleting(true);
     try {
       await ExerciseService.deleteGrade(gradeToDelete.gradeId);
-      setSuccessMessage(t('dashboard.rubrics.deleteGradeSuccess'));
+      setSuccessMessage(t('dashboard.evalCriteria.deleteGradeSuccess'));
       setSuccessDialogOpen(true);
       fetchGrades();
     } catch (error) {
       const msg = error instanceof ApiErrorException
         ? (error.apiError.detail || error.apiError.description)
-        : (error instanceof Error ? error.message : t('dashboard.rubrics.deleteGradeError'));
+        : (error instanceof Error ? error.message : t('dashboard.evalCriteria.deleteGradeError'));
       setErrorMessage(msg);
       setErrorDialogOpen(true);
     } finally {
@@ -318,7 +318,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
         maxValue: 10,
       };
     });
-    setChartModal({ title: t('dashboard.rubrics.total'), grades });
+    setChartModal({ title: t('dashboard.evalCriteria.total'), grades });
   };
 
   /** Export grades as Excel */
@@ -330,7 +330,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `rubrics_class_${selectedClass}.xlsx`;
+      a.download = `grades_class_${selectedClass}.xlsx`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -338,7 +338,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
     } catch (error) {
       const msg = error instanceof ApiErrorException
         ? (error.apiError.detail || error.apiError.description)
-        : (error instanceof Error ? error.message : t('dashboard.rubrics.exportGradesError'));
+        : (error instanceof Error ? error.message : t('dashboard.evalCriteria.exportGradesError'));
       setErrorMessage(msg);
       setErrorDialogOpen(true);
     } finally {
@@ -376,7 +376,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   if (!selectedClass) {
     return (
       <div className="dashboard-empty">
-        <p className="dashboard-empty-text">{t('dashboard.rubrics.noClassSelected')}</p>
+        <p className="dashboard-empty-text">{t('dashboard.evalCriteria.noClassSelected')}</p>
       </div>
     );
   }
@@ -392,7 +392,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   if (classSubjects.length === 0) {
     return (
       <div className="dashboard-empty">
-        <p className="dashboard-empty-text">{t('dashboard.rubrics.selectSubjectFirst')}</p>
+        <p className="dashboard-empty-text">{t('dashboard.evalCriteria.selectSubjectFirst')}</p>
       </div>
     );
   }
@@ -403,7 +403,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
       <div className="eval-criteria-toolbar">
         <Select value={selectedSubjectClassId ? String(selectedSubjectClassId) : ''} onValueChange={handleSubjectChange}>
           <SelectTrigger className="eval-criteria-subject-select">
-            <SelectValue placeholder={t('dashboard.rubrics.selectSubjectFirst')} />
+            <SelectValue placeholder={t('dashboard.evalCriteria.selectSubjectFirst')} />
           </SelectTrigger>
           <SelectContent>
             {classSubjects.map(cs => (
@@ -420,7 +420,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
           disabled={!selectedSubjectClassId}
         >
           <Plus size={16} style={{ marginRight: '0.25rem' }} />
-          {t('dashboard.rubrics.createExercise')}
+          {t('dashboard.evalCriteria.createExercise')}
         </button>
 
         <div className="eval-criteria-quarter-tabs">
@@ -430,7 +430,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
               className={`eval-criteria-quarter-tab ${activeQuarter === q ? 'active' : ''}`}
               onClick={() => setActiveQuarter(q)}
             >
-              {t(`dashboard.rubrics.quarter${q}`)}
+              {t(`dashboard.evalCriteria.quarter${q}`)}
             </button>
           ))}
         </div>
@@ -439,14 +439,14 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
           className="eval-criteria-export-btn"
           onClick={handleExportGrades}
           disabled={exporting}
-          title={t('dashboard.rubrics.exportGrades')}
+          title={t('dashboard.evalCriteria.exportGrades')}
         >
           {exporting ? (
             <Loader2 className="icon-spin" size={16} style={{ marginRight: '0.25rem' }} />
           ) : (
             <Download size={16} style={{ marginRight: '0.25rem' }} />
           )}
-          {t('dashboard.rubrics.exportGrades')}
+          {t('dashboard.evalCriteria.exportGrades')}
         </button>
       </div>
 
@@ -459,7 +459,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
         <>
           {filteredExercises.length === 0 && (
             <div style={{ color: '#7a8078', fontSize: '0.85rem', marginBottom: '0.75rem', textAlign: 'center' }}>
-              {t('dashboard.rubrics.noExercises')}
+              {t('dashboard.evalCriteria.noExercises')}
             </div>
           )}
         <div className="eval-criteria-table-container">
@@ -467,13 +467,13 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
             <table className="eval-criteria-table">
               <thead>
                 <tr>
-                  <th className="eval-criteria-student-col">{t('dashboard.rubrics.student')}</th>
+                  <th className="eval-criteria-student-col">{t('dashboard.evalCriteria.student')}</th>
                   {filteredExercises.map(ex => (
                     <th key={ex.id}>
                       <div className="eval-criteria-exercise-header">
                         <span className="eval-criteria-exercise-title">{ex.title}</span>
                         <span style={{ fontSize: '0.7rem', color: '#9ca3af' }}>
-                          {ex.percentageGrade}% - {t('dashboard.rubrics.maxGrade')}: {ex.maxGrade}
+                          {ex.percentageGrade}% - {t('dashboard.evalCriteria.maxGrade')}: {ex.maxGrade}
                         </span>
                         <div className="eval-criteria-exercise-actions">
                           {ex.description && (
@@ -481,11 +481,11 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                               <Info size={14} />
                             </EvalCriteriaTooltip>
                           )}
-                          <EvalCriteriaTooltip text={`${t('dashboard.rubrics.documents')} (${ex.documents.length})`} as="span">
+                          <EvalCriteriaTooltip text={`${t('dashboard.evalCriteria.documents')} (${ex.documents.length})`} as="span">
                             <button
                               className="eval-criteria-exercise-btn"
                               onClick={() => setDocsModal({ exerciseId: ex.id, exerciseTitle: ex.title, documents: ex.documents })}
-                              aria-label={t('dashboard.rubrics.documents')}
+                              aria-label={t('dashboard.evalCriteria.documents')}
                             >
                               <FileText size={14} />
                               {ex.documents.length > 0 && (
@@ -493,11 +493,11 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                               )}
                             </button>
                           </EvalCriteriaTooltip>
-                          <EvalCriteriaTooltip text={t('dashboard.rubrics.chart.title')} as="span">
+                          <EvalCriteriaTooltip text={t('dashboard.evalCriteria.chart.title')} as="span">
                             <button
                               className="eval-criteria-exercise-btn"
                               onClick={() => openChartForExercise(ex)}
-                              aria-label={t('dashboard.rubrics.chart.title')}
+                              aria-label={t('dashboard.evalCriteria.chart.title')}
                             >
                               <PieChart size={14} />
                             </button>
@@ -527,16 +527,16 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                   {filteredExercises.length > 0 && (
                     <th className="eval-criteria-total-col">
                       <div className="eval-criteria-exercise-header">
-                        <span className="eval-criteria-exercise-title">{t('dashboard.rubrics.total')}</span>
+                        <span className="eval-criteria-exercise-title">{t('dashboard.evalCriteria.total')}</span>
                         <span style={{ fontSize: '0.7rem', color: totalPercentage > 100 ? '#dc2626' : '#9ca3af' }}>
                           {totalPercentage}% / 100%
                         </span>
                         <div className="eval-criteria-exercise-actions">
-                          <EvalCriteriaTooltip text={t('dashboard.rubrics.chart.title')} as="span">
+                          <EvalCriteriaTooltip text={t('dashboard.evalCriteria.chart.title')} as="span">
                             <button
                               className="eval-criteria-exercise-btn"
                               onClick={() => openChartForTotal()}
-                              aria-label={t('dashboard.rubrics.chart.title')}
+                              aria-label={t('dashboard.evalCriteria.chart.title')}
                             >
                               <PieChart size={14} />
                             </button>
@@ -583,17 +583,17 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                                 </EvalCriteriaTooltip>
                               )}
                               {/* Documents button: always visible when has docs, hover-only when empty */}
-                              <EvalCriteriaTooltip text={`${t('dashboard.rubrics.gradeDocuments')} (${gradeData.documents.length})`} as="span">
+                              <EvalCriteriaTooltip text={`${t('dashboard.evalCriteria.gradeDocuments')} (${gradeData.documents.length})`} as="span">
                                 <button
                                   className={`eval-criteria-grade-btn${gradeData.documents.length === 0 ? ' eval-criteria-grade-hover-btn' : ''}`}
                                   onClick={() => setGradeDocsModal({
                                     gradeId: gradeData.gradeId,
-                                    title: t('dashboard.rubrics.gradeDocumentsTitle')
+                                    title: t('dashboard.evalCriteria.gradeDocumentsTitle')
                                       .replace('{student}', `${student.surnames}, ${student.name}`)
                                       .replace('{exercise}', ex.title),
                                     documents: gradeData.documents,
                                   })}
-                                  aria-label={t('dashboard.rubrics.gradeDocuments')}
+                                  aria-label={t('dashboard.evalCriteria.gradeDocuments')}
                                 >
                                   <FileText size={12} />
                                   {gradeData.documents.length > 0 && (
@@ -633,7 +633,7 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                               </div>
                             </div>
                           ) : (
-                            <EvalCriteriaTooltip text={t('dashboard.rubrics.createGrade')} as="span">
+                            <EvalCriteriaTooltip text={t('dashboard.evalCriteria.createGrade')} as="span">
                               <button
                                 className="eval-criteria-add-grade-btn"
                                 onClick={() => setGradeModal({
@@ -743,9 +743,9 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
       {exerciseToDelete && (
         <ConfirmDeleteModal
           isOpen={Boolean(exerciseToDelete)}
-          title={t('dashboard.rubrics.deleteExerciseTitle')}
+          title={t('dashboard.evalCriteria.deleteExerciseTitle')}
           itemName={exerciseToDelete.title}
-          confirmMessage={t('dashboard.rubrics.deleteExerciseConfirm')}
+          confirmMessage={t('dashboard.evalCriteria.deleteExerciseConfirm')}
           onConfirm={handleDeleteExercise}
           onCancel={() => setExerciseToDelete(null)}
           isDeleting={deleting}
@@ -756,9 +756,9 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
       {gradeToDelete && (
         <ConfirmDeleteModal
           isOpen={Boolean(gradeToDelete)}
-          title={t('dashboard.rubrics.deleteGradeTitle')}
+          title={t('dashboard.evalCriteria.deleteGradeTitle')}
           itemName={gradeToDelete.exerciseTitle}
-          confirmMessage={t('dashboard.rubrics.deleteGradeConfirm')}
+          confirmMessage={t('dashboard.evalCriteria.deleteGradeConfirm')}
           onConfirm={handleDeleteGrade}
           onCancel={() => setGradeToDelete(null)}
           isDeleting={deleting}
