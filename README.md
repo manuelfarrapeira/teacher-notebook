@@ -287,10 +287,7 @@ teacher-notebook/
 │   │   │   ├── TimetableTab.tsx      # Horario semanal
 │   │   │   └── SettingsTab.tsx       # Configuración
 │   │   │
-│   │   ├── selectors/                # Selectores especializados
-│   │   │   ├── LanguageSelector.tsx  # Selector de idioma
-│   │   │   ├── SchoolSelector.tsx    # Selector de escuela
-│   │   │   └── ClassSelector.tsx     # Selector de clase
+│   │   ├── LanguageSelector.tsx      # Selector de idioma con dropdown
 │   │   │
 │   │   ├── modals/                   # Componentes modales
 │   │   │   ├── StudentFormModal.tsx      # Formulario de estudiante

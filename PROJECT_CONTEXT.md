@@ -41,7 +41,7 @@ src/
 │   ├── LoginScreen.tsx           # Pantalla de inicio de sesión
 │   ├── LoadingScreen.tsx         # Pantalla de carga
 │   ├── RefreshButton.tsx         # Botón de actualizar datos
-│   ├── LanguageSelector.svg.tsx  # SVG del selector de idioma
+│   ├── LanguageSelector.tsx      # Selector de idioma con dropdown
 │   │
 │   ├── tabs/                     # Tabs del dashboard (cada uno en su archivo)
 │   │   ├── StudentsTab.tsx       # Gestión de estudiantes
@@ -49,11 +49,6 @@ src/
 │   │   ├── ScheduleTab.tsx       # Calendario académico
 │   │   ├── TimetableTab.tsx      # Horario semanal
 │   │   └── SettingsTab.tsx       # Configuración
-│   │
-│   ├── selectors/                # Selectores especializados
-│   │   ├── LanguageSelector.tsx  # Selector de idioma con dropdown
-│   │   ├── SchoolSelector.tsx    # Selector de colegio
-│   │   └── ClassSelector.tsx     # Selector de clase
 │   │
 │   ├── modals/                   # Componentes modales
 │   │   └── LoadingModal.tsx      # Modal de carga
@@ -592,50 +587,18 @@ export function StudentsTab({ onAddNew }: StudentsTabProps) {
 5. Agregar traducciones en `src/lib/i18n.tsx` bajo `dashboard.tabs.{nombreTab}`
 
 #### 2️⃣ **Selectores** (Dropdowns especializados)
-**Directorio:** `src/components/selectors/`
+**Directorio:** `src/components/`
 
-Componentes para seleccionar escuelas, clases, idioma, etc.
+Los selectores reutilizables van directamente en `src/components/`. Los selectores simples que solo se usan en un componente se integran directamente en el archivo correspondiente.
 
-**Ejemplo: `ClassSelector.tsx`**
-```typescriptreact
-import React from 'react';
-import { SchoolClass } from '../../services/SchoolService';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
-
-interface ClassSelectorProps {
-  classes: SchoolClass[];
-  selectedClass: number | null;
-  onClassChange: (classId: number) => void;
-}
-
-export function ClassSelector({ classes, selectedClass, onClassChange }: ClassSelectorProps) {
-  const selected = classes.find(cls => cls.id === selectedClass);
-  const selectedLabel = selected ? `${selected.name} - ${selected.schoolYear}` : 'Seleccionar clase';
-
-  return (
-    <Select value={selectedClass ? String(selectedClass) : ''} onValueChange={v => onClassChange(Number(v))}>
-      <SelectTrigger className="min-w-[140px]">
-        <SelectValue placeholder="Seleccionar clase">
-          {selectedLabel}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        {classes.map(cls => (
-          <SelectItem key={cls.id} value={String(cls.id)}>
-            {cls.name} - {cls.schoolYear}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-}
-```
+**Ejemplo: `LanguageSelector.tsx`**
+Selector de idioma con dropdown personalizado, usado en `LoginScreen.tsx` y `UserMenu.tsx`.
 
 **Para agregar un nuevo selector:**
-1. Crear archivo en `src/components/selectors/NuevoSelector.tsx`
-2. Usar componentes de Radix UI de `src/components/ui/`
-3. Importar en el componente padre donde se necesite
-4. Pasar las props necesarias y manejar los cambios
+1. Si se reutiliza en varios archivos: crear archivo en `src/components/NuevoSelector.tsx`
+2. Si solo se usa en un componente: integrarlo directamente en ese archivo
+3. Usar componentes de Radix UI de `src/components/ui/` o dropdowns personalizados
+4. Importar en el componente padre donde se necesite
 
 #### 3️⃣ **Modales**
 **Directorio:** `src/components/modals/`
@@ -789,19 +752,16 @@ src/components/
 ├── tabs/          # Solo archivos de tabs
 │   ├── NewTab.tsx
 │   └── AnotherTab.tsx
-├── selectors/     # Solo archivos de selectores
-│   ├── ClassSelector.tsx
-│   └── SchoolSelector.tsx
 ├── modals/        # Solo archivos de modales
 │   └── ConfirmModal.tsx
 ├── ui/            # Componentes base de UI
+├── LanguageSelector.tsx  # Selectores reutilizables
 ├── Dashboard.tsx  # Componentes raíz/principales
 
 ❌ INCORRECTO:
 src/components/
 ├── tabs.tsx           # Debe ir en tabs/
 ├── modals.tsx         # Debe ir en modals/
-├── selectors.tsx      # Debe ir en selectors/
 └── random-stuff/      # Directorios no estándar
 ```
 
@@ -1062,7 +1022,7 @@ npm run start:pro      # Ambiente producción
 
 ## 📝 Checklist para Nuevas Funcionalidades
 
-- [ ] Crear archivos en el directorio correspondiente (`tabs/`, `modals/`, `selectors/`, `services/`, etc.)
+- [ ] Crear archivos en el directorio correspondiente (`tabs/`, `modals/`, `services/`, etc.)
 - [ ] Usar PascalCase para nombres de archivos y componentes
 - [ ] Implementar interfaces TypeScript para props
 - [ ] Agregar traducciones en `src/lib/i18n.tsx` (español e inglés)
@@ -1121,7 +1081,7 @@ import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 |--------|-----------|
 | Hardcodear strings en componentes | Usar `t('clave')` del i18n |
 | CSS en archivos separados | Agregar todo a `src/index.css` |
-| Componentes en directorios aleatorios | Seguir estructura: `tabs/`, `modals/`, `selectors/` |
+| Componentes en directorios aleatorios | Seguir estructura: `tabs/`, `modals/`, `components/` |
 | Servicios sin heredar de `BaseService` | Siempre extender `BaseService` |
 | Llamadas fetch directas en componentes | Usar servicios del directorio `src/services/` |
 | Props sin tipos TypeScript | Usar interfaces `{ComponentName}Props` |

@@ -14,8 +14,8 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
 
 1. **Estructura de Carpetas**
    - Los componentes de tabs van en `src/components/tabs/` (un archivo por tab)
-   - Los selectores van en `src/components/selectors/`
    - Los modales van en `src/components/modals/`
+   - Los componentes reutilizables (como selectores) van directamente en `src/components/`
    - Los componentes base de UI van en `src/components/ui/`
    - Los servicios de API van en `src/services/` y heredan de `BaseService`
    - Los estilos van centralizados en `src/index.css` (no crear archivos CSS nuevos)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { User, LogOut } from 'lucide-react';
-import { LanguageSelector } from './selectors/LanguageSelector';
+import { LanguageSelector } from './LanguageSelector';
 import { useI18n } from '../lib/i18n';
 
 interface UserMenuProps {

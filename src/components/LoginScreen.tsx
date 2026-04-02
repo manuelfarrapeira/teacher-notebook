@@ -4,7 +4,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { GraduationCap, BookOpen, Users, Award } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
-import { LanguageSelector } from './selectors/LanguageSelector';
+import { LanguageSelector } from './LanguageSelector';
 
 interface LoginScreenProps {
   onLogin: (username: string, password: string) => void;

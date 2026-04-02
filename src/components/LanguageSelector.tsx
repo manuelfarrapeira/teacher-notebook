@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useI18n } from '../../lib/i18n';
+import { useI18n } from '../lib/i18n';
 import { ChevronDown } from 'lucide-react';
 
 const SpainFlag = () => (
