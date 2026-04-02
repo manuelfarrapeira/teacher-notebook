@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { X, Loader2, Search } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { SubjectService, Subject } from '../../services/SubjectService';
+import { SubjectService, Subject } from '../../infrastructure/api/SubjectService';
 import { ErrorModal } from './ErrorModal';
 import { SuccessModal } from './SuccessModal';
 

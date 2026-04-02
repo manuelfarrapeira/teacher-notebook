@@ -1,16 +1,16 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { useState, useEffect } from "react"
-import { School } from "../services/SchoolService"
+import { School } from "../infrastructure/api/SchoolService"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 /**
- * Convierte fecha de formato ISO (YYYY-MM-DD) a formato API (DD/MM/YYYY)
- * @param isoDate - Fecha en formato YYYY-MM-DD
- * @returns Fecha en formato DD/MM/YYYY
+ * Converts a date from ISO format (YYYY-MM-DD) to API format (DD/MM/YYYY)
+ * @param isoDate - Date in YYYY-MM-DD format
+ * @returns Date in DD/MM/YYYY format
  */
 export function formatDateForApi(isoDate: string): string {
   const [year, month, day] = isoDate.split('-');
@@ -18,9 +18,9 @@ export function formatDateForApi(isoDate: string): string {
 }
 
 /**
- * Convierte fecha de formato API (DD/MM/YYYY) a formato ISO (YYYY-MM-DD)
- * @param apiDate - Fecha en formato DD/MM/YYYY
- * @returns Fecha en formato YYYY-MM-DD
+ * Converts a date from API format (DD/MM/YYYY) to ISO format (YYYY-MM-DD)
+ * @param apiDate - Date in DD/MM/YYYY format
+ * @returns Date in YYYY-MM-DD format
  */
 export function formatDateForInput(apiDate: string): string {
   const [day, month, year] = apiDate.split('/');
@@ -28,10 +28,10 @@ export function formatDateForInput(apiDate: string): string {
 }
 
 /**
- * Obtiene información de las clases a las que pertenece un alumno
- * @param classIds - Array de IDs de clases del alumno
- * @param schools - Array de colegios con sus clases
- * @returns Array de objetos con schoolName, className, classId, schoolYear
+ * Gets information about the classes a student belongs to
+ * @param classIds - Array of class IDs the student is assigned to
+ * @param schools - Array of schools with their classes
+ * @returns Array of objects with schoolName, className, classId, schoolYear
  */
 export function getStudentClasses(classIds: number[], schools: School[]) {
   const classes: Array<{ schoolName: string; className: string; classId: number; schoolYear: string }> = [];
@@ -53,9 +53,9 @@ export function getStudentClasses(classIds: number[], schools: School[]) {
 }
 
 /**
- * Hook que detecta si la pantalla es móvil (≤768px).
- * Se actualiza automáticamente al redimensionar la ventana.
- * @returns true si el ancho de la ventana es ≤ 768px
+ * Hook that detects if the screen is mobile (≤768px).
+ * Automatically updates on window resize.
+ * @returns true if the window width is ≤ 768px
  */
 export function useIsMobile(breakpoint = 768): boolean {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= breakpoint);
@@ -74,9 +74,9 @@ export function useIsMobile(breakpoint = 768): boolean {
 }
 
 /**
- * Comprueba si hoy es el cumpleaños de un alumno comparando día y mes.
- * @param dateOfBirth - Fecha de nacimiento en formato DD/MM/YYYY
- * @returns true si hoy es el cumpleaños del alumno
+ * Checks if today is a student's birthday by comparing day and month.
+ * @param dateOfBirth - Date of birth in DD/MM/YYYY format
+ * @returns true if today is the student's birthday
  */
 export function isBirthday(dateOfBirth: string): boolean {
   if (!dateOfBirth) return false;
@@ -89,4 +89,3 @@ export function isBirthday(dateOfBirth: string): boolean {
 
   return today.getDate() === day && today.getMonth() + 1 === month;
 }
-

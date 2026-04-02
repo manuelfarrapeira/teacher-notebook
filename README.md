@@ -312,20 +312,41 @@ teacher-notebook/
 │   │   │
 │   │   └── ui/                       # Componentes UI base (Radix UI)
 │   │
-│   ├── services/                     # Servicios de API REST
-│   │   ├── BaseService.ts           # Clase base HTTP (JWT, errores, CRUD)
-│   │   ├── AuthService.ts           # Autenticación (login/logout)
-│   │   ├── SchoolService.ts         # Escuelas y clases
-│   │   ├── ClassService.ts          # Operaciones de clases
-│   │   ├── StudentService.ts        # Estudiantes y fotos
-│   │   ├── SubjectService.ts        # Asignaturas
-│   │   ├── SkillService.ts         # Competencias
-│   │   ├── SkillRubricService.ts   # Rúbricas y criterios de competencias
-│   │   ├── ClassRubricService.ts  # Rúbricas de clase y criterios de alumnos
-│   │   ├── ExerciseService.ts       # Ejercicios, calificaciones y documentos
-│   │   ├── StudentGroupService.ts   # Grupos cooperativos de alumnos
-│   │   ├── CalendarAlertService.ts  # Alertas del calendario
-│   │   └── ScheduleService.ts       # Horarios semanales
+│   ├── domain/                       # 🔵 Dominio (núcleo hexagonal)
+│   │   ├── models/                   # Interfaces/tipos puros (sin dependencias)
+│   │   │   ├── index.ts             # Barrel export de modelos
+│   │   │   ├── Student.ts           # Student, Gender, Shape
+│   │   │   ├── School.ts            # School, SchoolClass
+│   │   │   ├── Exercise.ts          # Exercise, ExerciseDocument
+│   │   │   ├── Grade.ts             # GradeExercise, StudentGrades
+│   │   │   ├── Subject.ts           # Subject, ClassSubject
+│   │   │   ├── Absence.ts           # Absence
+│   │   │   ├── CalendarAlert.ts     # CalendarAlert
+│   │   │   ├── ClassRubric.ts       # ClassRubric, StudentCriteriaGroup
+│   │   │   ├── Schedule.ts          # ScheduleItem
+│   │   │   ├── Skill.ts             # Skill
+│   │   │   ├── SkillRubric.ts       # SkillRubric, SkillCriterion
+│   │   │   ├── StudentGroup.ts      # SavedGroup, GroupMember
+│   │   │   └── Api.ts               # ApiError
+│   │   │
+│   │   └── ports/                    # Contratos (interfaces de puertos)
+│   │       ├── index.ts             # Barrel export de ports
+│   │       ├── StudentPort.ts       # Contrato de operaciones de alumnos
+│   │       ├── SchoolPort.ts        # Contrato de escuelas
+│   │       └── ...                  # Un port por entidad
+│   │
+│   ├── infrastructure/               # 🟢 Adaptadores de infraestructura
+│   │   ├── api/                      # Adaptadores HTTP (implementan ports)
+│   │   │   ├── index.ts             # Barrel export de servicios
+│   │   │   ├── BaseService.ts       # Clase base HTTP (JWT, errores, CRUD)
+│   │   │   ├── AuthService.ts       # Autenticación (login/logout)
+│   │   │   ├── StudentService.ts    # Adaptador HTTP para alumnos
+│   │   │   ├── SchoolService.ts     # Adaptador HTTP para escuelas
+│   │   │   ├── ExerciseService.ts   # Adaptador HTTP para ejercicios/notas/docs
+│   │   │   └── ...                  # Un servicio por entidad
+│   │   │
+│   │   └── config/                   # Configuración de infraestructura
+│   │       └── environment.ts       # URLs de API por entorno
 │   │
 │   ├── contexts/                     # React Contexts
 │   │   └── StudentPhotoContext.tsx   # Caché de fotos de estudiantes
@@ -334,8 +355,8 @@ teacher-notebook/
 │   │   ├── i18n.tsx                 # Sistema de internacionalización
 │   │   └── utils.ts                 # Funciones utilitarias
 │   │
-│   ├── config/                       # Configuración
-│   │   └── environment.ts           # Variables de entorno por ambiente
+│   ├── services/                     # ⚠️ DEPRECADO (re-exports → infrastructure/api)
+│   ├── config/                       # ⚠️ DEPRECADO (re-export → infrastructure/config)
 │   │
 │   ├── index.css                     # Estilos centralizados
 │   ├── App.tsx                       # Componente raíz
@@ -355,18 +376,47 @@ teacher-notebook/
 
 ---
 
-## 🔌 Arquitectura de Servicios
+## 🔌 Arquitectura Hexagonal (Ports & Adapters)
 
-Todos los servicios de API heredan de `BaseService`, que proporciona:
+El proyecto sigue una **arquitectura hexagonal** con tres capas bien definidas:
 
-- ✅ Métodos genéricos CRUD (`get`, `post`, `put`, `patch`, `delete`)
+### 🔵 Dominio (`src/domain/`)
+El núcleo de la aplicación. Contiene las entidades de negocio y los contratos, sin dependencias externas:
+- **`models/`** — Interfaces TypeScript puras (Student, School, Exercise, etc.)
+- **`ports/`** — Interfaces que definen los contratos que los adaptadores deben implementar
+
+### 🟢 Infraestructura (`src/infrastructure/`)
+Adaptadores secundarios (driven) que implementan los ports con tecnología concreta:
+- **`api/`** — Adaptadores HTTP que comunican con el backend REST
+- **`config/`** — Configuración de entorno (URLs de API)
+
+Todos los adaptadores HTTP heredan de `BaseService`, que proporciona:
+
+- ✅ Métodos genéricos CRUD (`get`, `put`, `patch`, `delete`)
 - ✅ Inyección automática del token JWT en headers
 - ✅ Header `Accept-Language` automático según el idioma seleccionado
 - ✅ Manejo centralizado de errores HTTP con `ApiErrorException`
 - ✅ Validación de sesión y logout automático ante tokens expirados
 
+### 🟡 UI — Adaptador Primario (`src/components/`)
+Adaptador de entrada (driving) que consume los ports a través de los adaptadores:
+- Componentes React que importan **tipos del dominio** y **servicios de infraestructura**
+
+### Diagrama de Dependencias
+
 ```
-BaseService (abstracta)
+┌───────────────────┐     ┌────────────────────┐     ┌──────────────────┐
+│   UI (React)      │ ──→ │   DOMINIO          │ ←── │ INFRAESTRUCTURA  │
+│   components/     │     │   domain/models/   │     │ infrastructure/  │
+│   contexts/       │     │   domain/ports/    │     │   api/ (HTTP)    │
+│   lib/            │     │   (sin deps)       │     │   config/        │
+└───────────────────┘     └────────────────────┘     └──────────────────┘
+```
+
+### Árbol de Servicios
+
+```
+BaseService (abstracta — src/infrastructure/api/)
 ├── AuthService        → Login / Logout / Gestión de sesión
 ├── SchoolService      → CRUD de escuelas
 ├── ClassService       → CRUD de clases

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { ExerciseService, ExerciseRequest, Exercise } from '../../services/ExerciseService';
+import { ExerciseService, ExerciseRequest, Exercise } from '../../infrastructure/api/ExerciseService';
 
 /**
  * Props for ExerciseFormModal

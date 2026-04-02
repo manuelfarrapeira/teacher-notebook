@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useMemo, useCallback } from 'react';
 
 /**
- * Interface representing cached photo data
+ * Interface for cached photo data
  */
 interface PhotoCache {
   url: string;
@@ -21,8 +21,8 @@ interface StudentPhotoContextType {
 const StudentPhotoContext = createContext<StudentPhotoContextType | undefined>(undefined);
 
 /**
- * Provider component for student photo caching
- * Manages a global cache of student photo URLs to avoid redundant API calls
+ * Provider component for student photo cache.
+ * Manages a global cache of photo URLs to avoid redundant API calls.
  */
 export function StudentPhotoProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [cache, setCache] = useState<Map<number, PhotoCache>>(new Map());
@@ -30,7 +30,7 @@ export function StudentPhotoProvider({ children }: Readonly<{ children: ReactNod
   /**
    * Get cached photo URL for a student
    * @param studentId - Student ID
-   * @returns Cached URL or null if not in cache
+   * @returns Cached URL or null if not cached
    */
   const getCachedPhoto = useCallback((studentId: number): string | null => {
     const cached = cache.get(studentId);
@@ -54,7 +54,7 @@ export function StudentPhotoProvider({ children }: Readonly<{ children: ReactNod
   }, []);
 
   /**
-   * Remove photo from cache (used when photo is uploaded/deleted)
+   * Remove photo from cache (used when uploading/deleting photo)
    * @param studentId - Student ID
    */
   const invalidatePhoto = useCallback((studentId: number) => {
@@ -94,8 +94,8 @@ export function StudentPhotoProvider({ children }: Readonly<{ children: ReactNod
 }
 
 /**
- * Hook to access student photo cache
- * @throws Error if used outside StudentPhotoProvider
+ * Hook to access the student photo cache
+ * @throws Error if used outside of StudentPhotoProvider
  */
 export function useStudentPhotoCache() {
   const context = useContext(StudentPhotoContext);

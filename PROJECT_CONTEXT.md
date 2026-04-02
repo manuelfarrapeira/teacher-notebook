@@ -30,11 +30,66 @@
 
 ---
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura del Proyecto (Arquitectura Hexagonal)
 
 ```
 src/
-├── components/                    # Componentes React reutilizables
+├── domain/                        # 🔵 NÚCLEO — Modelos y contratos puros
+│   ├── models/                    # Interfaces/tipos de dominio (sin dependencias externas)
+│   │   ├── index.ts              # Barrel export de todos los modelos
+│   │   ├── Student.ts            # Student, Gender, Shape, StudentRequestDTO
+│   │   ├── School.ts             # School, SchoolClass, SchoolRequestDTO
+│   │   ├── Class.ts              # ClassRequestDTO
+│   │   ├── Exercise.ts           # Exercise, ExerciseDocument, QuarterExercises, etc.
+│   │   ├── Grade.ts              # GradeExercise, StudentGrades, GradeCreateRequest, etc.
+│   │   ├── Subject.ts            # Subject, ClassSubject, SubjectRequestDTO
+│   │   ├── Absence.ts            # Absence, AbsenceCreateRequest
+│   │   ├── CalendarAlert.ts      # CalendarAlert, CalendarAlertRequestDTO
+│   │   ├── ClassRubric.ts        # ClassRubric, StudentCriteriaGroup, etc.
+│   │   ├── Schedule.ts           # ScheduleItem, ScheduleCreateRequest, etc.
+│   │   ├── Skill.ts              # Skill, SkillRequestDTO
+│   │   ├── SkillRubric.ts        # SkillRubric, SkillCriterion, CriterionRequest
+│   │   ├── StudentGroup.ts       # SavedGroup, GroupMember, SavedGroupRequest
+│   │   └── Api.ts                # ApiError
+│   │
+│   └── ports/                     # Interfaces de contrato (driven ports)
+│       ├── index.ts              # Barrel export de todos los ports
+│       ├── StudentPort.ts        # Contrato para operaciones de estudiantes
+│       ├── SchoolPort.ts         # Contrato para operaciones de colegios
+│       ├── ClassPort.ts          # Contrato para operaciones de clases
+│       ├── ExercisePort.ts       # Contrato para ejercicios, notas y documentos
+│       ├── SubjectPort.ts        # Contrato para asignaturas
+│       ├── AbsencePort.ts        # Contrato para faltas
+│       ├── CalendarAlertPort.ts  # Contrato para alertas de calendario
+│       ├── ClassRubricPort.ts    # Contrato para rúbricas de clase
+│       ├── SchedulePort.ts       # Contrato para horarios
+│       ├── SkillPort.ts          # Contrato para competencias
+│       ├── SkillRubricPort.ts    # Contrato para rúbricas de competencia
+│       ├── StudentGroupPort.ts   # Contrato para grupos cooperativos
+│       └── AuthPort.ts           # Contrato para autenticación
+│
+├── infrastructure/                # 🟢 ADAPTADORES SECUNDARIOS (driven)
+│   ├── api/                       # Adaptadores HTTP que implementan los ports
+│   │   ├── index.ts              # Barrel export de todos los servicios
+│   │   ├── BaseService.ts        # Clase base HTTP (headers, auth, CRUD genérico)
+│   │   ├── AuthService.ts        # Adaptador de autenticación
+│   │   ├── StudentService.ts     # Adaptador HTTP para estudiantes
+│   │   ├── SchoolService.ts      # Adaptador HTTP para colegios
+│   │   ├── ClassService.ts       # Adaptador HTTP para clases
+│   │   ├── ExerciseService.ts    # Adaptador HTTP para ejercicios/notas/docs
+│   │   ├── SubjectService.ts     # Adaptador HTTP para asignaturas
+│   │   ├── AbsenceService.ts     # Adaptador HTTP para faltas
+│   │   ├── CalendarAlertService.ts # Adaptador HTTP para alertas
+│   │   ├── ClassRubricService.ts # Adaptador HTTP para rúbricas de clase
+│   │   ├── ScheduleService.ts    # Adaptador HTTP para horarios
+│   │   ├── SkillService.ts       # Adaptador HTTP para competencias
+│   │   ├── SkillRubricService.ts # Adaptador HTTP para rúbricas
+│   │   └── StudentGroupService.ts # Adaptador HTTP para grupos cooperativos
+│   │
+│   └── config/                    # Configuración de infraestructura
+│       └── environment.ts        # URLs de API por entorno
+│
+├── components/                    # 🟡 ADAPTADOR PRIMARIO (driving) — UI React
 │   ├── Dashboard.tsx             # Componente principal del dashboard
 │   ├── TopBar.tsx                # Barra superior con selectores
 │   ├── Sidebar.tsx               # Barra lateral de navegación
@@ -56,24 +111,17 @@ src/
 │   └── ui/                       # Componentes UI base (Radix UI + custom)
 │       ├── button.tsx
 │       ├── dialog.tsx
-│       ├── select.tsx
-│       ├── input.tsx
-│       ├── card.tsx
-│       ├── badge.tsx
-│       ├── alert.tsx
-│       └── ... (otros componentes de UI)
+│       └── ...
 │
-├── services/                      # Servicios de API
-│   ├── BaseService.ts            # Clase base con lógica HTTP común
-│   ├── AuthService.ts            # Gestión de autenticación
-│   └── SchoolService.ts          # Servicios relacionados con escuelas/clases
-│
-├── lib/                          # Utilidades y librerías
+├── lib/                          # Utilidades compartidas
 │   ├── i18n.tsx                  # Sistema de internacionalización
 │   └── utils.ts                  # Funciones utilitarias
 │
-├── config/                       # Configuración
-│   └── environment.ts            # Variables de entorno
+├── contexts/                     # React Contexts
+│   └── StudentPhotoContext.tsx   # Cache de fotos de alumnos
+│
+├── services/                     # ⚠️ DEPRECADO — Re-exports hacia infrastructure/api
+├── config/                       # ⚠️ DEPRECADO — Re-export hacia infrastructure/config
 │
 ├── index.css                     # Estilos centralizados (Tailwind + custom)
 ├── App.tsx                       # Componente raíz
@@ -423,7 +471,7 @@ const locale = getCurrentLocale(); // Retorna 'es' | 'en'
 
 ### Clase Base: `BaseService`
 
-**Ubicación:** `src/services/BaseService.ts`
+**Ubicación:** `src/infrastructure/api/BaseService.ts`
 
 Todas las clases de servicio deben heredar de `BaseService`. Proporciona:
 
@@ -929,14 +977,28 @@ export function StudentCard(props) {
 
 **Pasos:**
 
-1. **Crear el archivo `src/services/NuevoService.ts`:**
+1. **Crear el modelo de dominio en `src/domain/models/NuevoItem.ts`:**
    ```typescript
-   import { BaseService } from './BaseService';
-
    export interface NuevoItem {
      id: number;
      name: string;
    }
+   ```
+   Y re-exportar en `src/domain/models/index.ts`.
+
+2. **Crear el port en `src/domain/ports/NuevoItemPort.ts`:**
+   ```typescript
+   import type { NuevoItem } from '../models';
+   
+   export interface NuevoItemPort {
+     getItems(): Promise<NuevoItem[]>;
+   }
+   ```
+
+3. **Crear el adaptador HTTP en `src/infrastructure/api/NuevoService.ts`:**
+   ```typescript
+   import { BaseService } from './BaseService';
+   import type { NuevoItem } from '../../domain/models';
 
    export class NuevoService extends BaseService {
      private static readonly BASE_ENDPOINT = '/teacher-notebook/v1';
@@ -947,9 +1009,10 @@ export function StudentCard(props) {
    }
    ```
 
-2. **Usar en componentes:**
+4. **Usar en componentes:**
    ```typescriptreact
-   import { NuevoService } from '../services/NuevoService';
+   import { NuevoService } from '../../infrastructure/api/NuevoService';
+   import type { NuevoItem } from '../../domain/models';
 
    export function MiComponente() {
      const [items, setItems] = useState<NuevoItem[]>([]);
@@ -1044,7 +1107,7 @@ npm run start:pro      # Ambiente producción
 |---------|----------|
 | `src/index.css` | **Todos** los estilos CSS centralizados |
 | `src/lib/i18n.tsx` | Sistema de traducciones (ES/EN) |
-| `src/services/BaseService.ts` | Clase base para servicios API |
+| `src/infrastructure/api/BaseService.ts` | Clase base para servicios API (adaptadores HTTP) |
 | `src/components/Dashboard.tsx` | Componente principal del dashboard |
 | `src/components/Sidebar.tsx` | Navegación lateral |
 | `forge.config.ts` | Configuración de Electron |
@@ -1083,7 +1146,7 @@ import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 | CSS en archivos separados | Agregar todo a `src/index.css` |
 | Componentes en directorios aleatorios | Seguir estructura: `tabs/`, `modals/`, `components/` |
 | Servicios sin heredar de `BaseService` | Siempre extender `BaseService` |
-| Llamadas fetch directas en componentes | Usar servicios del directorio `src/services/` |
+| Llamadas fetch directas en componentes | Usar adaptadores de `src/infrastructure/api/` |
 | Props sin tipos TypeScript | Usar interfaces `{ComponentName}Props` |
 | Ignorar multiidioma | Siempre agregar traducciones ES/EN |
 | Inline styles | Usar clases CSS de `src/index.css` |

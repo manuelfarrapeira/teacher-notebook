@@ -5,8 +5,8 @@ import {
   ClassRubricService,
   ClassRubric,
   StudentCriterionAssignment,
-} from '../../services/ClassRubricService';
-import { ApiErrorException } from '../../services/BaseService';
+} from '../../infrastructure/api/ClassRubricService';
+import { ApiErrorException } from '../../infrastructure/api/BaseService';
 
 /**
  * Props for StudentRubricCriteriaModal
@@ -150,7 +150,7 @@ export function StudentRubricCriteriaModal({
   useEffect(() => {
     if (!isOpen || classRubrics.length === 0) return;
     // Import dynamically to avoid circular deps
-    import('../../services/SkillService').then(({ SkillService }) => {
+    import('../../infrastructure/api/SkillService').then(({ SkillService }) => {
       SkillService.getSkills().then(skills => {
         const map = new Map<number, string>();
         for (const s of skills) {

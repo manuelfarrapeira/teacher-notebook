@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { ChevronLeft, ChevronRight, Loader2, X, Bell } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
-import { CalendarAlertService, CalendarAlert } from '../../services/CalendarAlertService';
-import { ApiErrorException } from '../../services/BaseService';
+import { CalendarAlertService, CalendarAlert } from '../../infrastructure/api/CalendarAlertService';
+import { ApiErrorException } from '../../infrastructure/api/BaseService';
 import { CalendarAlertFormModal } from '../modals/CalendarAlertFormModal';
 import { ErrorModal } from '../modals/ErrorModal';
 

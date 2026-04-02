@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bell, Calendar, Clock, X } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { CalendarAlert } from '../../services/CalendarAlertService';
+import { CalendarAlert } from '../../infrastructure/api/CalendarAlertService';
 
 interface TodayAlertsModalProps {
   isOpen: boolean;

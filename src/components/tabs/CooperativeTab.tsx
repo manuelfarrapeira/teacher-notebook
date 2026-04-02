@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Loader2, Users, Shuffle, Save, Trash2, GripVertical, X, RefreshCw } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { StudentService, Student, Shape } from '../../services/StudentService';
-import { StudentGroupService, SavedGroupRequest } from '../../services/StudentGroupService';
+import { StudentService, Student, Shape } from '../../infrastructure/api/StudentService';
+import { StudentGroupService, SavedGroupRequest } from '../../infrastructure/api/StudentGroupService';
 import { StudentPhoto } from '../students/StudentPhoto';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';

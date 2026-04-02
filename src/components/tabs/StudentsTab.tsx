@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Users, Plus, Loader2, UserPlus, UserMinus, Edit, Trash2, X, Search, Info, Grid3x3, List, Cake, ClipboardList, CalendarDays, Award, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { Student, StudentService, Shape } from '../../services/StudentService';
-import { School } from '../../services/SchoolService';
+import { Student, StudentService, Shape } from '../../infrastructure/api/StudentService';
+import { School } from '../../infrastructure/api/SchoolService';
 import { getStudentClasses, useIsMobile, isBirthday } from '../../lib/utils';
 import { StudentPhoto } from '../students/StudentPhoto';
 import { StudentFormModal } from '../modals/StudentFormModal';

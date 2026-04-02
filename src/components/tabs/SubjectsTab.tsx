@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { BookType, Loader2, Plus, Edit, Trash2, Search, Grid3x3, List } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { SubjectService, Subject } from '../../services/SubjectService';
+import { SubjectService, Subject } from '../../infrastructure/api/SubjectService';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';

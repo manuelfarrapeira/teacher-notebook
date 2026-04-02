@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 import { Loader2, Plus, Trash2, Info, Settings, X, PieChart, Search } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
-import { SkillService, Skill } from '../../services/SkillService';
-import { SkillRubricService, SkillRubric } from '../../services/SkillRubricService';
-import { StudentService, Student } from '../../services/StudentService';
+import { SkillService, Skill } from '../../infrastructure/api/SkillService';
+import { SkillRubricService, SkillRubric } from '../../infrastructure/api/SkillRubricService';
+import { StudentService, Student } from '../../infrastructure/api/StudentService';
 import {
   ClassRubricService,
   ClassRubric,
   ClassRubricCriterion,
   StudentCriteriaGroup,
   StudentCriterionAssignment,
-} from '../../services/ClassRubricService';
-import { ApiErrorException } from '../../services/BaseService';
+} from '../../infrastructure/api/ClassRubricService';
+import { ApiErrorException } from '../../infrastructure/api/BaseService';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';

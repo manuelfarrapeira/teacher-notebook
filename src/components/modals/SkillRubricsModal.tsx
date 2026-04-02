@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { Loader2, Plus, Edit, Trash2, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { Skill } from '../../services/SkillService';
+import { Skill } from '../../infrastructure/api/SkillService';
 import {
   SkillRubricService,
   SkillRubric,
   SkillCriterion,
-} from '../../services/SkillRubricService';
+} from '../../infrastructure/api/SkillRubricService';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { ErrorModal } from './ErrorModal';
 import { SuccessModal } from './SuccessModal';

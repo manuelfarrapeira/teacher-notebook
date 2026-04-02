@@ -2,11 +2,11 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { Loader2, CalendarDays, Check, UserX } from 'lucide-react';
 import { useI18n, translations } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
-import { SubjectService, ClassSubject } from '../../services/SubjectService';
-import { StudentService, Student } from '../../services/StudentService';
-import { AbsenceService, Absence } from '../../services/AbsenceService';
-import { ApiErrorException } from '../../services/BaseService';
-import { School } from '../../services/SchoolService';
+import { SubjectService, ClassSubject } from '../../infrastructure/api/SubjectService';
+import { StudentService, Student } from '../../infrastructure/api/StudentService';
+import { AbsenceService, Absence } from '../../infrastructure/api/AbsenceService';
+import { ApiErrorException } from '../../infrastructure/api/BaseService';
+import { School } from '../../infrastructure/api/SchoolService';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { StudentPhoto } from '../students/StudentPhoto';

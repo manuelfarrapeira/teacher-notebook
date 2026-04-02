@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
-import { StudentService, Gender } from '../../services/StudentService';
+import { StudentService, Gender } from '../../infrastructure/api/StudentService';
 import { useStudentPhotoCache } from '../../contexts/StudentPhotoContext';
 import silhouetteBoy from '../../images/shiluetas/niño.png';
 import silhouetteGirl from '../../images/shiluetas/niña.png';

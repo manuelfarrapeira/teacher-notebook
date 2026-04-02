@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Upload, Trash2, Loader2, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { StudentService, Student, StudentRequestDTO, Gender, Shape } from '../../services/StudentService';
+import { StudentService, Student, StudentRequestDTO, Gender, Shape } from '../../infrastructure/api/StudentService';
 import { formatDateForApi, formatDateForInput } from '../../lib/utils';
 import { useStudentPhotoCache } from '../../contexts/StudentPhotoContext';
 import { StudentPhoto } from '../students/StudentPhoto';

@@ -12,19 +12,29 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
 
 ## 📝 Reglas y Convenciones a Seguir
 
-1. **Estructura de Carpetas**
-   - Los componentes de tabs van en `src/components/tabs/` (un archivo por tab)
-   - Los modales van en `src/components/modals/`
-   - Los componentes reutilizables (como selectores) van directamente en `src/components/`
-   - Los componentes base de UI van en `src/components/ui/`
-   - Los servicios de API van en `src/services/` y heredan de `BaseService`
+1. **Estructura de Carpetas (Arquitectura Hexagonal)**
+   - **Dominio** (`src/domain/`):
+     - `models/` — Interfaces y tipos puros de dominio (sin dependencias externas)
+     - `ports/` — Interfaces que definen los contratos de los adaptadores
+   - **Infraestructura** (`src/infrastructure/`):
+     - `api/` — Adaptadores HTTP que implementan los ports (heredan de `BaseService`)
+     - `config/` — Configuración de entorno (URLs de API, etc.)
+   - **UI (Adaptador primario)** (`src/components/`):
+     - `tabs/` — Componentes de tabs (un archivo por tab)
+     - `modals/` — Componentes modales
+     - `ui/` — Componentes base de UI (Radix UI)
+     - Componentes reutilizables directamente en `src/components/`
+   - `src/lib/` — Utilidades compartidas (i18n, utils)
+   - `src/contexts/` — React Contexts
    - Los estilos van centralizados en `src/index.css` (no crear archivos CSS nuevos)
    - Las traducciones van en `src/lib/i18n.tsx` (no hardcodear textos)
+   - **Nota:** `src/services/` y `src/config/` son re-exports deprecados; importar siempre desde `src/infrastructure/api/` y `src/domain/models/`
 
-2. **Nombres y Tipado**
+2. **Nombres, Tipado y Comentarios**
    - Usar PascalCase para archivos y componentes React
    - Todas las props deben estar tipadas con interfaces TypeScript bien documentadas
    - Documentar las props y funciones con JSDoc
+   - **Todos los comentarios de código (JSDoc, inline, TODO, etc.) deben estar siempre en inglés**. El español se reserva exclusivamente para los textos visibles al usuario, gestionados a través de `i18n.tsx`
 
 3. **Estilos**
    - Usar solo clases CSS definidas en `src/index.css` y utilidades de Tailwind
@@ -35,9 +45,12 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
    - Todos los textos deben obtenerse con el hook `useI18n()` y la función `t('clave')`
    - Si se añade un texto nuevo, debe agregarse en ambos idiomas en `src/lib/i18n.tsx`
 
-5. **Servicios API**
-   - Todos los servicios deben heredar de `BaseService`
+5. **Servicios API (Arquitectura Hexagonal)**
+   - Los modelos de dominio (interfaces/tipos) van en `src/domain/models/`
+   - Los contratos (ports) van en `src/domain/ports/`
+   - Los adaptadores HTTP van en `src/infrastructure/api/` y heredan de `BaseService`
    - No hacer llamadas fetch directas en componentes
+   - Importar tipos desde `../../domain/models` y servicios desde `../../infrastructure/api/`
    - Manejar errores usando la lógica centralizada de `BaseService`
 
 6. **Componentes**
@@ -51,6 +64,7 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
    - Agregar traducciones ES/EN
    - Usar solo estilos centralizados
    - Heredar de `BaseService` para nuevos servicios
+   - Definir modelos en `src/domain/models/` y ports en `src/domain/ports/`
    - Probar en ambos idiomas y en responsive
    - **Actualizar `README.md`** con la descripción de la nueva funcionalidad en la sección correspondiente
 
@@ -60,6 +74,7 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
    - No usar estilos inline
    - No crear componentes fuera de los directorios estándar
    - No hacer llamadas fetch directas
+   - No escribir comentarios de código en español (solo en inglés)
 
 9. **Referencias**
    - Consultar siempre el archivo `PROJECT_CONTEXT.md` para ejemplos, estructura y convenciones

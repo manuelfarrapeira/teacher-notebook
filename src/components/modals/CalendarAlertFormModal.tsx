@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { CalendarAlertService, CalendarAlert, CalendarAlertRequestDTO } from '../../services/CalendarAlertService';
-import { ApiErrorException } from '../../services/BaseService';
+import { CalendarAlertService, CalendarAlert, CalendarAlertRequestDTO } from '../../infrastructure/api/CalendarAlertService';
+import { ApiErrorException } from '../../infrastructure/api/BaseService';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { ErrorModal } from './ErrorModal';
 import { SuccessModal } from './SuccessModal';

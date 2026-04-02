@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Loader2, X, Frown, Smile, ChevronDown, FileText, Download, Radar } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { ExerciseService, StudentQuarter, GradeExercise } from '../../services/ExerciseService';
-import { SubjectService, ClassSubject } from '../../services/SubjectService';
+import { ExerciseService, StudentQuarter, GradeExercise } from '../../infrastructure/api/ExerciseService';
+import { SubjectService, ClassSubject } from '../../infrastructure/api/SubjectService';
 import { PortalTooltip } from '../ui/PortalTooltip';
 import { StudentRadarChartModal } from './StudentRadarChartModal';
 

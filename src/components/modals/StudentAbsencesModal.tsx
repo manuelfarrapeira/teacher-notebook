@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Loader2, X, CalendarDays } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { AbsenceService, Absence } from '../../services/AbsenceService';
-import { ApiErrorException } from '../../services/BaseService';
+import { AbsenceService, Absence } from '../../infrastructure/api/AbsenceService';
+import { ApiErrorException } from '../../infrastructure/api/BaseService';
 
 /**
  * Props for StudentAbsencesModal

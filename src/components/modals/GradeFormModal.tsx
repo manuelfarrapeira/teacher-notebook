@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { ExerciseService } from '../../services/ExerciseService';
+import { ExerciseService } from '../../infrastructure/api/ExerciseService';
 
 /**
  * Existing grade data for edit mode

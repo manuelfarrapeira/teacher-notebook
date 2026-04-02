@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, Download, Trash2, Edit, X, Upload, CheckCircle } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { ExerciseService, GradeDocument } from '../../services/ExerciseService';
+import { ExerciseService, GradeDocument } from '../../infrastructure/api/ExerciseService';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { PortalTooltip } from '../ui/PortalTooltip';
 

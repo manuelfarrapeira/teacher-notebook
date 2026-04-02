@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Building2, Plus, Loader2, Trash2, Edit} from 'lucide-react';
 import {useI18n} from '../../lib/i18n';
-import {SchoolService, School, SchoolRequestDTO} from '../../services/SchoolService';
-import {ApiErrorException} from '../../services/BaseService';
+import {SchoolService, School, SchoolRequestDTO} from '../../infrastructure/api/SchoolService';
+import {ApiErrorException} from '../../infrastructure/api/BaseService';
 import {ErrorModal} from '../modals/ErrorModal';
 import {SuccessModal} from '../modals/SuccessModal';
 import {ConfirmDeleteModal} from '../modals/ConfirmDeleteModal';

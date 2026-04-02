@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { GraduationCap, Loader2, Plus, Edit, Trash2, Search, Grid3x3, List, ClipboardList } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { SkillService, Skill } from '../../services/SkillService';
-import { SkillRubricService } from '../../services/SkillRubricService';
+import { SkillService, Skill } from '../../infrastructure/api/SkillService';
+import { SkillRubricService } from '../../infrastructure/api/SkillRubricService';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';

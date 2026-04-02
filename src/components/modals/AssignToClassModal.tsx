@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Loader2, X, ChevronDown } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
-import { Student, StudentService } from '../../services/StudentService';
-import { School } from '../../services/SchoolService';
+import { Student, StudentService } from '../../infrastructure/api/StudentService';
+import { School } from '../../infrastructure/api/SchoolService';
 import { ErrorModal } from './ErrorModal';
 import { SuccessModal } from './SuccessModal';
 

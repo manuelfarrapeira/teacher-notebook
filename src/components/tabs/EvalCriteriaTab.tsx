@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { Loader2, Plus, Info, FileText, Trash2, Edit, Trash, Frown, Smile, Download, PieChart, Search } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
-import { SubjectService, ClassSubject } from '../../services/SubjectService';
-import { StudentService, Student } from '../../services/StudentService';
+import { SubjectService, ClassSubject } from '../../infrastructure/api/SubjectService';
+import { StudentService, Student } from '../../infrastructure/api/StudentService';
 import {
   ExerciseService,
   QuarterExercises,
@@ -12,8 +12,8 @@ import {
   GradeExercise,
   ExerciseDocument,
   GradeDocument,
-} from '../../services/ExerciseService';
-import { ApiErrorException } from '../../services/BaseService';
+} from '../../infrastructure/api/ExerciseService';
+import { ApiErrorException } from '../../infrastructure/api/BaseService';
 import { ExerciseFormModal } from '../modals/ExerciseFormModal';
 import { GradeFormModal } from '../modals/GradeFormModal';
 import { DocumentsModal } from '../modals/DocumentsModal';
