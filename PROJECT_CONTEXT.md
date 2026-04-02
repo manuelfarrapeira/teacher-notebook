@@ -51,26 +51,11 @@ src/
 │   │   ├── SkillRubric.ts        # SkillRubric, SkillCriterion, CriterionRequest
 │   │   ├── StudentGroup.ts       # SavedGroup, GroupMember, SavedGroupRequest
 │   │   └── Api.ts                # ApiError
-│   │
-│   └── ports/                     # Interfaces de contrato (driven ports)
-│       ├── index.ts              # Barrel export de todos los ports
-│       ├── StudentPort.ts        # Contrato para operaciones de estudiantes
-│       ├── SchoolPort.ts         # Contrato para operaciones de colegios
-│       ├── ClassPort.ts          # Contrato para operaciones de clases
-│       ├── ExercisePort.ts       # Contrato para ejercicios, notas y documentos
-│       ├── SubjectPort.ts        # Contrato para asignaturas
-│       ├── AbsencePort.ts        # Contrato para faltas
-│       ├── CalendarAlertPort.ts  # Contrato para alertas de calendario
-│       ├── ClassRubricPort.ts    # Contrato para rúbricas de clase
-│       ├── SchedulePort.ts       # Contrato para horarios
-│       ├── SkillPort.ts          # Contrato para competencias
-│       ├── SkillRubricPort.ts    # Contrato para rúbricas de competencia
-│       ├── StudentGroupPort.ts   # Contrato para grupos cooperativos
-│       └── AuthPort.ts           # Contrato para autenticación
 │
-├── infrastructure/                # 🟢 ADAPTADORES SECUNDARIOS (driven)
-│   ├── api/                       # Adaptadores HTTP que implementan los ports
+├── infrastructure/                # 🟢 ADAPTADORES DE INFRAESTRUCTURA
+│   ├── api/                       # Adaptadores HTTP
 │   │   ├── index.ts              # Barrel export de todos los servicios
+│   │   ├── endpoints.ts          # Constantes de endpoints versionados
 │   │   ├── BaseService.ts        # Clase base HTTP (headers, auth, CRUD genérico)
 │   │   ├── AuthService.ts        # Adaptador de autenticación
 │   │   ├── StudentService.ts     # Adaptador HTTP para estudiantes
@@ -986,30 +971,21 @@ export function StudentCard(props) {
    ```
    Y re-exportar en `src/domain/models/index.ts`.
 
-2. **Crear el port en `src/domain/ports/NuevoItemPort.ts`:**
-   ```typescript
-   import type { NuevoItem } from '../models';
-   
-   export interface NuevoItemPort {
-     getItems(): Promise<NuevoItem[]>;
-   }
-   ```
-
-3. **Crear el adaptador HTTP en `src/infrastructure/api/NuevoService.ts`:**
+2. **Crear el adaptador HTTP en `src/infrastructure/api/NuevoService.ts`:**
    ```typescript
    import { BaseService } from './BaseService';
+   import { BASE_ENDPOINT_V1 } from './endpoints';
    import type { NuevoItem } from '../../domain/models';
 
    export class NuevoService extends BaseService {
-     private static readonly BASE_ENDPOINT = '/teacher-notebook/v1';
 
      static async getItems(): Promise<NuevoItem[]> {
-       return this.get<NuevoItem[]>(this.BASE_ENDPOINT, '/items');
+       return this.get<NuevoItem[]>(BASE_ENDPOINT_V1, '/items');
      }
    }
    ```
 
-4. **Usar en componentes:**
+3. **Usar en componentes:**
    ```typescriptreact
    import { NuevoService } from '../../infrastructure/api/NuevoService';
    import type { NuevoItem } from '../../domain/models';

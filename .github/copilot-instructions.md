@@ -12,14 +12,13 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
 
 ## 📝 Reglas y Convenciones a Seguir
 
-1. **Estructura de Carpetas (Arquitectura Hexagonal)**
+1. **Estructura de Carpetas**
    - **Dominio** (`src/domain/`):
      - `models/` — Interfaces y tipos puros de dominio (sin dependencias externas)
-     - `ports/` — Interfaces que definen los contratos de los adaptadores
    - **Infraestructura** (`src/infrastructure/`):
-     - `api/` — Adaptadores HTTP que implementan los ports (heredan de `BaseService`)
+     - `api/` — Adaptadores HTTP (heredan de `BaseService`)
      - `config/` — Configuración de entorno (URLs de API, etc.)
-   - **UI (Adaptador primario)** (`src/components/`):
+   - **UI** (`src/components/`):
      - `tabs/` — Componentes de tabs (un archivo por tab)
      - `modals/` — Componentes modales
      - `ui/` — Componentes base de UI (Radix UI)
@@ -45,10 +44,10 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
    - Todos los textos deben obtenerse con el hook `useI18n()` y la función `t('clave')`
    - Si se añade un texto nuevo, debe agregarse en ambos idiomas en `src/lib/i18n.tsx`
 
-5. **Servicios API (Arquitectura Hexagonal)**
+5. **Servicios API**
    - Los modelos de dominio (interfaces/tipos) van en `src/domain/models/`
-   - Los contratos (ports) van en `src/domain/ports/`
    - Los adaptadores HTTP van en `src/infrastructure/api/` y heredan de `BaseService`
+   - Los endpoints base versionados están en `src/infrastructure/api/endpoints.ts`
    - No hacer llamadas fetch directas en componentes
    - Importar tipos desde `../../domain/models` y servicios desde `../../infrastructure/api/`
    - Manejar errores usando la lógica centralizada de `BaseService`
@@ -64,7 +63,7 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
    - Agregar traducciones ES/EN
    - Usar solo estilos centralizados
    - Heredar de `BaseService` para nuevos servicios
-   - Definir modelos en `src/domain/models/` y ports en `src/domain/ports/`
+   - Definir modelos en `src/domain/models/`
    - Probar en ambos idiomas y en responsive
    - **Actualizar `README.md`** con la descripción de la nueva funcionalidad en la sección correspondiente
 
@@ -364,4 +363,4 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia completa de:
 
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
-Última actualización: 2026-03-31
+Última actualización: 2026-04-02
