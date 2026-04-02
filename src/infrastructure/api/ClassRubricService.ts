@@ -1,6 +1,7 @@
 import { BaseService } from './BaseService';
 import { getApiUrl } from '../config/environment';
 import type { ClassRubric, StudentCriteriaGroup } from '../../domain/models';
+import { BASE_ENDPOINT_V1 } from './endpoints';
 
 // Re-export domain types for backward compatibility
 export type {
