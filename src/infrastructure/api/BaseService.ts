@@ -291,4 +291,121 @@ export abstract class BaseService {
 
     return {} as T;
   }
+
+  /**
+   * Performs a POST request with JSON body
+   * @param baseEndpoint - Service base endpoint
+   * @param endpoint - Relative endpoint
+   * @param body - Request body
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with typed data
+   */
+  protected static async post<T>(
+    baseEndpoint: string,
+    endpoint: string,
+    body?: unknown,
+    additionalHeaders?: HeadersInit
+  ): Promise<T> {
+    this.validateToken();
+
+    const apiUrl = getApiUrl();
+    const url = `${apiUrl}${baseEndpoint}${endpoint}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.buildHeaders(additionalHeaders),
+      body: body ? JSON.stringify(body) : undefined,
+    });
+
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
+    }
+
+    if (response.status === 204) {
+      return {} as T;
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      return await response.json();
+    }
+
+    return {} as T;
+  }
+
+  /**
+   * Performs a POST request with FormData body (for file uploads).
+   * Does NOT set Content-Type header so the browser can set the multipart boundary.
+   * @param baseEndpoint - Service base endpoint
+   * @param endpoint - Relative endpoint
+   * @param formData - FormData payload
+   * @returns Promise with typed data
+   */
+  protected static async postFormData<T>(
+    baseEndpoint: string,
+    endpoint: string,
+    formData: FormData,
+  ): Promise<T> {
+    this.validateToken();
+
+    const apiUrl = getApiUrl();
+    const url = `${apiUrl}${baseEndpoint}${endpoint}`;
+
+    const token = AuthService.getAccessToken();
+    const locale = getCurrentLocale();
+    const headers = new Headers({
+      'Authorization': `Bearer ${token}`,
+      'Accept-Language': locale,
+    });
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
+    }
+
+    if (response.status === 204) {
+      return {} as T;
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      return await response.json();
+    }
+
+    return {} as T;
+  }
+
+  /**
+   * Performs a GET request that returns a Blob (for file downloads / exports).
+   * @param baseEndpoint - Service base endpoint
+   * @param endpoint - Relative endpoint
+   * @param additionalHeaders - Optional additional headers
+   * @returns Promise with Blob data
+   */
+  protected static async getBlob(
+    baseEndpoint: string,
+    endpoint: string,
+    additionalHeaders?: HeadersInit
+  ): Promise<Blob> {
+    this.validateToken();
+
+    const apiUrl = getApiUrl();
+    const url = `${apiUrl}${baseEndpoint}${endpoint}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: this.buildHeaders(additionalHeaders),
+    });
+
+    if (!response.ok) {
+      await this.handleErrorResponse(response);
+    }
+
+    return response.blob();
+  }
 }

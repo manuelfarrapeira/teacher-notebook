@@ -1,5 +1,4 @@
 import { BaseService } from './BaseService';
-import { getApiUrl } from '../config/environment';
 import type { ClassRubric, StudentCriteriaGroup } from '../../domain/models';
 import { BASE_ENDPOINT_V1 } from './endpoints';
 
@@ -37,19 +36,7 @@ export class ClassRubricService extends BaseService {
    * @param rubricId - Rubric ID to assign
    */
   static async assignRubricToClass(classId: number, rubricId: number): Promise<void> {
-    this.validateToken();
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/classes/${classId}/rubrics`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: this.buildHeaders(),
-      body: JSON.stringify({ rubricId }),
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.post<void>(BASE_ENDPOINT_V1, `/classes/${classId}/rubrics`, { rubricId });
   }
 
   /**
@@ -101,19 +88,11 @@ export class ClassRubricService extends BaseService {
     studentId: number,
     criterionId: number,
   ): Promise<void> {
-    this.validateToken();
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/class-rubrics/${classRubricId}/students/${studentId}/criteria`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: this.buildHeaders(),
-      body: JSON.stringify({ criterionId }),
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.post<void>(
+      BASE_ENDPOINT_V1,
+      `/class-rubrics/${classRubricId}/students/${studentId}/criteria`,
+      { criterionId }
+    );
   }
 
   /**

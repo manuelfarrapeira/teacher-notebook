@@ -1,6 +1,5 @@
 import { BaseService } from './BaseService';
 import { getApiUrl } from '../config/environment';
-import { AuthService } from './AuthService';
 import { BASE_ENDPOINT_V1 } from './endpoints';
 import type { Student, StudentRequestDTO } from '../../domain/models';
 
@@ -61,28 +60,9 @@ export class StudentService extends BaseService {
    * @param file - Image file (JPEG/PNG)
    */
   static async uploadPhoto(studentId: number, file: File): Promise<void> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/students/${studentId}/photo`;
-
     const formData = new FormData();
     formData.append('file', file);
-
-    const token = this.getToken();
-    const headers = new Headers({
-      'Authorization': `Bearer ${token}`,
-    });
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: formData,
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.postFormData<void>(BASE_ENDPOINT_V1, `/students/${studentId}/photo`, formData);
   }
 
   /**
@@ -123,15 +103,4 @@ export class StudentService extends BaseService {
     return this.delete<void>(BASE_ENDPOINT_V1, `/classes/${classId}/students/${studentId}`);
   }
 
-  /**
-   * Helper to get the token from AuthService
-   * @private
-   */
-  private static getToken(): string {
-    const token = AuthService.getAccessToken();
-    if (!token) {
-      throw new Error('No access token found');
-    }
-    return token;
-  }
 }

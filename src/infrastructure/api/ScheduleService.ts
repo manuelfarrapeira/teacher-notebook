@@ -1,5 +1,4 @@
 import { BaseService } from './BaseService';
-import { getApiUrl } from '../config/environment';
 import type { ScheduleItem, ScheduleItemRequest, ScheduleCreateRequest, ScheduleDeleteRequest, ScheduleUpdateRequest } from '../../domain/models';
 import { BASE_ENDPOINT_V1 } from './endpoints';
 
@@ -52,17 +51,6 @@ export class ScheduleService extends BaseService {
    */
   static async deleteSchedules(ids: number[]): Promise<void> {
     const requestBody: ScheduleDeleteRequest = { ids };
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/schedules`;
-
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: BaseService.buildHeaders(),
-      body: JSON.stringify(requestBody),
-    });
-
-    if (!response.ok) {
-      throw new Error('Error deleting schedules');
-    }
+    return this.deleteWithBody<void>(BASE_ENDPOINT_V1, '/schedules', requestBody);
   }
 }

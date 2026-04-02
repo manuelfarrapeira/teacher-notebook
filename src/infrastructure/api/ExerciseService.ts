@@ -1,7 +1,4 @@
 import { BaseService } from './BaseService';
-import { getApiUrl } from '../config/environment';
-import { AuthService } from './AuthService';
-import { getCurrentLocale } from '../../lib/i18n';
 import { BASE_ENDPOINT_V1 } from './endpoints';
 import type {
   Exercise, ExerciseRequest, ExerciseSubject, QuarterExercises,
@@ -127,31 +124,10 @@ export class ExerciseService extends BaseService {
    * @param description - Document description
    */
   static async uploadDocument(exerciseId: number, file: File, description: string): Promise<void> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/exercises/${exerciseId}/documents`;
-
     const formData = new FormData();
     formData.append('file', file);
     formData.append('description', description);
-
-    const token = AuthService.getAccessToken();
-    const locale = getCurrentLocale();
-    const headers = new Headers({
-      'Authorization': `Bearer ${token}`,
-      'Accept-Language': locale,
-    });
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: formData,
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.postFormData<void>(BASE_ENDPOINT_V1, `/exercises/${exerciseId}/documents`, formData);
   }
 
   /**
@@ -162,28 +138,7 @@ export class ExerciseService extends BaseService {
    * @returns Document blob
    */
   static async downloadDocument(exerciseId: number, documentId: number): Promise<Blob> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/exercises/${exerciseId}/documents/${documentId}/download`;
-
-    const token = AuthService.getAccessToken();
-    const locale = getCurrentLocale();
-    const headers = new Headers({
-      'Authorization': `Bearer ${token}`,
-      'Accept-Language': locale,
-    });
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers,
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
-
-    return response.blob();
+    return this.getBlob(BASE_ENDPOINT_V1, `/exercises/${exerciseId}/documents/${documentId}/download`);
   }
 
   /**
@@ -228,31 +183,10 @@ export class ExerciseService extends BaseService {
    * @param description - Document description
    */
   static async uploadGradeDocument(gradeId: number, file: File, description: string): Promise<void> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/grades/${gradeId}/documents`;
-
     const formData = new FormData();
     formData.append('file', file);
     formData.append('description', description);
-
-    const token = AuthService.getAccessToken();
-    const locale = getCurrentLocale();
-    const headers = new Headers({
-      'Authorization': `Bearer ${token}`,
-      'Accept-Language': locale,
-    });
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: formData,
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.postFormData<void>(BASE_ENDPOINT_V1, `/grades/${gradeId}/documents`, formData);
   }
 
   /**
@@ -263,28 +197,7 @@ export class ExerciseService extends BaseService {
    * @returns Document blob
    */
   static async downloadGradeDocument(gradeId: number, documentId: number): Promise<Blob> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/grades/${gradeId}/documents/${documentId}`;
-
-    const token = AuthService.getAccessToken();
-    const locale = getCurrentLocale();
-    const headers = new Headers({
-      'Authorization': `Bearer ${token}`,
-      'Accept-Language': locale,
-    });
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers,
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
-
-    return response.blob();
+    return this.getBlob(BASE_ENDPOINT_V1, `/grades/${gradeId}/documents/${documentId}`);
   }
 
   /**
@@ -328,28 +241,7 @@ export class ExerciseService extends BaseService {
    * @returns Excel file blob
    */
   static async exportGrades(classId: number): Promise<Blob> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/classes/${classId}/grades/export`;
-
-    const token = AuthService.getAccessToken();
-    const locale = getCurrentLocale();
-    const headers = new Headers({
-      'Authorization': `Bearer ${token}`,
-      'Accept-Language': locale,
-    });
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers,
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
-
-    return response.blob();
+    return this.getBlob(BASE_ENDPOINT_V1, `/classes/${classId}/grades/export`);
   }
 }
 

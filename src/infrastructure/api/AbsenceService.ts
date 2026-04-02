@@ -1,5 +1,4 @@
 import { BaseService } from './BaseService';
-import { getApiUrl } from '../config/environment';
 import { BASE_ENDPOINT_V1 } from './endpoints';
 import type { Absence, AbsenceCreateRequest } from '../../domain/models';
 
@@ -41,20 +40,7 @@ export class AbsenceService extends BaseService {
    * @param body - Absence creation data
    */
   static async createAbsence(classId: number, body: AbsenceCreateRequest): Promise<void> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/classes/${classId}/absences`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: this.buildHeaders(),
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.post<void>(BASE_ENDPOINT_V1, `/classes/${classId}/absences`, body);
   }
 
   /**
@@ -78,22 +64,10 @@ export class AbsenceService extends BaseService {
     studentId: number,
     date: string
   ): Promise<void> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
     const params = new URLSearchParams({
       studentId: String(studentId),
       date,
     });
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/classes/${classId}/absences?${params.toString()}`;
-
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: this.buildHeaders(),
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.delete<void>(BASE_ENDPOINT_V1, `/classes/${classId}/absences?${params.toString()}`);
   }
 }

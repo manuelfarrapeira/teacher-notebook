@@ -1,5 +1,4 @@
 import { BaseService } from './BaseService';
-import { getApiUrl } from '../config/environment';
 import { BASE_ENDPOINT_V1 } from './endpoints';
 import type { SavedGroup, SavedGroupRequest } from '../../domain/models';
 
@@ -26,20 +25,7 @@ export class StudentGroupService extends BaseService {
    * @param groups - Array of group data to create
    */
   static async createSavedGroups(classId: number, groups: SavedGroupRequest[]): Promise<void> {
-    this.validateToken();
-
-    const apiUrl = getApiUrl();
-    const url = `${apiUrl}${BASE_ENDPOINT_V1}/classes/${classId}/saved-groups`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: this.buildHeaders(),
-      body: JSON.stringify(groups),
-    });
-
-    if (!response.ok) {
-      await this.handleErrorResponse(response);
-    }
+    return this.post<void>(BASE_ENDPOINT_V1, `/classes/${classId}/saved-groups`, groups);
   }
 
   /**
