@@ -6,6 +6,8 @@ export interface ClassRubricCriterion {
   description: string;
   gradeStart: number;
   gradeEnd: number;
+  /** Optional textual qualification label (e.g. "Insuficiente", "Notable") */
+  qualification?: string;
 }
 
 /**
@@ -37,6 +39,7 @@ export interface StudentCriterionAssignment {
     description: string;
     gradeStart: number;
     gradeEnd: number;
+    qualification?: string;
   };
 }
 

@@ -161,7 +161,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
   // ---- Chart modal ----
   const [rubricChartModal, setRubricChartModal] = useState<{
     title: string;
-    entries: Array<{ studentName: string; criterion: { description: string; gradeStart: number; gradeEnd: number } | null }>;
+    entries: Array<{ studentName: string; criterion: { description: string; gradeStart: number; gradeEnd: number; qualification?: string } | null }>;
   } | null>(null);
 
   // ---- Student search filter ----
@@ -282,6 +282,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
               description: assignment.criterion.description,
               gradeStart: assignment.criterion.gradeStart,
               gradeEnd: assignment.criterion.gradeEnd,
+              qualification: assignment.criterion.qualification,
             }
           : null,
       };
@@ -483,6 +484,11 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
                             <span className="class-rubrics-grade-badge">
                               {assignment.criterion.gradeStart}–{assignment.criterion.gradeEnd}
                             </span>
+                            {assignment.criterion.qualification && (
+                              <span className={`class-rubrics-qualification-badge${assignment.criterion.gradeStart < 5 ? ' qualification-low' : assignment.criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>
+                                {assignment.criterion.qualification}
+                              </span>
+                            )}
                             <ClassRubricsTooltip text={assignment.criterion.description} position="bottom">
                               <Info size={14} />
                             </ClassRubricsTooltip>
@@ -704,6 +710,11 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
                       <span className="class-rubrics-grade-badge">
                         {criterion.gradeStart}–{criterion.gradeEnd}
                       </span>
+                      {criterion.qualification && (
+                        <span className={`class-rubrics-qualification-badge${criterion.gradeStart < 5 ? ' qualification-low' : criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>
+                          {criterion.qualification}
+                        </span>
+                      )}
                       <span className="class-rubrics-select-item-desc">
                         {criterion.description}
                       </span>

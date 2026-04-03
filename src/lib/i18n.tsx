@@ -194,6 +194,8 @@ interface Translations {
         criterionDescriptionPlaceholder: string;
         gradeStart: string;
         gradeEnd: string;
+        qualification: string;
+        qualificationPlaceholder: string;
         noCriteria: string;
         deleteRubricTitle: string;
         deleteRubricConfirm: string;
@@ -805,6 +807,8 @@ export const translations: Record<Locale, Translations> = {
           criterionDescriptionPlaceholder: 'Descripción del criterio',
           gradeStart: 'Nota inicio',
           gradeEnd: 'Nota fin',
+          qualification: 'Calificación',
+          qualificationPlaceholder: 'Ej: Insuficiente, Bien, Notable...',
           noCriteria: 'No hay criterios registrados',
           deleteRubricTitle: 'Eliminar rúbrica',
           deleteRubricConfirm: '¿Está seguro que desea eliminar la rúbrica "{name}"? Se eliminarán también todos sus criterios. Esta acción no se puede deshacer.',
@@ -1417,6 +1421,8 @@ export const translations: Record<Locale, Translations> = {
           criterionDescriptionPlaceholder: 'Criterion description',
           gradeStart: 'Grade start',
           gradeEnd: 'Grade end',
+          qualification: 'Qualification',
+          qualificationPlaceholder: 'E.g.: Insufficient, Good, Outstanding...',
           noCriteria: 'No criteria registered',
           deleteRubricTitle: 'Delete rubric',
           deleteRubricConfirm: 'Are you sure you want to delete the rubric "{name}"? All its criteria will also be deleted. This action cannot be undone.',

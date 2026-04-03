@@ -14,6 +14,8 @@ interface RubricCriterionEntry {
     description: string;
     gradeStart: number;
     gradeEnd: number;
+    /** Optional textual qualification label */
+    qualification?: string;
   } | null;
 }
 
@@ -165,10 +167,14 @@ export function RubricDistributionChartModal({
         if (existing) {
           existing.count++;
         } else {
+          const rangeLabel = `${entry.criterion.gradeStart}–${entry.criterion.gradeEnd}`;
+          const label = entry.criterion.qualification
+            ? `${rangeLabel} (${entry.criterion.qualification})`
+            : rangeLabel;
           groups.set(key, {
             count: 1,
             description: entry.criterion.description,
-            label: `${entry.criterion.gradeStart}–${entry.criterion.gradeEnd}`,
+            label,
             gradeStart: entry.criterion.gradeStart,
           });
         }

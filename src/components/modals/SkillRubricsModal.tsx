@@ -108,6 +108,8 @@ const GRADE_OPTIONS = Array.from({ length: 11 }, (_, i) => i);
 /**
  * Checks whether `[start, end]` overlaps with any existing criterion,
  * optionally excluding one criterion (the one being edited).
+ * Boundary touching is allowed: e.g. [5,6] and [6,7] is valid because
+ * only the endpoints coincide. True overlap like [5,7] and [6,8] is not.
  */
 function hasOverlap(
   start: number,
@@ -117,7 +119,7 @@ function hasOverlap(
 ): boolean {
   return existing
     .filter((c) => c.id !== excludeId)
-    .some((c) => start <= c.gradeEnd && end >= c.gradeStart);
+    .some((c) => start < c.gradeEnd && end > c.gradeStart);
 }
 
 // ========================
@@ -159,6 +161,7 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
   const [criterionDescription, setCriterionDescription] = useState('');
   const [criterionGradeStart, setCriterionGradeStart] = useState(0);
   const [criterionGradeEnd, setCriterionGradeEnd] = useState(0);
+  const [criterionQualification, setCriterionQualification] = useState('');
   const [criterionFormErrors, setCriterionFormErrors] = useState<CriterionFormErrors>({});
   const [submittingCriterion, setSubmittingCriterion] = useState(false);
   const criterionDescRef = useRef<HTMLTextAreaElement>(null);
@@ -300,6 +303,7 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
     setCriterionDescription('');
     setCriterionGradeStart(0);
     setCriterionGradeEnd(0);
+    setCriterionQualification('');
     setCriterionFormErrors({});
   };
 
@@ -309,6 +313,7 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
     setCriterionDescription('');
     setCriterionGradeStart(0);
     setCriterionGradeEnd(0);
+    setCriterionQualification('');
     setCriterionFormErrors({});
     setShowCriterionForm(true);
     setTimeout(() => criterionDescRef.current?.focus(), 50);
@@ -320,6 +325,7 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
     setCriterionDescription(criterion.description);
     setCriterionGradeStart(criterion.gradeStart);
     setCriterionGradeEnd(criterion.gradeEnd);
+    setCriterionQualification(criterion.qualification ?? '');
     setCriterionFormErrors({});
     setShowCriterionForm(true);
     setTimeout(() => criterionDescRef.current?.focus(), 50);
@@ -336,7 +342,7 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
       errors.gradeEnd = t('dashboard.skills.rubrics.validation.gradeEndGreaterOrEqual');
     }
 
-    // Check overlap
+    // Check overlap (boundary touching allowed)
     if (!errors.gradeEnd && criterionRubricId !== null) {
       const existing = criteriaMap[criterionRubricId] ?? [];
       if (hasOverlap(criterionGradeStart, criterionGradeEnd, existing, editingCriterion?.id)) {
@@ -352,10 +358,12 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
   const handleCriterionSubmit = async () => {
     if (!validateCriterionForm() || criterionRubricId === null) return;
     setSubmittingCriterion(true);
+    const trimmedQualification = criterionQualification.trim();
     const data = {
       description: criterionDescription.trim(),
       gradeStart: criterionGradeStart,
       gradeEnd: criterionGradeEnd,
+      ...(trimmedQualification ? { qualification: trimmedQualification } : {}),
     };
     try {
       if (editingCriterion) {
@@ -566,6 +574,20 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
         </div>
         {criterionFormErrors.overlap && <p className="form-error-text">{criterionFormErrors.overlap}</p>}
 
+        {/* Qualification (optional) */}
+        <label className="modal-label">
+          {t('dashboard.skills.rubrics.qualification')}
+        </label>
+        <input
+          type="text"
+          className="modal-input"
+          placeholder={t('dashboard.skills.rubrics.qualificationPlaceholder')}
+          value={criterionQualification}
+          onChange={(e) => setCriterionQualification(e.target.value)}
+          maxLength={100}
+          disabled={submittingCriterion}
+        />
+
         <div className="skill-rubrics-form-actions">
           <button className="modal-button cancel" onClick={resetCriterionForm} disabled={submittingCriterion}>
             {t('common.cancel')}
@@ -583,6 +605,9 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
     <div key={criterion.id} className="skill-rubrics-criterion">
       <div className="skill-rubrics-criterion-info">
         <span className="skill-rubrics-grade-badge">{criterion.gradeStart} – {criterion.gradeEnd}</span>
+        {criterion.qualification && (
+          <span className={`skill-rubrics-qualification-badge${criterion.gradeStart < 5 ? ' qualification-low' : criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>{criterion.qualification}</span>
+        )}
         <span className="skill-rubrics-criterion-desc">{criterion.description}</span>
       </div>
       <div className="skill-rubrics-criterion-actions">

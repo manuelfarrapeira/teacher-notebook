@@ -5062,6 +5062,28 @@ dialog.calendar-day-popup {
   min-width: 50px;
 }
 
+.student-criteria-summary-qualification {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f59e0b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.student-criteria-summary-qualification.qualification-low {
+  background: #ef4444;
+}
+
+.student-criteria-summary-qualification.qualification-high {
+  background: #22c55e;
+}
+
 .student-criteria-summary-desc {
   font-size: 0.85rem;
   color: #7a8078;
@@ -5661,6 +5683,28 @@ td.attendance-weekend-cell {
   min-width: 50px;
 }
 
+.skill-rubrics-qualification-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f59e0b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.skill-rubrics-qualification-badge.qualification-low {
+  background: #ef4444;
+}
+
+.skill-rubrics-qualification-badge.qualification-high {
+  background: #22c55e;
+}
+
 .skill-rubrics-criterion-desc {
   font-size: 0.88rem;
   color: #3d4440;
@@ -5936,6 +5980,28 @@ td.attendance-weekend-cell {
   white-space: nowrap;
   flex-shrink: 0;
   min-width: 50px;
+}
+
+.class-rubrics-qualification-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f59e0b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.class-rubrics-qualification-badge.qualification-low {
+  background: #ef4444;
+}
+
+.class-rubrics-qualification-badge.qualification-high {
+  background: #22c55e;
 }
 
 /* Criterion action buttons */

@@ -39,6 +39,7 @@ interface RubricGroup {
     description: string;
     gradeStart: number;
     gradeEnd: number;
+    qualification?: string;
   };
 }
 
@@ -137,6 +138,7 @@ export function StudentRubricCriteriaModal({
           description: assignment.criterion.description,
           gradeStart: assignment.criterion.gradeStart,
           gradeEnd: assignment.criterion.gradeEnd,
+          qualification: assignment.criterion.qualification,
         },
       });
     }
@@ -236,6 +238,11 @@ export function StudentRubricCriteriaModal({
                             <span className="student-criteria-summary-badge">
                               {rubric.criterion.gradeStart}–{rubric.criterion.gradeEnd}
                             </span>
+                            {rubric.criterion.qualification && (
+                              <span className={`student-criteria-summary-qualification${rubric.criterion.gradeStart < 5 ? ' qualification-low' : rubric.criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>
+                                {rubric.criterion.qualification}
+                              </span>
+                            )}
                             <span className="student-criteria-summary-desc">
                               {rubric.criterion.description}
                             </span>

@@ -6,6 +6,8 @@ export interface SkillCriterion {
   description: string;
   gradeStart: number;
   gradeEnd: number;
+  /** Optional textual qualification label (e.g. "Insuficiente", "Notable") */
+  qualification?: string;
 }
 
 /**
@@ -24,4 +26,6 @@ export interface CriterionRequest {
   description: string;
   gradeStart: number;
   gradeEnd: number;
+  /** Optional textual qualification label */
+  qualification?: string;
 }
