@@ -4386,7 +4386,6 @@ dialog.modal-overlay::backdrop {
   flex-direction: column;
   height: 100%;
   width: 100%;
-  overflow: hidden;
 }
 
 .calendar-header {
