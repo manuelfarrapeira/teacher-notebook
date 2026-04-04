@@ -481,12 +481,15 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
                       <td key={rubric.id}>
                         {assignment ? (
                           <div className="class-rubrics-criterion-cell">
-                            <span className="class-rubrics-grade-badge">
-                              {assignment.criterion.gradeStart}–{assignment.criterion.gradeEnd}
-                            </span>
-                            {assignment.criterion.qualification && (
-                              <span className={`class-rubrics-qualification-badge${assignment.criterion.gradeStart < 5 ? ' qualification-low' : assignment.criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>
-                                {assignment.criterion.qualification}
+                            {assignment.criterion.qualification ? (
+                              <ClassRubricsTooltip text={`${assignment.criterion.gradeStart}–${assignment.criterion.gradeEnd}`} position="bottom">
+                                <span className={`class-rubrics-qualification-badge${assignment.criterion.gradeStart < 5 ? ' qualification-low' : assignment.criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>
+                                  {assignment.criterion.qualification}
+                                </span>
+                              </ClassRubricsTooltip>
+                            ) : (
+                              <span className="class-rubrics-grade-badge">
+                                {assignment.criterion.gradeStart}–{assignment.criterion.gradeEnd}
                               </span>
                             )}
                             <ClassRubricsTooltip text={assignment.criterion.description} position="bottom">

@@ -606,7 +606,9 @@ export function SkillRubricsModal({ isOpen, onClose, skill }: SkillRubricsModalP
       <div className="skill-rubrics-criterion-info">
         <span className="skill-rubrics-grade-badge">{criterion.gradeStart} – {criterion.gradeEnd}</span>
         {criterion.qualification && (
-          <span className={`skill-rubrics-qualification-badge${criterion.gradeStart < 5 ? ' qualification-low' : criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>{criterion.qualification}</span>
+          <span className={`skill-rubrics-qualification-badge${criterion.gradeStart < 5 ? ' qualification-low' : criterion.gradeEnd >= 9 ? ' qualification-high' : ''}`}>
+            {criterion.qualification}
+          </span>
         )}
         <span className="skill-rubrics-criterion-desc">{criterion.description}</span>
       </div>

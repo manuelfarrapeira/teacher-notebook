@@ -94,6 +94,7 @@ interface DayAlertsPopupProps {
 
 function DayAlertsPopup({ popupState, onClose, onBadgeClick, intlLocale }: Readonly<DayAlertsPopupProps>) {
   const popupRef = useRef<HTMLElement>(null);
+  const { t } = useI18n();
   const { day, dayAlerts, top, left } = popupState;
 
   useEffect(() => {
@@ -126,7 +127,7 @@ function DayAlertsPopup({ popupState, onClose, onBadgeClick, intlLocale }: Reado
     >
       <div className="calendar-day-popup-header">
         <span className="calendar-day-popup-title">{dateLabel}</span>
-        <button className="calendar-day-popup-close" onClick={onClose} aria-label="Cerrar">
+        <button className="calendar-day-popup-close tooltip-container" data-tooltip={t('dashboard.calendar.close')} onClick={onClose} aria-label={t('dashboard.calendar.close')}>
           <X size={14} />
         </button>
       </div>
@@ -172,6 +173,7 @@ interface CalendarCellProps {
 }
 
 function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberClick, onBadgeClick, onMoreClick, moreEventsLabel }: Readonly<CalendarCellProps>) {
+  const { t } = useI18n();
   const visibleAlerts = dayAlerts.slice(0, MAX_VISIBLE_EVENTS);
   const hiddenCount = dayAlerts.length - visibleAlerts.length;
   const isOtherMonth = day.getMonth() !== currentMonth;
@@ -183,17 +185,20 @@ function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberCl
     isTodayCell ? 'today' : '',
   ].filter(Boolean).join(' ');
 
+  const dateStr = `${day.getDate()}/${day.getMonth() + 1}/${day.getFullYear()}`;
+  const addAlertTooltip = t('dashboard.calendar.addAlertOn').replace('{date}', dateStr);
+
   return (
     <div
       className={cellClasses}
       onClick={() => onCellClick(day)}
       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onCellClick(day); }}
-      aria-label={`Añadir alerta el ${day.getDate()}/${day.getMonth() + 1}/${day.getFullYear()}`}
+      aria-label={addAlertTooltip}
     >
       <button
-        className="calendar-day-number"
+        className="calendar-day-number tooltip-container tooltip-bottom"
+        data-tooltip={addAlertTooltip}
         onClick={e => onDayNumberClick(e, day)}
-        title={`Añadir alerta el ${day.getDate()}/${day.getMonth() + 1}/${day.getFullYear()}`}
       >
         {day.getDate()}
       </button>
@@ -205,13 +210,14 @@ function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberCl
             'calendar-event-badge',
             expired ? 'expired' : '',
             todayAlert ? 'current-day' : '',
+            'tooltip-container',
           ].filter(Boolean).join(' ');
           return (
             <button
               key={alert.id}
               className={badgeClass}
               onClick={e => onBadgeClick(e, alert)}
-              title={alert.title}
+              data-tooltip={alert.title}
             >
               <span className="calendar-event-badge-text">
                 {alert.startTime ? `${alert.startTime} ` : ''}{alert.title}
@@ -372,17 +378,21 @@ export function ScheduleTab() {
 
         <div className="calendar-header">
           <div className="calendar-header-nav">
-            <button className="calendar-nav-btn" onClick={goToPrevMonth} aria-label="Mes anterior">
-              <ChevronLeft size={18} />
-            </button>
-            <button className="calendar-nav-btn" onClick={goToNextMonth} aria-label="Mes siguiente">
-              <ChevronRight size={18} />
-            </button>
+            <div className="tooltip-container tooltip-bottom" data-tooltip={t('dashboard.calendar.previousMonth')}>
+              <button className="calendar-nav-btn" onClick={goToPrevMonth} aria-label={t('dashboard.calendar.previousMonth')}>
+                <ChevronLeft size={18} />
+              </button>
+            </div>
+            <div className="tooltip-container tooltip-bottom" data-tooltip={t('dashboard.calendar.nextMonth')}>
+              <button className="calendar-nav-btn" onClick={goToNextMonth} aria-label={t('dashboard.calendar.nextMonth')}>
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
 
           <div className="calendar-header-selectors">
             <Select value={String(currentMonth)} onValueChange={v => setCurrentMonth(Number(v))}>
-              <SelectTrigger className="calendar-month-select" aria-label="Seleccionar mes">
+              <SelectTrigger className="calendar-month-select" aria-label={t('dashboard.calendar.selectMonth')}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -394,7 +404,7 @@ export function ScheduleTab() {
               </SelectContent>
             </Select>
             <Select value={String(currentYear)} onValueChange={v => setCurrentYear(Number(v))}>
-              <SelectTrigger className="calendar-year-select" aria-label="Seleccionar año">
+              <SelectTrigger className="calendar-year-select" aria-label={t('dashboard.calendar.selectYear')}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

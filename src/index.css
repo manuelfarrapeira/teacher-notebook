@@ -4544,6 +4544,18 @@ dialog.modal-overlay::backdrop {
 
 .calendar-cell:hover {
   background-color: #faf8f5;
+  overflow: visible;
+  z-index: 2;
+}
+
+/* Allow tooltip to escape calendar-events overflow */
+.calendar-events:has(.tooltip-container:hover) {
+  overflow: visible;
+}
+
+/* Allow tooltip to escape calendar-grid overflow */
+.calendar-grid:has(.tooltip-container:hover) {
+  overflow: visible;
 }
 
 .calendar-cell:nth-child(7n) {
@@ -4612,7 +4624,6 @@ dialog.modal-overlay::backdrop {
   color: white;
   cursor: pointer;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
   transition: background-color 0.1s;
@@ -4691,7 +4702,6 @@ dialog.calendar-day-popup {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   min-width: 220px;
   max-width: 280px;
-  overflow: hidden;
 }
 
 
@@ -4702,6 +4712,7 @@ dialog.calendar-day-popup {
   padding: 0.5rem 0.75rem;
   background: #f0ece5;
   border-bottom: 1px solid #ddd5cb;
+  border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .calendar-day-popup-title {

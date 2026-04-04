@@ -580,6 +580,12 @@ interface Translations {
       deleteConfirm: string;
       todayAlerts: string;
       goToCalendar: string;
+      addAlertOn: string;
+      previousMonth: string;
+      nextMonth: string;
+      selectMonth: string;
+      selectYear: string;
+      close: string;
       validation: {
         titleRequired: string;
         titleMaxLength: string;
@@ -1196,6 +1202,12 @@ export const translations: Record<Locale, Translations> = {
         deleteConfirm: '¿Está seguro que desea eliminar la alerta "{name}"? Esta acción no se puede deshacer.',
         todayAlerts: 'Alertas de hoy',
         goToCalendar: 'Ir al calendario',
+        addAlertOn: 'Añadir alerta el {date}',
+        previousMonth: 'Mes anterior',
+        nextMonth: 'Mes siguiente',
+        selectMonth: 'Seleccionar mes',
+        selectYear: 'Seleccionar año',
+        close: 'Cerrar',
         validation: {
           titleRequired: 'El título es obligatorio',
           titleMaxLength: 'El título no puede superar los 100 caracteres',
@@ -1810,6 +1822,12 @@ export const translations: Record<Locale, Translations> = {
         deleteConfirm: 'Are you sure you want to delete the alert "{name}"? This action cannot be undone.',
         todayAlerts: "Today's alerts",
         goToCalendar: 'Go to calendar',
+        addAlertOn: 'Add alert on {date}',
+        previousMonth: 'Previous month',
+        nextMonth: 'Next month',
+        selectMonth: 'Select month',
+        selectYear: 'Select year',
+        close: 'Close',
         validation: {
           titleRequired: 'Title is required',
           titleMaxLength: 'Title cannot exceed 100 characters',
