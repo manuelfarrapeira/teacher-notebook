@@ -110,7 +110,7 @@
 - Eliminación de criterios asignados con confirmación
 - **Gráfica de distribución de criterios**: botón en cada columna de rúbrica que abre un modal con gráfico tipo pie chart mostrando la distribución de alumnos por criterio asignado (rango de notas), con descripción del criterio al pasar el ratón
 
-### 🤝 Trabajo Cooperativo (Grupos)
+### 🤝 Trabajo Cooperativo (Grupos y Trabajos)
 - **Generación automática de grupos** equilibrados de 3-4 alumnos por clase
 - Opción de **priorizar diversidad por figura** (shape) o por **género** al generar grupos
 - **Drag & drop nativo** (HTML5) para mover alumnos entre grupos manualmente
@@ -122,6 +122,13 @@
 - Botón de eliminación masiva de todos los grupos con confirmación
 - Indicador visual del número de alumnos por grupo con **figura geométrica** (shape) visible
 - Foto de perfil y nombre del alumno visibles en cada tarjeta de grupo
+- **Trabajos cooperativos** por clase: CRUD completo de asignaciones grupales con título, descripción y trimestre (Q1, Q2, Q3)
+- **Calificaciones por grupo** (0–10) en cada trabajo cooperativo, con guardado y eliminación individual
+- **Documentos a nivel de trabajo**: subida, descarga y eliminación de documentos adjuntos por asignación (máx. 2 MB)
+- **Documentos a nivel de grupo**: subida, descarga y eliminación de documentos específicos de cada grupo dentro de un trabajo
+- **Sección expandible de notas** por trabajo: vista colapsable que muestra cada grupo guardado con su nota, input numérico y acciones
+- Badge de trimestre con código de color (Q1 azul, Q2 naranja, Q3 verde)
+- Requiere grupos guardados para poder crear trabajos cooperativos (aviso visual si no existen)
 
 ### 📅 Calendario Académico
 - Calendario mensual interactivo con navegación por mes
@@ -299,6 +306,9 @@ teacher-notebook/
 │   │   │   ├── RubricDistributionChartModal.tsx # Gráfica distribución de criterios
 │   │   │   ├── StudentRadarChartModal.tsx  # Gráfica radar de rendimiento del alumno
 │   │   │   ├── DocumentsModal.tsx        # Gestión de documentos
+│   │   │   ├── GradeDocumentsModal.tsx   # Documentos de calificaciones
+│   │   │   ├── GroupAssignmentFormModal.tsx    # Formulario de trabajo cooperativo
+│   │   │   ├── GroupAssignmentDocumentsModal.tsx # Documentos de trabajos cooperativos
 │   │   │   ├── CalendarAlertFormModal.tsx # Formulario de alerta
 │   │   │   ├── ClassSubjectsModal.tsx    # Asignaturas de clase
 │   │   │   ├── TodayAlertsModal.tsx      # Alertas del día
@@ -327,6 +337,7 @@ teacher-notebook/
 │   │   │   ├── Skill.ts             # Skill
 │   │   │   ├── SkillRubric.ts       # SkillRubric, SkillCriterion
 │   │   │   ├── StudentGroup.ts      # SavedGroup, GroupMember
+│   │   │   ├── GroupAssignment.ts   # GroupAssignment, GroupAssignmentGrade, GroupAssignmentDocument
 │   │   │   └── Api.ts               # ApiError
 │   │
 │   ├── infrastructure/               # 🟢 Adaptadores de infraestructura
@@ -421,6 +432,7 @@ BaseService (abstracta — src/infrastructure/api/)
 ├── ClassRubricService → Rúbricas de clase y criterios de alumnos
 ├── ExerciseService    → Ejercicios, calificaciones y documentos
 ├── StudentGroupService → Grupos cooperativos de alumnos
+├── GroupAssignmentService → Trabajos cooperativos, calificaciones y documentos
 ├── CalendarAlertService → Alertas del calendario
 └── ScheduleService    → Horarios semanales
 ```

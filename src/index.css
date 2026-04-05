@@ -6462,6 +6462,262 @@ td.attendance-weekend-cell {
   .cooperative-priority-options {
     flex-direction: column;
   }
+
+  .cooperative-assignment-header {
+    flex-wrap: wrap;
+  }
+
+  .cooperative-grade-row {
+    flex-wrap: wrap;
+  }
+}
+
+/* ── Group Assignments ── */
+
+.cooperative-assignments-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c5f4a;
+  margin: 2rem 0 0 0;
+  padding-bottom: 0.5rem;
+}
+
+.cooperative-assignments-section {
+  padding-top: 1rem;
+  border-top: 2px solid #ddd5cb;
+}
+
+.cooperative-assignments-section .dashboard-section-header {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cooperative-assignments-section .dashboard-add-btn {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Quarter tab bar */
+.cooperative-quarter-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.cooperative-quarter-tab {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #ccc4b8;
+  border-radius: 0.375rem;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7a8078;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cooperative-quarter-tab:hover {
+  background: #f0ece5;
+  color: #3d4440;
+}
+
+.cooperative-quarter-tab.active {
+  background: #2c5f4a;
+  color: white;
+  border-color: #2c5f4a;
+  box-shadow: 0 1px 3px rgba(44, 95, 74, 0.3);
+}
+
+.cooperative-quarter-tab-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.12);
+  color: inherit;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.3rem;
+}
+
+.cooperative-quarter-tab.active .cooperative-quarter-tab-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.cooperative-assignment-card {
+  background: #ffffff;
+  border: 1px solid #ddd5cb;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s;
+}
+
+.cooperative-assignment-card:hover {
+  border-color: #ccc4b8;
+}
+
+.cooperative-assignment-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.cooperative-assignment-expand-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7a8078;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.cooperative-assignment-expand-btn:hover {
+  color: #2c5f4a;
+}
+
+.cooperative-assignment-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.cooperative-assignment-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #3d4440;
+}
+
+.cooperative-assignment-desc {
+  font-size: 0.8rem;
+  color: #7a8078;
+  width: 100%;
+}
+
+.cooperative-assignment-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.cooperative-quarter-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.cooperative-quarter-badge.q1 {
+  background: #2c5f4a;
+}
+
+.cooperative-quarter-badge.q2 {
+  background: #6366f1;
+}
+
+.cooperative-quarter-badge.q3 {
+  background: #d97706;
+}
+
+.cooperative-doc-count {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: #2c5f4a;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: -6px;
+  right: -2px;
+}
+
+/* Grades section inside assignment card */
+.cooperative-grades-section {
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid #f0ece5;
+  background: #faf8f5;
+}
+
+.cooperative-grades-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3d4440;
+  margin: 0 0 0.5rem 0;
+}
+
+.cooperative-grade-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #f0ece5;
+}
+
+.cooperative-grade-row:last-child {
+  border-bottom: none;
+}
+
+.cooperative-grade-group-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #3d4440;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cooperative-grade-input {
+  width: 70px;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #ccc4b8;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  text-align: center;
+  color: #3d4440;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cooperative-grade-input:focus {
+  outline: none;
+  border-color: #2c5f4a;
+  box-shadow: 0 0 0 2px rgba(44, 95, 74, 0.15);
+}
+
+.cooperative-grade-input.input-error {
+  border-color: #ef4444;
+  border-width: 2px;
+}
+
+.cooperative-grade-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
 }
 
 /* ==============================

@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Loader2, Users, Shuffle, Save, Trash2, GripVertical, X, RefreshCw } from 'lucide-react';
+import { Loader2, Users, Shuffle, Save, Trash2, GripVertical, X, RefreshCw, Plus, Edit, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { StudentService, Student, Shape } from '../../infrastructure/api/StudentService';
 import { StudentGroupService, SavedGroupRequest } from '../../infrastructure/api/StudentGroupService';
+import { GroupAssignmentService } from '../../infrastructure/api/GroupAssignmentService';
+import type { GroupAssignment, GroupAssignmentGrade, GroupAssignmentDocument } from '../../domain/models';
 import { StudentPhoto } from '../students/StudentPhoto';
 import { ErrorModal } from '../modals/ErrorModal';
 import { SuccessModal } from '../modals/SuccessModal';
 import { ConfirmDeleteModal } from '../modals/ConfirmDeleteModal';
+import { GroupAssignmentFormModal } from '../modals/GroupAssignmentFormModal';
+import { GroupAssignmentDocumentsModal } from '../modals/GroupAssignmentDocumentsModal';
+import { PortalTooltip } from '../ui/PortalTooltip';
 
 /**
  * Renders a small colored shape SVG inline for cooperative student items
@@ -63,6 +68,8 @@ interface LocalGroup {
  */
 export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
   const { t } = useI18n();
+  /** Shorthand to access groupAssignments i18n keys */
+  const gat = (key: string) => t(`dashboard.cooperative.groupAssignments.${key}`);
 
   const [classStudents, setClassStudents] = useState<Student[]>([]);
   const [groups, setGroups] = useState<LocalGroup[]>([]);
@@ -84,6 +91,30 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
   const [dragSourceGroup, setDragSourceGroup] = useState<number | null>(null);
   const [dragOverGroup, setDragOverGroup] = useState<number | null>(null);
 
+  // ── Group Assignments state ──
+  const [assignments, setAssignments] = useState<GroupAssignment[]>([]);
+  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
+  const [activeQuarter, setActiveQuarter] = useState<1 | 2 | 3>(1);
+  const [showAssignmentForm, setShowAssignmentForm] = useState(false);
+  const [editingAssignment, setEditingAssignment] = useState<GroupAssignment | null>(null);
+  const [confirmDeleteAssignment, setConfirmDeleteAssignment] = useState<GroupAssignment | null>(null);
+  const [deletingAssignment, setDeletingAssignment] = useState(false);
+
+  // Grades per assignment (keyed by assignmentId)
+  const [gradesMap, setGradesMap] = useState<Record<number, GroupAssignmentGrade[]>>({});
+  const [expandedAssignments, setExpandedAssignments] = useState<Set<number>>(new Set());
+  const [gradeInputs, setGradeInputs] = useState<Record<string, string>>({});
+  const [savingGrade, setSavingGrade] = useState<string | null>(null);
+  const [deletingGrade, setDeletingGrade] = useState<string | null>(null);
+
+  // Documents modal state
+  const [docsModal, setDocsModal] = useState<{
+    assignmentId: number;
+    groupId?: number | null;
+    title: string;
+    documents: GroupAssignmentDocument[];
+  } | null>(null);
+
   /** Map of studentId → Student for quick lookup */
   const studentsMap = useMemo(() => {
     const map = new Map<number, Student>();
@@ -92,6 +123,23 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
     }
     return map;
   }, [classStudents]);
+
+  /** Assignments filtered by the active quarter tab */
+  const filteredAssignments = useMemo(
+    () => assignments.filter(a => a.quarter === activeQuarter),
+    [assignments, activeQuarter],
+  );
+
+  /** Count of assignments per quarter for tab badges */
+  const quarterCounts = useMemo(() => {
+    const counts = { 1: 0, 2: 0, 3: 0 };
+    for (const a of assignments) {
+      if (a.quarter >= 1 && a.quarter <= 3) {
+        counts[a.quarter as 1 | 2 | 3]++;
+      }
+    }
+    return counts;
+  }, [assignments]);
 
   /** IDs of all students assigned to any group */
   const assignedStudentIds = useMemo(() => {
@@ -152,9 +200,46 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
     }
   }, [selectedClass, t]);
 
+  /** Fetch group assignments for the class */
+  const fetchAssignments = useCallback(async () => {
+    if (!selectedClass) return;
+    setAssignmentsLoading(true);
+    try {
+      const data = await GroupAssignmentService.getByClass(selectedClass);
+      setAssignments(data);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : gat('loadError'));
+      setErrorDialogOpen(true);
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  }, [selectedClass, t]);
+
+  /** Fetch grades for a specific assignment */
+  const fetchGrades = useCallback(async (assignmentId: number) => {
+    try {
+      const grades = await GroupAssignmentService.getGrades(assignmentId);
+      setGradesMap(prev => ({ ...prev, [assignmentId]: grades }));
+      // Populate grade inputs
+      const inputs: Record<string, string> = {};
+      for (const g of grades) {
+        inputs[`${assignmentId}-${g.groupId}`] = String(g.grade);
+      }
+      setGradeInputs(prev => ({ ...prev, ...inputs }));
+    } catch {
+      // Silently handle – grades section will show empty
+    }
+  }, []);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    if (isSaved && selectedClass) {
+      fetchAssignments();
+    }
+  }, [isSaved, selectedClass, fetchAssignments]);
 
   /** Generate groups via the API and display them (unsaved) */
   const handleGenerate = async (prioritizeShape: boolean) => {
@@ -310,6 +395,135 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
     handleDragEnd();
   };
 
+  // ── Group Assignments handlers ──
+
+  /** Toggle expanded state of an assignment to show/hide grades */
+  const toggleAssignmentExpand = async (assignmentId: number) => {
+    setExpandedAssignments(prev => {
+      const next = new Set(prev);
+      if (next.has(assignmentId)) {
+        next.delete(assignmentId);
+      } else {
+        next.add(assignmentId);
+        // Fetch grades if not yet loaded
+        if (!gradesMap[assignmentId]) {
+          fetchGrades(assignmentId);
+        }
+      }
+      return next;
+    });
+  };
+
+  /** Handle editing an assignment */
+  const handleEditAssignment = (assignment: GroupAssignment) => {
+    setEditingAssignment(assignment);
+    setShowAssignmentForm(true);
+  };
+
+  /** Handle deleting an assignment */
+  const handleDeleteAssignmentConfirm = async () => {
+    if (!confirmDeleteAssignment) return;
+    setDeletingAssignment(true);
+    try {
+      await GroupAssignmentService.deleteAssignment(confirmDeleteAssignment.id);
+      setSuccessMessage(gat('deleteSuccess'));
+      setSuccessDialogOpen(true);
+      await fetchAssignments();
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : gat('deleteError'));
+      setErrorDialogOpen(true);
+    } finally {
+      setDeletingAssignment(false);
+      setConfirmDeleteAssignment(null);
+    }
+  };
+
+  /** Handle grade input change – filter to valid numeric input */
+  const handleGradeInputChange = (key: string, value: string) => {
+    // Allow only digits and one decimal point
+    const filtered = value.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');
+    setGradeInputs(prev => ({ ...prev, [key]: filtered }));
+  };
+
+  /** Save (upsert) a grade for a group */
+  const handleSaveGrade = async (assignmentId: number, groupId: number) => {
+    const key = `${assignmentId}-${groupId}`;
+    const rawValue = gradeInputs[key];
+    const numValue = Number(rawValue);
+
+    if (rawValue === '' || rawValue === undefined || isNaN(numValue) || numValue < 0 || numValue > 10) {
+      setErrorMessage(gat('validation.gradeRange'));
+      setErrorDialogOpen(true);
+      return;
+    }
+
+    setSavingGrade(key);
+    try {
+      await GroupAssignmentService.upsertGrade(assignmentId, groupId, numValue);
+      setSuccessMessage(gat('gradeSuccess'));
+      setSuccessDialogOpen(true);
+      await fetchGrades(assignmentId);
+      await fetchAssignments();
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : gat('gradeError'));
+      setErrorDialogOpen(true);
+    } finally {
+      setSavingGrade(null);
+    }
+  };
+
+  /** Delete a grade for a group */
+  const handleDeleteGrade = async (assignmentId: number, groupId: number) => {
+    const key = `${assignmentId}-${groupId}`;
+    setDeletingGrade(key);
+    try {
+      await GroupAssignmentService.deleteGrade(assignmentId, groupId);
+      setSuccessMessage(gat('gradeDeleteSuccess'));
+      setSuccessDialogOpen(true);
+      // Clear input
+      setGradeInputs(prev => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+      await fetchGrades(assignmentId);
+      await fetchAssignments();
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : gat('gradeDeleteError'));
+      setErrorDialogOpen(true);
+    } finally {
+      setDeletingGrade(null);
+    }
+  };
+
+  /** Open documents modal for assignment or group */
+  const openDocsModal = (assignmentId: number, groupId: number | null, titleStr: string, docs: GroupAssignmentDocument[]) => {
+    setDocsModal({ assignmentId, groupId, title: titleStr, documents: docs });
+  };
+
+  /** Callback when documents changed inside the modal */
+  const handleDocsChanged = async () => {
+    await fetchAssignments();
+    if (docsModal) {
+      // Refresh grades too if it's a group document
+      if (docsModal.groupId) {
+        await fetchGrades(docsModal.assignmentId);
+      }
+      // Refresh the documents shown in the modal
+      const refreshed = await GroupAssignmentService.getByClass(selectedClass!);
+      const assignment = refreshed.find(a => a.id === docsModal.assignmentId);
+      if (assignment) {
+        if (docsModal.groupId) {
+          const grades = await GroupAssignmentService.getGrades(docsModal.assignmentId);
+          const gradeEntry = grades.find(g => g.groupId === docsModal.groupId);
+          setDocsModal(prev => prev ? { ...prev, documents: gradeEntry?.documents ?? [] } : null);
+        } else {
+          setDocsModal(prev => prev ? { ...prev, documents: assignment.documents.filter(d => !d.groupDocument) } : null);
+        }
+      }
+    }
+  };
+
   // ── Render ──
 
   if (!selectedClass) {
@@ -331,6 +545,7 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
 
   return (
     <>
+      {/* ═══ GROUPS SECTION ═══ */}
       {/* Actions Header */}
       <div className="dashboard-section-header">
         <h2 className="dashboard-section-title">{t('dashboard.cooperative.title')}</h2>
@@ -528,6 +743,184 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
         </div>
       )}
 
+      {/* ═══ GROUP ASSIGNMENTS SECTION ═══ */}
+      {isSaved && (
+        <>
+          <h2 className="cooperative-assignments-title">{gat('title')}</h2>
+          <div className="cooperative-assignments-section">
+            <div className="dashboard-section-header">
+              {/* Quarter tabs */}
+              <div className="cooperative-quarter-tabs">
+                {([1, 2, 3] as const).map(q => (
+                  <button
+                    key={q}
+                    className={`cooperative-quarter-tab ${activeQuarter === q ? 'active' : ''}`}
+                    onClick={() => setActiveQuarter(q)}
+                  >
+                    {t(`dashboard.evalCriteria.quarter${q}`)}
+                    {quarterCounts[q] > 0 && (
+                      <span className="cooperative-quarter-tab-count">{quarterCounts[q]}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <button
+                className="dashboard-add-btn"
+                onClick={() => { setEditingAssignment(null); setShowAssignmentForm(true); }}
+              >
+                <Plus size={16} className="icon-margin-right" />
+                {gat('addAssignment')}
+              </button>
+            </div>
+
+          {assignmentsLoading && (
+            <div className="loading-center" style={{ padding: '2rem 0' }}>
+              <Loader2 className="icon-spin" size={24} />
+            </div>
+          )}
+
+          {!assignmentsLoading && filteredAssignments.length === 0 && (
+            <div className="dashboard-empty" style={{ padding: '2rem 0' }}>
+              <FileText className="dashboard-empty-icon" />
+              <p className="dashboard-empty-text">{gat('noAssignments')}</p>
+              <p className="dashboard-empty-text" style={{ fontSize: '0.85rem' }}>{gat('noAssignmentsHint')}</p>
+            </div>
+          )}
+
+          {!assignmentsLoading && filteredAssignments.map(assignment => {
+            const isExpanded = expandedAssignments.has(assignment.id);
+            const assignmentGrades = gradesMap[assignment.id] || [];
+            const assignmentDocs = assignment.documents.filter(d => !d.groupDocument);
+            const docCount = assignmentDocs.length;
+
+            return (
+              <div key={assignment.id} className="cooperative-assignment-card">
+                {/* Assignment header */}
+                <div className="cooperative-assignment-header">
+                  <button
+                    className="cooperative-assignment-expand-btn"
+                    onClick={() => toggleAssignmentExpand(assignment.id)}
+                    aria-label={isExpanded ? 'Collapse' : 'Expand'}
+                  >
+                    {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                  </button>
+                  <div className="cooperative-assignment-info">
+                    <span className="cooperative-assignment-title">{assignment.title}</span>
+                    {Boolean(assignment.description) && (
+                      <span className="cooperative-assignment-desc">{assignment.description}</span>
+                    )}
+                  </div>
+                  <div className="cooperative-assignment-actions">
+                    <PortalTooltip text={`${gat('documents')} (${docCount})`} as="span">
+                      <button
+                        className="eval-criteria-exercise-btn"
+                        onClick={() => openDocsModal(assignment.id, null, `${gat('assignmentDocuments')}: ${assignment.title}`, assignmentDocs)}
+                        aria-label={gat('documents')}
+                      >
+                        <FileText size={16} />
+                        {docCount > 0 && <span className="cooperative-doc-count">{docCount}</span>}
+                      </button>
+                    </PortalTooltip>
+                    <PortalTooltip text={gat('editAssignment')} as="span">
+                      <button
+                        className="eval-criteria-exercise-btn"
+                        onClick={() => handleEditAssignment(assignment)}
+                        aria-label={gat('editAssignment')}
+                      >
+                        <Edit size={16} />
+                      </button>
+                    </PortalTooltip>
+                    <PortalTooltip text={gat('deleteAssignment')} as="span">
+                      <button
+                        className="eval-criteria-exercise-btn delete"
+                        onClick={() => setConfirmDeleteAssignment(assignment)}
+                        aria-label={gat('deleteAssignment')}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </PortalTooltip>
+                  </div>
+                </div>
+
+                {/* Grades section (expandable) */}
+                {isExpanded && (
+                  <div className="cooperative-grades-section">
+                    <h4 className="cooperative-grades-title">{gat('grades')}</h4>
+                    {groups.map(group => {
+                      if (!group.id) return null;
+                      const gradeKey = `${assignment.id}-${group.id}`;
+                      const existingGrade = assignmentGrades.find(g => g.groupId === group.id);
+                      const groupDocs = existingGrade?.documents ?? [];
+
+                      return (
+                        <div key={group.id} className="cooperative-grade-row">
+                          <span className="cooperative-grade-group-name">{group.name}</span>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            className={`cooperative-grade-input ${
+                              gradeInputs[gradeKey] !== undefined && gradeInputs[gradeKey] !== '' &&
+                              (isNaN(Number(gradeInputs[gradeKey])) || Number(gradeInputs[gradeKey]) < 0 || Number(gradeInputs[gradeKey]) > 10)
+                                ? 'input-error' : ''
+                            }`}
+                            placeholder={gat('gradePlaceholder')}
+                            value={gradeInputs[gradeKey] ?? ''}
+                            onChange={(e) => handleGradeInputChange(gradeKey, e.target.value)}
+                            maxLength={5}
+                          />
+                          <div className="cooperative-grade-actions">
+                            <PortalTooltip text={gat('saveGrade')} as="span">
+                              <button
+                                className="eval-criteria-exercise-btn"
+                                onClick={() => handleSaveGrade(assignment.id, group.id!)}
+                                disabled={savingGrade === gradeKey}
+                                aria-label={gat('saveGrade')}
+                              >
+                                {savingGrade === gradeKey ? <Loader2 size={14} className="icon-spin" /> : <Save size={14} />}
+                              </button>
+                            </PortalTooltip>
+                            {existingGrade && (
+                              <PortalTooltip text={gat('deleteGrade')} as="span">
+                                <button
+                                  className="eval-criteria-exercise-btn delete"
+                                  onClick={() => handleDeleteGrade(assignment.id, group.id!)}
+                                  disabled={deletingGrade === gradeKey}
+                                  aria-label={gat('deleteGrade')}
+                                >
+                                  {deletingGrade === gradeKey ? <Loader2 size={14} className="icon-spin" /> : <Trash2 size={14} />}
+                                </button>
+                              </PortalTooltip>
+                            )}
+                            <PortalTooltip text={`${gat('groupDocuments')} (${groupDocs.length})`} as="span">
+                              <button
+                                className="eval-criteria-exercise-btn"
+                                onClick={() => openDocsModal(assignment.id, group.id!, `${gat('groupDocuments')}: ${group.name}`, groupDocs)}
+                                aria-label={gat('groupDocuments')}
+                              >
+                                <FileText size={14} />
+                                {groupDocs.length > 0 && <span className="cooperative-doc-count">{groupDocs.length}</span>}
+                              </button>
+                            </PortalTooltip>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          </div>
+        </>
+      )}
+      {!isSaved && groups.length > 0 && (
+        <div className="cooperative-warning" style={{ marginTop: '1.5rem' }}>
+          <p>{gat('needSavedGroups')}</p>
+        </div>
+      )}
+
+      {/* ═══ MODALS ═══ */}
+
       {/* Priority Selection Dialog */}
       {showPriorityDialog && (
         <dialog className="modal-overlay" open={true}>
@@ -549,17 +942,11 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
                   {t('dashboard.cooperative.priorityDescription')}
                 </p>
                 <div className="cooperative-priority-options">
-                  <button
-                    className="cooperative-priority-btn"
-                    onClick={() => handleGenerate(true)}
-                  >
+                  <button className="cooperative-priority-btn" onClick={() => handleGenerate(true)}>
                     <span className="cooperative-priority-icon">🔷</span>
                     <span>{t('dashboard.cooperative.prioritizeShape')}</span>
                   </button>
-                  <button
-                    className="cooperative-priority-btn"
-                    onClick={() => handleGenerate(false)}
-                  >
+                  <button className="cooperative-priority-btn" onClick={() => handleGenerate(false)}>
                     <span className="cooperative-priority-icon">👫</span>
                     <span>{t('dashboard.cooperative.prioritizeGender')}</span>
                   </button>
@@ -570,7 +957,34 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
         </dialog>
       )}
 
-      {/* Confirm Delete All Modal */}
+      {/* Group Assignment Form Modal */}
+      <GroupAssignmentFormModal
+        isOpen={showAssignmentForm}
+        onClose={() => { setShowAssignmentForm(false); setEditingAssignment(null); }}
+        classId={selectedClass!}
+        quarter={activeQuarter}
+        editingAssignment={editingAssignment}
+        onSaved={async () => {
+          setSuccessMessage(editingAssignment ? gat('updateSuccess') : gat('createSuccess'));
+          setSuccessDialogOpen(true);
+          await fetchAssignments();
+        }}
+      />
+
+      {/* Group Assignment Documents Modal */}
+      {docsModal && (
+        <GroupAssignmentDocumentsModal
+          isOpen={true}
+          onClose={() => setDocsModal(null)}
+          assignmentId={docsModal.assignmentId}
+          groupId={docsModal.groupId}
+          title={docsModal.title}
+          documents={docsModal.documents}
+          onDocumentsChanged={handleDocsChanged}
+        />
+      )}
+
+      {/* Confirm Delete Groups */}
       <ConfirmDeleteModal
         isOpen={confirmDeleteOpen}
         title={t('dashboard.cooperative.deleteAllTitle')}
@@ -580,6 +994,19 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
         onCancel={() => setConfirmDeleteOpen(false)}
         isDeleting={deleting}
       />
+
+      {/* Confirm Delete Assignment */}
+      {confirmDeleteAssignment && (
+        <ConfirmDeleteModal
+          isOpen={true}
+          title={gat('deleteAssignment')}
+          itemName={confirmDeleteAssignment.title}
+          confirmMessage={gat('deleteAssignmentConfirm').replace('{name}', confirmDeleteAssignment.title)}
+          onConfirm={handleDeleteAssignmentConfirm}
+          onCancel={() => setConfirmDeleteAssignment(null)}
+          isDeleting={deletingAssignment}
+        />
+      )}
 
       <ErrorModal
         isOpen={errorDialogOpen}

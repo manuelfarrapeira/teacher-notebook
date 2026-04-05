@@ -22,3 +22,4 @@ export { ScheduleService } from './ScheduleService';
 export { SkillService } from './SkillService';
 export { SkillRubricService } from './SkillRubricService';
 export { StudentGroupService } from './StudentGroupService';
+export { GroupAssignmentService } from './GroupAssignmentService';

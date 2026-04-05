@@ -53,5 +53,11 @@ export type { SkillCriterion, SkillRubric, CriterionRequest } from './SkillRubri
 // Student Group
 export type { GroupMember, SavedGroup, SavedGroupRequest } from './StudentGroup';
 
+// Group Assignment
+export type {
+  GroupAssignmentDocument, GroupAssignmentGrade,
+  GroupAssignment, GroupAssignmentRequest
+} from './GroupAssignment';
+
 // API
 export type { ApiError } from './Api';

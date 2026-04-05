@@ -554,6 +554,58 @@ interface Translations {
       generateDisabledHint: string;
       groupSizeError: string;
       reloadGroups: string;
+      groupAssignments: {
+        title: string;
+        addAssignment: string;
+        editAssignment: string;
+        deleteAssignment: string;
+        deleteAssignmentConfirm: string;
+        assignmentTitle: string;
+        assignmentTitlePlaceholder: string;
+        assignmentDescription: string;
+        assignmentDescriptionPlaceholder: string;
+        quarter: string;
+        grades: string;
+        grade: string;
+        gradePlaceholder: string;
+        gradeRange: string;
+        saveGrade: string;
+        deleteGrade: string;
+        documents: string;
+        assignmentDocuments: string;
+        groupDocuments: string;
+        noDocuments: string;
+        uploadDocument: string;
+        downloadDocument: string;
+        deleteDocument: string;
+        deleteDocumentTitle: string;
+        deleteDocumentConfirm: string;
+        noAssignments: string;
+        noAssignmentsHint: string;
+        needSavedGroups: string;
+        createSuccess: string;
+        updateSuccess: string;
+        deleteSuccess: string;
+        createError: string;
+        updateError: string;
+        deleteError: string;
+        gradeSuccess: string;
+        gradeError: string;
+        gradeDeleteSuccess: string;
+        gradeDeleteError: string;
+        loadError: string;
+        uploadSuccess: string;
+        uploadError: string;
+        downloadError: string;
+        deleteDocError: string;
+        validation: {
+          titleRequired: string;
+          quarterRequired: string;
+          gradeRange: string;
+          fileRequired: string;
+          fileTooLarge: string;
+        };
+      };
     };
     calendar: {
       title: string;
@@ -1173,6 +1225,58 @@ export const translations: Record<Locale, Translations> = {
         generateDisabledHint: 'Elimina los grupos guardados antes de generar nuevos',
         groupSizeError: 'Cada grupo debe tener entre 3 y 4 miembros',
         reloadGroups: 'Recargar grupos',
+        groupAssignments: {
+          title: 'Trabajos cooperativos',
+          addAssignment: 'Nuevo trabajo',
+          editAssignment: 'Editar trabajo',
+          deleteAssignment: 'Eliminar trabajo',
+          deleteAssignmentConfirm: '¿Está seguro que desea eliminar el trabajo "{name}"? Se eliminarán también las notas y documentos asociados.',
+          assignmentTitle: 'Título',
+          assignmentTitlePlaceholder: 'Título del trabajo...',
+          assignmentDescription: 'Descripción',
+          assignmentDescriptionPlaceholder: 'Descripción opcional...',
+          quarter: 'Trimestre',
+          grades: 'Notas',
+          grade: 'Nota',
+          gradePlaceholder: '0-10',
+          gradeRange: 'La nota debe estar entre 0 y 10',
+          saveGrade: 'Guardar nota',
+          deleteGrade: 'Eliminar nota',
+          documents: 'Documentos',
+          assignmentDocuments: 'Documentos del trabajo',
+          groupDocuments: 'Documentos del grupo',
+          noDocuments: 'No hay documentos',
+          uploadDocument: 'Subir documento',
+          downloadDocument: 'Descargar documento',
+          deleteDocument: 'Eliminar documento',
+          deleteDocumentTitle: 'Eliminar documento',
+          deleteDocumentConfirm: '¿Está seguro que desea eliminar este documento? Esta acción no se puede deshacer.',
+          noAssignments: 'No hay trabajos cooperativos',
+          noAssignmentsHint: 'Crea un nuevo trabajo para asignar notas y documentos a los grupos',
+          needSavedGroups: 'Debes tener grupos guardados para gestionar trabajos cooperativos',
+          createSuccess: 'Trabajo creado correctamente',
+          updateSuccess: 'Trabajo actualizado correctamente',
+          deleteSuccess: 'Trabajo eliminado correctamente',
+          createError: 'Error al crear el trabajo',
+          updateError: 'Error al actualizar el trabajo',
+          deleteError: 'Error al eliminar el trabajo',
+          gradeSuccess: 'Nota guardada correctamente',
+          gradeError: 'Error al guardar la nota',
+          gradeDeleteSuccess: 'Nota eliminada correctamente',
+          gradeDeleteError: 'Error al eliminar la nota',
+          loadError: 'Error al cargar los trabajos',
+          uploadSuccess: 'Documento subido correctamente',
+          uploadError: 'Error al subir el documento',
+          downloadError: 'Error al descargar el documento',
+          deleteDocError: 'Error al eliminar el documento',
+          validation: {
+            titleRequired: 'El título es obligatorio',
+            quarterRequired: 'El trimestre es obligatorio',
+            gradeRange: 'La nota debe estar entre 0 y 10',
+            fileRequired: 'Selecciona un archivo',
+            fileTooLarge: 'El archivo no puede superar los 2MB',
+          },
+        },
       },
       calendar: {
         title: 'Calendario',
@@ -1793,6 +1897,58 @@ export const translations: Record<Locale, Translations> = {
         generateDisabledHint: 'Delete saved groups before generating new ones',
         groupSizeError: 'Each group must have between 3 and 4 members',
         reloadGroups: 'Reload groups',
+        groupAssignments: {
+          title: 'Group Assignments',
+          addAssignment: 'New assignment',
+          editAssignment: 'Edit assignment',
+          deleteAssignment: 'Delete assignment',
+          deleteAssignmentConfirm: 'Are you sure you want to delete the assignment "{name}"? All associated grades and documents will also be deleted.',
+          assignmentTitle: 'Title',
+          assignmentTitlePlaceholder: 'Assignment title...',
+          assignmentDescription: 'Description',
+          assignmentDescriptionPlaceholder: 'Optional description...',
+          quarter: 'Quarter',
+          grades: 'Grades',
+          grade: 'Grade',
+          gradePlaceholder: '0-10',
+          gradeRange: 'Grade must be between 0 and 10',
+          saveGrade: 'Save grade',
+          deleteGrade: 'Delete grade',
+          documents: 'Documents',
+          assignmentDocuments: 'Assignment documents',
+          groupDocuments: 'Group documents',
+          noDocuments: 'No documents',
+          uploadDocument: 'Upload document',
+          downloadDocument: 'Download document',
+          deleteDocument: 'Delete document',
+          deleteDocumentTitle: 'Delete document',
+          deleteDocumentConfirm: 'Are you sure you want to delete this document? This action cannot be undone.',
+          noAssignments: 'No group assignments',
+          noAssignmentsHint: 'Create a new assignment to manage grades and documents for groups',
+          needSavedGroups: 'You need saved groups to manage group assignments',
+          createSuccess: 'Assignment created successfully',
+          updateSuccess: 'Assignment updated successfully',
+          deleteSuccess: 'Assignment deleted successfully',
+          createError: 'Error creating assignment',
+          updateError: 'Error updating assignment',
+          deleteError: 'Error deleting assignment',
+          gradeSuccess: 'Grade saved successfully',
+          gradeError: 'Error saving grade',
+          gradeDeleteSuccess: 'Grade deleted successfully',
+          gradeDeleteError: 'Error deleting grade',
+          loadError: 'Error loading assignments',
+          uploadSuccess: 'Document uploaded successfully',
+          uploadError: 'Error uploading document',
+          downloadError: 'Error downloading document',
+          deleteDocError: 'Error deleting document',
+          validation: {
+            titleRequired: 'Title is required',
+            quarterRequired: 'Quarter is required',
+            gradeRange: 'Grade must be between 0 and 10',
+            fileRequired: 'Please select a file',
+            fileTooLarge: 'File cannot exceed 2MB',
+          },
+        },
       },
       calendar: {
         title: 'Calendar',
