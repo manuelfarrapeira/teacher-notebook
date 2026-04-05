@@ -554,6 +554,8 @@ interface Translations {
       generateDisabledHint: string;
       groupSizeError: string;
       reloadGroups: string;
+      collapseGroups: string;
+      expandGroups: string;
       groupAssignments: {
         title: string;
         addAssignment: string;
@@ -1197,8 +1199,8 @@ export const translations: Record<Locale, Translations> = {
       cooperative: {
         title: 'Cooperativo',
         generateGroups: 'Generar grupos',
-        saveGroups: 'Guardar grupos',
-        updateGroups: 'Actualizar grupos',
+        saveGroups: 'Guardar',
+        updateGroups: 'Actualizar',
         deleteAllGroups: 'Eliminar todos',
         deleteAllTitle: 'Eliminar todos los grupos',
         deleteAllConfirm: '¿Está seguro que desea eliminar todos los grupos de esta clase? Esta acción no se puede deshacer.',
@@ -1225,6 +1227,8 @@ export const translations: Record<Locale, Translations> = {
         generateDisabledHint: 'Elimina los grupos guardados antes de generar nuevos',
         groupSizeError: 'Cada grupo debe tener entre 3 y 4 miembros',
         reloadGroups: 'Recargar grupos',
+        collapseGroups: 'Ocultar grupos',
+        expandGroups: 'Mostrar grupos',
         groupAssignments: {
           title: 'Trabajos cooperativos',
           addAssignment: 'Nuevo trabajo',
@@ -1869,8 +1873,8 @@ export const translations: Record<Locale, Translations> = {
       cooperative: {
         title: 'Cooperative',
         generateGroups: 'Generate groups',
-        saveGroups: 'Save groups',
-        updateGroups: 'Update groups',
+        saveGroups: 'Save',
+        updateGroups: 'Update',
         deleteAllGroups: 'Delete all',
         deleteAllTitle: 'Delete all groups',
         deleteAllConfirm: 'Are you sure you want to delete all groups for this class? This action cannot be undone.',
@@ -1897,6 +1901,8 @@ export const translations: Record<Locale, Translations> = {
         generateDisabledHint: 'Delete saved groups before generating new ones',
         groupSizeError: 'Each group must have between 3 and 4 members',
         reloadGroups: 'Reload groups',
+        collapseGroups: 'Hide groups',
+        expandGroups: 'Show groups',
         groupAssignments: {
           title: 'Group Assignments',
           addAssignment: 'New assignment',

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 /**
@@ -18,29 +18,54 @@ interface PortalTooltipProps {
   readonly as?: 'button' | 'span';
 }
 
+/** Minimum gap between tooltip edge and viewport edge */
+const MARGIN = 8;
+
 /**
  * Tooltip that renders via a React portal so it escapes any overflow/stacking context.
  * Uses the same CSS classes as the eval-criteria tooltip system.
- *
- * @example
- * <PortalTooltip text="Download file" as="span">
- *   <button onClick={handleDownload}><Download size={16} /></button>
- * </PortalTooltip>
+ * Automatically clamps horizontal position so the tooltip never overflows the viewport.
  */
 export function PortalTooltip({ text, children, position = 'top', as = 'button' }: PortalTooltipProps) {
   const triggerRef = useRef<HTMLElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0 });
+  const [style, setStyle] = useState<React.CSSProperties>({});
 
-  const show = () => {
-    if (!triggerRef.current) return;
-    const rect = triggerRef.current.getBoundingClientRect();
-    const left = rect.left + rect.width / 2;
-    const top = position === 'bottom' ? rect.bottom + 8 : rect.top - 8;
-    setCoords({ top, left });
-    setVisible(true);
-  };
+  /**
+   * After the portal tooltip is in the DOM, measure it and clamp to viewport.
+   * useLayoutEffect runs synchronously before the browser paints.
+   */
+  useLayoutEffect(() => {
+    if (!visible || !triggerRef.current || !tooltipRef.current) return;
 
+    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const tipEl = tooltipRef.current;
+    const tipWidth = tipEl.offsetWidth;
+    const vw = window.innerWidth;
+
+    const centerX = triggerRect.left + triggerRect.width / 2;
+    const top = position === 'bottom' ? triggerRect.bottom + 8 : triggerRect.top - 8;
+
+    // Calculate ideal left (centered)
+    let left = centerX - tipWidth / 2;
+
+    // Clamp so tooltip stays within viewport
+    if (left + tipWidth > vw - MARGIN) {
+      left = vw - MARGIN - tipWidth;
+    }
+    if (left < MARGIN) {
+      left = MARGIN;
+    }
+
+    setStyle({
+      top,
+      left,
+      transform: position === 'bottom' ? 'none' : 'translateY(-100%)',
+    });
+  }, [visible, text, position]);
+
+  const show = () => setVisible(true);
   const hide = () => setVisible(false);
 
   const Tag = as;
@@ -59,14 +84,9 @@ export function PortalTooltip({ text, children, position = 'top', as = 'button' 
       </Tag>
       {visible && ReactDOM.createPortal(
         <div
+          ref={tooltipRef}
           className="eval-criteria-tooltip-popup"
-          style={{
-            top: coords.top,
-            left: coords.left,
-            transform: position === 'bottom'
-              ? 'translateX(-50%)'
-              : 'translate(-50%, -100%)',
-          }}
+          style={style}
         >
           {text}
         </div>,

@@ -6230,7 +6230,15 @@ td.attendance-weekend-cell {
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+.cooperative-icon-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
 }
 
 .cooperative-delete-btn {
@@ -6450,11 +6458,29 @@ td.attendance-weekend-cell {
   }
 
   .cooperative-actions {
-    flex-direction: column;
+    flex-wrap: wrap;
     width: 100%;
   }
 
-  .cooperative-actions .dashboard-add-btn {
+  .cooperative-main-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .cooperative-icon-actions {
+    flex: 1 0 100%;
+    justify-content: stretch;
+  }
+
+  .cooperative-icon-actions > * {
+    flex: 1;
+  }
+
+  .cooperative-icon-actions .dashboard-add-btn {
     width: 100%;
     justify-content: center;
   }
@@ -6491,6 +6517,7 @@ td.attendance-weekend-cell {
 .cooperative-assignments-section .dashboard-section-header {
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 1rem;
 }
 
 .cooperative-assignments-section .dashboard-add-btn {
@@ -6503,7 +6530,6 @@ td.attendance-weekend-cell {
 .cooperative-quarter-tabs {
   display: flex;
   gap: 0.25rem;
-  margin-bottom: 1rem;
 }
 
 .cooperative-quarter-tab {

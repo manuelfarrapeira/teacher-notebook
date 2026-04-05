@@ -91,6 +91,9 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
   const [dragSourceGroup, setDragSourceGroup] = useState<number | null>(null);
   const [dragOverGroup, setDragOverGroup] = useState<number | null>(null);
 
+  // Collapse groups section
+  const [groupsCollapsed, setGroupsCollapsed] = useState(false);
+
   // ── Group Assignments state ──
   const [assignments, setAssignments] = useState<GroupAssignment[]>([]);
   const [assignmentsLoading, setAssignmentsLoading] = useState(false);
@@ -552,7 +555,7 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
         <div className="cooperative-actions">
           {/* Generate button — only enabled if no persisted groups */}
           <button
-            className="dashboard-add-btn"
+            className="dashboard-add-btn cooperative-main-btn"
             onClick={() => setShowPriorityDialog(true)}
             disabled={isSaved || saving}
             title={isSaved ? t('dashboard.cooperative.generateDisabledHint') : ''}
@@ -564,7 +567,7 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
           {/* Save / Update button — disabled if not all students assigned or invalid group sizes */}
           {groups.length > 0 && (
             <button
-              className="dashboard-add-btn"
+              className="dashboard-add-btn cooperative-main-btn"
               onClick={handleSave}
               disabled={saving || !canSave}
               title={!allAssigned ? t('dashboard.cooperative.allStudentsMustBeAssigned') : !allGroupsValidSize ? t('dashboard.cooperative.groupSizeError') : ''}
@@ -580,7 +583,7 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
           {/* Delete all button */}
           {groups.length > 0 && (
             <button
-              className="dashboard-add-btn cooperative-delete-btn"
+              className="dashboard-add-btn cooperative-delete-btn cooperative-main-btn"
               onClick={() => setConfirmDeleteOpen(true)}
               disabled={saving}
             >
@@ -589,158 +592,177 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
             </button>
           )}
 
-          {/* Reload saved groups (discard local changes) */}
-          {isSaved && groups.length > 0 && (
-            <button
-              className="dashboard-add-btn"
-              onClick={fetchData}
-              disabled={saving || loading}
-              title={t('dashboard.cooperative.reloadGroups')}
-              style={{ padding: '0.5rem' }}
-            >
-              <RefreshCw size={16} />
-            </button>
-          )}
+          {/* Reload + Collapse icon buttons */}
+          <div className="cooperative-icon-actions">
+            {isSaved && groups.length > 0 && (
+              <PortalTooltip text={t('dashboard.cooperative.reloadGroups')} as="span" position="bottom">
+                <button
+                  className="dashboard-add-btn"
+                  onClick={fetchData}
+                  disabled={saving || loading}
+                  style={{ padding: '0.625rem' }}
+                >
+                  <RefreshCw size={16} />
+                </button>
+              </PortalTooltip>
+            )}
+            {groups.length > 0 && (
+              <PortalTooltip text={groupsCollapsed ? t('dashboard.cooperative.expandGroups') : t('dashboard.cooperative.collapseGroups')} as="span" position="bottom">
+                <button
+                  className="dashboard-add-btn"
+                  onClick={() => setGroupsCollapsed(prev => !prev)}
+                  style={{ padding: '0.625rem' }}
+                >
+                  {groupsCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+                </button>
+              </PortalTooltip>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Warning: unassigned students exist */}
-      {groups.length > 0 && !allAssigned && (
-        <div className="cooperative-warning">
-          <p>{t('dashboard.cooperative.allStudentsMustBeAssigned')}</p>
-          <p className="cooperative-warning-detail">
-            {t('dashboard.cooperative.unassignedCount').replace('{count}', String(unassignedStudents.length))}
-          </p>
-        </div>
-      )}
+      {/* Collapsible groups content */}
+      {!groupsCollapsed && (
+        <>
+          {/* Warning: unassigned students exist */}
+          {groups.length > 0 && !allAssigned && (
+            <div className="cooperative-warning">
+              <p>{t('dashboard.cooperative.allStudentsMustBeAssigned')}</p>
+              <p className="cooperative-warning-detail">
+                {t('dashboard.cooperative.unassignedCount').replace('{count}', String(unassignedStudents.length))}
+              </p>
+            </div>
+          )}
 
-      {/* Warning: groups with invalid size */}
-      {groups.length > 0 && allAssigned && !allGroupsValidSize && (
-        <div className="cooperative-warning">
-          <p>{t('dashboard.cooperative.groupSizeError')}</p>
-        </div>
-      )}
+          {/* Warning: groups with invalid size */}
+          {groups.length > 0 && allAssigned && !allGroupsValidSize && (
+            <div className="cooperative-warning">
+              <p>{t('dashboard.cooperative.groupSizeError')}</p>
+            </div>
+          )}
 
-      {/* Empty state */}
-      {groups.length === 0 && (
-        <div className="dashboard-empty">
-          <Users className="dashboard-empty-icon" />
-          <p className="dashboard-empty-text">{t('dashboard.cooperative.noGroups')}</p>
-          <p className="dashboard-empty-text" style={{ fontSize: '0.85rem' }}>
-            {t('dashboard.cooperative.noGroupsHint')}
-          </p>
-        </div>
-      )}
+          {/* Empty state */}
+          {groups.length === 0 && (
+            <div className="dashboard-empty">
+              <Users className="dashboard-empty-icon" />
+              <p className="dashboard-empty-text">{t('dashboard.cooperative.noGroups')}</p>
+              <p className="dashboard-empty-text" style={{ fontSize: '0.85rem' }}>
+                {t('dashboard.cooperative.noGroupsHint')}
+              </p>
+            </div>
+          )}
 
-      {/* Groups grid */}
-      {groups.length > 0 && (
-        <div className="cooperative-groups-container">
-          {groups.map((group, groupIndex) => (
+          {/* Groups grid */}
+          {groups.length > 0 && (
+            <div className="cooperative-groups-container">
+              {groups.map((group, groupIndex) => (
+                <div
+                  key={group.id ?? `new-${groupIndex}`}
+                  role="listbox"
+                  tabIndex={0}
+                  aria-label={group.name}
+                  className={`cooperative-group-card ${dragOverGroup === groupIndex ? 'drag-over' : ''}`}
+                  onDragOver={(e) => handleDragOver(e, groupIndex)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDropOnGroup(e, groupIndex)}
+                >
+                  {/* Group header with name input + student count */}
+                  <div className="cooperative-group-header">
+                    <input
+                      type="text"
+                      className="cooperative-group-name-input"
+                      value={group.name}
+                      onChange={(e) => handleGroupNameChange(groupIndex, e.target.value)}
+                      placeholder={`${t('dashboard.cooperative.groupNamePlaceholder')} ${groupIndex + 1}`}
+                    />
+                    <span className={`cooperative-group-count ${group.studentIds.length < 3 || group.studentIds.length > 4 ? 'invalid-size' : ''}`}>
+                      {group.studentIds.length}
+                    </span>
+                  </div>
+
+                  {/* Student list inside this group */}
+                  <div className="cooperative-student-list">
+                    {group.studentIds.map(studentId => {
+                      const student = studentsMap.get(studentId);
+                      if (!student) return null;
+                      return (
+                        <div
+                          key={studentId}
+                          role="option"
+                          tabIndex={0}
+                          aria-selected={dragStudentId === studentId}
+                          className={`cooperative-student-item ${dragStudentId === studentId ? 'dragging' : ''}`}
+                          draggable
+                          onDragStart={() => handleDragStart(studentId, groupIndex)}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <GripVertical size={14} className="cooperative-grip-icon" />
+                          <StudentPhoto
+                            studentId={student.id}
+                            photoFileName={student.photo}
+                            gender={student.gender}
+                            size={36}
+                            alt={`${student.name} ${student.surnames}`}
+                          />
+                          <span className="cooperative-student-name">
+                            {student.surnames}, {student.name}
+                          </span>
+                          {renderShapeBadge(student.shape)}
+                        </div>
+                      );
+                    })}
+                    {group.studentIds.length === 0 && (
+                      <p className="cooperative-empty-group">{t('dashboard.cooperative.dragHint')}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Unassigned students drop zone */}
+          {groups.length > 0 && unassignedStudents.length > 0 && (
             <div
-              key={group.id ?? `new-${groupIndex}`}
               role="listbox"
+              aria-label={t('dashboard.cooperative.unassignedStudents')}
               tabIndex={0}
-              aria-label={group.name}
-              className={`cooperative-group-card ${dragOverGroup === groupIndex ? 'drag-over' : ''}`}
-              onDragOver={(e) => handleDragOver(e, groupIndex)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDropOnGroup(e, groupIndex)}
+              className="cooperative-unassigned"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDropUnassigned}
             >
-              {/* Group header with name input + student count */}
-              <div className="cooperative-group-header">
-                <input
-                  type="text"
-                  className="cooperative-group-name-input"
-                  value={group.name}
-                  onChange={(e) => handleGroupNameChange(groupIndex, e.target.value)}
-                  placeholder={`${t('dashboard.cooperative.groupNamePlaceholder')} ${groupIndex + 1}`}
-                />
-                <span className={`cooperative-group-count ${group.studentIds.length < 3 || group.studentIds.length > 4 ? 'invalid-size' : ''}`}>
-                  {group.studentIds.length}
-                </span>
-              </div>
-
-              {/* Student list inside this group */}
+              <h3 className="cooperative-unassigned-title">
+                {t('dashboard.cooperative.unassignedStudents')} ({unassignedStudents.length})
+              </h3>
               <div className="cooperative-student-list">
-                {group.studentIds.map(studentId => {
-                  const student = studentsMap.get(studentId);
-                  if (!student) return null;
-                  return (
-                    <div
-                      key={studentId}
-                      role="option"
-                      tabIndex={0}
-                      aria-selected={dragStudentId === studentId}
-                      className={`cooperative-student-item ${dragStudentId === studentId ? 'dragging' : ''}`}
-                      draggable
-                      onDragStart={() => handleDragStart(studentId, groupIndex)}
-                      onDragEnd={handleDragEnd}
-                    >
-                      <GripVertical size={14} className="cooperative-grip-icon" />
-                      <StudentPhoto
-                        studentId={student.id}
-                        photoFileName={student.photo}
-                        gender={student.gender}
-                        size={36}
-                        alt={`${student.name} ${student.surnames}`}
-                      />
-                      <span className="cooperative-student-name">
-                        {student.surnames}, {student.name}
-                      </span>
-                      {renderShapeBadge(student.shape)}
-                    </div>
-                  );
-                })}
-                {group.studentIds.length === 0 && (
-                  <p className="cooperative-empty-group">{t('dashboard.cooperative.dragHint')}</p>
-                )}
+                {unassignedStudents.map(student => (
+                  <div
+                    key={student.id}
+                    role="option"
+                    tabIndex={0}
+                    aria-selected={dragStudentId === student.id}
+                    className={`cooperative-student-item ${dragStudentId === student.id ? 'dragging' : ''}`}
+                    draggable
+                    onDragStart={() => handleDragStartUnassigned(student.id)}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <GripVertical size={14} className="cooperative-grip-icon" />
+                    <StudentPhoto
+                      studentId={student.id}
+                      photoFileName={student.photo}
+                      gender={student.gender}
+                      size={36}
+                      alt={`${student.name} ${student.surnames}`}
+                    />
+                    <span className="cooperative-student-name">
+                      {student.surnames}, {student.name}
+                    </span>
+                    {renderShapeBadge(student.shape)}
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      )}
-
-      {/* Unassigned students drop zone */}
-      {groups.length > 0 && unassignedStudents.length > 0 && (
-        <div
-          role="listbox"
-          aria-label={t('dashboard.cooperative.unassignedStudents')}
-          tabIndex={0}
-          className="cooperative-unassigned"
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleDropUnassigned}
-        >
-          <h3 className="cooperative-unassigned-title">
-            {t('dashboard.cooperative.unassignedStudents')} ({unassignedStudents.length})
-          </h3>
-          <div className="cooperative-student-list">
-            {unassignedStudents.map(student => (
-              <div
-                key={student.id}
-                role="option"
-                tabIndex={0}
-                aria-selected={dragStudentId === student.id}
-                className={`cooperative-student-item ${dragStudentId === student.id ? 'dragging' : ''}`}
-                draggable
-                onDragStart={() => handleDragStartUnassigned(student.id)}
-                onDragEnd={handleDragEnd}
-              >
-                <GripVertical size={14} className="cooperative-grip-icon" />
-                <StudentPhoto
-                  studentId={student.id}
-                  photoFileName={student.photo}
-                  gender={student.gender}
-                  size={36}
-                  alt={`${student.name} ${student.surnames}`}
-                />
-                <span className="cooperative-student-name">
-                  {student.surnames}, {student.name}
-                </span>
-                {renderShapeBadge(student.shape)}
-              </div>
-            ))}
-          </div>
-        </div>
+          )}
+        </>
       )}
 
       {/* ═══ GROUP ASSIGNMENTS SECTION ═══ */}
