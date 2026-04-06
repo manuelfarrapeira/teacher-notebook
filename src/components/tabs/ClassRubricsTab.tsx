@@ -567,17 +567,17 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
               {isAssigned && assignedClassRubric ? (
                 <button
                   className="modal-button cancel"
-                  style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', minWidth: 'auto', color: '#dc2626', borderColor: '#fecaca' }}
+                  style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', minWidth: 'auto', color: '#dc2626', borderColor: '#fecaca', display: 'flex', alignItems: 'center' }}
                   onClick={() => handleRemoveRubricClick(assignedClassRubric)}
                   disabled={Boolean(assigningRubric)}
                 >
-                  <Trash2 size={14} style={{ marginRight: '0.25rem' }} />
+                  <Trash2 size={14} style={{ marginRight: '0.25rem', flexShrink: 0 }} />
                   {t('dashboard.classRubrics.removeRubric')}
                 </button>
               ) : (
                 <button
                   className="modal-button save"
-                  style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', minWidth: 'auto' }}
+                  style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', minWidth: 'auto', display: 'flex', alignItems: 'center' }}
                   onClick={() => handleAssignRubric(rubric.id)}
                   disabled={Boolean(assigningRubric)}
                 >
@@ -585,7 +585,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
                     <Loader2 className="icon-spin" size={14} />
                   ) : (
                     <>
-                      <Plus size={14} style={{ marginRight: '0.25rem' }} />
+                      <Plus size={14} style={{ marginRight: '0.25rem', flexShrink: 0 }} />
                       {t('dashboard.classRubrics.assignRubric')}
                     </>
                   )}
@@ -677,7 +677,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
       {criterionModal && (
         <dialog className="modal-overlay" open={true} aria-label={t('dashboard.classRubrics.selectCriterion')}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
-            <div className="modal-content" style={{ maxWidth: '500px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="modal-content" style={{ maxWidth: '50rem', width: '90vw', maxHeight: '90vh', overflowY: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h3 className="modal-title">{t('dashboard.classRubrics.selectCriterion')}</h3>
                 <button
@@ -747,7 +747,7 @@ export function ClassRubricsTab({ selectedClass }: ClassRubricsTabProps) {
       {showManageModal && (
         <dialog className="modal-overlay" open={true} aria-label={t('dashboard.classRubrics.manageClassRubrics')}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
-            <div className="modal-content" style={{ maxWidth: '550px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="modal-content" style={{ maxWidth: '50rem', width: '90vw', maxHeight: '90vh', overflowY: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h3 className="modal-title">
                   {t('dashboard.classRubrics.availableRubrics')}

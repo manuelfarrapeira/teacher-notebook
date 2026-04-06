@@ -111,7 +111,7 @@ export function GroupAssignmentFormModal({
   return (
     <dialog className="modal-overlay" open={isOpen} aria-label={editingAssignment ? gat('editAssignment') : gat('addAssignment')}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
-        <div className="modal-content" style={{ maxWidth: '28rem', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+        <div className="modal-content" style={{ maxWidth: '50rem', width: '90vw', maxHeight: '90vh', overflowY: 'auto' }}>
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 className="modal-title" style={{ marginBottom: 0 }}>

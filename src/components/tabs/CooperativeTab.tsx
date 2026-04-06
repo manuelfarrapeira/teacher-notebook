@@ -836,7 +836,7 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
                     <PortalTooltip text={`${gat('documents')} (${docCount})`} as="span">
                       <button
                         className="eval-criteria-exercise-btn"
-                        onClick={() => openDocsModal(assignment.id, null, `${gat('assignmentDocuments')}: ${assignment.title}`, assignmentDocs)}
+                        onClick={() => openDocsModal(assignment.id, null, assignment.title, assignmentDocs)}
                         aria-label={gat('documents')}
                       >
                         <FileText size={16} />
@@ -916,7 +916,7 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
                             <PortalTooltip text={`${gat('groupDocuments')} (${groupDocs.length})`} as="span">
                               <button
                                 className="eval-criteria-exercise-btn"
-                                onClick={() => openDocsModal(assignment.id, group.id!, `${gat('groupDocuments')}: ${group.name}`, groupDocs)}
+                                onClick={() => openDocsModal(assignment.id, group.id!, group.name, groupDocs)}
                                 aria-label={gat('groupDocuments')}
                               >
                                 <FileText size={14} />

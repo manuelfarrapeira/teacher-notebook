@@ -197,7 +197,7 @@ export function ExerciseFormModal({
   return (
     <dialog className="modal-overlay" open={isOpen} aria-label={modalTitle}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
-        <div className="modal-content" style={{ maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+        <div className="modal-content" style={{ maxWidth: '50rem', width: '90vw', maxHeight: '90vh', overflowY: 'auto' }}>
           <h3 className="modal-title">{modalTitle}</h3>
 
           {errorMessage && (

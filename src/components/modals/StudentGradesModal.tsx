@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Loader2, X, Frown, Smile, ChevronDown, FileText, Download, Radar } from 'lucide-react';
+import { Loader2, X, Frown, Smile, ChevronDown, FileText, Download, Radar, Users } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { ExerciseService, StudentQuarter, GradeExercise } from '../../infrastructure/api/ExerciseService';
 import { SubjectService, ClassSubject } from '../../infrastructure/api/SubjectService';
+import { GroupAssignmentService } from '../../infrastructure/api/GroupAssignmentService';
+import { StudentGroupService } from '../../infrastructure/api/StudentGroupService';
+import type { GroupAssignment, GroupAssignmentGrade, SavedGroup } from '../../domain/models';
 import { PortalTooltip } from '../ui/PortalTooltip';
 import { StudentRadarChartModal } from './StudentRadarChartModal';
 
@@ -65,6 +68,11 @@ export function StudentGradesModal({
   const [classSubjects, setClassSubjects] = useState<ClassSubject[]>([]);
   const [radarChartOpen, setRadarChartOpen] = useState(false);
 
+  /** Group work state */
+  const [groupAssignments, setGroupAssignments] = useState<GroupAssignment[]>([]);
+  const [savedGroups, setSavedGroups] = useState<SavedGroup[]>([]);
+  const [groupGradesMap, setGroupGradesMap] = useState<Record<number, GroupAssignmentGrade[]>>({});
+
   /** Toggle the document list for a grade row */
   const toggleDocs = (gradeId: number) => {
     setExpandedDocs(prev => {
@@ -115,14 +123,31 @@ export function StudentGradesModal({
       Promise.all([
         ExerciseService.getStudentGrades(classId, studentId),
         SubjectService.getClassSubjects(classId),
+        GroupAssignmentService.getByClass(classId),
+        StudentGroupService.getSavedGroups(classId),
       ])
-        .then(([gradesData, subjectsData]) => {
+        .then(async ([gradesData, subjectsData, assignmentsData, groupsData]) => {
           const sorted = [...gradesData].sort((a, b) => a.quarter - b.quarter);
           setQuarters(sorted);
           setClassSubjects(subjectsData);
+          setGroupAssignments(assignmentsData);
+          setSavedGroups(groupsData);
           if (sorted.length > 0) {
             setActiveTab(sorted[0].quarter);
           }
+          // Fetch grades for all assignments
+          const gradesEntries: Record<number, GroupAssignmentGrade[]> = {};
+          await Promise.all(
+            assignmentsData.map(async (a) => {
+              try {
+                const grades = await GroupAssignmentService.getGrades(a.id);
+                gradesEntries[a.id] = grades;
+              } catch {
+                gradesEntries[a.id] = [];
+              }
+            })
+          );
+          setGroupGradesMap(gradesEntries);
         })
         .catch(err => {
           setError(err instanceof Error ? err.message : t('dashboard.evalCriteria.loadError'));
@@ -167,6 +192,36 @@ export function StudentGradesModal({
 
     return results;
   }, [quarters]);
+
+  /**
+   * Find which saved group the student belongs to.
+   * Returns the group or null if the student is not in any group.
+   */
+  const studentGroup = useMemo(() => {
+    return savedGroups.find(g => g.members.some(m => m.studentId === studentId)) ?? null;
+  }, [savedGroups, studentId]);
+
+  /**
+   * Group work data: for each assignment, find the grade for the student's group.
+   * Sorted by quarter, then by title.
+   */
+  const groupWorkData = useMemo(() => {
+    if (!studentGroup) return [];
+    return groupAssignments
+      .map(a => {
+        const grades = groupGradesMap[a.id] ?? [];
+        const gradeEntry = grades.find(g => g.groupId === studentGroup.id);
+        return {
+          assignmentId: a.id,
+          title: a.title,
+          description: a.description,
+          quarter: a.quarter,
+          groupName: studentGroup.name,
+          grade: gradeEntry?.grade ?? null,
+        };
+      })
+      .sort((a, b) => a.quarter - b.quarter || a.title.localeCompare(b.title));
+  }, [groupAssignments, groupGradesMap, studentGroup]);
 
   if (!isOpen) return null;
 
@@ -307,6 +362,7 @@ export function StudentGradesModal({
           <p className="dashboard-empty-text">{t('dashboard.evalCriteria.noGradesForStudent')}</p>
         </div>
       )}
+      {renderGroupWorkForQuarter(quarterData.quarter)}
     </>
   );
 
@@ -370,6 +426,66 @@ export function StudentGradesModal({
     </>
   );
 
+  /** Render group work grades for a specific quarter, shown below subject grades */
+  const renderGroupWorkForQuarter = (quarter: number) => {
+    const quarterAssignments = groupWorkData.filter(gw => gw.quarter === quarter);
+    if (quarterAssignments.length === 0) return null;
+
+    return (
+      <div style={{ marginTop: '1rem', borderTop: '1px solid #E3DED6', paddingTop: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+          <Users size={16} style={{ color: '#2c5f4a' }} />
+          <span style={{ fontWeight: 600, fontSize: '0.9rem', color: '#3d4440' }}>
+            {t('dashboard.evalCriteria.groupWork.title')}
+          </span>
+          {studentGroup && (
+            <span style={{ fontSize: '0.8rem', color: '#7a8078' }}>
+              — {studentGroup.name}
+            </span>
+          )}
+        </div>
+        <table className="student-grades-table">
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left' }}>{t('dashboard.evalCriteria.groupWork.assignment')}</th>
+              <th>{t('dashboard.evalCriteria.groupWork.grade')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quarterAssignments.map(gw => {
+              const isFailing = gw.grade !== null && gw.grade < 5;
+              const isExcellent = gw.grade !== null && gw.grade >= 9;
+              const gradeBg = gw.grade === null ? 'transparent' : (isFailing ? '#fecaca' : '#e8e4f3');
+              return (
+                <tr key={gw.assignmentId}>
+                  <td style={{ textAlign: 'left' }}>
+                    {gw.title}
+                    {gw.description && (
+                      <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginLeft: '0.5rem' }}>
+                        - {gw.description}
+                      </span>
+                    )}
+                  </td>
+                  <td style={{ fontWeight: 600, background: gradeBg }}>
+                    {gw.grade === null ? (
+                      <span style={{ color: '#9ca3af', fontWeight: 400 }}>{t('dashboard.evalCriteria.groupWork.noGrade')}</span>
+                    ) : (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                        {isFailing && <Frown size={14} style={{ color: '#f97316' }} />}
+                        {isExcellent && <Smile size={14} style={{ color: '#eab308' }} />}
+                        {formatGrade(gw.grade)} / 10
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <>
       <dialog className="modal-overlay" open={isOpen} aria-label={title}>
@@ -429,7 +545,7 @@ export function StudentGradesModal({
                 </div>
               )}
 
-              {error && (
+              {Boolean(error) && (
                 <div style={{ color: '#dc2626', fontSize: '0.875rem', padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', marginBottom: '1rem' }}>
                   {error}
                 </div>
@@ -441,17 +557,17 @@ export function StudentGradesModal({
                 </div>
               )}
 
-              {!loading && !error && quarters.length > 0 && activeTab !== 'final' && activeQuarterData && (
+              {!loading && !error && activeTab !== 'final' && activeQuarterData && (
                 renderQuarterContent(activeQuarterData)
               )}
 
-              {!loading && !error && quarters.length > 0 && activeTab !== 'final' && !activeQuarterData && (
+              {!loading && !error && activeTab !== 'final' && !activeQuarterData && quarters.length > 0 && (
                 <div className="dashboard-empty" style={{ padding: '1.5rem' }}>
                   <p className="dashboard-empty-text">{t('dashboard.evalCriteria.noGradesForStudent')}</p>
                 </div>
               )}
 
-              {!loading && !error && quarters.length > 0 && activeTab === 'final' && (
+              {!loading && !error && activeTab === 'final' && (
                 renderFinalGrade()
               )}
             </div>

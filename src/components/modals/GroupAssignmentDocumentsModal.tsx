@@ -140,7 +140,7 @@ export function GroupAssignmentDocumentsModal({
     <>
       <dialog className="modal-overlay" open={isOpen} aria-label={title}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
-          <div className="modal-content" style={{ maxWidth: '36rem', minWidth: '20rem', maxHeight: '90vh', overflowY: 'auto' }}>
+          <div className="modal-content" style={{ maxWidth: '50rem', width: '90vw', minWidth: '20rem', maxHeight: '90vh', overflowY: 'auto' }}>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 className="modal-title" style={{ marginBottom: 0 }}>{title}</h3>

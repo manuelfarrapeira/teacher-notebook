@@ -425,6 +425,16 @@ interface Translations {
       noGradesForStudent: string;
       gradeDocuments: string;
       gradeDocumentsTitle: string;
+      groupWork: {
+        title: string;
+        assignment: string;
+        group: string;
+        grade: string;
+        noGroupWork: string;
+        notInGroup: string;
+        noGrade: string;
+        quarter: string;
+      };
       chart: {
         title: string;
         failing: string;
@@ -1101,6 +1111,16 @@ export const translations: Record<Locale, Translations> = {
         noGradesForStudent: 'No hay notas registradas para este alumno',
         gradeDocuments: 'Documentos de la nota',
         gradeDocumentsTitle: 'Documentos: {student} - {exercise}',
+        groupWork: {
+          title: 'Trabajos en grupo',
+          assignment: 'Trabajo',
+          group: 'Grupo',
+          grade: 'Nota',
+          noGroupWork: 'No hay trabajos en grupo para esta clase',
+          notInGroup: 'Sin grupo asignado',
+          noGrade: 'Sin nota',
+          quarter: 'Trimestre',
+        },
         chart: {
           title: 'Distribución de notas',
           failing: 'Suspenso',
@@ -1778,6 +1798,16 @@ export const translations: Record<Locale, Translations> = {
         noGradesForStudent: 'No grades recorded for this student',
         gradeDocuments: 'Grade documents',
         gradeDocumentsTitle: 'Documents: {student} - {exercise}',
+        groupWork: {
+          title: 'Group work',
+          assignment: 'Assignment',
+          group: 'Group',
+          grade: 'Grade',
+          noGroupWork: 'No group assignments for this class',
+          notInGroup: 'Not assigned to a group',
+          noGrade: 'No grade',
+          quarter: 'Quarter',
+        },
         chart: {
           title: 'Grade distribution',
           failing: 'Failing',
