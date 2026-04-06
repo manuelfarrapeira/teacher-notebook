@@ -1,30 +1,31 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 /* ==============================
-   "Refined Academic" Design System
-   Warm sage + copper palette
-   Playfair Display + Source Sans 3
+   "Atelier Classique" Design System
+   Deep emerald + antique gold palette
+   Cormorant Garamond + Outfit
+   Crafted, tactile, editorial
    ============================== */
 @theme {
-  --color-background: #faf8f5;
-  --color-foreground: #2d3436;
+  --color-background: #F8F7F4;
+  --color-foreground: #1A1F1C;
   --color-popover: #ffffff;
-  --color-popover-foreground: #2d3436;
-  --color-accent: #f5f0e8;
-  --color-accent-foreground: #2d3436;
-  --color-muted: #f0ece5;
-  --color-muted-foreground: #7a8078;
-  --color-border: #e0d8cf;
-  --color-input: #e0d8cf;
+  --color-popover-foreground: #1A1F1C;
+  --color-accent: #EEEBE4;
+  --color-accent-foreground: #1A1F1C;
+  --color-muted: #E8E4DC;
+  --color-muted-foreground: #6E756F;
+  --color-border: #D8D2C8;
+  --color-input: #D8D2C8;
   --color-ring: #2c5f4a;
-  --color-destructive: #c0392b;
+  --color-destructive: #B82E22;
   --color-destructive-foreground: #ffffff;
-  --radius: 0.5rem;
-  --radius-md: calc(0.5rem - 2px);
-  --radius-sm: calc(0.5rem - 4px);
-  --radius-lg: 0.5rem;
+  --radius: 0.625rem;
+  --radius-md: calc(0.625rem - 2px);
+  --radius-sm: calc(0.625rem - 4px);
+  --radius-lg: 0.75rem;
 }
 
 /* ==============================
@@ -32,8 +33,8 @@
    ============================== */
 [data-slot="select-content"] {
   background-color: #ffffff !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 10px 40px rgba(44, 95, 74, 0.10), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 0.875rem !important;
+  box-shadow: 0 12px 40px rgba(44, 95, 74, 0.10), 0 4px 12px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.04) !important;
   border: none !important;
   overflow: hidden;
   padding: 0 !important;
@@ -44,9 +45,10 @@
   padding: 0.75rem 1rem !important;
   font-size: 0.9rem !important;
   font-weight: 500 !important;
-  color: #2d3436 !important;
+  color: #1A1F1C !important;
   border-radius: 0 !important;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 /* Hide the check-mark indicator — TopBar dropdowns don't use it */
@@ -56,8 +58,8 @@
 
 [data-slot="select-item"]:hover,
 [data-slot="select-item"][data-highlighted] {
-  background-color: #f5f0e8 !important;
-  color: #2d3436 !important;
+  background-color: #EEEBE4 !important;
+  color: #1A1F1C !important;
 }
 
 * {
@@ -67,14 +69,14 @@
 }
 
 ::selection {
-  background: rgba(44, 95, 74, 0.15);
-  color: #2d3436;
+  background: rgba(44, 95, 74, 0.18);
+  color: #1A1F1C;
 }
 
-/* Custom scrollbar for modern look */
+/* Custom scrollbar — refined thin style */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -82,21 +84,22 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c9c0b5;
-  border-radius: 4px;
+  background: #C4BCB0;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a89e93;
+  background: #9E958A;
 }
 
 body {
-  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
-  background-color: #faf8f5;
-  color: #2d3436;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+  background-color: #F8F7F4;
+  color: #1A1F1C;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.011em;
+  letter-spacing: -0.008em;
 }
 
 #root {
@@ -107,7 +110,7 @@ body {
 /* LoginScreen Styles */
 .login-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a3c2e 0%, #2c5f4a 30%, #3d7a5e 60%, #c4833c 100%);
+  background: linear-gradient(145deg, #0F2B20 0%, #163832 20%, #1B4A3A 40%, #2c5f4a 60%, #A67C52 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,16 +157,20 @@ body {
 }
 
 .login-card {
-  background: rgba(255, 253, 250, 0.97);
-  backdrop-filter: blur(20px);
-  border-radius: 1.25rem;
-  box-shadow: 0 25px 60px -12px rgba(44, 95, 74, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2);
-  padding: 2.5rem;
+  background: rgba(255, 253, 250, 0.96);
+  backdrop-filter: blur(24px) saturate(1.2);
+  border-radius: 1.5rem;
+  box-shadow:
+    0 32px 80px -16px rgba(15, 43, 32, 0.35),
+    0 8px 24px -8px rgba(15, 43, 32, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  padding: 3rem;
   width: 100%;
   max-width: 28rem;
   position: relative;
   z-index: 10;
-  border: 1px solid rgba(196, 131, 60, 0.15);
+  border: 1px solid rgba(166, 124, 82, 0.12);
 }
 
 .login-header {
@@ -177,15 +184,17 @@ body {
 }
 
 .login-main-icon {
-  background: linear-gradient(135deg, #2c5f4a, #3d7a5e, #c4833c);
+  background: linear-gradient(145deg, #163832, #2c5f4a, #A67C52);
   width: 5rem;
   height: 5rem;
-  border-radius: 1rem;
+  border-radius: 1.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
-  box-shadow: 0 10px 15px -3px rgba(44, 95, 74, 0.2);
+  box-shadow:
+    0 12px 24px -4px rgba(22, 56, 50, 0.3),
+    0 4px 8px -2px rgba(22, 56, 50, 0.15);
   transform: rotate(3deg);
   animation: pulse 2s infinite;
 }
@@ -194,31 +203,33 @@ body {
   position: absolute;
   top: -0.5rem;
   right: -0.5rem;
-  background: linear-gradient(90deg, #c4833c, #d4a056);
+  background: linear-gradient(135deg, #A67C52, #C4983C);
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 6px -1px rgba(196, 131, 60, 0.2);
+  box-shadow: 0 4px 10px -2px rgba(166, 124, 82, 0.35);
   animation: bounce 1s infinite;
 }
 
 .login-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.875rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #2c5f4a, #3d7a5e, #c4833c);
+  background: linear-gradient(135deg, #163832, #2c5f4a, #A67C52);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
 .login-subtitle {
-  color: #2d3436;
-  font-size: 1.125rem;
-  font-weight: 500;
+  color: #1A1F1C;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
 }
 
 .login-tagline {
@@ -253,39 +264,47 @@ body {
 
 .login-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc4b8;
+  padding: 0.8rem 1rem;
+  border: 1px solid #D8D2C8;
   border-radius: 0.625rem;
-  font-size: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 0.95rem;
+  transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #FAFAF8;
 }
 
 .login-input:focus {
   outline: none;
   border-color: #2c5f4a;
-  box-shadow: 0 0 0 3px rgba(44, 95, 74, 0.12);
+  box-shadow: 0 0 0 3px rgba(44, 95, 74, 0.1), 0 2px 8px rgba(44, 95, 74, 0.06);
+  background: #ffffff;
 }
 
 .login-button {
   width: 100%;
-  background: linear-gradient(90deg, #2c5f4a, #3d7a5e, #c4833c);
+  background: linear-gradient(135deg, #163832, #2c5f4a 50%, #A67C52);
   color: white; /* White text on dark gradient background provides sufficient contrast (>7:1) */
   font-weight: 600;
-  padding: 0.75rem;
+  padding: 0.875rem;
   border-radius: 0.75rem;
   border: none;
-  box-shadow: 0 10px 15px -3px rgba(44, 95, 74, 0.2);
+  box-shadow:
+    0 8px 20px -4px rgba(22, 56, 50, 0.3),
+    0 4px 8px -2px rgba(22, 56, 50, 0.1);
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  letter-spacing: 0.02em;
+  font-size: 0.95rem;
 }
 
 .login-button:hover {
-  transform: scale(1.03);
-  box-shadow: 0 14px 25px -5px rgba(44, 95, 74, 0.25);
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 32px -8px rgba(22, 56, 50, 0.35),
+    0 8px 16px -4px rgba(22, 56, 50, 0.15);
 }
 
 .login-footer {
@@ -299,7 +318,7 @@ body {
 }
 
 .login-link {
-  background: linear-gradient(90deg, #2c5f4a, #c4833c);
+  background: linear-gradient(135deg, #2c5f4a, #A67C52);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 500;
@@ -322,8 +341,8 @@ body {
 }
 
 .login-feature.students { color: #2c5f4a; }
-.login-feature.classes { color: #c4833c; }
-.login-feature.evaluations { color: #8b6914; }
+.login-feature.classes { color: #A67C52; }
+.login-feature.evaluations { color: #7A6A2E; }
 
 .login-dot {
   width: 0.25rem;
@@ -332,11 +351,11 @@ body {
 }
 
 .login-dot.pink-purple {
-  background: linear-gradient(90deg, #2c5f4a, #3d7a5e);
+  background: linear-gradient(135deg, #2c5f4a, #3d7a5e);
 }
 
 .login-dot.purple-cyan {
-  background: linear-gradient(90deg, #c4833c, #d4a056);
+  background: linear-gradient(135deg, #A67C52, #C4983C);
 }
 
 @keyframes pulse {
@@ -355,18 +374,18 @@ body {
 }
 
 @keyframes modalSlideIn {
-  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  from { opacity: 0; transform: translateY(-16px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes underlineGrow {
-  from { width: 0; }
-  to { width: 70%; }
+  from { width: 0; opacity: 0; }
+  to { width: 70%; opacity: 1; }
 }
 
 /* Icon Styles */
@@ -428,7 +447,7 @@ body {
 /* LoadingScreen Styles */
 .loading-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a3c2e, #2c5f4a);
+  background: linear-gradient(145deg, #0F2B20, #163832, #2c5f4a);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -481,11 +500,12 @@ body {
 }
 
 .loading-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.5rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.625rem;
   font-weight: 600;
   color: white;
   margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
 }
 
 .loading-subtitle {
@@ -519,10 +539,10 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f5f0e8;
+  background: #F0EDE8;
   overflow: hidden;
   border-top: 3px solid transparent;
-  border-image: linear-gradient(90deg, #2c5f4a, #c4833c) 1;
+  border-image: linear-gradient(90deg, #163832, #2c5f4a 40%, #A67C52) 1;
 }
 
 .dashboard-sidebar {
@@ -558,11 +578,11 @@ body {
 
 .dashboard-main-content {
   flex: 1;
-  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  padding: 1.25rem 1.75rem 1.75rem 1.75rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  background: #f5f0e8;
+  background: #F0EDE8;
 }
 
 .dashboard-header {
@@ -580,11 +600,13 @@ body {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 1.25rem;
   background: #ffffff;
-  border-bottom: 1px solid #e0d8cf;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 4px 12px 0 rgba(0, 0, 0, 0.03);
-  min-height: 52px;
+  border-bottom: 1px solid #E3DED6;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.03),
+    0 4px 16px 0 rgba(0, 0, 0, 0.02);
+  min-height: 54px;
   z-index: 50;
   gap: 0.5rem;
   position: relative;
@@ -623,12 +645,12 @@ body {
   padding: 0.5rem 0.75rem;
   border: none;
   background: transparent;
-  color: #7a8078;
+  color: #7A8078;
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 500;
   border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   position: relative;
 }
@@ -641,20 +663,20 @@ body {
   transform: translateX(-50%);
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2c5f4a, #c4833c);
+  background: linear-gradient(90deg, #2c5f4a, #A67C52);
   border-radius: 3px 3px 0 0;
-  transition: width 0.25s ease;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .topbar-tab:hover {
   color: #2c5f4a;
-  background: #f0ece5;
+  background: #EEEBE4;
 }
 
 .topbar-tab.active {
   color: #2c5f4a;
   font-weight: 600;
-  background: #f0ece5;
+  background: #EEEBE4;
 }
 
 .topbar-tab.active::after {
@@ -678,11 +700,13 @@ body {
   left: 0;
   right: 0;
   background: white;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.04);
   z-index: 100;
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid #e0d8cf;
+  border-bottom: 1px solid #E3DED6;
 }
 
 .topbar-dropdown-tab {
@@ -848,8 +872,11 @@ body {
   top: calc(100% + 0.5rem);
   right: 0;
   background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border-radius: 0.875rem;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
   z-index: 1001;
   overflow: hidden;
   display: flex;
@@ -920,8 +947,11 @@ body {
   top: calc(100% + 0.5rem);
   left: 0;
   background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border-radius: 0.875rem;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
   z-index: 50;
   overflow: hidden;
   display: flex;
@@ -941,10 +971,11 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
   color: #3d4440;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .selector-option:hover {
-  background-color: #f0ece5;
+  background-color: #EEEBE4;
 }
 
 .dashboard-tabs-content {
@@ -988,7 +1019,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(15, 20, 18, 0.55);
+  backdrop-filter: blur(4px);
 }
 
 /* Dialog element styles - for native HTML5 dialog */
@@ -1000,29 +1032,36 @@ dialog.modal-overlay {
   width: 100vw;
   height: 100vh;
   overflow-y: auto;
+  background-color: rgba(15, 20, 18, 0.55);
+  backdrop-filter: blur(4px);
 }
 
 dialog.modal-overlay::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(15, 20, 18, 0.55);
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
   background: white;
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: 1.125rem;
+  padding: 1.75rem;
   width: 100%;
   max-width: 29rem;
   min-width: 29rem;
-  box-shadow: 0 25px 60px -12px rgba(44, 95, 74, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
-  animation: modalSlideIn 0.25s ease-out;
+  box-shadow:
+    0 32px 80px -16px rgba(26, 31, 28, 0.2),
+    0 12px 32px -8px rgba(26, 31, 28, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.125rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  color: #2d3436;
+  margin-bottom: 1.25rem;
+  color: #1A1F1C;
+  letter-spacing: -0.01em;
 }
 
 .modal-body {
@@ -1045,17 +1084,18 @@ dialog.modal-overlay::backdrop {
 
 .modal-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc4b8;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid #D8D2C8;
   border-radius: 0.5rem;
-  background: #faf8f5;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  background: #FAFAF8;
+  transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+  font-size: 0.925rem;
 }
 
 .modal-input:focus {
   outline: none;
   border-color: #2c5f4a;
-  box-shadow: 0 0 0 3px rgba(44, 95, 74, 0.1);
+  box-shadow: 0 0 0 3px rgba(44, 95, 74, 0.08), 0 2px 6px rgba(44, 95, 74, 0.05);
   background: #ffffff;
 }
 
@@ -1082,30 +1122,31 @@ dialog.modal-overlay::backdrop {
   border-radius: 0.5rem;
   font-weight: 500;
   font-size: 0.875rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
 }
 
 .modal-button.cancel {
-  border: 1px solid #ccc4b8;
+  border: 1px solid #D8D2C8;
   background: white;
-  color: #3d4440;
+  color: #4A5248;
 }
 
 .modal-button.cancel:hover {
-  background: #f0ece5;
-  border-color: #a09890;
+  background: #EEEBE4;
+  border-color: #B0A99F;
 }
 
 .modal-button.save {
-  background: #2c5f4a;
+  background: linear-gradient(135deg, #2c5f4a, #347A5C);
   color: white;
   border: none;
-  box-shadow: 0 1px 3px rgba(44, 95, 74, 0.3);
+  box-shadow: 0 2px 8px rgba(44, 95, 74, 0.25);
 }
 
 .modal-button.save:hover {
-  background: #1e4a38;
-  box-shadow: 0 4px 12px rgba(44, 95, 74, 0.35);
+  background: linear-gradient(135deg, #1e4a38, #2c5f4a);
+  box-shadow: 0 6px 16px rgba(44, 95, 74, 0.3);
   transform: translateY(-1px);
 }
 
@@ -1120,23 +1161,24 @@ dialog.modal-overlay::backdrop {
 }
 
 .dashboard-add-btn {
-  background: #2c5f4a;
+  background: linear-gradient(135deg, #2c5f4a, #347A5C);
   color: white;
-  padding: 0.625rem 1rem;
+  padding: 0.625rem 1.125rem;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   font-size: 0.875rem;
   font-weight: 500;
-  box-shadow: 0 1px 3px rgba(44, 95, 74, 0.3);
+  box-shadow: 0 2px 8px rgba(44, 95, 74, 0.25);
+  letter-spacing: 0.01em;
 }
 
 .dashboard-add-btn:hover {
-  background: #1e4a38;
-  box-shadow: 0 4px 12px rgba(44, 95, 74, 0.35);
+  background: linear-gradient(135deg, #1e4a38, #2c5f4a);
+  box-shadow: 0 6px 20px rgba(44, 95, 74, 0.3);
   transform: translateY(-1px);
 }
 
@@ -1155,17 +1197,17 @@ dialog.modal-overlay::backdrop {
 
 .dashboard-search {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc4b8;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid #D8D2C8;
   border-radius: 0.5rem;
-  background: #faf8f5;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #FAFAF8;
+  transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dashboard-search:focus {
   outline: none;
   border-color: #2c5f4a;
-  box-shadow: 0 0 0 3px rgba(44, 95, 74, 0.1);
+  box-shadow: 0 0 0 3px rgba(44, 95, 74, 0.08), 0 2px 6px rgba(44, 95, 74, 0.05);
   background: #ffffff;
 }
 
@@ -1186,19 +1228,20 @@ dialog.modal-overlay::backdrop {
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1rem;
-  background-color: #2c5f4a;
+  background: linear-gradient(135deg, #2c5f4a, #347A5C);
   color: white;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(44, 95, 74, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(44, 95, 74, 0.25);
 }
 
 .filter-toggle-btn:hover {
-  background-color: #1e4a38;
+  background: linear-gradient(135deg, #1e4a38, #2c5f4a);
+  box-shadow: 0 4px 12px rgba(44, 95, 74, 0.3);
 }
 
 .filter-reset-btn {
@@ -1225,12 +1268,12 @@ dialog.modal-overlay::backdrop {
   margin-top: 1rem;
   padding: 1.25rem;
   background-color: #ffffff;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 .filter-row {
@@ -1359,18 +1402,20 @@ dialog.modal-overlay::backdrop {
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.625rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.75rem;
   background-color: #ffffff;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.01);
   animation: fadeInUp 0.3s ease-out both;
 }
 
 .dashboard-student:hover {
-  box-shadow: 0 6px 16px rgba(44, 95, 74, 0.08);
+  box-shadow:
+    0 8px 24px rgba(44, 95, 74, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
   border-color: #8fb5a3;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .dashboard-student-info {
@@ -1400,12 +1445,12 @@ dialog.modal-overlay::backdrop {
 }
 
 .dashboard-badge {
-  background: #f5f0e8;
-  color: #3d4440;
+  background: #EEEBE4;
+  color: #4A5248;
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid #ddd5cb;
+  border: 1px solid #E3DED6;
   border-radius: 9999px;
 }
 
@@ -1439,8 +1484,10 @@ dialog.modal-overlay::backdrop {
 .loading-modal-content {
   background: white;
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+  border-radius: 1.125rem;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.18),
+    0 8px 24px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -1665,18 +1712,20 @@ dialog.modal-overlay::backdrop {
 }
 
 .school-card {
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
-  padding: 1rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
+  padding: 1.25rem;
   background-color: #ffffff;
   position: relative;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .school-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04);
   border-color: #8fb5a3;
 }
 
@@ -1827,10 +1876,10 @@ dialog.modal-overlay::backdrop {
   flex-direction: column;
   gap: 1rem;
   background-color: #ffffff;
-  border-radius: 0.75rem;
-  border: 1px solid #ddd5cb;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  border-radius: 0.875rem;
+  border: 1px solid #E3DED6;
+  padding: 1.75rem;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.04), 0 2px 8px 0 rgba(0, 0, 0, 0.02);
 }
 
 .school-section-header {
@@ -1853,11 +1902,12 @@ dialog.modal-overlay::backdrop {
 }
 
 .school-section-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.25rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: #2d3436;
+  color: #1A1F1C;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .school-section-town {
@@ -1973,13 +2023,16 @@ dialog.modal-overlay::backdrop {
   top: calc(100% + 0.5rem);
   right: 0;
   background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border-radius: 0.875rem;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.14),
+    0 6px 16px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
   z-index: 1000;
   overflow: visible;
   min-width: 200px;
   width: max-content;
-  animation: slideDown 0.2s ease-out;
+  animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes slideDown {
@@ -2079,7 +2132,7 @@ dialog.modal-overlay::backdrop {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid #ddd5cb;
+  border-bottom: 2px solid #E3DED6;
 }
 
 .student-tabs button {
@@ -2089,8 +2142,8 @@ dialog.modal-overlay::backdrop {
   border-bottom: 2px solid transparent;
   cursor: pointer;
   font-weight: 500;
-  color: #7a8078;
-  transition: all 0.2s;
+  color: #7A8078;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: -2px;
 }
 
@@ -2172,11 +2225,11 @@ dialog.modal-overlay::backdrop {
 /* Class Info Header */
 .student-class-info-header {
   background: #ffffff;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
   padding: 1rem 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .student-class-info-content {
@@ -2209,18 +2262,20 @@ dialog.modal-overlay::backdrop {
 
 .student-card {
   background: #ffffff;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .student-card:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04);
   border-color: #8fb5a3;
 }
 
@@ -2341,7 +2396,7 @@ dialog.modal-overlay::backdrop {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  background: #f0ece5;
+  background: #EEEBE4;
   color: #2c5f4a;
   padding: 0.375rem 0.75rem;
   border-radius: 9999px;
@@ -2426,12 +2481,12 @@ dialog.modal-overlay::backdrop {
   width: 100%;
   padding: 0.875rem 1.25rem;
   padding-left: 3rem;
-  border: 1px solid #ddd5cb;
+  border: 1px solid #E3DED6;
   border-radius: 0.75rem;
   font-size: 0.9375rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .student-search-input:hover {
@@ -2473,7 +2528,7 @@ dialog.modal-overlay::backdrop {
 .view-toggle-group {
   display: flex;
   gap: 0.5rem;
-  background: #f5f0e8;
+  background: #E8E4DC;
   padding: 0.25rem;
   border-radius: 0.625rem;
   align-items: stretch;
@@ -2520,18 +2575,20 @@ dialog.modal-overlay::backdrop {
   flex-direction: column;
   align-items: center;
   padding: 1.5rem 1rem;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
   background: #ffffff;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
   position: relative;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .students-grid .student-list-item:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
   border-color: #8fb5a3;
 }
 
@@ -2564,17 +2621,17 @@ dialog.modal-overlay::backdrop {
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
   background: #ffffff;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
   position: relative;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .students-list .student-list-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
   border-color: #8fb5a3;
 }
 
@@ -2911,16 +2968,18 @@ dialog.modal-overlay::backdrop {
   flex-direction: column;
   align-items: flex-start;
   padding: 1.5rem;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
   background: #ffffff;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .subjects-grid .dashboard-student:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04);
   border-color: #8fb5a3;
 }
 
@@ -2936,7 +2995,7 @@ dialog.modal-overlay::backdrop {
 .subjects-grid .dashboard-student-name {
   font-weight: 600;
   font-size: 1rem;
-  color: #2d3436;
+  color: #1A1F1C;
 }
 
 .subjects-grid .school-card-actions {
@@ -3008,16 +3067,18 @@ dialog.modal-overlay::backdrop {
   flex-direction: column;
   align-items: flex-start;
   padding: 1.5rem;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
   background: #ffffff;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .skills-grid .dashboard-student:hover {
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04);
   border-color: #8fb5a3;
 }
 
@@ -3034,7 +3095,7 @@ dialog.modal-overlay::backdrop {
 .skills-grid .dashboard-student-name {
   font-weight: 600;
   font-size: 1rem;
-  color: #2d3436;
+  color: #1A1F1C;
 }
 
 .skills-grid .skills-description {
@@ -3167,9 +3228,9 @@ dialog.modal-overlay::backdrop {
 /* Schedule Table Styles */
 .schedule-table-container {
   overflow-x: hidden;
-  border: 1px solid #ddd5cb;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid #E3DED6;
+  border-radius: 0.875rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 .schedule-table {
@@ -6501,7 +6562,7 @@ td.attendance-weekend-cell {
 /* ── Group Assignments ── */
 
 .cooperative-assignments-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.25rem;
   font-weight: 600;
   color: #2c5f4a;
@@ -6771,5 +6832,54 @@ td.attendance-weekend-cell {
 .grade-distribution-sector:hover {
   transform: scale(1.06);
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) brightness(1.08);
+}
+
+/* ==============================
+   Atelier Classique — Grain Texture Overlay
+   Adds a subtle tactile noise to main background
+   ============================== */
+
+.dashboard-main-content::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+.dashboard-main-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==============================
+   Refined Transition Utilities
+   ============================== */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes subtleLift {
+  from { transform: translateY(4px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Gold accent line utility */
+.gold-accent-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #A67C52 20%, #C4983C 50%, #A67C52 80%, transparent);
+  border: none;
+  margin: 1.5rem 0;
 }
 
