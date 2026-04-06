@@ -495,7 +495,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
             <button
               className="dashboard-add-btn"
               onClick={() => setShowSubjectsModal(true)}
-              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #ccc4b8' }}
             >
               <BookType size={16} />
             </button>
@@ -504,7 +503,6 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
             <button
               className="dashboard-add-btn"
               onClick={handlePrint}
-              style={{ backgroundColor: '#fff', color: '#4b5563', border: '1px solid #ccc4b8' }}
             >
               <Printer size={16} />
             </button>
