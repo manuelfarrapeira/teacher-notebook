@@ -239,6 +239,9 @@ interface Translations {
       searchAvailable: string;
       selectAll: string;
       deselectAll: string;
+      confirmRemoveTitle: string;
+      confirmRemoveMessage: string;
+      confirmRemoveBtn: string;
     };
     schedule: {
       title: string;
@@ -912,6 +915,9 @@ export const translations: Record<Locale, Translations> = {
         searchAvailable: 'Buscar asignaturas...',
         selectAll: 'Seleccionar todas',
         deselectAll: 'Deseleccionar todas',
+        confirmRemoveTitle: 'Eliminar asignatura de la clase',
+        confirmRemoveMessage: '¿Estás seguro de que deseas eliminar la asignatura "{name}" de esta clase? Se perderán todos los criterios de evaluación asociados a esta clase y asignatura.',
+        confirmRemoveBtn: 'Sí, eliminar',
       },
       schedule: {
         title: 'Horario Escolar',
@@ -1586,6 +1592,9 @@ export const translations: Record<Locale, Translations> = {
         searchAvailable: 'Search subjects...',
         selectAll: 'Select all',
         deselectAll: 'Deselect all',
+        confirmRemoveTitle: 'Remove subject from class',
+        confirmRemoveMessage: 'Are you sure you want to remove the subject "{name}" from this class? All evaluation criteria associated with this class and subject will be lost.',
+        confirmRemoveBtn: 'Yes, remove',
       },
       schedule: {
         title: 'School Schedule',

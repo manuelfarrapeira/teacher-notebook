@@ -4,6 +4,7 @@ import { useI18n } from '../../lib/i18n';
 import { SubjectService, Subject } from '../../infrastructure/api/SubjectService';
 import { ErrorModal } from './ErrorModal';
 import { SuccessModal } from './SuccessModal';
+import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 
 /**
  * Props for ClassSubjectsModal component
@@ -49,7 +50,8 @@ export function ClassSubjectsModal({
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-
+  const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
+  const [subjectToRemove, setSubjectToRemove] = useState<Subject | null>(null);
   const availableSubjects = useMemo(() => {
     const assignedIds = new Set(assignedSubjects.map(s => s.id));
     return allSubjects.filter(s => !assignedIds.has(s.id));
@@ -150,9 +152,19 @@ export function ClassSubjectsModal({
   };
 
   /**
-   * Remove a subject from the class
+   * Show confirmation dialog before removing a subject
    */
-  const handleRemoveSubject = async (subjectId: number) => {
+  const handleRemoveSubjectClick = (subject: Subject) => {
+    setSubjectToRemove(subject);
+    setConfirmRemoveOpen(true);
+  };
+
+  /**
+   * Confirm and remove a subject from the class
+   */
+  const handleConfirmRemoveSubject = async () => {
+    if (!subjectToRemove) return;
+    const subjectId = subjectToRemove.id;
     setRemovingId(subjectId);
     try {
       await SubjectService.removeSubjectsFromClass(classId, [subjectId]);
@@ -166,7 +178,17 @@ export function ClassSubjectsModal({
       setErrorDialogOpen(true);
     } finally {
       setRemovingId(null);
+      setConfirmRemoveOpen(false);
+      setSubjectToRemove(null);
     }
+  };
+
+  /**
+   * Cancel subject removal
+   */
+  const handleCancelRemoveSubject = () => {
+    setConfirmRemoveOpen(false);
+    setSubjectToRemove(null);
   };
 
   if (!isOpen) return null;
@@ -201,7 +223,7 @@ export function ClassSubjectsModal({
                         <span key={subject.id} className="subject-badge">
                           {subject.name}
                           <button
-                            onClick={() => handleRemoveSubject(subject.id)}
+                            onClick={() => handleRemoveSubjectClick(subject)}
                             disabled={removingId === subject.id}
                             aria-label={`${t('common.delete')} ${subject.name}`}
                           >
@@ -316,6 +338,17 @@ export function ClassSubjectsModal({
           </div>
         </div>
       </dialog>
+
+      {/* Confirm Remove Subject Modal */}
+      <ConfirmDeleteModal
+        isOpen={confirmRemoveOpen}
+        itemName={subjectToRemove?.name ?? ''}
+        title={t('dashboard.classSubjects.confirmRemoveTitle')}
+        confirmMessage={t('dashboard.classSubjects.confirmRemoveMessage')}
+        onConfirm={handleConfirmRemoveSubject}
+        onCancel={handleCancelRemoveSubject}
+        isDeleting={removingId !== null}
+      />
 
       {/* Error Modal */}
       <ErrorModal
