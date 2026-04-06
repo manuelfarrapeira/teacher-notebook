@@ -41,8 +41,11 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
    - Prefijar las clases según la sección: `dashboard-`, `login-`, `modal-`, etc.
 
 4. **Internacionalización**
+   - La aplicación soporta **3 idiomas: Español (es), Inglés (en) y Gallego (ga)**
    - Todos los textos deben obtenerse con el hook `useI18n()` y la función `t('clave')`
-   - Si se añade un texto nuevo, debe agregarse en ambos idiomas en `src/lib/i18n.tsx`
+   - Si se añade un texto nuevo, **debe agregarse obligatoriamente en los 3 idiomas** (ES, EN y GA) en `src/lib/i18n.tsx`
+   - Nunca dejar un idioma sin traducir; todos los valores del tipo `Translations` deben estar presentes en las 3 entradas del objeto `translations`
+   - El `Accept-Language` que se envía al backend es `es`, `en` o `ga` según el idioma seleccionado
 
 5. **Servicios API**
    - Los modelos de dominio (interfaces/tipos) van en `src/domain/models/`
@@ -60,11 +63,11 @@ Este proyecto es una aplicación de escritorio construida con Electron, React y 
 7. **Checklist para nuevas funcionalidades**
    - Crear archivos en el directorio correcto
    - Usar PascalCase y tipado estricto
-   - Agregar traducciones ES/EN
+   - Agregar traducciones ES/EN/GA
    - Usar solo estilos centralizados
    - Heredar de `BaseService` para nuevos servicios
    - Definir modelos en `src/domain/models/`
-   - Probar en ambos idiomas y en responsive
+   - Probar en los 3 idiomas (ES/EN/GA) y en responsive
    - **Actualizar `README.md`** con la descripción de la nueva funcionalidad en la sección correspondiente
 
 8. **Errores comunes a evitar**

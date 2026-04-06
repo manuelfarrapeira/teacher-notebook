@@ -19,12 +19,21 @@ const UKFlag = () => (
   </svg>
 );
 
+/** Galician flag: white background with blue diagonal band */
+const GalicianFlag = () => (
+  <svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: '3px', border: '1px solid #e0e0e0' }}>
+    <rect width="24" height="18" fill="#FFFFFF"/>
+    <polygon points="0,14 0,18 20,0 16,0" fill="#0070B8"/>
+    <polygon points="4,18 24,2 24,6 8,18" fill="#0070B8"/>
+  </svg>
+);
+
 export function LanguageSelector() {
   const { locale, setLocale, t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleLanguageChange = (newLocale: 'es' | 'en') => {
+  const handleLanguageChange = (newLocale: 'es' | 'en' | 'ga') => {
     setLocale(newLocale);
     setIsOpen(false);
   };
@@ -48,12 +57,24 @@ export function LanguageSelector() {
     schoolYear = urlParams.get('schoolYear') || '';
   }
 
-  const languageName = `${locale === 'es' ? t('common.language.es') : t('common.language.en')}${schoolYear ? ' - ' + schoolYear : ''}`;
+  const getLanguageName = (): string => {
+    if (locale === 'es') return t('common.language.es');
+    if (locale === 'ga') return t('common.language.ga');
+    return t('common.language.en');
+  };
+
+  const getFlag = () => {
+    if (locale === 'es') return <SpainFlag />;
+    if (locale === 'ga') return <GalicianFlag />;
+    return <UKFlag />;
+  };
+
+  const languageName = `${getLanguageName()}${schoolYear ? ' - ' + schoolYear : ''}`;
 
   return (
     <div className="language-selector-container" ref={containerRef}>
       <button onClick={() => setIsOpen(!isOpen)} className="language-button">
-        {locale === 'es' ? <SpainFlag /> : <UKFlag />}
+        {getFlag()}
         <span className="language-name">{languageName}</span>
         <ChevronDown size={16} className={`chevron-icon ${isOpen ? 'open' : ''}`} />
       </button>
@@ -62,6 +83,10 @@ export function LanguageSelector() {
           <button onClick={() => handleLanguageChange('es')} className="language-option">
             <SpainFlag />
             <span>{`${t('common.language.es')}${schoolYear ? ' - ' + schoolYear : ''}`}</span>
+          </button>
+          <button onClick={() => handleLanguageChange('ga')} className="language-option">
+            <GalicianFlag />
+            <span>{`${t('common.language.ga')}${schoolYear ? ' - ' + schoolYear : ''}`}</span>
           </button>
           <button onClick={() => handleLanguageChange('en')} className="language-option">
             <UKFlag />
