@@ -490,7 +490,7 @@ export function TimetableTab({ selectedClass }: Readonly<TimetableTabProps>) {
     <div className="dashboard-card">
       {/* Header */}
       <div className="dashboard-section-header">
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="joined-btn-group">
           <div className="tooltip-container tooltip-bottom" data-tooltip={t('dashboard.classSubjects.manageSubjects')}>
             <button
               className="dashboard-add-btn"

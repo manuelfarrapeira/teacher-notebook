@@ -3895,20 +3895,51 @@ dialog.modal-overlay::backdrop {
 /* Quarter tabs */
 .eval-criteria-quarter-tabs {
   display: flex;
-  gap: 0.25rem;
   margin-left: auto;
 }
 
 .eval-criteria-quarter-tab {
   padding: 0.5rem 1rem;
   border: 1px solid #ccc4b8;
-  border-radius: 0.375rem;
+  border-radius: 0;
   background: white;
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 500;
   color: #7a8078;
   transition: all 0.2s;
+  position: relative;
+}
+
+.eval-criteria-quarter-tab:first-child {
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.eval-criteria-quarter-tab:last-child {
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.eval-criteria-quarter-tab:only-child {
+  border-radius: 0.375rem;
+}
+
+.eval-criteria-quarter-tab + .eval-criteria-quarter-tab {
+  border-left: none;
+}
+
+.eval-criteria-quarter-tab + .eval-criteria-quarter-tab::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background: #000;
+}
+
+.eval-criteria-quarter-tab.active + .eval-criteria-quarter-tab::before,
+.eval-criteria-quarter-tab + .eval-criteria-quarter-tab.active::before {
+  display: none;
 }
 
 /* Export button matching quarter tab height */
@@ -6286,6 +6317,80 @@ td.attendance-weekend-cell {
   }
 }
 
+/* ===================== Joined Button Group (generic) ===================== */
+
+.joined-btn-group {
+  display: flex;
+  align-items: stretch;
+}
+
+.joined-btn-group > * {
+  display: flex;
+  align-items: stretch;
+}
+
+.joined-btn-group > .dashboard-add-btn,
+.joined-btn-group > * > .dashboard-add-btn {
+  border-radius: 0;
+  position: relative;
+  box-shadow: none;
+  height: auto;
+  align-self: stretch;
+}
+
+.joined-btn-group > :first-child > .dashboard-add-btn,
+.joined-btn-group > .dashboard-add-btn:first-child {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.joined-btn-group > :last-child > .dashboard-add-btn,
+.joined-btn-group > .dashboard-add-btn:last-child {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.joined-btn-group > :only-child > .dashboard-add-btn,
+.joined-btn-group > .dashboard-add-btn:only-child {
+  border-radius: 0.5rem;
+}
+
+.joined-btn-group > :not(:first-child) > .dashboard-add-btn::before,
+.joined-btn-group > .dashboard-add-btn + .dashboard-add-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background: #000;
+}
+
+.joined-btn-group > .dashboard-add-btn:hover,
+.joined-btn-group > * > .dashboard-add-btn:hover {
+  transform: none;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .joined-btn-group {
+    width: 100%;
+  }
+
+  .joined-btn-group > *,
+  .joined-btn-group > .dashboard-add-btn {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .joined-btn-group > * > .dashboard-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .joined-btn-group > .dashboard-add-btn {
+    justify-content: center;
+  }
+}
+
 /* ===================== Cooperative Tab ===================== */
 
 .cooperative-actions {
@@ -6293,24 +6398,96 @@ td.attendance-weekend-cell {
   gap: 0.5rem;
   align-items: center;
   flex-wrap: nowrap;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.cooperative-btn-group {
+  display: flex;
+  align-items: stretch;
+}
+
+.cooperative-btn-group .dashboard-add-btn {
+  border-radius: 0;
+  position: relative;
+  box-shadow: none;
+}
+
+.cooperative-btn-group .dashboard-add-btn:first-child {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.cooperative-btn-group .dashboard-add-btn:last-child {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.cooperative-btn-group .dashboard-add-btn:only-child {
+  border-radius: 0.5rem;
+}
+
+.cooperative-btn-group .dashboard-add-btn + .dashboard-add-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background: #000;
+}
+
+.cooperative-btn-group .dashboard-add-btn:hover {
+  transform: none;
+  z-index: 1;
 }
 
 .cooperative-icon-actions {
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
+  align-items: stretch;
   flex-shrink: 0;
   flex-wrap: nowrap;
 }
 
+.cooperative-icon-actions .dashboard-add-btn {
+  border-radius: 0;
+  position: relative;
+  box-shadow: none;
+}
+
+.cooperative-icon-actions > :first-child .dashboard-add-btn {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.cooperative-icon-actions > :last-child .dashboard-add-btn {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.cooperative-icon-actions > :only-child .dashboard-add-btn {
+  border-radius: 0.5rem;
+}
+
+.cooperative-icon-actions > :not(:first-child) .dashboard-add-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background: #000;
+}
+
+.cooperative-icon-actions .dashboard-add-btn:hover {
+  transform: none;
+  z-index: 1;
+}
+
 .cooperative-delete-btn {
   background: #dc2626 !important;
-  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.3);
+  box-shadow: none !important;
 }
 
 .cooperative-delete-btn:hover {
   background: #b91c1c !important;
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+  box-shadow: none !important;
 }
 
 /* Groups grid */
@@ -6524,7 +6701,11 @@ td.attendance-weekend-cell {
     width: 100%;
   }
 
-  .cooperative-main-btn {
+  .cooperative-btn-group {
+    flex: 1 1 100%;
+  }
+
+  .cooperative-btn-group .dashboard-add-btn {
     flex: 1 1 0;
     min-width: 0;
     justify-content: center;
@@ -6591,13 +6772,12 @@ td.attendance-weekend-cell {
 /* Quarter tab bar */
 .cooperative-quarter-tabs {
   display: flex;
-  gap: 0.25rem;
 }
 
 .cooperative-quarter-tab {
   padding: 0.5rem 1.25rem;
   border: 1px solid #ccc4b8;
-  border-radius: 0.375rem;
+  border-radius: 0;
   background: white;
   cursor: pointer;
   font-size: 0.85rem;
@@ -6607,6 +6787,38 @@ td.attendance-weekend-cell {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  position: relative;
+}
+
+.cooperative-quarter-tab:first-child {
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.cooperative-quarter-tab:last-child {
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.cooperative-quarter-tab:only-child {
+  border-radius: 0.375rem;
+}
+
+.cooperative-quarter-tab + .cooperative-quarter-tab {
+  border-left: none;
+}
+
+.cooperative-quarter-tab + .cooperative-quarter-tab::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background: #000;
+}
+
+.cooperative-quarter-tab.active + .cooperative-quarter-tab::before,
+.cooperative-quarter-tab + .cooperative-quarter-tab.active::before {
+  display: none;
 }
 
 .cooperative-quarter-tab:hover {

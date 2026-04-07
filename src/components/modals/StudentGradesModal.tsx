@@ -506,22 +506,24 @@ export function StudentGradesModal({
 
             {/* Quarter Tabs */}
             {!loading && !error && quarters.length > 0 && (
-              <div className="eval-criteria-quarter-tabs" style={{ marginBottom: '1rem', marginLeft: 0 }}>
-                {[1, 2, 3].map(q => (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                <div className="eval-criteria-quarter-tabs" style={{ marginBottom: 0, marginLeft: 0 }}>
+                  {[1, 2, 3].map(q => (
+                    <button
+                      key={q}
+                      className={`eval-criteria-quarter-tab ${activeTab === q ? 'active' : ''}`}
+                      onClick={() => setActiveTab(q)}
+                    >
+                      {t(`dashboard.evalCriteria.quarter${q}`)}
+                    </button>
+                  ))}
                   <button
-                    key={q}
-                    className={`eval-criteria-quarter-tab ${activeTab === q ? 'active' : ''}`}
-                    onClick={() => setActiveTab(q)}
+                    className={`eval-criteria-quarter-tab ${activeTab === 'final' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('final')}
                   >
-                    {t(`dashboard.evalCriteria.quarter${q}`)}
+                    {t('dashboard.evalCriteria.finalGrade')}
                   </button>
-                ))}
-                <button
-                  className={`eval-criteria-quarter-tab ${activeTab === 'final' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('final')}
-                >
-                  {t('dashboard.evalCriteria.finalGrade')}
-                </button>
+                </div>
                 {classSubjects.length > 0 && (
                   <PortalTooltip text={t('dashboard.evalCriteria.radarChart.title')} as="span">
                     <button

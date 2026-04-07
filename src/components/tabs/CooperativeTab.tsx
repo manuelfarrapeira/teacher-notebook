@@ -553,44 +553,46 @@ export function CooperativeTab({ selectedClass }: CooperativeTabProps) {
       <div className="dashboard-section-header">
         <h2 className="dashboard-section-title">{t('dashboard.cooperative.title')}</h2>
         <div className="cooperative-actions">
-          {/* Generate button — only enabled if no persisted groups */}
-          <button
-            className="dashboard-add-btn cooperative-main-btn"
-            onClick={() => setShowPriorityDialog(true)}
-            disabled={isSaved || saving}
-            title={isSaved ? t('dashboard.cooperative.generateDisabledHint') : ''}
-          >
-            <Shuffle size={16} className="icon-margin-right" />
-            {t('dashboard.cooperative.generateGroups')}
-          </button>
-
-          {/* Save / Update button — disabled if not all students assigned or invalid group sizes */}
-          {groups.length > 0 && (
+          <div className="cooperative-btn-group">
+            {/* Generate button — only enabled if no persisted groups */}
             <button
-              className="dashboard-add-btn cooperative-main-btn"
-              onClick={handleSave}
-              disabled={saving || !canSave}
-              title={!allAssigned ? t('dashboard.cooperative.allStudentsMustBeAssigned') : !allGroupsValidSize ? t('dashboard.cooperative.groupSizeError') : ''}
+              className="dashboard-add-btn"
+              onClick={() => setShowPriorityDialog(true)}
+              disabled={isSaved || saving}
+              title={isSaved ? t('dashboard.cooperative.generateDisabledHint') : ''}
             >
-              {saving
-                ? <Loader2 className="animate-spin" size={16} />
-                : <Save size={16} className="icon-margin-right" />
-              }
-              {isSaved ? t('dashboard.cooperative.updateGroups') : t('dashboard.cooperative.saveGroups')}
+              <Shuffle size={16} className="icon-margin-right" />
+              {t('dashboard.cooperative.generateGroups')}
             </button>
-          )}
 
-          {/* Delete all button */}
-          {groups.length > 0 && (
-            <button
-              className="dashboard-add-btn cooperative-delete-btn cooperative-main-btn"
-              onClick={() => setConfirmDeleteOpen(true)}
-              disabled={saving}
-            >
-              <Trash2 size={16} className="icon-margin-right" />
-              {t('dashboard.cooperative.deleteAllGroups')}
-            </button>
-          )}
+            {/* Save / Update button — disabled if not all students assigned or invalid group sizes */}
+            {groups.length > 0 && (
+              <button
+                className="dashboard-add-btn"
+                onClick={handleSave}
+                disabled={saving || !canSave}
+                title={!allAssigned ? t('dashboard.cooperative.allStudentsMustBeAssigned') : !allGroupsValidSize ? t('dashboard.cooperative.groupSizeError') : ''}
+              >
+                {saving
+                  ? <Loader2 className="animate-spin" size={16} />
+                  : <Save size={16} className="icon-margin-right" />
+                }
+                {isSaved ? t('dashboard.cooperative.updateGroups') : t('dashboard.cooperative.saveGroups')}
+              </button>
+            )}
+
+            {/* Delete all button */}
+            {groups.length > 0 && (
+              <button
+                className="dashboard-add-btn cooperative-delete-btn"
+                onClick={() => setConfirmDeleteOpen(true)}
+                disabled={saving}
+              >
+                <Trash2 size={16} className="icon-margin-right" />
+                {t('dashboard.cooperative.deleteAllGroups')}
+              </button>
+            )}
+          </div>
 
           {/* Reload + Collapse icon buttons */}
           <div className="cooperative-icon-actions">
