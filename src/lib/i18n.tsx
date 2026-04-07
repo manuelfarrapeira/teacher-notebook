@@ -686,6 +686,15 @@ interface Translations {
       ga: string;
     };
   };
+  update: {
+    downloading: string;
+    ready: string;
+    installNow: string;
+    error: string;
+    checkManually: string;
+    upToDate: string;
+    version: string;
+  };
 }
 
 export const translations: Record<Locale, Translations> = {
@@ -1375,6 +1384,15 @@ export const translations: Record<Locale, Translations> = {
         en: 'INGLÉS',
         ga: 'GALEGO'
       }
+    },
+    update: {
+      downloading: 'Descargando nueva versión...',
+      ready: 'Nueva versión lista. Reinicia para actualizar.',
+      installNow: 'Reiniciar y actualizar',
+      error: 'Error al buscar actualizaciones.',
+      checkManually: 'Buscar actualizaciones',
+      upToDate: 'La aplicación está actualizada.',
+      version: 'Versión'
     }
   },
   en: {
@@ -2063,6 +2081,15 @@ export const translations: Record<Locale, Translations> = {
         en: 'ENGLISH',
         ga: 'GALICIAN'
       }
+    },
+    update: {
+      downloading: 'Downloading new version...',
+      ready: 'New version ready. Restart to update.',
+      installNow: 'Restart and update',
+      error: 'Error checking for updates.',
+      checkManually: 'Check for updates',
+      upToDate: 'The application is up to date.',
+      version: 'Version'
     }
   },
   ga: {
@@ -2751,6 +2778,15 @@ export const translations: Record<Locale, Translations> = {
         en: 'INGLÉS',
         ga: 'GALEGO'
       }
+    },
+    update: {
+      downloading: 'Descargando nova versión...',
+      ready: 'Nova versión lista. Reinicia para actualizar.',
+      installNow: 'Reiniciar e actualizar',
+      error: 'Erro ao buscar actualizacións.',
+      checkManually: 'Buscar actualizacións',
+      upToDate: 'A aplicación está actualizada.',
+      version: 'Versión'
     }
   }
 };

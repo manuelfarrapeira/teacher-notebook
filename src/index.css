@@ -7096,3 +7096,164 @@ td.attendance-weekend-cell {
   margin: 1.5rem 0;
 }
 
+
+/* ==============================
+   Auto-Update Notification
+   ============================== */
+
+.update-notification {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 10000;
+  animation: updateSlideIn 0.4s ease-out;
+}
+
+.update-notification-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--color-border, #D8D2C8);
+  border-left: 4px solid #2c5f4a;
+  border-radius: var(--radius, 0.625rem);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-family: 'Outfit', 'Source Sans 3', sans-serif;
+  font-size: 0.875rem;
+  color: var(--color-foreground, #1A1F1C);
+  max-width: 480px;
+}
+
+.update-notification-icon {
+  flex-shrink: 0;
+  color: #2c5f4a;
+}
+
+.update-notification-icon.update-success {
+  color: #2c5f4a;
+}
+
+.update-notification-icon.update-error {
+  color: #B82E22;
+}
+
+.update-notification-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.update-notification-btn {
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm, 0.375rem);
+  cursor: pointer;
+  font-family: 'Outfit', 'Source Sans 3', sans-serif;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  transition: all 0.2s ease;
+  padding: 0.5rem 1rem;
+}
+
+.update-notification-btn.install {
+  background: #2c5f4a;
+  color: #ffffff;
+}
+
+.update-notification-btn.install:hover {
+  background: #1e4a38;
+}
+
+.update-notification-btn.dismiss {
+  background: transparent;
+  color: var(--color-muted-foreground, #6E756F);
+  padding: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.update-notification-btn.dismiss:hover {
+  background: var(--color-accent, #EEEBE4);
+  color: var(--color-foreground, #1A1F1C);
+}
+
+@keyframes updateSlideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .update-notification {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+  }
+  .update-notification-content {
+    max-width: 100%;
+  }
+}
+
+
+/* ==============================
+   Settings Tab
+   ============================== */
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0.5rem 0;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid var(--color-border, #D8D2C8);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-label {
+  font-family: 'Outfit', 'Source Sans 3', sans-serif;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--color-foreground, #1A1F1C);
+}
+
+.settings-value {
+  font-family: 'Outfit', 'Source Sans 3', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--color-muted-foreground, #6E756F);
+}
+
+.settings-update-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-family: 'Outfit', 'Source Sans 3', sans-serif;
+}
+
+.settings-up-to-date {
+  color: #2c5f4a;
+}
+
+.settings-update-available {
+  color: #C4983C;
+}
+
+.settings-update-error {
+  color: #B82E22;
+}
+

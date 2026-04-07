@@ -147,7 +147,18 @@
 - Modal de gestión rápida de asignaturas de la clase
 
 ### ⚙️ Configuración
-- Panel de configuración del sistema (en desarrollo)
+- Panel de ajustes con versión de la aplicación
+- Búsqueda manual de actualizaciones
+- Selector de idioma
+
+### 🔄 Auto-actualización (OTA)
+- Sistema de **actualización automática silenciosa** con Squirrel.Windows (solo entorno **pro**)
+- Verificación automática cada 30 minutos y al iniciar la aplicación
+- Descarga en segundo plano del nuevo paquete `.nupkg`
+- **Notificación flotante** con botón "Reiniciar y actualizar" cuando la descarga termina
+- Botón de **buscar actualizaciones manualmente** en la pestaña de Configuración
+- Los artefactos se generan en `out/make/squirrel.windows/x64/`
+- Para publicar: subir `RELEASES` y `.nupkg` a `https://codefm.synology.me/teacher_notebook/`
 
 ### 🎨 Interfaz de Usuario
 - **Diseño responsivo** adaptado a escritorio y móvil

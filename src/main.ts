@@ -1,5 +1,6 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, autoUpdater } from 'electron';
 import path from 'node:path';
+import https from 'node:https';
 import started from 'electron-squirrel-startup';
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
@@ -9,12 +10,95 @@ if (started) {
   app.quit();
 }
 
+/** URL where RELEASES and .nupkg files are hosted on the NAS */
+const UPDATE_FEED_URL = 'https://codefm.synology.me/teacher_notebook/';
+
+/** Reference to the main window for IPC communication */
+let mainWindow: BrowserWindow | null = null;
+
+/** Whether an update has been downloaded and is ready to install */
+let updateDownloaded = false;
+
+/**
+ * Configures the Squirrel.Windows auto-updater.
+ * Only runs in packaged production builds (pro), not in dev or pre.
+ */
+function setupAutoUpdater() {
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    console.log('[AutoUpdater] Skipping — running in development mode');
+    return;
+  }
+
+  const env = process.env.VITE_ENV || 'pre';
+  if (env !== 'pro') {
+    console.log('[AutoUpdater] Skipping — auto-update is only enabled for pro');
+    return;
+  }
+
+  try {
+    autoUpdater.setFeedURL({ url: UPDATE_FEED_URL });
+    console.log(`[AutoUpdater] Feed URL set to: ${UPDATE_FEED_URL}`);
+  } catch (err) {
+    console.error('[AutoUpdater] Failed to set feed URL:', err);
+    return;
+  }
+
+  autoUpdater.on('checking-for-update', () => {
+    console.log('[AutoUpdater] Checking for updates...');
+    mainWindow?.webContents.send('update-status', 'checking');
+  });
+
+  autoUpdater.on('update-available', () => {
+    console.log('[AutoUpdater] Update available — downloading...');
+    mainWindow?.webContents.send('update-status', 'downloading');
+  });
+
+  autoUpdater.on('update-not-available', () => {
+    console.log('[AutoUpdater] App is up to date.');
+    mainWindow?.webContents.send('update-status', 'not-available');
+  });
+
+  autoUpdater.on('update-downloaded', (_event, releaseNotes, releaseName) => {
+    console.log(`[AutoUpdater] Update downloaded: ${releaseName}`);
+    updateDownloaded = true;
+    mainWindow?.webContents.send('update-status', 'downloaded', {
+      releaseName,
+      releaseNotes,
+    });
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('[AutoUpdater] Error:', err.message);
+    mainWindow?.webContents.send('update-status', 'error', err.message);
+  });
+
+  // Check 10 seconds after start, then every 30 minutes
+  setTimeout(async () => {
+    try {
+      const content = await fetchReleases();
+      console.log(`[AutoUpdater] RELEASES pre-check OK: "${content}"`);
+      autoUpdater.checkForUpdates();
+    } catch (err) {
+      console.error('[AutoUpdater] Initial check failed:', err instanceof Error ? err.message : err);
+    }
+  }, 10_000);
+
+  setInterval(async () => {
+    try {
+      await fetchReleases();
+      autoUpdater.checkForUpdates();
+    } catch (err) {
+      console.error('[AutoUpdater] Periodic check failed:', err instanceof Error ? err.message : err);
+    }
+  }, 30 * 60 * 1000);
+}
+
 const createWindow = () => {
   const iconPath = process.platform === 'win32'
     ? path.join(__dirname, '../../public/favicon.ico')
     : path.join(__dirname, '../../public/favicon.png');
 
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
     minWidth: 500,
@@ -36,6 +120,14 @@ const createWindow = () => {
   if (process.env.VITE_ENV === 'local') {
     mainWindow.webContents.openDevTools();
   }
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    setupAutoUpdater();
+  });
 };
 
 app.on('ready', createWindow);
@@ -52,8 +144,77 @@ app.on('activate', () => {
   }
 });
 
+// --- IPC Handlers ---
+
 ipcMain.handle('get-env', () => {
   console.log('VITE_ENV:', process.env.VITE_ENV);
   return process.env.VITE_ENV || 'pre';
 });
 
+ipcMain.handle('get-app-version', () => {
+  return app.getVersion();
+});
+
+/**
+ * Pre-checks that the RELEASES file is accessible via Node.js https.
+ * Returns the content if OK, or throws with a descriptive error.
+ */
+function fetchReleases(): Promise<string> {
+  const url = `${UPDATE_FEED_URL}RELEASES`;
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`RELEASES returned HTTP ${res.statusCode}`));
+        res.resume();
+        return;
+      }
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => resolve(data.trim()));
+    });
+    req.on('error', (err) => reject(err));
+    req.setTimeout(10_000, () => {
+      req.destroy();
+      reject(new Error('Timeout fetching RELEASES (10s)'));
+    });
+  });
+}
+
+/** Manually trigger an update check (pro only) with diagnostics */
+ipcMain.handle('check-for-updates', async () => {
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    return { status: 'dev-mode' };
+  }
+  const env = process.env.VITE_ENV || 'pre';
+  if (env !== 'pro') {
+    return { status: 'not-pro' };
+  }
+
+  // Step 1: pre-check RELEASES file accessibility
+  try {
+    const content = await fetchReleases();
+    console.log(`[AutoUpdater] RELEASES content: "${content}"`);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[AutoUpdater] Pre-check failed: ${msg}`);
+    mainWindow?.webContents.send('update-status', 'error', msg);
+    return { status: 'error', message: msg };
+  }
+
+  // Step 2: call Squirrel autoUpdater
+  try {
+    autoUpdater.checkForUpdates();
+    return { status: 'checking' };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    mainWindow?.webContents.send('update-status', 'error', msg);
+    return { status: 'error', message: msg };
+  }
+});
+
+/** Quit and install the downloaded update */
+ipcMain.handle('install-update', () => {
+  if (updateDownloaded) {
+    autoUpdater.quitAndInstall();
+  }
+});

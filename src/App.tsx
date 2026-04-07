@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LoginScreen } from './components/LoginScreen';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Dashboard } from './components/Dashboard';
+import { UpdateNotification } from './components/UpdateNotification';
 import { AuthService } from './infrastructure/api/AuthService';
 import { useI18n } from './lib/i18n';
 
@@ -72,7 +73,12 @@ function App() {
     return <LoadingScreen />;
   }
 
-  return <Dashboard onLogout={handleLogout} userName={userName} />;
+  return (
+    <>
+      <Dashboard onLogout={handleLogout} userName={userName} />
+      <UpdateNotification />
+    </>
+  );
 }
 
 export default App;
