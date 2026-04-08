@@ -653,6 +653,8 @@ interface Translations {
       selectMonth: string;
       selectYear: string;
       close: string;
+      moveSuccess: string;
+      moveError: string;
       validation: {
         titleRequired: string;
         titleMaxLength: string;
@@ -1352,6 +1354,8 @@ export const translations: Record<Locale, Translations> = {
         selectMonth: 'Seleccionar mes',
         selectYear: 'Seleccionar año',
         close: 'Cerrar',
+        moveSuccess: 'Alerta movida correctamente',
+        moveError: 'Error al mover la alerta',
         validation: {
           titleRequired: 'El título es obligatorio',
           titleMaxLength: 'El título no puede superar los 100 caracteres',
@@ -2049,6 +2053,8 @@ export const translations: Record<Locale, Translations> = {
         selectMonth: 'Select month',
         selectYear: 'Select year',
         close: 'Close',
+        moveSuccess: 'Alert moved successfully',
+        moveError: 'Error moving alert',
         validation: {
           titleRequired: 'Title is required',
           titleMaxLength: 'Title cannot exceed 100 characters',
@@ -2746,6 +2752,8 @@ export const translations: Record<Locale, Translations> = {
         selectMonth: 'Seleccionar mes',
         selectYear: 'Seleccionar ano',
         close: 'Pechar',
+        moveSuccess: 'Alerta movida correctamente',
+        moveError: 'Erro ao mover a alerta',
         validation: {
           titleRequired: 'O título é obrigatorio',
           titleMaxLength: 'O título non pode superar os 100 caracteres',

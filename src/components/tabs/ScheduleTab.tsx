@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import { ChevronLeft, ChevronRight, Loader2, X, Bell } from 'lucide-react';
 import { useI18n } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
-import { CalendarAlertService, CalendarAlert } from '../../infrastructure/api/CalendarAlertService';
+import { CalendarAlertService, CalendarAlert, CalendarAlertRequestDTO } from '../../infrastructure/api/CalendarAlertService';
 import { ApiErrorException } from '../../infrastructure/api/BaseService';
 import { CalendarAlertFormModal } from '../modals/CalendarAlertFormModal';
 import { ErrorModal } from '../modals/ErrorModal';
+import { SuccessModal } from '../modals/SuccessModal';
 
 const MAX_VISIBLE_EVENTS = 3;
 
@@ -170,10 +171,13 @@ interface CalendarCellProps {
   onBadgeClick: (e: React.MouseEvent, alert: CalendarAlert) => void;
   onMoreClick: (e: React.MouseEvent, day: Date, dayAlerts: CalendarAlert[]) => void;
   moreEventsLabel: (n: number) => string;
+  onAlertDragStart: (alert: CalendarAlert) => void;
+  onAlertDrop: (targetDate: Date) => void;
 }
 
-function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberClick, onBadgeClick, onMoreClick, moreEventsLabel }: Readonly<CalendarCellProps>) {
+function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberClick, onBadgeClick, onMoreClick, moreEventsLabel, onAlertDragStart, onAlertDrop }: Readonly<CalendarCellProps>) {
   const { t } = useI18n();
+  const [dragOver, setDragOver] = useState(false);
   const visibleAlerts = dayAlerts.slice(0, MAX_VISIBLE_EVENTS);
   const hiddenCount = dayAlerts.length - visibleAlerts.length;
   const isOtherMonth = day.getMonth() !== currentMonth;
@@ -183,10 +187,27 @@ function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberCl
     'calendar-cell',
     isOtherMonth ? 'other-month' : '',
     isTodayCell ? 'today' : '',
+    dragOver ? 'drag-over' : '',
   ].filter(Boolean).join(' ');
 
   const dateStr = `${day.getDate()}/${day.getMonth() + 1}/${day.getFullYear()}`;
   const addAlertTooltip = t('dashboard.calendar.addAlertOn').replace('{date}', dateStr);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    onAlertDrop(day);
+  };
 
   return (
     <div
@@ -194,6 +215,9 @@ function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberCl
       onClick={() => onCellClick(day)}
       onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onCellClick(day); }}
       aria-label={addAlertTooltip}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       <button
         className="calendar-day-number tooltip-container tooltip-bottom"
@@ -218,6 +242,17 @@ function CalendarCell({ day, currentMonth, dayAlerts, onCellClick, onDayNumberCl
               className={badgeClass}
               onClick={e => onBadgeClick(e, alert)}
               data-tooltip={alert.title}
+              draggable
+              onDragStart={e => {
+                e.stopPropagation();
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', String(alert.id));
+                (e.currentTarget as HTMLElement).classList.add('dragging');
+                onAlertDragStart(alert);
+              }}
+              onDragEnd={e => {
+                (e.currentTarget as HTMLElement).classList.remove('dragging');
+              }}
             >
               <span className="calendar-event-badge-text">
                 {alert.startTime ? `${alert.startTime} ` : ''}{alert.title}
@@ -253,6 +288,10 @@ export function ScheduleTab() {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [popupState, setPopupState] = useState<PopupState | null>(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+
+  const dragAlertRef = useRef<CalendarAlert | null>(null);
 
   const fetchAlerts = useCallback(async (year: number, month: number) => {
     setLoading(true);
@@ -341,6 +380,38 @@ export function ScheduleTab() {
 
   const handleDeleted = () => {
     fetchAlerts(currentYear, currentMonth);
+  };
+
+  const handleAlertDragStart = (alert: CalendarAlert) => {
+    dragAlertRef.current = alert;
+  };
+
+  const handleAlertDrop = async (targetDate: Date) => {
+    const alert = dragAlertRef.current;
+    dragAlertRef.current = null;
+    if (!alert) return;
+
+    const targetKey = formatDayKey(targetDate);
+    if (alert.date === targetKey) return;
+
+    const dto: CalendarAlertRequestDTO = {
+      date: targetKey,
+      title: alert.title,
+      description: alert.description ?? undefined,
+      startTime: alert.startTime ?? undefined,
+      endTime: alert.endTime ?? undefined,
+    };
+
+    try {
+      await CalendarAlertService.update(alert.id, dto);
+      setSuccessMessage(t('dashboard.calendar.moveSuccess'));
+      setSuccessModalOpen(true);
+      fetchAlerts(currentYear, currentMonth);
+    } catch (error) {
+      const msg = getErrorMessage(error, t('dashboard.calendar.moveError'));
+      setErrorMessage(msg);
+      setErrorModalOpen(true);
+    }
   };
 
   const weeks = buildCalendarGrid(currentYear, currentMonth);
@@ -447,6 +518,8 @@ export function ScheduleTab() {
                     onBadgeClick={handleBadgeClick}
                     onMoreClick={handleMoreClick}
                     moreEventsLabel={n => t('dashboard.calendar.moreEvents').replace('{n}', String(n))}
+                    onAlertDragStart={handleAlertDragStart}
+                    onAlertDrop={handleAlertDrop}
                   />
                 );
               })
@@ -477,6 +550,12 @@ export function ScheduleTab() {
         isOpen={errorModalOpen}
         message={errorMessage}
         onClose={() => setErrorModalOpen(false)}
+      />
+
+      <SuccessModal
+        isOpen={successModalOpen}
+        message={successMessage}
+        onClose={() => setSuccessModalOpen(false)}
       />
     </div>
   );
