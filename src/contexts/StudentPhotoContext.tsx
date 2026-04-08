@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useRef, ReactNode, useMemo, useCallback } from 'react';
 
 /**
  * Interface for cached photo data
@@ -15,6 +15,7 @@ interface StudentPhotoContextType {
   getCachedPhoto: (studentId: number) => string | null;
   setCachedPhoto: (studentId: number, url: string) => void;
   invalidatePhoto: (studentId: number) => void;
+  getCacheVersion: (studentId: number) => number;
   clearCache: () => void;
 }
 
@@ -23,68 +24,80 @@ const StudentPhotoContext = createContext<StudentPhotoContextType | undefined>(u
 /**
  * Provider component for student photo cache.
  * Manages a global cache of photo URLs to avoid redundant API calls.
+ * Uses a ref for the cache Map (no re-renders on cache hits) and
+ * a state-based version map for targeted invalidation signals.
  */
 export function StudentPhotoProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const [cache, setCache] = useState<Map<number, PhotoCache>>(new Map());
+  const cacheRef = useRef<Map<number, PhotoCache>>(new Map());
+  const [versions, setVersions] = useState<Map<number, number>>(new Map());
 
   /**
-   * Get cached photo URL for a student
+   * Get cached photo URL for a student.
+   * Reads from a ref so the function reference is stable.
    * @param studentId - Student ID
    * @returns Cached URL or null if not cached
    */
   const getCachedPhoto = useCallback((studentId: number): string | null => {
-    const cached = cache.get(studentId);
+    const cached = cacheRef.current.get(studentId);
     return cached ? cached.url : null;
-  }, [cache]);
+  }, []);
 
   /**
-   * Store photo URL in cache
+   * Store photo URL in cache.
+   * Updates the ref without causing re-renders.
    * @param studentId - Student ID
    * @param url - Object URL from blob
    */
   const setCachedPhoto = useCallback((studentId: number, url: string) => {
-    setCache(prev => {
-      const newCache = new Map(prev);
-      newCache.set(studentId, {
-        url,
-        timestamp: Date.now()
-      });
-      return newCache;
-    });
+    cacheRef.current.set(studentId, { url, timestamp: Date.now() });
   }, []);
 
   /**
-   * Remove photo from cache (used when uploading/deleting photo)
+   * Remove photo from cache and signal the specific StudentPhoto component to reload.
+   * Revokes the old object URL and increments the version counter.
    * @param studentId - Student ID
    */
   const invalidatePhoto = useCallback((studentId: number) => {
-    setCache(prev => {
-      const newCache = new Map(prev);
-      const cached = newCache.get(studentId);
-      if (cached) {
-        URL.revokeObjectURL(cached.url);
-      }
-      newCache.delete(studentId);
-      return newCache;
+    const cached = cacheRef.current.get(studentId);
+    if (cached) {
+      URL.revokeObjectURL(cached.url);
+    }
+    cacheRef.current.delete(studentId);
+    setVersions(prev => {
+      const next = new Map(prev);
+      next.set(studentId, (prev.get(studentId) ?? 0) + 1);
+      return next;
     });
   }, []);
 
   /**
-   * Clear all cached photos (used on logout)
+   * Get the invalidation version for a specific student.
+   * Used as an effect dependency in StudentPhoto to detect cache invalidation.
+   * @param studentId - Student ID
+   * @returns Current version number (0 if never invalidated)
+   */
+  const getCacheVersion = useCallback((studentId: number): number => {
+    return versions.get(studentId) ?? 0;
+  }, [versions]);
+
+  /**
+   * Clear all cached photos and revoke all object URLs (used on logout)
    */
   const clearCache = useCallback(() => {
-    cache.forEach(cached => {
+    cacheRef.current.forEach(cached => {
       URL.revokeObjectURL(cached.url);
     });
-    setCache(new Map());
-  }, [cache]);
+    cacheRef.current.clear();
+    setVersions(new Map());
+  }, []);
 
   const contextValue = useMemo(() => ({
     getCachedPhoto,
     setCachedPhoto,
     invalidatePhoto,
+    getCacheVersion,
     clearCache
-  }), [getCachedPhoto, setCachedPhoto, invalidatePhoto, clearCache]);
+  }), [getCachedPhoto, setCachedPhoto, invalidatePhoto, getCacheVersion, clearCache]);
 
   return (
     <StudentPhotoContext.Provider value={contextValue}>

@@ -32,7 +32,10 @@ export function StudentPhoto({
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { getCachedPhoto, setCachedPhoto } = useStudentPhotoCache();
+  const { getCachedPhoto, setCachedPhoto, getCacheVersion } = useStudentPhotoCache();
+
+  /** Track the invalidation version for this specific student */
+  const cacheVersion = getCacheVersion(studentId);
 
   useEffect(() => {
     if (!photoFileName) return;
@@ -57,16 +60,21 @@ export function StudentPhoto({
   useEffect(() => {
     if (!isVisible || !photoFileName) return;
 
+    // Check cache first (stable function, reads from ref)
     const cachedUrl = getCachedPhoto(studentId);
     if (cachedUrl) {
       setImageUrl(cachedUrl);
+      setError(false);
       return;
     }
+
+    let cancelled = false;
 
     const loadPhoto = async () => {
       try {
         setLoading(true);
         setError(false);
+        setImageUrl(null);
 
         const url = StudentService.getPhotoUrl(studentId);
 
@@ -75,6 +83,7 @@ export function StudentPhoto({
         });
 
         if (!response.ok) throw new Error('Photo load failed');
+        if (cancelled) return;
 
         const blob = await response.blob();
         const objectUrl = URL.createObjectURL(blob);
@@ -82,23 +91,23 @@ export function StudentPhoto({
         setCachedPhoto(studentId, objectUrl);
         setImageUrl(objectUrl);
       } catch (err) {
-        console.error('Error loading student photo:', err);
-        setError(true);
+        if (!cancelled) {
+          console.error('Error loading student photo:', err);
+          setError(true);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
     loadPhoto();
-  }, [isVisible, photoFileName, studentId, getCachedPhoto, setCachedPhoto]);
 
-  useEffect(() => {
     return () => {
-      if (imageUrl && !getCachedPhoto(studentId)) {
-        URL.revokeObjectURL(imageUrl);
-      }
+      cancelled = true;
     };
-  }, [imageUrl, studentId, getCachedPhoto]);
+  }, [isVisible, photoFileName, studentId, cacheVersion, getCachedPhoto, setCachedPhoto]);
 
   return (
     <div

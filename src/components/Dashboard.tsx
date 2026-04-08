@@ -16,7 +16,21 @@ import { LoadingModal } from './modals/LoadingModal';
 import { AlertMessage } from './ui/alert';
 import { TodayAlertsModal } from './modals/TodayAlertsModal';
 import { useI18n } from '../lib/i18n';
-import { StudentPhotoProvider } from '../contexts/StudentPhotoContext';
+import { StudentPhotoProvider, useStudentPhotoCache } from '../contexts/StudentPhotoContext';
+
+/**
+ * Component that clears the student photo cache on unmount (e.g. logout).
+ * Must be rendered inside StudentPhotoProvider.
+ */
+function PhotoCacheCleaner() {
+  const { clearCache } = useStudentPhotoCache();
+  useEffect(() => {
+    return () => {
+      clearCache();
+    };
+  }, [clearCache]);
+  return null;
+}
 
 function getTodayKey(): string {
   const now = new Date();
@@ -150,6 +164,7 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
 
   return (
     <StudentPhotoProvider>
+      <PhotoCacheCleaner />
       <div className="dashboard-container">
         {isMenuOpen && (
           <button
