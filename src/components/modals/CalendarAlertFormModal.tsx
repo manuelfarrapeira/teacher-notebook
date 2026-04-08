@@ -157,9 +157,7 @@ export function CalendarAlertFormModal({
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    const dateStr = isEditMode && alertToEdit
-      ? alertToEdit.date
-      : inputValueToApiFormat(formData.date);
+    const dateStr = inputValueToApiFormat(formData.date);
 
     const dto: CalendarAlertRequestDTO = {
       date: dateStr,
@@ -247,7 +245,7 @@ export function CalendarAlertFormModal({
         onClose={onClose}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
-          <div className="modal-content" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+          <div className="modal-content" style={{ maxHeight: '90vh', overflowY: 'auto', width: '95vw', maxWidth: '640px' }}>
             <h3 className="modal-title">{modalTitle}</h3>
 
             <div className="modal-body">
@@ -261,8 +259,6 @@ export function CalendarAlertFormModal({
                   type="date"
                   value={formData.date}
                   onChange={e => handleFieldChange('date', e.target.value)}
-                  readOnly={isEditMode}
-                  style={isEditMode ? { backgroundColor: '#f0ece5', cursor: 'default' } : undefined}
                   disabled={submitting}
                 />
                 {formErrors.date && (
