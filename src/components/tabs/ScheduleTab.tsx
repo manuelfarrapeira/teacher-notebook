@@ -296,19 +296,29 @@ export function ScheduleTab() {
   const fetchAlerts = useCallback(async (year: number, month: number) => {
     setLoading(true);
     try {
-      const prevMonth = month === 0 ? 11 : month - 1;
-      const prevYear = month === 0 ? year - 1 : year;
-      const nextMonth = month === 11 ? 0 : month + 1;
-      const nextYear = month === 11 ? year + 1 : year;
+      const apiMonth = month + 1;
 
-      const [current, prev, next] = await Promise.all([
-        CalendarAlertService.getByMonthYear(year, month + 1),
-        CalendarAlertService.getByMonthYear(prevYear, prevMonth + 1),
-        CalendarAlertService.getByMonthYear(nextYear, nextMonth + 1),
-      ]);
+      let allAlerts: CalendarAlert[];
 
+      if (apiMonth === 1) {
+        const [prev, curr] = await Promise.all([
+          CalendarAlertService.getByMonthYear(year - 1, 12),
+          CalendarAlertService.getByMonthRange(year, 1, 2),
+        ]);
+        allAlerts = [...prev, ...curr];
+      } else if (apiMonth === 12) {
+        const [curr, next] = await Promise.all([
+          CalendarAlertService.getByMonthRange(year, 11, 12),
+          CalendarAlertService.getByMonthYear(year + 1, 1),
+        ]);
+        allAlerts = [...curr, ...next];
+      } else {
+        allAlerts = await CalendarAlertService.getByMonthRange(year, apiMonth - 1, apiMonth + 1);
+      }
+
+      // Deduplicate by id
       const merged = new Map<number, CalendarAlert>();
-      for (const alert of [...prev, ...current, ...next]) {
+      for (const alert of allAlerts) {
         merged.set(alert.id, alert);
       }
       setAlerts(Array.from(merged.values()));

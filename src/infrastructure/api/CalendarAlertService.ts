@@ -12,6 +12,13 @@ export class CalendarAlertService extends BaseService {
     return this.get<CalendarAlert[]>(BASE_ENDPOINT_V1, `${this.RESOURCE}/${year}/${month}`);
   }
 
+  /**
+   * Fetches alerts for a range of months in a single request
+   */
+  static async getByMonthRange(year: number, startMonth: number, endMonth: number): Promise<CalendarAlert[]> {
+    return this.get<CalendarAlert[]>(BASE_ENDPOINT_V1, `${this.RESOURCE}/${year}/${startMonth}/${endMonth}`);
+  }
+
   static async create(data: CalendarAlertRequestDTO): Promise<CalendarAlert> {
     return this.put<CalendarAlert>(BASE_ENDPOINT_V1, this.RESOURCE, data);
   }
