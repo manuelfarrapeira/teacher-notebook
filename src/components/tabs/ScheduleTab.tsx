@@ -296,8 +296,22 @@ export function ScheduleTab() {
   const fetchAlerts = useCallback(async (year: number, month: number) => {
     setLoading(true);
     try {
-      const data = await CalendarAlertService.getByMonthYear(year, month + 1);
-      setAlerts(data);
+      const prevMonth = month === 0 ? 11 : month - 1;
+      const prevYear = month === 0 ? year - 1 : year;
+      const nextMonth = month === 11 ? 0 : month + 1;
+      const nextYear = month === 11 ? year + 1 : year;
+
+      const [current, prev, next] = await Promise.all([
+        CalendarAlertService.getByMonthYear(year, month + 1),
+        CalendarAlertService.getByMonthYear(prevYear, prevMonth + 1),
+        CalendarAlertService.getByMonthYear(nextYear, nextMonth + 1),
+      ]);
+
+      const merged = new Map<number, CalendarAlert>();
+      for (const alert of [...prev, ...current, ...next]) {
+        merged.set(alert.id, alert);
+      }
+      setAlerts(Array.from(merged.values()));
     } catch (error) {
       setErrorMessage(getErrorMessage(error, t('dashboard.calendar.loadError')));
       setErrorModalOpen(true);
