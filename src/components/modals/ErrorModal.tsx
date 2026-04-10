@@ -26,17 +26,16 @@ export function ErrorModal({ isOpen, message, onClose }: ErrorModalProps) {
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
         <div className="modal-content" ref={modalRef} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-          <h3 className="modal-title" style={{ color: '#dc2626' }}>
+          <h3 className="modal-title modal-title--error">
             ❌ {t('common.error')}
           </h3>
           <div className="modal-body">
             <p style={{ whiteSpace: 'pre-line' }}>{message}</p>
           </div>
-          <div className="modal-footer" style={{ marginTop: '1.5rem' }}>
+          <div className="modal-footer">
             <button
-              className="modal-button save"
+              className="modal-button danger"
               onClick={onClose}
-              style={{ backgroundColor: '#dc2626' }}
             >
               {t('common.close')}
             </button>

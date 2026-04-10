@@ -26,17 +26,16 @@ export function SuccessModal({ isOpen, message, onClose }: SuccessModalProps) {
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
         <div className="modal-content" ref={modalRef} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-          <h3 className="modal-title" style={{ color: '#16a34a' }}>
+          <h3 className="modal-title modal-title--success">
             ✅ {t('common.success')}
           </h3>
           <div className="modal-body">
             <p>{message}</p>
           </div>
-          <div className="modal-footer" style={{ marginTop: '1.5rem' }}>
+          <div className="modal-footer">
             <button
-              className="modal-button save"
+              className="modal-button success"
               onClick={onClose}
-              style={{ backgroundColor: '#16a34a' }}
             >
               {t('common.close')}
             </button>
