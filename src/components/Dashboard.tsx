@@ -114,8 +114,6 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
         } else {
           setSelectedClass(null);
         }
-      } else {
-        setErrorMessage(t('dashboard.errors.noSchools'));
       }
     } catch (error) {
       console.error(error);
