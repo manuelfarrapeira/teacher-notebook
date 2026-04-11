@@ -3929,6 +3929,13 @@ dialog.modal-overlay::backdrop {
   flex-wrap: wrap;
 }
 
+.eval-criteria-toolbar .dashboard-add-btn {
+  height: 2.375rem;
+  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .eval-criteria-search-container {
   position: relative;
   display: flex;
@@ -3947,7 +3954,8 @@ dialog.modal-overlay::backdrop {
   padding-left: 2rem !important;
   max-width: 220px;
   font-size: 0.85rem;
-  height: 2.25rem;
+  height: 2.375rem;
+  box-sizing: border-box;
   margin-bottom: 0;
 }
 
@@ -3959,7 +3967,8 @@ dialog.modal-overlay::backdrop {
   min-width: 200px;
   font-size: 0.875rem;
   color: #3d4440;
-  height: auto !important;
+  height: 2.375rem !important;
+  box-sizing: border-box;
   box-shadow: none !important;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -3988,6 +3997,10 @@ dialog.modal-overlay::backdrop {
   color: var(--color-muted-foreground);
   transition: all 0.2s;
   position: relative;
+  height: 2.375rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
 .eval-criteria-quarter-tab:first-child {
@@ -4035,6 +4048,8 @@ dialog.modal-overlay::backdrop {
   align-items: center;
   transition: all 0.2s;
   box-shadow: 0 1px 3px rgba(44, 95, 74, 0.3);
+  height: 2.375rem;
+  box-sizing: border-box;
 }
 
 .eval-criteria-export-btn:hover {
@@ -4610,6 +4625,10 @@ dialog.modal-overlay::backdrop {
   font-size: 0.875rem;
   font-weight: 500;
   transition: background-color 0.15s, color 0.15s;
+  height: 2.375rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
 .calendar-today-btn:hover {
@@ -4641,7 +4660,8 @@ dialog.modal-overlay::backdrop {
   cursor: pointer;
   transition: border-color 0.15s;
   text-transform: capitalize;
-  height: auto !important;
+  height: 2.375rem !important;
+  box-sizing: border-box;
   box-shadow: none !important;
 }
 
@@ -4663,6 +4683,13 @@ dialog.modal-overlay::backdrop {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.calendar-header-actions .dashboard-add-btn {
+  height: 2.375rem;
+  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .calendar-grid-wrapper {
@@ -5309,7 +5336,8 @@ dialog.calendar-day-popup {
   min-width: 200px;
   font-size: 0.875rem;
   color: #3d4440;
-  height: auto !important;
+  height: 2.375rem !important;
+  box-sizing: border-box;
   box-shadow: none !important;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -5336,6 +5364,8 @@ dialog.calendar-day-popup {
   transition: all 0.2s;
   margin-left: auto;
   box-shadow: 0 1px 3px rgba(44, 95, 74, 0.3);
+  height: 2.375rem;
+  box-sizing: border-box;
 }
 
 .attendance-full-day-btn:hover {
@@ -6017,6 +6047,18 @@ td.attendance-weekend-cell {
   flex-wrap: wrap;
 }
 
+.class-rubrics-toolbar .dashboard-add-btn {
+  height: 2.375rem;
+  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.class-rubrics-toolbar .eval-criteria-search-input {
+  height: 2.375rem;
+  box-sizing: border-box;
+}
+
 .class-rubrics-skill-select {
   padding: 0.5rem 0.75rem !important;
   border: 1px solid var(--color-input-border) !important;
@@ -6025,7 +6067,8 @@ td.attendance-weekend-cell {
   min-width: 200px;
   font-size: 0.875rem;
   color: #3d4440;
-  height: auto !important;
+  height: 2.375rem !important;
+  box-sizing: border-box;
   box-shadow: none !important;
   transition: border-color 0.2s, box-shadow 0.2s;
 }

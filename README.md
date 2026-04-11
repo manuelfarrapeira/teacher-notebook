@@ -34,7 +34,7 @@
 - Manejo centralizado de errores de autenticación
 
 ### 🌍 Internacionalización (i18n)
-- Soporte completo para **Español** e **Inglés**
+- Soporte completo para **Español**, **Gallego**  e **Inglés**
 - Cambio de idioma en tiempo real desde cualquier pantalla
 - Persistencia de preferencia de idioma en `localStorage`
 - Todas las cadenas de texto gestionadas a través del sistema i18n
@@ -473,6 +473,158 @@ npm run make
 # Crear instalador para producción
 npm run make:pro
 ```
+
+---
+
+## 🚀 Crear una Nueva Versión y Desplegar la Actualización (OTA)
+
+El sistema de auto-actualización usa **Squirrel.Windows** y está habilitado únicamente en el entorno **pro** (producción). A continuación se describe el proceso completo para publicar una nueva versión y que los usuarios con la aplicación instalada reciban la actualización automáticamente.
+
+### Requisitos previos
+
+- Acceso al servidor NAS (`codefm.synology.me`) donde se alojan los artefactos
+- La carpeta de hosting es: `https://codefm.synology.me/teacher_notebook/`
+- Tener Node.js >= 18.x instalado
+
+### Paso 1 — Incrementar la versión en `package.json`
+
+Antes de generar el nuevo instalador, **actualiza el campo `version`** en `package.json`. Squirrel compara esta versión con la versión instalada del usuario para determinar si hay una actualización disponible.
+
+```json
+{
+  "version": "1.3.0"
+}
+```
+
+> ⚠️ **Importante**: Usa [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`). Squirrel **solo detecta la actualización si la nueva versión es superior** a la instalada.
+
+| Tipo de cambio | Ejemplo | Cuándo usar |
+|---|---|---|
+| **PATCH** | `1.2.1` → `1.2.2` | Corrección de bugs menores |
+| **MINOR** | `1.2.2` → `1.3.0` | Nueva funcionalidad retrocompatible |
+| **MAJOR** | `1.3.0` → `2.0.0` | Cambios que rompen compatibilidad |
+
+### Paso 2 — Generar el instalador de producción
+
+Ejecuta el comando de build para el entorno **pro**:
+
+```bash
+npm run make:pro
+```
+
+Este comando:
+1. Compila el código TypeScript/React con Vite
+2. Empaqueta la aplicación con Electron Forge
+3. Genera los artefactos de Squirrel.Windows
+
+### Paso 3 — Localizar los artefactos generados
+
+Los archivos se generan en:
+
+```
+out/make/squirrel.windows/x64/
+├── RELEASES                              # Manifiesto de versiones
+├── teacher-notebook-X.Y.Z-full.nupkg     # Paquete completo de la nueva versión
+├── teacher-notebook-X.Y.Z Setup.exe      # Instalador para nuevos usuarios
+└── teacher-notebook-X.Y.Z-delta.nupkg    # (Opcional) Paquete delta incremental
+```
+
+| Archivo | Descripción |
+|---|---|
+| `RELEASES` | Archivo de texto que lista todas las versiones disponibles. **Squirrel lo consulta para saber si hay actualizaciones.** |
+| `*.full.nupkg` | Paquete NuGet con la aplicación completa. Se descarga cuando hay actualización. |
+| `*-delta.nupkg` | Paquete incremental (solo cambios). Se usa automáticamente si existe y es aplicable. |
+| `* Setup.exe` | Instalador para usuarios que instalan la app por primera vez. |
+
+### Paso 4 — Subir los artefactos al servidor
+
+Sube los siguientes archivos al directorio de hosting en el NAS:
+
+```
+https://codefm.synology.me/teacher_notebook/
+```
+
+**Archivos a subir** (reemplazando los anteriores):
+
+1. **`RELEASES`** — ⚡ **Obligatorio**. Debe contener las entradas de la nueva versión.
+2. **`teacher-notebook-X.Y.Z-full.nupkg`** — ⚡ **Obligatorio**. El paquete de la nueva versión.
+3. **`teacher-notebook-X.Y.Z-delta.nupkg`** — Opcional pero recomendado (actualizaciones más rápidas).
+4. **`teacher-notebook-X.Y.Z Setup.exe`** — Para nuevas instalaciones.
+
+> 💡 **Tip**: Mantén también el `.nupkg` de la versión anterior si quieres que Squirrel pueda generar deltas automáticamente.
+
+### Paso 5 — Verificar la publicación
+
+Comprueba que el archivo `RELEASES` es accesible desde un navegador:
+
+```
+https://codefm.synology.me/teacher_notebook/RELEASES
+```
+
+Debería mostrar algo como:
+
+```
+SHA1_HASH teacher-notebook-1.3.0-full.nupkg SIZE
+```
+
+### Cómo funciona la actualización automática
+
+Una vez publicados los artefactos, las aplicaciones instaladas detectan la actualización automáticamente:
+
+```
+┌─────────────────────────┐
+│   App instalada (v1.2.1)│
+│                         │
+│  1. Al iniciar (10s)    │──→ GET /teacher_notebook/RELEASES
+│  2. Cada 30 minutos     │         │
+│                         │         ▼
+│  3. Compara versión     │    ¿Versión nueva?
+│     local vs remota     │     │          │
+│                         │    NO         SÍ
+│                         │     │          │
+│  4. Si hay nueva:       │  (nada)   Descarga .nupkg
+│     descarga en segundo │              │
+│     plano               │              ▼
+│                         │    Notificación flotante:
+│  5. Muestra notificación│    "Reiniciar y actualizar"
+│     al usuario          │              │
+│                         │              ▼
+│  6. Al pulsar:          │    autoUpdater.quitAndInstall()
+│     reinicia y actualiza│    → Cierra app, instala, reabre
+└─────────────────────────┘
+```
+
+| Evento | Comportamiento |
+|---|---|
+| **Inicio de la app** | Verifica actualizaciones a los 10 segundos |
+| **Cada 30 minutos** | Consulta periódica al servidor |
+| **Actualización disponible** | Descarga silenciosa en segundo plano |
+| **Descarga completa** | Aparece notificación flotante con botón "Reiniciar y actualizar" |
+| **Botón manual** | En **Configuración** → "Buscar actualizaciones" para verificar manualmente |
+
+### Checklist rápido para nueva versión
+
+```
+☐ 1. Incrementar "version" en package.json (ej: "1.2.1" → "1.3.0")
+☐ 2. Ejecutar: npm run make:pro
+☐ 3. Copiar al servidor:
+     - out/make/squirrel.windows/x64/RELEASES
+     - out/make/squirrel.windows/x64/teacher-notebook-X.Y.Z-full.nupkg
+     - (opcional) teacher-notebook-X.Y.Z-delta.nupkg
+     - (opcional) teacher-notebook-X.Y.Z Setup.exe
+☐ 4. Verificar: https://codefm.synology.me/teacher_notebook/RELEASES
+☐ 5. Esperar que los usuarios reciban la notificación (máx. 30 min)
+```
+
+### Solución de problemas
+
+| Problema | Causa | Solución |
+|---|---|---|
+| No se detecta la actualización | La versión en `package.json` no se incrementó | Verificar que la nueva versión es **mayor** que la instalada |
+| Error de red al buscar actualizaciones | El servidor NAS no es accesible | Comprobar que `https://codefm.synology.me/teacher_notebook/RELEASES` responde HTTP 200 |
+| La actualización no se aplica | Falta el archivo `.nupkg` en el servidor | Verificar que el `.nupkg` referenciado en `RELEASES` existe en la misma ruta |
+| Auto-update no funciona en dev | Es el comportamiento esperado | Solo funciona en builds empaquetados con `VITE_ENV=pro` |
+| Error de certificado SSL | Certificado del NAS no es de confianza | Verificar la configuración SSL del servidor |
 
 ---
 
