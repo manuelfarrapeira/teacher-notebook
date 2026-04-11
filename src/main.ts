@@ -1,14 +1,68 @@
 import { app, BrowserWindow, ipcMain, autoUpdater, dialog } from 'electron';
 import path from 'node:path';
 import https from 'node:https';
-import started from 'electron-squirrel-startup';
+import { spawn } from 'node:child_process';
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
-if (started) {
-  app.quit();
+/** Minimum time (ms) the install loading GIF stays visible */
+const INSTALL_SPLASH_MIN_MS = 5000;
+
+/**
+ * Handles Squirrel.Windows lifecycle events manually.
+ * Adds a minimum delay on install so the loading splash is visible.
+ * Returns true if a Squirrel event was handled (app will quit).
+ */
+function handleSquirrelEvents(): boolean {
+  if (process.platform !== 'win32') return false;
+
+  const squirrelCommand = process.argv[1];
+  if (!squirrelCommand?.startsWith('--squirrel-')) return false;
+
+  const appFolder = path.resolve(process.execPath, '..');
+  const rootFolder = path.resolve(appFolder, '..');
+  const updateExe = path.resolve(rootFolder, 'Update.exe');
+  const exeName = path.basename(process.execPath);
+
+  const spawnUpdate = (args: string[]) => {
+    try {
+      spawn(updateExe, args, { detached: true });
+    } catch {
+      // ignore
+    }
+  };
+
+  switch (squirrelCommand) {
+    case '--squirrel-install':
+      spawnUpdate(['--createShortcut', exeName]);
+      // Keep the process alive so Setup.exe shows the loading GIF longer
+      setTimeout(() => app.quit(), INSTALL_SPLASH_MIN_MS);
+      return true;
+
+    case '--squirrel-updated':
+      spawnUpdate(['--createShortcut', exeName]);
+      setTimeout(() => app.quit(), 1500);
+      return true;
+
+    case '--squirrel-uninstall':
+      spawnUpdate(['--removeShortcut', exeName]);
+      setTimeout(() => app.quit(), 1500);
+      return true;
+
+    case '--squirrel-obsolete':
+      app.quit();
+      return true;
+
+    default:
+      return false;
+  }
 }
+
+if (handleSquirrelEvents()) {
+  // Squirrel event handled — prevent normal startup
+  // (app.quit() is called after a delay inside the handler)
+} else {
 
 /**
  * After a fresh install, Squirrel launches the app with --squirrel-firstrun.
@@ -250,3 +304,4 @@ ipcMain.handle('install-update', () => {
 
 } // end if (!isFirstRun)
 
+} // end else (normal startup, no Squirrel event)
