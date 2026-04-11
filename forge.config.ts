@@ -7,6 +7,8 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
+import path from 'node:path';
+
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
@@ -17,6 +19,7 @@ const config: ForgeConfig = {
   makers: [
     new MakerSquirrel({
       name: 'teacher-notebook',
+      loadingGif: path.resolve(__dirname, 'public', 'install-loading.gif'),
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({}),

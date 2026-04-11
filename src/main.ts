@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, autoUpdater } from 'electron';
+import { app, BrowserWindow, ipcMain, autoUpdater, dialog } from 'electron';
 import path from 'node:path';
 import https from 'node:https';
 import started from 'electron-squirrel-startup';
@@ -9,6 +9,35 @@ declare const MAIN_WINDOW_VITE_NAME: string;
 if (started) {
   app.quit();
 }
+
+/**
+ * After a fresh install, Squirrel launches the app with --squirrel-firstrun.
+ * Instead of opening the main window, show a success dialog and quit.
+ */
+const isFirstRun = process.argv.includes('--squirrel-firstrun');
+if (isFirstRun) {
+  app.whenReady().then(() => {
+    const installDir = path.resolve(process.execPath, '..', '..');
+
+    const choice = dialog.showMessageBoxSync({
+      type: 'info',
+      buttons: ['Aceptar', 'Abrir aplicación'],
+      defaultId: 1,
+      title: 'Teacher Notebook',
+      message: 'Teacher Notebook se ha instalado correctamente.',
+      detail: `Ruta de instalación: ${installDir}\n\nPuede abrir la aplicación desde el acceso directo del escritorio o el menú de inicio.`,
+      icon: path.join(__dirname, '../../public/favicon.png'),
+    });
+
+    if (choice === 1) {
+      // Relaunch the app normally (without --squirrel-firstrun)
+      app.relaunch({ args: [] });
+    }
+    app.quit();
+  });
+}
+
+if (!isFirstRun) {
 
 /** URL where RELEASES and .nupkg files are hosted on the NAS */
 const UPDATE_FEED_URL = 'https://codefm.synology.me/teacher_notebook/';
@@ -23,7 +52,7 @@ let updateDownloaded = false;
  * Configures the Squirrel.Windows auto-updater.
  * Only runs in packaged production builds (pro), not in dev or pre.
  */
-function setupAutoUpdater() {
+const setupAutoUpdater = () => {
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     console.log('[AutoUpdater] Skipping — running in development mode');
     return;
@@ -159,7 +188,7 @@ ipcMain.handle('get-app-version', () => {
  * Pre-checks that the RELEASES file is accessible via Node.js https.
  * Returns the content if OK, or throws with a descriptive error.
  */
-function fetchReleases(): Promise<string> {
+const fetchReleases = (): Promise<string> => {
   const url = `${UPDATE_FEED_URL}RELEASES`;
   return new Promise((resolve, reject) => {
     const req = https.get(url, (res) => {
@@ -218,3 +247,6 @@ ipcMain.handle('install-update', () => {
     autoUpdater.quitAndInstall();
   }
 });
+
+} // end if (!isFirstRun)
+
