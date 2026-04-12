@@ -5378,6 +5378,11 @@ dialog.calendar-day-popup {
   cursor: not-allowed;
 }
 
+/* Search input inside attendance toolbar — remove auto margin so the button stays on the right */
+.attendance-toolbar .eval-criteria-search-container {
+  margin-left: 0;
+}
+
 /* Table container with scroll */
 .attendance-table-container {
   flex: 1;
@@ -5605,6 +5610,20 @@ td.attendance-cell-today {
 .attendance-checkbox.checked:hover {
   background: var(--color-primary-dark);
   border-color: var(--color-primary-dark);
+}
+
+/* Disabled checkbox — subject not scheduled on this day */
+.attendance-checkbox.disabled,
+.attendance-checkbox.disabled:hover {
+  border-color: var(--color-border-soft);
+  background: var(--color-background-warm);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* Cell with no schedule — subtle background hint */
+.attendance-cell-no-schedule {
+  background: var(--color-background-warm) !important;
 }
 
 /* Weekend columns */

@@ -113,8 +113,7 @@ export function SettingsTab() {
               disabled={checkState === 'checking'}
               style={{ fontSize: '0.8125rem', padding: '0.4rem 1rem' }}
             >
-              <RefreshCw size={14} />
-              {t('update.checkManually')}
+              <RefreshCw size={14} />&nbsp;&nbsp;{t('update.checkManually')}
             </button>
             {renderCheckStatus()}
           </div>

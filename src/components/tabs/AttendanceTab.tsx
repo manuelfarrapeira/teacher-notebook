@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Loader2, CalendarDays, Check, UserX } from 'lucide-react';
+import { Loader2, CalendarDays, Check, UserX, Search } from 'lucide-react';
 import { useI18n, translations } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import { SubjectService, ClassSubject } from '../../infrastructure/api/SubjectService';
 import { StudentService, Student } from '../../infrastructure/api/StudentService';
 import { AbsenceService, Absence } from '../../infrastructure/api/AbsenceService';
+import { ScheduleService, ScheduleItem } from '../../infrastructure/api/ScheduleService';
 import { ApiErrorException } from '../../infrastructure/api/BaseService';
 import { School } from '../../infrastructure/api/SchoolService';
 import { ErrorModal } from '../modals/ErrorModal';
@@ -139,6 +140,7 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
   const [classSubjects, setClassSubjects] = useState<ClassSubject[]>([]);
   const [classStudents, setClassStudents] = useState<Student[]>([]);
   const [absences, setAbsences] = useState<Absence[]>([]);
+  const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [operatingCells, setOperatingCells] = useState<Set<string>>(new Set());
   const [operatingFullDay, setOperatingFullDay] = useState(false);
@@ -154,6 +156,8 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+
+  const [studentSearch, setStudentSearch] = useState('');
 
   // Ref for auto-scroll to today
   const todayRef = useRef<HTMLTableCellElement>(null);
@@ -230,24 +234,36 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
     }
   }, [selectedClass]);
 
+  const fetchSchedules = useCallback(async () => {
+    if (!selectedClass) return;
+    try {
+      const data = await ScheduleService.getSchedules(selectedClass);
+      setSchedules(data);
+    } catch (error) {
+      console.error('Error fetching schedules:', error);
+    }
+  }, [selectedClass]);
+
   const loadAll = useCallback(async () => {
     if (!selectedClass) return;
     setLoading(true);
     try {
-      await Promise.all([fetchSubjects(), fetchStudents(), fetchAbsences()]);
+      await Promise.all([fetchSubjects(), fetchStudents(), fetchAbsences(), fetchSchedules()]);
     } finally {
       setLoading(false);
     }
-  }, [selectedClass, fetchSubjects, fetchStudents, fetchAbsences]);
+  }, [selectedClass, fetchSubjects, fetchStudents, fetchAbsences, fetchSchedules]);
 
   useEffect(() => {
     if (selectedClass) {
       setSelectedSubjectId(0);
+      setStudentSearch('');
       loadAll();
     } else {
       setClassSubjects([]);
       setClassStudents([]);
       setAbsences([]);
+      setSchedules([]);
     }
   }, [selectedClass]);
 
@@ -278,6 +294,41 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
     }
     return map;
   }, [absences]);
+
+  /**
+   * Set of weekday numbers (1-5) on which the selected subject is scheduled.
+   * ScheduleItem.day: 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri
+   */
+  const scheduledDays = useMemo(() => {
+    if (!selectedSubjectId) return new Set<number>();
+    const days = new Set<number>();
+    for (const s of schedules) {
+      if (s.subjectId === selectedSubjectId) {
+        days.add(s.day);
+      }
+    }
+    return days;
+  }, [schedules, selectedSubjectId]);
+
+  /**
+   * Check if the selected subject is scheduled on a given calendar day.
+   * CalendarDay.dow: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+   * ScheduleItem.day: 1=Mon … 5=Fri (same mapping as dow 1-5)
+   */
+  const isSubjectScheduled = (day: CalendarDay): boolean => {
+    if (day.isWeekend) return false;
+    return scheduledDays.has(day.dow);
+  };
+
+  /** Students filtered by search query */
+  const displayedStudents = useMemo(() => {
+    if (!studentSearch.trim()) return classStudents;
+    const query = studentSearch.trim().toLowerCase();
+    return classStudents.filter(s =>
+      `${s.name} ${s.surnames}`.toLowerCase().includes(query) ||
+      `${s.surnames}, ${s.name}`.toLowerCase().includes(query)
+    );
+  }, [classStudents, studentSearch]);
 
   /** Count absences for a student for the selected subject */
   const getAbsenceCount = (studentId: number): number => {
@@ -442,6 +493,17 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
           </SelectContent>
         </Select>
 
+        <div className="eval-criteria-search-container">
+          <Search size={16} className="eval-criteria-search-icon" />
+          <input
+            type="text"
+            className="dashboard-search eval-criteria-search-input"
+            placeholder={t('dashboard.students.searchStudents')}
+            value={studentSearch}
+            onChange={e => setStudentSearch(e.target.value)}
+          />
+        </div>
+
         <button
           className="attendance-full-day-btn"
           onClick={openFullDayModal}
@@ -505,7 +567,7 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                 </tr>
               </thead>
               <tbody>
-                {classStudents.map((student, sIdx) => {
+                {displayedStudents.map((student, sIdx) => {
                   const count = getAbsenceCount(student.id);
                   return (
                     <tr key={student.id}>
@@ -536,10 +598,12 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                         const key = `${student.id}-${selectedSubjectId}-${day.dateStr}`;
                         const isChecked = absenceMap.has(key);
                         const isCellLoading = operatingCells.has(key);
+                        const isScheduled = isSubjectScheduled(day);
 
                         const cellClasses = [
                           'attendance-cell',
                           day.isToday ? 'attendance-cell-today' : '',
+                          isScheduled ? '' : 'attendance-cell-no-schedule',
                         ].filter(Boolean).join(' ');
 
                         return (
@@ -548,10 +612,11 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                               <Loader2 className="animate-spin" size={14} style={{ color: '#2c5f4a', margin: '0 auto' }} />
                             ) : (
                               <button
-                                className={`attendance-checkbox ${isChecked ? 'checked' : ''}`}
+                                className={`attendance-checkbox ${isChecked ? 'checked' : ''} ${isScheduled ? '' : 'disabled'}`}
                                 onClick={() => handleToggleAbsence(student.id, day)}
                                 aria-label={`${student.surnames}, ${student.name} - ${day.dateStr}`}
                                 type="button"
+                                disabled={!isScheduled}
                               >
                                 {isChecked && <Check size={12} />}
                               </button>
