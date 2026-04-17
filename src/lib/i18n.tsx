@@ -1122,7 +1122,7 @@ export const translations: Record<Locale, Translations> = {
         finalGrade: 'Nota Final',
         noGradesForStudent: 'No hay notas registradas para este alumno',
         gradeDocuments: 'Documentos de la nota',
-        gradeDocumentsTitle: 'Documentos: {student} - {exercise}',
+        gradeDocumentsTitle: '{student} - {exercise}',
         groupWork: {
           title: 'Trabajos en grupo',
           assignment: 'Trabajo',
@@ -2520,7 +2520,7 @@ export const translations: Record<Locale, Translations> = {
         finalGrade: 'Nota Final',
         noGradesForStudent: 'Non hai notas rexistradas para este alumno',
         gradeDocuments: 'Documentos da nota',
-        gradeDocumentsTitle: 'Documentos: {student} - {exercise}',
+        gradeDocumentsTitle: '{student} - {exercise}',
         groupWork: {
           title: 'Traballos en grupo',
           assignment: 'Traballo',

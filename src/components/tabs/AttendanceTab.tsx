@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef, memo, useTransition } from 'react';
 import { Loader2, CalendarDays, Check, UserX, Search } from 'lucide-react';
 import { useI18n, translations } from '../../lib/i18n';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
@@ -123,6 +123,87 @@ function todayStr(): string {
   return `${d}/${m}/${y}`;
 }
 
+/** Props for a single attendance row */
+interface AttendanceRowProps {
+  readonly student: Student;
+  readonly index: number;
+  readonly schoolDays: CalendarDay[];
+  readonly selectedSubjectId: number;
+  readonly absenceMap: Map<string, Absence>;
+  readonly operatingCells: Set<string>;
+  readonly scheduledDays: Set<number>;
+  readonly absenceCount: number;
+  readonly onToggle: (studentId: number, day: CalendarDay) => void;
+}
+
+/** Memoized row component to prevent full-table re-renders */
+const AttendanceRow = memo(function AttendanceRow({
+  student, index, schoolDays, selectedSubjectId, absenceMap, operatingCells, scheduledDays, absenceCount, onToggle,
+}: AttendanceRowProps) {
+  const isScheduled = (day: CalendarDay): boolean => {
+    if (day.isWeekend) return false;
+    return scheduledDays.has(day.dow);
+  };
+
+  return (
+    <tr>
+      <td className="attendance-student-col">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+          <span>{index + 1}. {student.surnames}, {student.name}</span>
+          <StudentPhoto
+            studentId={student.id}
+            photoFileName={student.photo}
+            gender={student.gender}
+            size={42}
+            alt={`${student.name} ${student.surnames}`}
+          />
+        </div>
+      </td>
+      <td className="attendance-count-col">
+        {absenceCount > 0 ? absenceCount : ''}
+      </td>
+      {schoolDays.map((day) => {
+        if (day.isWeekend) {
+          return (
+            <td key={day.dateStr} className="attendance-cell attendance-weekend-cell">
+              &nbsp;
+            </td>
+          );
+        }
+
+        const key = `${student.id}-${selectedSubjectId}-${day.dateStr}`;
+        const isChecked = absenceMap.has(key);
+        const isCellLoading = operatingCells.has(key);
+        const scheduled = isScheduled(day);
+
+        const cellClasses = [
+          'attendance-cell',
+          day.isToday ? 'attendance-cell-today' : '',
+          scheduled ? '' : 'attendance-cell-no-schedule',
+        ].filter(Boolean).join(' ');
+
+        return (
+          <td key={day.dateStr} className={cellClasses}>
+            {isCellLoading ? (
+              <Loader2 className="animate-spin" size={14} style={{ color: '#2c5f4a', margin: '0 auto' }} />
+            ) : (
+              <button
+                className={`attendance-checkbox ${isChecked ? 'checked' : ''} ${scheduled ? '' : 'disabled'}`}
+                onClick={() => onToggle(student.id, day)}
+                aria-label={`${student.surnames}, ${student.name} - ${day.dateStr}`}
+                type="button"
+                disabled={!scheduled}
+              >
+                {isChecked && <Check size={12} />}
+              </button>
+            )}
+          </td>
+        );
+      })}
+    </tr>
+  );
+});
+
 /** Props for AttendanceTab */
 interface AttendanceTabProps {
   /** Currently selected class ID */
@@ -153,6 +234,7 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
   const [fullDayDate, setFullDayDate] = useState<string>(todayStr());
 
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState('');
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -315,10 +397,6 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
    * CalendarDay.dow: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
    * ScheduleItem.day: 1=Mon … 5=Fri (same mapping as dow 1-5)
    */
-  const isSubjectScheduled = (day: CalendarDay): boolean => {
-    if (day.isWeekend) return false;
-    return scheduledDays.has(day.dow);
-  };
 
   /** Students filtered by search query */
   const displayedStudents = useMemo(() => {
@@ -395,7 +473,9 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
   };
 
   const handleSubjectChange = (value: string) => {
-    setSelectedSubjectId(Number(value));
+    startTransition(() => {
+      setSelectedSubjectId(Number(value));
+    });
   };
 
   const handleFullDaySubmit = async () => {
@@ -567,66 +647,20 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
                 </tr>
               </thead>
               <tbody>
-                {displayedStudents.map((student, sIdx) => {
-                  const count = getAbsenceCount(student.id);
-                  return (
-                    <tr key={student.id}>
-                      <td className="attendance-student-col">
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                          <span>{sIdx + 1}. {student.surnames}, {student.name}</span>
-                          <StudentPhoto
-                            studentId={student.id}
-                            photoFileName={student.photo}
-                            gender={student.gender}
-                            size={42}
-                            alt={`${student.name} ${student.surnames}`}
-                          />
-                        </div>
-                      </td>
-                      <td className="attendance-count-col">
-                        {count > 0 ? count : ''}
-                      </td>
-                      {schoolDays.map((day) => {
-                        if (day.isWeekend) {
-                          return (
-                            <td key={day.dateStr} className="attendance-cell attendance-weekend-cell">
-                              &nbsp;
-                            </td>
-                          );
-                        }
-
-                        const key = `${student.id}-${selectedSubjectId}-${day.dateStr}`;
-                        const isChecked = absenceMap.has(key);
-                        const isCellLoading = operatingCells.has(key);
-                        const isScheduled = isSubjectScheduled(day);
-
-                        const cellClasses = [
-                          'attendance-cell',
-                          day.isToday ? 'attendance-cell-today' : '',
-                          isScheduled ? '' : 'attendance-cell-no-schedule',
-                        ].filter(Boolean).join(' ');
-
-                        return (
-                          <td key={day.dateStr} className={cellClasses}>
-                            {isCellLoading ? (
-                              <Loader2 className="animate-spin" size={14} style={{ color: '#2c5f4a', margin: '0 auto' }} />
-                            ) : (
-                              <button
-                                className={`attendance-checkbox ${isChecked ? 'checked' : ''} ${isScheduled ? '' : 'disabled'}`}
-                                onClick={() => handleToggleAbsence(student.id, day)}
-                                aria-label={`${student.surnames}, ${student.name} - ${day.dateStr}`}
-                                type="button"
-                                disabled={!isScheduled}
-                              >
-                                {isChecked && <Check size={12} />}
-                              </button>
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
+                {displayedStudents.map((student, sIdx) => (
+                  <AttendanceRow
+                    key={student.id}
+                    student={student}
+                    index={sIdx}
+                    schoolDays={schoolDays}
+                    selectedSubjectId={selectedSubjectId}
+                    absenceMap={absenceMap}
+                    operatingCells={operatingCells}
+                    scheduledDays={scheduledDays}
+                    absenceCount={getAbsenceCount(student.id)}
+                    onToggle={handleToggleAbsence}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
