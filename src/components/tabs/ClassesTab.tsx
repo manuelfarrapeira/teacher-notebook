@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useMemo} from 'react';
 import {BookOpen, Loader2, Building2, Plus, Edit, Trash2, Search, X, ChevronDown, BookType} from 'lucide-react';
 import {useI18n} from '../../lib/i18n';
 import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from '../ui/select';
@@ -58,8 +58,19 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
     const [formErrors, setFormErrors] = useState<FormErrors>({});
 
     const nameInputRef = useRef<HTMLInputElement>(null);
-    const schoolYearInputRef = useRef<HTMLInputElement>(null);
     const schoolSelectRef = useRef<HTMLButtonElement>(null);
+
+    /** Generate school year options: 2 years before to 5 years after current year */
+    const schoolYearOptions = useMemo(() => {
+        const currentYear = new Date().getFullYear();
+        const options: string[] = [];
+        for (let y = currentYear - 2; y <= currentYear + 1; y++) {
+            const short1 = String(y).slice(2);
+            const short2 = String(y + 1).slice(2);
+            options.push(`${short1}/${short2}`);
+        }
+        return options;
+    }, []);
 
     useEffect(() => {
         fetchSchools();
@@ -115,18 +126,6 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
         const trimmedSchoolYear = formData.schoolYear.trim();
         if (trimmedSchoolYear.length === 0) {
             errors.schoolYear = t('dashboard.classes.validation.schoolYearRequired');
-        } else {
-            const schoolYearRegex = /^\d{2}\/\d{2}$/;
-            const isValidFormat = schoolYearRegex.test(trimmedSchoolYear);
-
-            if (isValidFormat) {
-                const [firstYear, secondYear] = trimmedSchoolYear.split('/').map(Number);
-                if (secondYear !== firstYear + 1) {
-                    errors.schoolYear = t('dashboard.classes.validation.schoolYearNotConsecutive');
-                }
-            } else {
-                errors.schoolYear = t('dashboard.classes.validation.schoolYearInvalid');
-            }
         }
 
         setFormErrors(errors);
@@ -136,20 +135,13 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
         } else if (errors.name) {
             nameInputRef.current?.focus();
         } else if (errors.schoolYear) {
-            schoolYearInputRef.current?.focus();
+            // No ref to focus for select dropdown
         }
 
         return Object.keys(errors).length === 0;
     };
 
     const handleInputChange = (field: keyof FormData, value: string) => {
-        if (field === 'schoolYear') {
-            value = value.replaceAll(/[^\d/]/g, '');
-            if (value.length === 2 && !value.includes('/')) {
-                value = value + '/';
-            }
-            value = value.substring(0, 5);
-        }
 
         setFormData(prev => ({...prev, [field]: value}));
 
@@ -587,16 +579,20 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
                                         {t('dashboard.classes.schoolYear')} <span
                                         className="form-required-asterisk">*</span>
                                     </label>
-                                    <input
-                                        ref={schoolYearInputRef}
-                                        id="schoolYear"
-                                        className={`modal-input ${formErrors.schoolYear ? 'input-error' : ''}`}
+                                    <Select
                                         value={formData.schoolYear}
-                                        onChange={(e) => handleInputChange('schoolYear', e.target.value)}
-                                        placeholder={t('dashboard.classes.schoolYearPlaceholder')}
+                                        onValueChange={(v) => handleInputChange('schoolYear', v)}
                                         disabled={submitting}
-                                        maxLength={5}
-                                    />
+                                    >
+                                        <SelectTrigger className={`modal-input ${formErrors.schoolYear ? 'input-error' : ''}`}>
+                                            <SelectValue placeholder={t('dashboard.classes.schoolYearPlaceholder')} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {schoolYearOptions.map(opt => (
+                                                <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                     {formErrors.schoolYear && (
                                         <p className="form-error-text">{formErrors.schoolYear}</p>
                                     )}
