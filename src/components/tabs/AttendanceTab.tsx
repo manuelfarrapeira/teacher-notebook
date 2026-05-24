@@ -478,15 +478,42 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
     });
   };
 
+  /**
+   * Compute weekday number (1=Mon … 7=Sun) from DD/MM/YYYY string,
+   * matching the ScheduleItem.day convention (1=Mon … 5=Fri).
+   */
+  const getWeekdayFromDateStr = (ddmmyyyy: string): number => {
+    const [d, m, y] = ddmmyyyy.split('/').map(Number);
+    const dow = new Date(y, m - 1, d).getDay(); // 0=Sun … 6=Sat
+    return dow === 0 ? 7 : dow;
+  };
+
   const handleFullDaySubmit = async () => {
     if (!selectedClass || !fullDayStudentId || !fullDayDate) return;
 
+    // Only create absences for subjects scheduled on that weekday
+    const weekday = getWeekdayFromDateStr(fullDayDate);
+    const subjectIdsForDay = Array.from(
+      new Set(schedules.filter(s => s.day === weekday).map(s => s.subjectId))
+    );
+
+    if (subjectIdsForDay.length === 0) {
+      setErrorMessage(t('dashboard.attendance.noSubjectsForDay'));
+      setErrorDialogOpen(true);
+      return;
+    }
+
     setOperatingFullDay(true);
     try {
-      await AbsenceService.createAbsence(selectedClass, {
-        studentId: fullDayStudentId,
-        date: fullDayDate,
-      });
+      await Promise.all(
+        subjectIdsForDay.map(subjectId =>
+          AbsenceService.createAbsence(selectedClass, {
+            studentId: fullDayStudentId,
+            subjectId,
+            date: fullDayDate,
+          })
+        )
+      );
       setShowFullDayModal(false);
       await fetchAbsences();
       setSuccessMessage(t('dashboard.attendance.fullDayCreated'));

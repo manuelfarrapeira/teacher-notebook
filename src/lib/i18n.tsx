@@ -525,6 +525,7 @@ interface Translations {
       absenceCreated: string;
       absenceDeleted: string;
       fullDayCreated: string;
+      noSubjectsForDay: string;
       today: string;
       monthNames: string[];
       dayAbbreviations: string[];
@@ -1223,6 +1224,7 @@ export const translations: Record<Locale, Translations> = {
         absenceCreated: 'Ausencia registrada correctamente',
         absenceDeleted: 'Ausencia eliminada correctamente',
         fullDayCreated: 'Ausencia de día completo registrada',
+        noSubjectsForDay: 'No hay asignaturas programadas para ese día',
         today: 'Hoy',
         monthNames: ['Septiembre', 'Octubre', 'Noviembre', 'Diciembre', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
         dayAbbreviations: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
@@ -1922,6 +1924,7 @@ export const translations: Record<Locale, Translations> = {
         absenceCreated: 'Absence recorded successfully',
         absenceDeleted: 'Absence deleted successfully',
         fullDayCreated: 'Full day absence recorded',
+        noSubjectsForDay: 'There are no subjects scheduled for that day',
         today: 'Today',
         monthNames: ['September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June'],
         dayAbbreviations: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -2621,6 +2624,7 @@ export const translations: Record<Locale, Translations> = {
         absenceCreated: 'Ausencia rexistrada correctamente',
         absenceDeleted: 'Ausencia eliminada correctamente',
         fullDayCreated: 'Ausencia de día completo rexistrada',
+        noSubjectsForDay: 'Non hai materias programadas para ese día',
         today: 'Hoxe',
         monthNames: ['Setembro', 'Outubro', 'Novembro', 'Decembro', 'Xaneiro', 'Febreiro', 'Marzo', 'Abril', 'Maio', 'Xuño'],
         dayAbbreviations: ['Lu', 'Ma', 'Me', 'Xo', 'Ve', 'Sá', 'Do'],
