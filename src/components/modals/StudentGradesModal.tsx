@@ -64,6 +64,8 @@ export function StudentGradesModal({
   const [activeTab, setActiveTab] = useState<number | 'final'>(1);
   const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(new Set());
   const [expandedDocs, setExpandedDocs] = useState<Set<number>>(new Set());
+  const [expandedGroupDocs, setExpandedGroupDocs] = useState<Set<number>>(new Set());
+  const [downloadingGroupDoc, setDownloadingGroupDoc] = useState<number | null>(null);
   const [downloading, setDownloading] = useState<number | null>(null);
   const [classSubjects, setClassSubjects] = useState<ClassSubject[]>([]);
   const [radarChartOpen, setRadarChartOpen] = useState(false);
@@ -80,6 +82,36 @@ export function StudentGradesModal({
       if (next.has(gradeId)) { next.delete(gradeId); } else { next.add(gradeId); }
       return next;
     });
+  };
+
+  /** Toggle the document list for a group assignment row */
+  const toggleGroupDocs = (assignmentId: number) => {
+    setExpandedGroupDocs(prev => {
+      const next = new Set(prev);
+      if (next.has(assignmentId)) next.delete(assignmentId);
+      else next.add(assignmentId);
+      return next;
+    });
+  };
+
+  /** Download a single group document */
+  const handleGroupDownload = async (assignmentId: number, docId: number, fileName: string) => {
+    setDownloadingGroupDoc(docId);
+    try {
+      const blob = await GroupAssignmentService.downloadDoc(assignmentId, docId);
+      const url = globalThis.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      globalThis.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Error downloading group document:', err);
+    } finally {
+      setDownloadingGroupDoc(null);
+    }
   };
 
   /** Download a single grade document */
@@ -218,6 +250,7 @@ export function StudentGradesModal({
           quarter: a.quarter,
           groupName: studentGroup.name,
           grade: gradeEntry?.grade ?? null,
+          documents: gradeEntry?.documents || []
         };
       })
       .sort((a, b) => a.quarter - b.quarter || a.title.localeCompare(b.title));
@@ -445,10 +478,16 @@ export function StudentGradesModal({
           )}
         </div>
         <table className="student-grades-table">
+          <colgroup>
+            <col style={{ width: '60%' }} />
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '10%' }} />
+          </colgroup>
           <thead>
             <tr>
               <th style={{ textAlign: 'left' }}>{t('dashboard.evalCriteria.groupWork.assignment')}</th>
               <th>{t('dashboard.evalCriteria.groupWork.grade')}</th>
+              <th style={{ textAlign: 'center' }}></th>
             </tr>
           </thead>
           <tbody>
@@ -456,28 +495,92 @@ export function StudentGradesModal({
               const isFailing = gw.grade !== null && gw.grade < 5;
               const isExcellent = gw.grade !== null && gw.grade >= 9;
               const gradeBg = gw.grade === null ? 'transparent' : (isFailing ? '#fecaca' : '#e8e4f3');
+              const hasDocuments = gw.documents && gw.documents.length > 0;
+              const docsExpanded = expandedGroupDocs.has(gw.assignmentId);
+
               return (
-                <tr key={gw.assignmentId}>
-                  <td style={{ textAlign: 'left' }}>
-                    {gw.title}
-                    {gw.description && (
-                      <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginLeft: '0.5rem' }}>
-                        - {gw.description}
-                      </span>
-                    )}
-                  </td>
-                  <td style={{ fontWeight: 600, background: gradeBg }}>
-                    {gw.grade === null ? (
-                      <span style={{ color: '#9ca3af', fontWeight: 400 }}>{t('dashboard.evalCriteria.groupWork.noGrade')}</span>
-                    ) : (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
-                        {isFailing && <Frown size={14} style={{ color: '#f97316' }} />}
-                        {isExcellent && <Smile size={14} style={{ color: '#eab308' }} />}
-                        {formatGrade(gw.grade)} / 10
-                      </span>
-                    )}
-                  </td>
-                </tr>
+                <React.Fragment key={gw.assignmentId}>
+                  <tr>
+                    <td style={{ textAlign: 'left' }}>
+                      {gw.title}
+                      {gw.description && (
+                        <span style={{ color: '#9ca3af', fontSize: '0.75rem', marginLeft: '0.5rem' }}>
+                          - {gw.description}
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ fontWeight: 600, background: gradeBg, textAlign: 'center' }}>
+                      {gw.grade === null ? (
+                        <span style={{ color: '#9ca3af', fontWeight: 400 }}>{t('dashboard.evalCriteria.groupWork.noGrade')}</span>
+                      ) : (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', justifyContent: 'center' }}>
+                          {isFailing && <Frown size={14} style={{ color: '#f97316' }} />}
+                          {isExcellent && <Smile size={14} style={{ color: '#eab308' }} />}
+                          {formatGrade(gw.grade)} / 10
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      {hasDocuments && (
+                        <PortalTooltip text={`${t('dashboard.evalCriteria.gradeDocuments')} (${gw.documents.length})`} as="span">
+                          <button
+                            className="eval-criteria-exercise-btn"
+                            onClick={() => toggleGroupDocs(gw.assignmentId)}
+                            aria-label={t('dashboard.evalCriteria.gradeDocuments')}
+                            style={{ color: docsExpanded ? '#2c5f4a' : undefined }}
+                          >
+                            <FileText size={14} />
+                            <span style={{ fontSize: '0.7rem', marginLeft: '2px' }}>{gw.documents.length}</span>
+                          </button>
+                        </PortalTooltip>
+                      )}
+                    </td>
+                  </tr>
+                  {hasDocuments && docsExpanded && (
+                    <tr>
+                      <td colSpan={3} style={{ padding: '0.25rem 0.5rem 0.5rem 1rem', background: '#f9fafb' }}>
+                        <table style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse', fontSize: '0.8rem', textAlign: 'left' }}>
+                          <colgroup>
+                            <col style={{ width: '26px' }} />
+                            <col />
+                          </colgroup>
+                          <tbody>
+                            {gw.documents.map(doc => (
+                              <tr key={doc.id}>
+                                <td style={{ verticalAlign: 'middle', textAlign: 'left', padding: '0.1rem 0.25rem 0.1rem 0' }}>
+                                  <PortalTooltip text={t('dashboard.evalCriteria.downloadDocument')} as="span">
+                                    <button
+                                      className="eval-criteria-exercise-btn"
+                                      onClick={() => handleGroupDownload(gw.assignmentId, doc.id, doc.document)}
+                                      disabled={downloadingGroupDoc === doc.id}
+                                      aria-label={t('dashboard.evalCriteria.downloadDocument')}
+                                    >
+                                      {downloadingGroupDoc === doc.id ? (
+                                        <Loader2 size={14} className="icon-spin" />
+                                      ) : (
+                                        <Download size={14} />
+                                      )}
+                                    </button>
+                                  </PortalTooltip>
+                                </td>
+                                <td style={{ verticalAlign: 'middle', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', padding: '0.1rem 0' }}>
+                                  <span title={doc.document} style={{ color: '#374151' }}>
+                                    {doc.document}
+                                  </span>
+                                  {doc.description && (
+                                    <span style={{ color: '#6b7280', marginLeft: '6px', fontSize: '0.75rem' }}>
+                                      - {doc.description}
+                                    </span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               );
             })}
           </tbody>
