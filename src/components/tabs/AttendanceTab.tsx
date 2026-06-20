@@ -149,7 +149,13 @@ const AttendanceRow = memo(function AttendanceRow({
     <tr>
       <td className="attendance-student-col">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-          <span>{index + 1}. {student.surnames}, {student.name}</span>
+          <span className="student-name-stacked">
+            <span className="student-name-index">{index + 1}.</span>
+            <span className="student-name-names">
+              <span className="student-name-surnames">{student.surnames}</span>
+              <span className="student-name-given">{student.name}</span>
+            </span>
+          </span>
           <StudentPhoto
             studentId={student.id}
             photoFileName={student.photo}
@@ -600,25 +606,27 @@ export function AttendanceTab({ selectedClass, schools }: AttendanceTabProps) {
           </SelectContent>
         </Select>
 
-        <div className="eval-criteria-search-container">
-          <Search size={16} className="eval-criteria-search-icon" />
-          <input
-            type="text"
-            className="dashboard-search eval-criteria-search-input"
-            placeholder={t('dashboard.students.searchStudents')}
-            value={studentSearch}
-            onChange={e => setStudentSearch(e.target.value)}
-          />
-        </div>
+        <div className="attendance-row-secondary">
+          <div className="eval-criteria-search-container">
+            <Search size={16} className="eval-criteria-search-icon" />
+            <input
+              type="text"
+              className="dashboard-search eval-criteria-search-input"
+              placeholder={t('dashboard.students.searchStudents')}
+              value={studentSearch}
+              onChange={e => setStudentSearch(e.target.value)}
+            />
+          </div>
 
-        <button
-          className="attendance-full-day-btn"
-          onClick={openFullDayModal}
-          disabled={classStudents.length === 0}
-        >
-          <UserX size={16} />
-          {t('dashboard.attendance.fullDayAbsence')}
-        </button>
+          <button
+            className="attendance-full-day-btn"
+            onClick={openFullDayModal}
+            disabled={classStudents.length === 0}
+          >
+            <UserX size={16} />
+            {t('dashboard.attendance.fullDayAbsence')}
+          </button>
+        </div>
       </div>
 
       {/* Table */}

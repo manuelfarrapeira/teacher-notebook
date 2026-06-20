@@ -414,27 +414,29 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       {/* Toolbar: subject selector + create btn + quarter tabs */}
       <div className="eval-criteria-toolbar">
-        <Select value={selectedSubjectClassId ? String(selectedSubjectClassId) : ''} onValueChange={handleSubjectChange}>
-          <SelectTrigger className="eval-criteria-subject-select">
-            <SelectValue placeholder={t('dashboard.evalCriteria.selectSubjectFirst')} />
-          </SelectTrigger>
-          <SelectContent>
-            {classSubjects.map(cs => (
-              <SelectItem key={cs.subjectClassId} value={String(cs.subjectClassId)}>
-                {cs.subjectName}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="eval-criteria-row-primary">
+          <Select value={selectedSubjectClassId ? String(selectedSubjectClassId) : ''} onValueChange={handleSubjectChange}>
+            <SelectTrigger className="eval-criteria-subject-select">
+              <SelectValue placeholder={t('dashboard.evalCriteria.selectSubjectFirst')} />
+            </SelectTrigger>
+            <SelectContent>
+              {classSubjects.map(cs => (
+                <SelectItem key={cs.subjectClassId} value={String(cs.subjectClassId)}>
+                  {cs.subjectName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        <button
-          className="dashboard-add-btn"
-          onClick={() => setShowExerciseForm(true)}
-          disabled={!selectedSubjectClassId}
-        >
-          <Plus size={16} style={{ marginRight: '0.25rem' }} />
-          {t('dashboard.evalCriteria.createExercise')}
-        </button>
+          <button
+            className="dashboard-add-btn"
+            onClick={() => setShowExerciseForm(true)}
+            disabled={!selectedSubjectClassId}
+          >
+            <Plus size={16} style={{ marginRight: '0.25rem' }} />
+            {t('dashboard.evalCriteria.createExercise')}
+          </button>
+        </div>
 
         <div className="eval-criteria-quarter-tabs">
           {[1, 2, 3].map(q => (
@@ -448,30 +450,32 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
           ))}
         </div>
 
-        <div className="eval-criteria-search-container">
-          <Search size={16} className="eval-criteria-search-icon" />
-          <input
-            type="text"
-            className="dashboard-search eval-criteria-search-input"
-            placeholder={t('dashboard.students.searchStudents')}
-            value={studentSearch}
-            onChange={e => setStudentSearch(e.target.value)}
-          />
-        </div>
+        <div className="eval-criteria-row-secondary">
+          <div className="eval-criteria-search-container">
+            <Search size={16} className="eval-criteria-search-icon" />
+            <input
+              type="text"
+              className="dashboard-search eval-criteria-search-input"
+              placeholder={t('dashboard.students.searchStudents')}
+              value={studentSearch}
+              onChange={e => setStudentSearch(e.target.value)}
+            />
+          </div>
 
-        <button
-          className="eval-criteria-export-btn"
-          onClick={handleExportGrades}
-          disabled={exporting}
-          title={t('dashboard.evalCriteria.exportGrades')}
-        >
-          {exporting ? (
-            <Loader2 className="icon-spin" size={16} style={{ marginRight: '0.25rem' }} />
-          ) : (
-            <Download size={16} style={{ marginRight: '0.25rem' }} />
-          )}
-          {t('dashboard.evalCriteria.exportGrades')}
-        </button>
+          <button
+            className="eval-criteria-export-btn"
+            onClick={handleExportGrades}
+            disabled={exporting}
+            title={t('dashboard.evalCriteria.exportGrades')}
+          >
+            {exporting ? (
+              <Loader2 className="icon-spin" size={16} style={{ marginRight: '0.25rem' }} />
+            ) : (
+              <Download size={16} style={{ marginRight: '0.25rem' }} />
+            )}
+            {t('dashboard.evalCriteria.exportGrades')}
+          </button>
+        </div>
       </div>
 
       {/* Table */}
@@ -576,7 +580,13 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
                   <tr key={student.id}>
                     <td className="eval-criteria-student-col">
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                        <span>{index + 1}. {student.surnames}, {student.name}</span>
+                        <span className="student-name-stacked">
+                          <span className="student-name-index">{index + 1}.</span>
+                          <span className="student-name-names">
+                            <span className="student-name-surnames">{student.surnames}</span>
+                            <span className="student-name-given">{student.name}</span>
+                          </span>
+                        </span>
                         <StudentPhoto
                           studentId={student.id}
                           photoFileName={student.photo}

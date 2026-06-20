@@ -1921,7 +1921,7 @@ dialog.modal-overlay::backdrop {
   position: absolute;
   bottom: calc(100% + 8px);
   left: 50%;
-  transform: translateX(-50%) translateY(-4px);
+  transform: translateX(calc(-50% + var(--tooltip-shift, 0px))) translateY(-4px);
   background-color: #2d3436;
   color: white;
   padding: 0.5rem 0.75rem;
@@ -1956,6 +1956,10 @@ dialog.modal-overlay::backdrop {
   transform: translateX(-50%) translateY(0);
 }
 
+.tooltip-container:hover::before {
+  transform: translateX(calc(-50% + var(--tooltip-shift, 0px))) translateY(0);
+}
+
 .tooltip-container:disabled::before,
 .tooltip-container:disabled::after {
   display: none;
@@ -1965,7 +1969,7 @@ dialog.modal-overlay::backdrop {
 .tooltip-container.tooltip-bottom::before {
   bottom: auto;
   top: calc(100% + 8px);
-  transform: translateX(-50%) translateY(4px);
+  transform: translateX(calc(-50% + var(--tooltip-shift, 0px))) translateY(4px);
 }
 
 .tooltip-container.tooltip-bottom::after {
@@ -1979,6 +1983,10 @@ dialog.modal-overlay::backdrop {
 .tooltip-container.tooltip-bottom:hover::before,
 .tooltip-container.tooltip-bottom:hover::after {
   transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-container.tooltip-bottom:hover::before {
+  transform: translateX(calc(-50% + var(--tooltip-shift, 0px))) translateY(0);
 }
 
 .school-card-details {
@@ -4003,6 +4011,12 @@ dialog.modal-overlay::backdrop {
   flex-wrap: wrap;
 }
 
+/* Wrappers are transparent on desktop so the toolbar layout is unchanged */
+.eval-criteria-row-primary,
+.eval-criteria-row-secondary {
+  display: contents;
+}
+
 .eval-criteria-toolbar .dashboard-add-btn {
   height: 2.375rem;
   box-sizing: border-box;
@@ -4546,17 +4560,40 @@ dialog.modal-overlay::backdrop {
     text-align: center;
   }
 
-  .eval-criteria-subject-select {
-    min-width: 100%;
+  /* Group selector + create button, and search + export, on shared rows */
+  .eval-criteria-row-primary,
+  .eval-criteria-row-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
   }
 
-  .eval-criteria-search-container {
+  .eval-criteria-row-primary .eval-criteria-subject-select {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .eval-criteria-row-primary .dashboard-add-btn {
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .eval-criteria-row-secondary .eval-criteria-search-container {
+    flex: 1 1 0;
+    min-width: 0;
     margin-left: 0;
   }
 
-  .eval-criteria-search-input {
+  .eval-criteria-row-secondary .eval-criteria-search-input {
     max-width: 100%;
     width: 100%;
+  }
+
+  .eval-criteria-row-secondary .eval-criteria-export-btn {
+    flex: 0 1 auto;
+    white-space: nowrap;
   }
 }
 
@@ -5402,6 +5439,11 @@ dialog.calendar-day-popup {
   flex-wrap: wrap;
 }
 
+/* Wrapper is transparent on desktop so the toolbar layout is unchanged */
+.attendance-row-secondary {
+  display: contents;
+}
+
 .attendance-subject-select {
   padding: 0.5rem 0.75rem !important;
   border: 1px solid var(--color-input-border) !important;
@@ -5788,18 +5830,34 @@ td.attendance-weekend-cell {
     min-width: 100%;
   }
 
-  .attendance-full-day-btn {
+  /* Student search + full-day absence button share one row */
+  .attendance-row-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .attendance-row-secondary .eval-criteria-search-container {
+    flex: 1 1 0;
+    min-width: 0;
     margin-left: 0;
   }
 
+  .attendance-row-secondary .attendance-full-day-btn {
+    flex: 0 1 auto;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
   .attendance-student-col {
-    width: 250px;
-    min-width: 250px;
-    max-width: 250px;
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
   }
 
   .attendance-count-col {
-    left: 250px;
+    left: 150px;
     min-width: 45px;
     width: 45px;
     max-width: 45px;
@@ -6138,6 +6196,11 @@ td.attendance-weekend-cell {
   gap: 0.75rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+}
+
+/* Wrapper is transparent on desktop so the toolbar layout is unchanged */
+.class-rubrics-row-secondary {
+  display: contents;
 }
 
 .class-rubrics-toolbar .dashboard-add-btn {
@@ -6545,6 +6608,31 @@ td.attendance-weekend-cell {
 
   .class-rubrics-skill-select {
     min-width: 100%;
+  }
+
+  /* Manage rubric button + student search on the same row */
+  .class-rubrics-row-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .class-rubrics-row-secondary .dashboard-add-btn {
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .class-rubrics-row-secondary .eval-criteria-search-container {
+    flex: 1 1 0;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .class-rubrics-row-secondary .eval-criteria-search-input {
+    max-width: 100%;
+    width: 100%;
   }
 }
 
@@ -7605,13 +7693,13 @@ td.attendance-weekend-cell {
 
   /* Even narrower student column on small phones */
   .attendance-student-col {
-    width: 160px;
-    min-width: 160px;
-    max-width: 160px;
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
   }
 
   .attendance-count-col {
-    left: 160px;
+    left: 120px;
   }
 
   /* ── School cards ── */
@@ -7632,16 +7720,6 @@ td.attendance-weekend-cell {
 
 @media (max-width: 360px) {
 
-  /* Hide class selector on very narrow screens to prevent overflow */
-  .selector-button-group:last-of-type {
-    display: none;
-  }
-
-  /* Even tighter school name */
-  .selector-name {
-    max-width: 70px;
-  }
-
   /* Modal fills full width */
   .modal-content {
     max-width: calc(100vw - 1rem);
@@ -7651,11 +7729,177 @@ td.attendance-weekend-cell {
 }
 
 
-/* ==============================
-   Motion Accessibility
-   Respects prefers-reduced-motion: reduce for users
-   with vestibular disorders or motion sensitivity.
-   ============================== */
+/* ============================================================
+   Mobile responsive refinements (user-reported fixes)
+   ============================================================ */
+
+/* On small screens, let long tooltips wrap and cap their width so the
+   viewport-aware JS shift can always keep them fully on screen */
+@media (max-width: 768px) {
+  .tooltip-container::before {
+    max-width: min(80vw, 280px);
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Stacked student name: index on the left, surnames over given name (aligned) */
+.student-name-stacked {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.3rem;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.student-name-names {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.student-name-stacked .student-name-given {
+  color: var(--color-muted-foreground);
+}
+
+@media (max-width: 768px) {
+  /* --- 1. Student list: stack name above action buttons --- */
+  .students-list .student-list-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .students-list .student-list-left {
+    width: 100%;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .students-list .student-photo-container {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px;
+    aspect-ratio: 1 / 1 !important;
+  }
+
+  .students-list .student-card-name {
+    font-size: 0.9rem;
+    line-height: 1.25;
+    word-break: break-word;
+  }
+
+  .students-list .student-list-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.25rem;
+    border-top: 1px solid var(--color-border-soft);
+    padding-top: 0.6rem;
+  }
+
+  .students-list .student-list-actions .school-action-btn {
+    flex: 1;
+    min-height: 2.5rem;
+  }
+
+  /* --- 2. Classes header: stack filter group and add button --- */
+  .classes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  .classes-header > div {
+    width: 100%;
+  }
+
+  .classes-header .dashboard-add-btn {
+    margin-left: 0 !important;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* --- 3. TopBar: selectors fill the full width next to the hamburger button --- */
+  .top-bar-right {
+    min-width: 0;
+    flex: 1 1 auto;
+    margin-left: 0.5rem; /* sit right next to the menu button instead of the far edge */
+  }
+
+  .course-selectors {
+    max-width: none;
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 0.25rem;
+  }
+
+  /* Each selector group shares the available width equally */
+  .top-bar-right .selector-button-group {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .top-bar-right .selector-button {
+    flex-shrink: 1;
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+    padding: 0 0.4rem;
+    gap: 0.2rem;
+  }
+
+  /* Let the selector label expand to use the full available width (ellipsis handles overflow) */
+  .top-bar-right .selector-name {
+    max-width: none;
+    flex: 1 1 auto;
+  }
+
+  /* --- 4. Calendar: square, symmetric day cells instead of full-height --- */
+  .calendar-container {
+    height: auto;
+  }
+
+  .calendar-grid-wrapper {
+    overflow: visible;
+  }
+
+  .calendar-grid {
+    flex: 0 0 auto;
+    grid-auto-rows: auto;
+    overflow: visible;
+  }
+
+  .calendar-cell {
+    aspect-ratio: 1 / 1;
+    max-height: none;
+  }
+
+  /* --- 5. Eval-criteria & class-rubrics tables: smaller student name column --- */
+  .eval-criteria-student-col,
+  .class-rubrics-student-col,
+  .attendance-student-col {
+    font-size: 0.72rem !important;
+  }
+
+  /* Hide the student photo on mobile to free horizontal space for the name */
+  .eval-criteria-student-col .student-photo-container,
+  .class-rubrics-student-col .student-photo-container,
+  .attendance-student-col .student-photo-container {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Keep selectors full-width next to the hamburger even on very small screens */
+  .top-bar-right .selector-name {
+    max-width: none;
+    flex: 1 1 auto;
+  }
+}
+
+
+
 
 @media (prefers-reduced-motion: reduce) {
   *,

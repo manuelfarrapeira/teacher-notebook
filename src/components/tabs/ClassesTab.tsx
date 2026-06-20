@@ -420,7 +420,7 @@ export function ClassesTab({ onClassesChange }: Readonly<ClassesTabProps>) {
     return (
         <div className="dashboard-card">
             {/* Header with inline filter and Add Button */}
-            <div className="dashboard-section-header" style={{justifyContent: 'flex-start', flexWrap: 'wrap'}}>
+            <div className="dashboard-section-header classes-header" style={{justifyContent: 'flex-start', flexWrap: 'wrap'}}>
                 {schools.length > 0 && (
                     <div style={{display: 'flex', gap: '0.5rem', alignItems: 'center', flex: 1, minWidth: 0}}>
                         {/* Search type dropdown */}
