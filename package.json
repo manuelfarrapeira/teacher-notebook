@@ -13,6 +13,9 @@
     "make:pre": "cross-env VITE_ENV=pre electron-forge make",
     "make:pro": "cross-env VITE_ENV=pro electron-forge make",
     "publish": "electron-forge publish",
+    "build:web": "cross-env VITE_ENV=pro vite build --config vite.config.web.mjs",
+    "build:web:pre": "cross-env VITE_ENV=pre vite build --config vite.config.web.mjs",
+    "preview:web": "vite preview --config vite.config.web.mjs",
     "lint": "eslint --ext .ts,.tsx ."
   },
   "keywords": [],

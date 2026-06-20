@@ -356,6 +356,33 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia completa de:
 
 ---
 
+## 🌐 Compilación / Despliegue como Aplicación Web (actualizado 2026-06-20)
+
+Además del empaquetado de escritorio con Electron, el proyecto puede compilarse como una **aplicación web nativa de React** (HTML + JS + CSS estáticos) para subir a cualquier servidor web. **Si el usuario pide "compilar a web", "generar la versión web", "build web" o similar, sigue este proceso (no hay que volver a crear la configuración, ya existe):**
+
+### Configuración existente
+
+- **`vite.config.web.mjs`** (raíz del proyecto) — configuración standalone de Vite para web, independiente de Electron. Puntos clave:
+  - `base: './'` → rutas relativas (funciona desde cualquier subdirectorio del servidor).
+  - `plugins: [react()]` con `@vitejs/plugin-react`. El archivo es **JavaScript ESM (`.mjs`)**, igual que el config de Electron (`vite.renderer.config.js`). **No usar `.ts`/`.mts`**: el proyecto está en TypeScript 4.5, que con `moduleResolution: node` no resuelve el campo `exports` de `@vitejs/plugin-react` (paquete ESM-only sin `main`/`types`) y daría un falso error de "módulo no encontrado" en el editor. Al ser JS plano se evita ese chequeo. Tampoco se puede usar `moduleResolution: bundler`/`node16` porque requieren TS 5.x.
+  - `define['import.meta.env.VITE_ENV']` → fija el entorno en tiempo de compilación. Por defecto **`pro`**.
+  - `build.outDir: 'web'` con `emptyOutDir: true` → la salida se genera en la carpeta **`web/`**.
+- **Scripts en `package.json`:**
+  - `npm run build:web` → compila apuntando a **producción** (`pro`), salida en `web/`.
+  - `npm run build:web:pre` → compila apuntando a preproducción.
+  - `npm run preview:web` → previsualiza el build en `http://localhost:4173`.
+
+### Reglas a tener en cuenta
+
+- **No se necesita modificar el código de `src/`**: `src/renderer.tsx` y los componentes ya tienen *fallbacks* (`window.electronAPI?.…`) para funcionar en navegador sin Electron.
+- El entorno (`pro`/`pre`) queda **embebido en el bundle en tiempo de compilación**; para cambiar de entorno hay que recompilar con el script correspondiente.
+- La salida web se genera en la carpeta **`web/`**. Por defecto el usuario quiere que apunte a **PRO**.
+- La CSP del `index.html` ya incluye en `connect-src` la URL de producción (`https://codefm.synology.me:4443`).
+- Tras generar el build, basta con subir el **contenido de `web/`** a un servidor web estático.
+- Si se cambian estos scripts, la config o el flujo, **actualiza también el README** (sección "🌐 Despliegue como Aplicación Web").
+
+---
+
 ## 🎨 Skill de Diseño Frontend
 
 - Cuando se trabaje en componentes de UI, páginas, estilos o cualquier aspecto visual de la aplicación, se debe seguir la skill de diseño definida en `.agents/skills/frontend-design/SKILL.md`.
@@ -366,4 +393,4 @@ Ver `src/components/tabs/SchoolsTab.tsx` como referencia completa de:
 
 **Estas reglas son obligatorias para cualquier cambio, sugerencia o generación de código en este repositorio.**
 
-Última actualización: 2026-04-02
+Última actualización: 2026-06-20

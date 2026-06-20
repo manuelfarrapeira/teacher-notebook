@@ -88,6 +88,9 @@ typings/
 # Vite
 .vite/
 
+# Web build output (npm run build:web)
+web/
+
 # Electron-Forge
 out/
 

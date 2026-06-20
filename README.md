@@ -263,6 +263,9 @@ npm run start:local
 | `npm run make` | Crear instalador para la plataforma actual |
 | `npm run make:pre` | Crear instalador (preproducción) |
 | `npm run make:pro` | Crear instalador (producción) |
+| `npm run build:web` | Compilar la versión **web** (apunta a producción, salida en `web/`) |
+| `npm run build:web:pre` | Compilar la versión web apuntando a preproducción |
+| `npm run preview:web` | Previsualizar localmente el build web generado |
 | `npm run lint` | Ejecutar ESLint |
 
 ### Entornos
@@ -473,6 +476,58 @@ npm run make
 # Crear instalador para producción
 npm run make:pro
 ```
+
+---
+
+## 🌐 Despliegue como Aplicación Web (build estático)
+
+Además del empaquetado de escritorio con Electron, el proyecto puede compilarse como una **aplicación web nativa de React** (HTML + JS + CSS estáticos) lista para subir a cualquier servidor web, sin Electron.
+
+### Cómo funciona
+
+El build web reutiliza exactamente el mismo código React de `src/`. El punto de entrada `src/renderer.tsx` ya incluye *fallbacks* para cuando `window.electronAPI` no existe (caso navegador), por lo que **no requiere cambios en el código de la aplicación**.
+
+La configuración vive en un archivo de Vite independiente del de Electron:
+
+- **`vite.config.web.mjs`** — configuración standalone de Vite para web. Características clave:
+  - `base: './'` → rutas relativas, de modo que el sitio funciona servido desde cualquier subdirectorio (p. ej. `https://host/teacher-notebook/`).
+  - `plugins: [react()]` → usa `@vitejs/plugin-react`. El archivo es **JavaScript ESM (`.mjs`)**, siguiendo la convención del config de Electron (`vite.renderer.config.js`). Se usa `.mjs` y no `.ts`/`.mts` porque el plugin es ESM-only y, además, al ser JS plano evita el chequeo de tipos de TypeScript 4.5 (que con `moduleResolution: node` no resuelve el campo `exports` del plugin y daría un falso error de "módulo no encontrado").
+  - `define['import.meta.env.VITE_ENV']` → fija el entorno en tiempo de compilación. Por defecto **`pro`**.
+  - `build.outDir: 'web'` con `emptyOutDir: true` → la salida se genera en la carpeta **`web/`**.
+
+### Generar el build
+
+```bash
+# Compila apuntando a PRODUCCIÓN (https://codefm.synology.me:4443) → salida en web/
+npm run build:web
+
+# (Opcional) Compila apuntando a preproducción
+npm run build:web:pre
+
+# Previsualizar localmente lo generado (sirve la carpeta web/ en http://localhost:4173)
+npm run preview:web
+```
+
+### Resultado (carpeta `web/`)
+
+```
+web/
+├── index.html                 # HTML de entrada (rutas relativas, CSP con la API de PRO)
+├── favicon.ico / favicon.png
+├── fonts/                     # Fuentes Playfair Display
+└── assets/
+    ├── index-[hash].js        # Bundle de la aplicación
+    ├── index-[hash].css       # Estilos compilados
+    └── *.png                  # Imágenes procesadas
+```
+
+### Desplegar
+
+1. Ejecuta `npm run build:web`.
+2. Sube **el contenido de la carpeta `web/`** a la raíz (o subdirectorio) de tu servidor web.
+3. Asegúrate de que el backend de producción permite peticiones CORS desde el dominio donde se aloje la web.
+
+> **Nota:** El entorno (`pro`/`pre`) queda *embebido* en el bundle en tiempo de compilación. Para cambiar de entorno hay que recompilar con el script correspondiente.
 
 ---
 
