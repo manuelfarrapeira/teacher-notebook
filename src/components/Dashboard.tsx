@@ -16,6 +16,7 @@ import { LoadingModal } from './modals/LoadingModal';
 import { AlertMessage } from './ui/alert';
 import { TodayAlertsModal } from './modals/TodayAlertsModal';
 import { useI18n } from '../lib/i18n';
+import { isElectron } from '../lib/utils';
 import { StudentPhotoProvider, useStudentPhotoCache } from '../contexts/StudentPhotoContext';
 
 /**
@@ -135,7 +136,8 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
     { id: 'skills', label: t('dashboard.tabs.skills'), icon: GraduationCap },
     { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
     { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
-    { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
+    // Settings tab is Electron-only (app version and manual update check)
+    ...(isElectron() ? [{ id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings }] : []),
   ];
 
   const handleTabChange = (tabId: string) => {
@@ -215,7 +217,7 @@ export function Dashboard({ onLogout, userName }: Readonly<DashboardProps>) {
             {activeTab === 'timetable' && (
               <TimetableTab selectedClass={selectedClass} />
             )}
-            {activeTab === 'settings' && <SettingsTab />}
+            {activeTab === 'settings' && isElectron() && <SettingsTab />}
           </div>
         </main>
 

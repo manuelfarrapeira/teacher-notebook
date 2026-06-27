@@ -8,6 +8,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Detects whether the app is running inside Electron.
+ * The Electron preload exposes `window.electronAPI`; in the web build it is absent.
+ * @returns true when running in the Electron desktop app, false in the web build
+ */
+export function isElectron(): boolean {
+  return typeof window !== 'undefined' && Boolean(window.electronAPI);
+}
+
+/**
  * Converts a date from ISO format (YYYY-MM-DD) to API format (DD/MM/YYYY)
  * @param isoDate - Date in YYYY-MM-DD format
  * @returns Date in DD/MM/YYYY format

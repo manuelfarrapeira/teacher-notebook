@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookOpen, Users, Calendar, Settings, LogOut, Clock, BookType } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
+import { isElectron } from '../lib/utils';
 
 interface SidebarProps {
   readonly activeTab: string;
@@ -18,7 +19,8 @@ export function Sidebar({ activeTab, isMenuOpen, onTabChange, onLogout }: Sideba
     { id: 'subjects', label: t('dashboard.tabs.subjects'), icon: BookType },
     { id: 'schedule', label: t('dashboard.tabs.schedule'), icon: Calendar },
     { id: 'timetable', label: t('dashboard.tabs.timetable'), icon: Clock },
-    { id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings },
+    // Settings tab is Electron-only (app version and manual update check)
+    ...(isElectron() ? [{ id: 'settings', label: t('dashboard.tabs.settings'), icon: Settings }] : []),
   ];
 
   return (
