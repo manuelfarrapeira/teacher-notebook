@@ -343,8 +343,8 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
               </div>
 
               {/* Row 2: Date of Birth + Gender + Shape */}
-              <div className="modal-fields-row">
-                <div className="modal-field" style={{ flex: 1 }}>
+              <div className="modal-fields-row modal-fields-row--keep-inline">
+                <div className="modal-field modal-field--dob" style={{ flex: 1 }}>
                   <label className="modal-label">
                     {t('dashboard.students.dateOfBirth')} <span className="form-required-asterisk">*</span>
                   </label>
@@ -360,7 +360,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                 </div>
 
                 {/* Gender Field */}
-                <div className="modal-field" style={{ flex: 1 }}>
+                <div className="modal-field modal-field--gender" style={{ flex: 1 }}>
                   <label className="modal-label">
                     {t('dashboard.students.gender')} <span className="form-required-asterisk">*</span>
                   </label>
@@ -412,7 +412,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                 </div>
 
                 {/* Shape Field */}
-                <div className="modal-field" style={{ flex: 0, minWidth: '80px' }}>
+                <div className="modal-field modal-field--shape" style={{ flex: 0, minWidth: '80px' }}>
                   <label className="modal-label">
                     {t('dashboard.students.shape')}
                   </label>

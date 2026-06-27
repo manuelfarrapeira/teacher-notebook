@@ -7607,6 +7607,26 @@ td.attendance-weekend-cell {
     flex-direction: column;
   }
 
+  /* Keep these rows horizontal even on mobile (e.g. date/gender/shape).
+     Date of birth takes its own line; gender + shape share the next one. */
+  .modal-fields-row--keep-inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .modal-fields-row--keep-inline .modal-field--dob {
+    flex: 1 1 100% !important;
+  }
+
+  .modal-fields-row--keep-inline .modal-field--gender {
+    flex: 1 1 auto !important;
+  }
+
+  .modal-fields-row--keep-inline .modal-field--shape {
+    flex: 0 0 auto !important;
+  }
+
   /* Full-height modals (skill rubrics, grade charts, etc.) */
   .skill-rubrics-modal-content,
   .grade-distribution-modal {
