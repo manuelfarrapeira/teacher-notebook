@@ -15,6 +15,8 @@ interface Translations {
     usernamePlaceholder: string;
     passwordPlaceholder: string;
     loginButton: string;
+    forgotPassword: string;
+    recoverAccess: string;
     errors: {
       emptyFields: string;
       loginFailed: string;
@@ -714,6 +716,8 @@ export const translations: Record<Locale, Translations> = {
       usernamePlaceholder: 'tu_usuario',
       passwordPlaceholder: '••••••••',
       loginButton: 'Acceder al Aula',
+      forgotPassword: '¿Olvidaste tu contraseña?',
+      recoverAccess: 'Recuperar acceso',
       errors: {
         emptyFields: 'Por favor completa todos los campos.',
         loginFailed: 'Error en el login.',
@@ -1414,6 +1418,8 @@ export const translations: Record<Locale, Translations> = {
       usernamePlaceholder: 'your_username',
       passwordPlaceholder: '••••••••',
       loginButton: 'Access Classroom',
+      forgotPassword: 'Forgot your password?',
+      recoverAccess: 'Recover access',
       errors: {
         emptyFields: 'Please fill in all fields.',
         loginFailed: 'Login error.',
@@ -2114,6 +2120,8 @@ export const translations: Record<Locale, Translations> = {
       usernamePlaceholder: 'o_teu_usuario',
       passwordPlaceholder: '••••••••',
       loginButton: 'Acceder á Aula',
+      forgotPassword: 'Esqueciches o teu contrasinal?',
+      recoverAccess: 'Recuperar acceso',
       errors: {
         emptyFields: 'Por favor completa todos os campos.',
         loginFailed: 'Erro no login.',

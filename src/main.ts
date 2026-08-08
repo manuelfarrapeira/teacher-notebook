@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, autoUpdater, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, autoUpdater, dialog, shell } from 'electron';
 import path from 'node:path';
 import https from 'node:https';
 import { spawn } from 'node:child_process';
@@ -236,6 +236,13 @@ ipcMain.handle('get-env', () => {
 
 ipcMain.handle('get-app-version', () => {
   return app.getVersion();
+});
+
+/** Open an external URL in the user's default browser (https/http only) */
+ipcMain.handle('open-external', async (_event, url: string) => {
+  if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
+    await shell.openExternal(url);
+  }
 });
 
 /**

@@ -169,6 +169,7 @@
 - Animaciones y transiciones suaves
 - Iconografía consistente con **Lucide React**
 - Pantalla de login con elementos decorativos animados
+- Enlace "Recuperar acceso" en el login que abre el portal de cuenta (Keycloak) en el navegador externo
 - Pantalla de carga con spinner animado
 
 ### ♿ Accesibilidad

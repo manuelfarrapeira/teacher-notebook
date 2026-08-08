@@ -5,6 +5,7 @@ import { Label } from './ui/label';
 import { GraduationCap, BookOpen, Users, Award } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 import { LanguageSelector } from './LanguageSelector';
+import { getRecoverAccessUrl } from '../infrastructure/config/environment';
 
 interface LoginScreenProps {
   onLogin: (username: string, password: string) => void;
@@ -19,6 +20,17 @@ export function LoginScreen({ onLogin, error }: LoginScreenProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onLogin(username, password);
+  };
+
+  const recoverAccessUrl = getRecoverAccessUrl();
+
+  const handleRecoverAccess = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (globalThis.window?.electronAPI?.openExternal) {
+      globalThis.window.electronAPI.openExternal(recoverAccessUrl);
+    } else {
+      globalThis.window?.open(recoverAccessUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
@@ -111,9 +123,15 @@ export function LoginScreen({ onLogin, error }: LoginScreenProps) {
 
         <div className="login-footer">
           <p className="login-forgot">
-            ¿Olvidaste tu contraseña?{' '}
-            <a href="#" className="login-link">
-              Recuperar acceso
+            {t('login.forgotPassword')}{' '}
+            <a
+              href={recoverAccessUrl}
+              className="login-link"
+              onClick={handleRecoverAccess}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t('login.recoverAccess')}
             </a>
           </p>
           <div className="login-features">

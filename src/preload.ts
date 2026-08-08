@@ -7,6 +7,7 @@ type UpdateStatus = 'checking' | 'downloading' | 'not-available' | 'downloaded' 
 contextBridge.exposeInMainWorld('electronAPI', {
   getEnv: () => ipcRenderer.invoke('get-env'),
   getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  openExternal: (url: string) => ipcRenderer.invoke('open-external', url),
   checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
   installUpdate: () => ipcRenderer.invoke('install-update'),
   onUpdateStatus: (callback: (status: UpdateStatus, data?: unknown) => void) => {

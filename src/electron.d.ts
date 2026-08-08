@@ -11,6 +11,7 @@ interface Window {
   electronAPI: {
     getEnv: () => Promise<string>;
     getAppVersion: () => Promise<string>;
+    openExternal: (url: string) => Promise<void>;
     checkForUpdates: () => Promise<{ status: string; message?: string }>;
     installUpdate: () => Promise<void>;
     onUpdateStatus: (callback: (status: ElectronUpdateStatus, data?: unknown) => void) => () => void;
