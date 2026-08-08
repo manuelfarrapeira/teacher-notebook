@@ -1105,6 +1105,22 @@ dialog.modal-overlay::backdrop {
   border-radius: 1.125rem 1.125rem 0 0;
 }
 
+/* Radix portalled floating content (Select, Dropdown, Popover, etc.) is
+   rendered at the document body level as a sibling of the modal <dialog>,
+   which sits at z-index: 60. The library default z-index (50) makes these
+   menus appear behind the modal. Force them above every modal overlay so
+   dropdowns opened inside a modal are always visible and clickable. */
+[data-slot='select-content'],
+[data-slot='dropdown-menu-content'],
+[data-slot='dropdown-menu-sub-content'],
+[data-slot='context-menu-content'],
+[data-slot='context-menu-sub-content'],
+[data-slot='menubar-content'],
+[data-slot='popover-content'],
+[data-slot='hover-card-content'] {
+  z-index: 1100 !important;
+}
+
 .modal-title {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.25rem;
