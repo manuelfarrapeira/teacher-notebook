@@ -88,15 +88,8 @@ export function ClassSubjectsModal({
         SubjectService.getSubjects(),
         SubjectService.getSubjectsByClass(classId),
       ]);
-      // Filter out non-assessable subjects
-      const assessableSubjects = all.filter(subject => !subject.notAssessable);
-      // Cross with Subject to get notAssessable info
-      const assessableAssigned = assigned.filter((classSubject) => {
-        const subject = all.find(s => s.id === classSubject.subjectId);
-        return subject && !subject.notAssessable;
-      });
-      setAllSubjects(assessableSubjects);
-      setAssignedSubjects(assessableAssigned);
+      setAllSubjects(all);
+      setAssignedSubjects(assigned);
     } catch (error) {
       console.error('Error fetching subjects:', error);
       setErrorMessage(error instanceof Error ? error.message : t('dashboard.subjects.loadError'));
