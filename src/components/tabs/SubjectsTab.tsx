@@ -11,6 +11,11 @@ interface FormErrors {
   name?: string;
 }
 
+interface FormData {
+  name: string;
+  notAssessable: boolean;
+}
+
 /**
  * SubjectsTab component for managing subjects (CRUD operations)
  * Allows listing, creating, editing and deleting subjects
@@ -23,7 +28,7 @@ export function SubjectsTab() {
   const [submitting, setSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
-  const [subjectName, setSubjectName] = useState('');
+  const [formData, setFormData] = useState<FormData>({ name: '', notAssessable: false });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
@@ -44,11 +49,19 @@ export function SubjectsTab() {
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   const filteredSubjects = useMemo(() => {
-    if (!searchTerm.trim()) return subjects;
-    const term = searchTerm.toLowerCase();
-    return subjects.filter(subject =>
-      subject.name.toLowerCase().includes(term)
-    );
+    let filtered = subjects;
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = subjects.filter(subject =>
+        subject.name.toLowerCase().includes(term)
+      );
+    }
+    // Sort: assessable subjects first, then non-assessable at the end
+    return [...filtered].sort((a, b) => {
+      const aNotAssessable = a.notAssessable ?? false;
+      const bNotAssessable = b.notAssessable ?? false;
+      return Number(aNotAssessable) - Number(bNotAssessable);
+    });
   }, [subjects, searchTerm]);
 
   useEffect(() => {
@@ -81,7 +94,7 @@ export function SubjectsTab() {
 
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
-    const trimmedName = subjectName.trim();
+    const trimmedName = formData.name.trim();
 
     if (trimmedName.length === 0) {
       errors.name = t('dashboard.subjects.validation.nameRequired');
@@ -98,8 +111,8 @@ export function SubjectsTab() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleInputChange = (value: string) => {
-    setSubjectName(value);
+  const handleInputChange = (field: string, value: string | boolean) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
     if (formErrors.name) {
       setFormErrors({});
     }
@@ -107,14 +120,14 @@ export function SubjectsTab() {
 
   const handleAddClick = () => {
     setEditingSubject(null);
-    setSubjectName('');
+    setFormData({ name: '', notAssessable: false });
     setFormErrors({});
     setShowForm(true);
   };
 
   const handleEditClick = (subject: Subject) => {
     setEditingSubject(subject);
-    setSubjectName(subject.name);
+    setFormData({ name: subject.name, notAssessable: subject.notAssessable ?? false });
     setFormErrors({});
     setShowForm(true);
   };
@@ -127,7 +140,7 @@ export function SubjectsTab() {
   const handleCancelForm = () => {
     setShowForm(false);
     setEditingSubject(null);
-    setSubjectName('');
+    setFormData({ name: '', notAssessable: false });
     setFormErrors({});
   };
 
@@ -137,16 +150,16 @@ export function SubjectsTab() {
     setSubmitting(true);
     try {
       if (editingSubject) {
-        await SubjectService.updateSubject(editingSubject.id, subjectName.trim());
+        await SubjectService.updateSubject(editingSubject.id, formData.name.trim(), formData.notAssessable);
         setSuccessMessage(t('dashboard.subjects.updateSuccess'));
       } else {
-        await SubjectService.createSubject(subjectName.trim());
+        await SubjectService.createSubject(formData.name.trim(), formData.notAssessable);
         setSuccessMessage(t('dashboard.subjects.createSuccess'));
       }
       setSuccessDialogOpen(true);
       setShowForm(false);
       setEditingSubject(null);
-      setSubjectName('');
+      setFormData({ name: '', notAssessable: false });
       await fetchSubjects();
     } catch (error) {
       console.error('Error saving subject:', error);
@@ -259,13 +272,24 @@ export function SubjectsTab() {
                   type="text"
                   className={`modal-input ${formErrors.name ? 'input-error' : ''}`}
                   placeholder={t('dashboard.subjects.namePlaceholder')}
-                  value={subjectName}
-                  onChange={(e) => handleInputChange(e.target.value)}
+                  value={formData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
                   disabled={submitting}
                 />
                 {formErrors.name && (
                   <p className="form-error-text">{formErrors.name}</p>
                 )}
+
+                <label className="modal-label" style={{ marginTop: '1rem' }}>
+                  <input
+                    type="checkbox"
+                    checked={formData.notAssessable}
+                    onChange={(e) => handleInputChange('notAssessable', e.target.checked)}
+                    disabled={submitting}
+                    style={{ marginRight: '0.5rem', cursor: 'pointer' }}
+                  />
+                  {t('dashboard.subjects.notAssessable')}
+                </label>
               </div>
               <div className="modal-footer" style={{ marginTop: '1.5rem' }}>
                 <button
@@ -308,10 +332,15 @@ export function SubjectsTab() {
       ) : (
         <div className={effectiveViewMode === 'grid' ? 'subjects-grid' : 'subjects-list'}>
           {filteredSubjects.map((subject) => (
-            <div key={subject.id} className="dashboard-student">
+            <div
+              key={subject.id}
+              className={`dashboard-student ${subject.notAssessable ? 'subject-not-assessable' : ''}`}
+            >
               <div className="dashboard-student-info">
-                <BookType size={20} style={{ color: '#2c5f4a', marginRight: '0.75rem' }} />
-                <span className="dashboard-student-name">{subject.name}</span>
+                <BookType size={20} style={{ color: subject.notAssessable ? '#9ca3af' : '#2c5f4a', marginRight: '0.75rem' }} />
+                <span className={`dashboard-student-name ${subject.notAssessable ? 'subject-not-assessable-text' : ''}`}>
+                  {subject.name}
+                </span>
               </div>
               <div className="school-card-actions">
                 <button

@@ -121,6 +121,7 @@ interface Translations {
       addNew: string;
       name: string;
       namePlaceholder: string;
+      notAssessable: string;
       edit: string;
       delete: string;
       createTitle: string;
@@ -822,6 +823,7 @@ export const translations: Record<Locale, Translations> = {
         addNew: 'Crear Asignatura',
         name: 'Nombre',
         namePlaceholder: 'Nombre de la asignatura',
+        notAssessable: 'Asignatura no evaluable (solo para calendario)',
         edit: 'Editar',
         delete: 'Eliminar',
         createTitle: 'Crear Asignatura',
@@ -1524,6 +1526,7 @@ export const translations: Record<Locale, Translations> = {
         addNew: 'Create Subject',
         name: 'Name',
         namePlaceholder: 'Subject name',
+        notAssessable: 'Non-assessable subject (schedule only)',
         edit: 'Edit',
         delete: 'Delete',
         createTitle: 'Create Subject',
@@ -2226,6 +2229,7 @@ export const translations: Record<Locale, Translations> = {
         addNew: 'Crear Materia',
         name: 'Nome',
         namePlaceholder: 'Nome da materia',
+        notAssessable: 'Materia non avaliable (só para calendario)',
         edit: 'Editar',
         delete: 'Eliminar',
         createTitle: 'Crear Materia',

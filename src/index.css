@@ -3229,6 +3229,21 @@ dialog.modal-overlay::backdrop {
   flex-shrink: 0;
 }
 
+/* Non-assessable subjects styling */
+.subject-not-assessable {
+  background: #f9f7f5 !important;
+  border-color: #e5dfd6 !important;
+}
+
+.subject-not-assessable:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+  border-color: #d4ccc0 !important;
+}
+
+.subject-not-assessable-text {
+  color: #8b8279 !important;
+}
+
 /* Skills Description */
 .skills-description {
   font-size: 0.85rem;

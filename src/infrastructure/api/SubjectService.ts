@@ -24,10 +24,11 @@ export class SubjectService extends BaseService {
    * Create a new subject.
    * PUT /teacher-notebook/v1/subjects
    * @param name - Subject name
+   * @param notAssessable - (Optional) Mark as non-assessable subject (only for schedule)
    * @returns Created subject
    */
-  static async createSubject(name: string): Promise<Subject> {
-    const requestBody: SubjectRequestDTO = { name };
+  static async createSubject(name: string, notAssessable?: boolean): Promise<Subject> {
+    const requestBody: SubjectRequestDTO = { name, notAssessable };
     return this.put<Subject>(BASE_ENDPOINT_V1, '/subjects', requestBody);
   }
 
@@ -36,10 +37,11 @@ export class SubjectService extends BaseService {
    * PATCH /teacher-notebook/v1/subjects/:subjectId
    * @param subjectId - Subject ID
    * @param name - New name
+   * @param notAssessable - (Optional) Mark as non-assessable subject
    * @returns Updated subject
    */
-  static async updateSubject(subjectId: number, name: string): Promise<Subject> {
-    const requestBody: SubjectRequestDTO = { name };
+  static async updateSubject(subjectId: number, name: string, notAssessable?: boolean): Promise<Subject> {
+    const requestBody: SubjectRequestDTO = { name, notAssessable };
     return this.patch<Subject>(BASE_ENDPOINT_V1, `/subjects/${subjectId}`, requestBody);
   }
 

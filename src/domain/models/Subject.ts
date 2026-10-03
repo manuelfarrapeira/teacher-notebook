@@ -4,6 +4,7 @@
 export interface Subject {
   id: number;
   name: string;
+  notAssessable?: boolean;
 }
 
 /**
@@ -13,6 +14,7 @@ export interface ClassSubject {
   subjectClassId: number;
   subjectId: number;
   subjectName: string;
+  notAssessable?: boolean;
 }
 
 /**
@@ -20,4 +22,5 @@ export interface ClassSubject {
  */
 export interface SubjectRequestDTO {
   name: string;
+  notAssessable?: boolean;
 }

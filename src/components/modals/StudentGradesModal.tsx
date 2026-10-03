@@ -155,13 +155,19 @@ export function StudentGradesModal({
       Promise.all([
         ExerciseService.getStudentGrades(classId, studentId),
         SubjectService.getClassSubjects(classId),
+        SubjectService.getSubjects(),
         GroupAssignmentService.getByClass(classId),
         StudentGroupService.getSavedGroups(classId),
       ])
-        .then(async ([gradesData, subjectsData, assignmentsData, groupsData]) => {
+        .then(async ([gradesData, classSubjectsData, allSubjects, assignmentsData, groupsData]) => {
           const sorted = [...gradesData].sort((a, b) => a.quarter - b.quarter);
           setQuarters(sorted);
-          setClassSubjects(subjectsData);
+          // Filter out non-assessable subjects by crossing with Subject data
+          const assessableSubjects = classSubjectsData.filter((classSubject) => {
+            const subject = allSubjects.find(s => s.id === classSubject.subjectId);
+            return subject && !subject.notAssessable;
+          });
+          setClassSubjects(assessableSubjects);
           setGroupAssignments(assignmentsData);
           setSavedGroups(groupsData);
           if (sorted.length > 0) {

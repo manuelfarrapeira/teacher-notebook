@@ -102,11 +102,19 @@ export function EvalCriteriaTab({ selectedClass }: EvalCriteriaTabProps) {
   const fetchSubjects = useCallback(async () => {
     if (!selectedClass) return;
     try {
-      const data = await SubjectService.getClassSubjects(selectedClass);
-      setClassSubjects(data);
-      if (data.length > 0 && !selectedSubjectClassId) {
-        setSelectedSubjectClassId(data[0].subjectClassId);
-        setSelectedSubjectId(data[0].subjectId);
+      const [classSubjectsData, allSubjects] = await Promise.all([
+        SubjectService.getClassSubjects(selectedClass),
+        SubjectService.getSubjects(),
+      ]);
+      // Filter out non-assessable subjects by crossing with Subject data
+      const assessableSubjects = classSubjectsData.filter((classSubject) => {
+        const subject = allSubjects.find(s => s.id === classSubject.subjectId);
+        return subject && !subject.notAssessable;
+      });
+      setClassSubjects(assessableSubjects);
+      if (assessableSubjects.length > 0 && !selectedSubjectClassId) {
+        setSelectedSubjectClassId(assessableSubjects[0].subjectClassId);
+        setSelectedSubjectId(assessableSubjects[0].subjectId);
       }
     } catch (error) {
       console.error('Error fetching class subjects:', error);
