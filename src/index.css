@@ -6842,6 +6842,21 @@ td.attendance-weekend-cell {
   box-shadow: none !important;
 }
 
+/* Student ClassList in Header */
+.student-header-classlist {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.student-header-classlist-line {
+  font-size: 0.85rem;
+  color: #6E756F;
+  margin: 0;
+  line-height: 1.4;
+}
+
 .cooperative-delete-btn:hover {
   background: var(--color-error-dark) !important;
   box-shadow: none !important;

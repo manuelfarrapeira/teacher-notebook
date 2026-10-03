@@ -19,6 +19,7 @@ interface FormData {
   name: string;
   surnames: string;
   dateOfBirth: string;
+  classNumber: string;
   additionalInfo: string;
   gender: Gender | '';
   shape: Shape | '';
@@ -27,7 +28,7 @@ interface FormData {
 interface FormErrors {
   name?: string;
   surnames?: string;
-  dateOfBirth?: string;
+  classNumber?: string;
   gender?: string;
 }
 
@@ -46,6 +47,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
     name: student?.name || '',
     surnames: student?.surnames || '',
     dateOfBirth: student?.dateOfBirth ? formatDateForInput(student.dateOfBirth) : '',
+    classNumber: student?.classNumber ? String(student.classNumber) : '',
     additionalInfo: student?.additionalInfo || '',
     gender: student?.gender || '',
     shape: student?.shape || '',
@@ -71,7 +73,8 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       setFormData({
         name: student.name,
         surnames: student.surnames,
-        dateOfBirth: formatDateForInput(student.dateOfBirth),
+        dateOfBirth: student.dateOfBirth ? formatDateForInput(student.dateOfBirth) : '',
+        classNumber: student.classNumber ? String(student.classNumber) : '',
         additionalInfo: student.additionalInfo,
         gender: student.gender || '',
         shape: student.shape || '',
@@ -82,6 +85,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         name: '',
         surnames: '',
         dateOfBirth: '',
+        classNumber: '',
         additionalInfo: '',
         gender: '',
         shape: '',
@@ -141,15 +145,12 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       errors.surnames = t('dashboard.students.validation.surnamesRequired');
     }
 
-    const trimmedDate = formData.dateOfBirth.trim();
-    if (trimmedDate.length === 0) {
-      errors.dateOfBirth = t('dashboard.students.validation.dateOfBirthRequired');
-    } else {
-      const selectedDate = new Date(trimmedDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (selectedDate > today) {
-        errors.dateOfBirth = t('dashboard.students.validation.dateOfBirthInvalid');
+    // classNumber validation - only if provided
+    const trimmedClassNumber = formData.classNumber.trim();
+    if (trimmedClassNumber.length > 0) {
+      const classNumberInt = parseInt(trimmedClassNumber, 10);
+      if (Number.isNaN(classNumberInt) || classNumberInt < 0) {
+        errors.classNumber = t('dashboard.students.validation.classNumberInvalid');
       }
     }
 
@@ -163,8 +164,8 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       nameInputRef.current?.focus();
     } else if (errors.surnames) {
       surnamesInputRef.current?.focus();
-    } else if (errors.dateOfBirth) {
-      dateInputRef.current?.focus();
+    } else if (errors.classNumber) {
+      // Focus on classNumber field if error exists
     } else if (errors.gender) {
       genderInputRef.current?.focus();
     }
@@ -184,13 +185,15 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
 
     setSubmitting(true);
     try {
+      const classNumberValue = formData.classNumber.trim() ? parseInt(formData.classNumber.trim(), 10) : null;
       const studentData: StudentRequestDTO = {
         name: formData.name.trim(),
         surnames: formData.surnames.trim(),
-        dateOfBirth: formatDateForApi(formData.dateOfBirth),
+        dateOfBirth: formData.dateOfBirth ? formatDateForApi(formData.dateOfBirth) : undefined,
         additionalInfo: formData.additionalInfo.trim(),
         gender: formData.gender as Gender,
         shape: formData.shape || undefined,
+        classNumber: classNumberValue || undefined,
       };
 
       if (student) {
@@ -222,6 +225,7 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
       name: '',
       surnames: '',
       dateOfBirth: '',
+      classNumber: '',
       additionalInfo: '',
       gender: '',
       shape: '',
@@ -293,9 +297,21 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '1rem' }}>
           <div className="modal-content" style={{ maxWidth: '50rem', width: '90vw', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h3 className="modal-title">
-                {student ? t('dashboard.students.editStudent') : t('dashboard.students.addStudent')}
-              </h3>
+              <div>
+                <h3 className="modal-title">
+                  {student ? t('dashboard.students.editStudent') : t('dashboard.students.addStudent')}
+                </h3>
+                {student && student.classList && student.classList.length > 0 && (
+                  <div className="student-header-classlist">
+                    {student.classList.map((schoolInfo, schoolIdx) => (
+                      <p key={schoolIdx} className="student-header-classlist-line">
+                        <strong>{schoolInfo.schoolName}:</strong>{' '}
+                        {schoolInfo.classes.map(c => c.className).join(', ')}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
               <button
                 onClick={handleCancel}
                 className="modal-button cancel"
@@ -342,11 +358,11 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                 </div>
               </div>
 
-              {/* Row 2: Date of Birth + Gender + Shape */}
+              {/* Row 2: Date of Birth + Class Number + Gender + Shape */}
               <div className="modal-fields-row modal-fields-row--keep-inline">
                 <div className="modal-field modal-field--dob" style={{ flex: 1 }}>
                   <label className="modal-label">
-                    {t('dashboard.students.dateOfBirth')} <span className="form-required-asterisk">*</span>
+                    {t('dashboard.students.dateOfBirth')}
                   </label>
                   <input
                     ref={dateInputRef}
@@ -357,6 +373,22 @@ export function StudentFormModal({ isOpen, onClose, onSuccess, student }: Readon
                     disabled={submitting}
                   />
                   {formErrors.dateOfBirth && <p className="form-error-text">{formErrors.dateOfBirth}</p>}
+                </div>
+
+                <div className="modal-field" style={{ flex: 1 }}>
+                  <label className="modal-label">
+                    {t('dashboard.students.classNumber')}
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    className={`modal-input ${formErrors.classNumber ? 'input-error' : ''}`}
+                    placeholder={t('dashboard.students.classNumberPlaceholder')}
+                    value={formData.classNumber}
+                    onChange={(e) => handleInputChange('classNumber', e.target.value.replaceAll(/\D/g, ''))}
+                    disabled={submitting}
+                  />
+                  {formErrors.classNumber && <p className="form-error-text">{formErrors.classNumber}</p>}
                 </div>
 
                 {/* Gender Field */}
