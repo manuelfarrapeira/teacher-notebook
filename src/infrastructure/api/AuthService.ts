@@ -6,6 +6,14 @@ interface LoginResponse {
   accessToken: string;
 }
 
+/** Thrown when the server cannot be reached (no internet connection). */
+export class NetworkError extends Error {
+  constructor() {
+    super('Network error');
+    this.name = 'NetworkError';
+  }
+}
+
 /**
  * Infrastructure adapter for authentication.
  * Manages login, session and token storage.
@@ -18,6 +26,10 @@ export class AuthService {
     const apiUrl = getApiUrl();
     const locale = getCurrentLocale();
 
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      throw new NetworkError();
+    }
+
     const response = await fetch(`${apiUrl}/public/auth/login`, {
       method: 'POST',
       headers: {
@@ -28,7 +40,7 @@ export class AuthService {
       body: new URLSearchParams({ username, password }),
       credentials: 'include'
     }).catch(() => {
-      throw new Error('Se ha producido un error al autenticar');
+      throw new NetworkError();
     });
 
     if (!response.ok) {

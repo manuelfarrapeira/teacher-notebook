@@ -23,6 +23,7 @@ interface Translations {
       sessionExpired: string;
       invalidCredentials: string;
       authError: string;
+      networkError: string;
     };
   };
   dashboard: {
@@ -724,7 +725,8 @@ export const translations: Record<Locale, Translations> = {
         loginFailed: 'Error en el login.',
         sessionExpired: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
         invalidCredentials: 'Verifica tus credenciales.',
-        authError: 'Se ha producido un error al autenticar'
+        authError: 'Se ha producido un error al autenticar',
+        networkError: 'Error de conexión a internet. Comprueba tu conexión e inténtalo de nuevo.'
       }
     },
     dashboard: {
@@ -1428,7 +1430,8 @@ export const translations: Record<Locale, Translations> = {
         loginFailed: 'Login error.',
         sessionExpired: 'Your session has expired. Please log in again.',
         invalidCredentials: 'Check your credentials.',
-        authError: 'An authentication error has occurred'
+        authError: 'An authentication error has occurred',
+        networkError: 'Internet connection error. Check your connection and try again.'
       }
     },
     dashboard: {
@@ -2132,7 +2135,8 @@ export const translations: Record<Locale, Translations> = {
         loginFailed: 'Erro no login.',
         sessionExpired: 'A túa sesión caducou. Por favor, inicia sesión de novo.',
         invalidCredentials: 'Verifica as túas credenciais.',
-        authError: 'Produciuse un erro ao autenticar'
+        authError: 'Produciuse un erro ao autenticar',
+        networkError: 'Erro de conexión a internet. Comproba a túa conexión e inténtao de novo.'
       }
     },
     dashboard: {

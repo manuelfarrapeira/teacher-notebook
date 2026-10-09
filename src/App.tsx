@@ -3,7 +3,7 @@ import { LoginScreen } from './components/LoginScreen';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Dashboard } from './components/Dashboard';
 import { UpdateNotification } from './components/UpdateNotification';
-import { AuthService } from './infrastructure/api/AuthService';
+import { AuthService, NetworkError } from './infrastructure/api/AuthService';
 import { useI18n } from './lib/i18n';
 
 type AppState = 'login' | 'loading' | 'dashboard';
@@ -53,6 +53,11 @@ function App() {
       setCurrentScreen('dashboard');
     } catch (error) {
       console.error('Login failed:', error);
+      if (error instanceof NetworkError) {
+        setLoginError(t('login.errors.networkError'));
+        setCurrentScreen('login');
+        return;
+      }
       const errorMessage = error instanceof Error ? error.message : t('login.errors.authError');
       setLoginError(`${t('login.errors.loginFailed')} ${errorMessage}`);
       setCurrentScreen('login');
